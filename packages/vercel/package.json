@@ -1,0 +1,42 @@
+{
+  "name": "vite-plugin-vercel",
+  "version": "1.0.0",
+  "module": "./dist/index.mjs",
+  "files": [
+    "dist",
+    "*.d.ts"
+  ],
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "description": "Vercel adapter for vite",
+  "author": "Joël Charles <joel.charles91@gmail.com>",
+  "repository": "https://github.com/magne4000/vite-plugin-vercel",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "prepack": "rm -rf dist && pnpm build",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
+  },
+  "peerDependencies": {
+    "vite": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
+    "esbuild": "^0.14.25",
+    "eslint": "^8.10.0",
+    "eslint-plugin-solid": "^0.4.4",
+    "fast-glob": "^3.2.11",
+    "tsup": "^5.12.0",
+    "typescript": "^4.6.2",
+    "vite": "^2.8.6"
+  }
+}
