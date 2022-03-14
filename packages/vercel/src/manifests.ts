@@ -2,46 +2,63 @@ import { ResolvedConfig } from 'vite';
 import {
   FunctionsManifest,
   PrerenderManifest,
+  PrerenderManifestDynamicRoute,
   PrerenderManifestRoute,
   RoutesManifest,
-  RoutesManifestDynamicRoutePlugin,
 } from './types';
 import path from 'path';
 import { getRoot } from './utils';
+import { assert } from './assert';
 
 // Prerender manifest
 
 export function getPrerenderManifest(
+  resolvedConfig: ResolvedConfig,
   isrPages: string[],
-  dynamicRoutes: RoutesManifestDynamicRoutePlugin[],
 ): PrerenderManifest {
-  // TODO assert
-  const ssrRoute = dynamicRoutes.find((r) => r.ssr);
-  if (!ssrRoute) {
-    throw new Error('ssrRoute missing');
-  }
+  const isr = resolvedConfig.vercel?.isr;
+  const prerenderManifestDefault = resolvedConfig.vercel?.prerenderManifest;
 
   const routes = isrPages.reduce((acc, cur) => {
+    const srcRoute = prerenderManifestDefault?.routes?.[cur]?.srcRoute;
+
+    assert(
+      typeof srcRoute === 'string',
+      `\`[prerender-manifest] { srcRoute }\` is required for route ${cur}`,
+    );
+
     acc[cur === '/' ? '/index' : cur] = {
-      initialRevalidateSeconds: 30,
-      srcRoute: ssrRoute.page,
-      dataRoute: '',
+      initialRevalidateSeconds:
+        prerenderManifestDefault?.routes?.[cur]?.initialRevalidateSeconds ??
+        isr?.initialRevalidateSeconds ??
+        30,
+      srcRoute: srcRoute,
+      dataRoute: prerenderManifestDefault?.routes?.[cur]?.dataRoute ?? '',
     };
     return acc;
   }, {} as Record<string, PrerenderManifestRoute>);
 
+  const uniqueRoutes = Array.from(
+    new Set(Object.values(routes).map((r) => r.srcRoute)),
+  );
+  const dynamicRoutes = uniqueRoutes.reduce((acc, cur) => {
+    acc[cur] = {
+      routeRegex: '^' + cur + '$',
+      dataRoute:
+        prerenderManifestDefault?.dynamicRoutes?.[cur]?.dataRoute ?? '',
+      fallback:
+        prerenderManifestDefault?.dynamicRoutes?.[cur]?.fallback ?? null,
+      dataRouteRegex:
+        prerenderManifestDefault?.dynamicRoutes?.[cur]?.dataRouteRegex ?? '',
+    };
+    return acc;
+  }, {} as Record<string, PrerenderManifestDynamicRoute>);
+
   return {
     version: 3,
     routes,
-    dynamicRoutes: {
-      [ssrRoute.page]: {
-        routeRegex: '^' + ssrRoute.page + '$',
-        dataRoute: '',
-        fallback: null,
-        dataRouteRegex: '',
-      },
-    },
-    preview: {
+    dynamicRoutes,
+    preview: prerenderManifestDefault?.preview ?? {
       previewModeId: null,
     },
   };
@@ -56,17 +73,18 @@ export function getPrerenderManifestDestination(
 // Routes manifest
 
 export function getRoutesManifest(
-  dynamicRoutes: RoutesManifestDynamicRoutePlugin[],
+  resolvedConfig: ResolvedConfig,
 ): RoutesManifest {
+  const routesManifestDefault = resolvedConfig.vercel?.routesManifest;
+
   return {
     version: 3,
-    basePath: '/',
-    pages404: true,
-    dynamicRoutes: dynamicRoutes.map((r) => {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { ssr, ...rest } = r;
-      return rest;
-    }),
+    basePath: routesManifestDefault?.basePath ?? '/',
+    pages404: routesManifestDefault?.pages404 ?? true,
+    dynamicRoutes: routesManifestDefault?.dynamicRoutes,
+    rewrites: routesManifestDefault?.rewrites,
+    redirects: routesManifestDefault?.redirects,
+    headers: routesManifestDefault?.headers,
   };
 }
 

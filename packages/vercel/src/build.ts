@@ -46,6 +46,7 @@ export async function buildApiEndpoints(
   resolvedConfig: ResolvedConfig,
 ): Promise<FunctionsManifest['pages']> {
   const entries = getApiEntries(resolvedConfig);
+  const defaultPage = resolvedConfig.vercel?.functionsManifest?.pages;
   const fnManifests: FunctionsManifest['pages'] = {};
 
   for (const [key, val] of Object.entries(entries)) {
@@ -53,6 +54,7 @@ export async function buildApiEndpoints(
 
     fnManifests[key + '.js'] = {
       maxDuration: 10,
+      ...defaultPage,
     };
   }
 

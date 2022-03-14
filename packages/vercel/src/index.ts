@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import type { Plugin, ResolvedConfig } from 'vite';
-import { FunctionsManifest, RoutesManifestDynamicRoutePlugin } from './types';
+import { FunctionsManifest } from './types';
 import { copyDir, getOutDir, getRoot } from './utils';
 import {
   getFunctionsManifest,
@@ -14,14 +14,9 @@ import {
 import { buildApiEndpoints } from './build';
 import { execPrerender } from './prerender';
 
-export interface VercelPluginOptions {
-  dynamicRoutes?: RoutesManifestDynamicRoutePlugin[];
-}
-
-function vercelPlugin({
-  dynamicRoutes = [],
-}: VercelPluginOptions = {}): Plugin {
+function vercelPlugin(): Plugin {
   let resolvedConfig: ResolvedConfig;
+
   return {
     apply: 'build',
     name: 'vite-plugin-vercel',
@@ -51,8 +46,8 @@ function vercelPlugin({
 
       // step 3.3:	Generates manifests
       await generateFunctionsManifest(resolvedConfig, fnManifests);
-      // await generateRoutesManifest(resolvedConfig, dynamicRoutes);
-      await generatePrerenderManifest(resolvedConfig, isrPages, dynamicRoutes);
+      await generateRoutesManifest(resolvedConfig);
+      await generatePrerenderManifest(resolvedConfig, isrPages);
     },
   };
 }
@@ -74,21 +69,21 @@ async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
 async function generatePrerenderManifest(
   resolvedConfig: ResolvedConfig,
   isrPages: string[],
-  dynamicRoutes: RoutesManifestDynamicRoutePlugin[],
 ) {
   await fs.writeFile(
     getPrerenderManifestDestination(resolvedConfig),
-    JSON.stringify(getPrerenderManifest(isrPages, dynamicRoutes), undefined, 2),
+    JSON.stringify(
+      getPrerenderManifest(resolvedConfig, isrPages),
+      undefined,
+      2,
+    ),
   );
 }
 
-async function generateRoutesManifest(
-  resolvedConfig: ResolvedConfig,
-  dynamicRoutes: RoutesManifestDynamicRoutePlugin[],
-) {
+async function generateRoutesManifest(resolvedConfig: ResolvedConfig) {
   await fs.writeFile(
     getRoutesManifestDestination(resolvedConfig),
-    JSON.stringify(getRoutesManifest(dynamicRoutes), undefined, 2),
+    JSON.stringify(getRoutesManifest(resolvedConfig), undefined, 2),
   );
 }
 
@@ -102,8 +97,8 @@ async function generateFunctionsManifest(
   );
 }
 
-function allPlugins(options?: VercelPluginOptions): Plugin[] {
-  return [vercelPlugin(options)];
+function allPlugins(): Plugin[] {
+  return [vercelPlugin()];
 }
 
 export { allPlugins as default };

@@ -4,17 +4,22 @@ import ssr from 'vite-plugin-ssr/plugin';
 import vercel from 'vite-plugin-vercel';
 
 export default defineConfig({
-  plugins: [
-    react(),
-    ssr(),
-    vercel({
-      dynamicRoutes: [
-        {
-          ssr: true,
-          page: '/ssr',
-          regex: '/((?!assets/)(?!api/).*)',
+  plugins: [react(), ssr(), vercel()],
+  vercel: {
+    isr: {
+      initialRevalidateSeconds: 25,
+    },
+    apiEndpoints: ['/ssr'],
+    prerenderManifest: {
+      routes: {
+        '/': {
+          srcRoute: '/ssr',
         },
-      ],
-    }),
-  ],
+        '/about': {
+          srcRoute: '/ssr',
+          initialRevalidateSeconds: 20,
+        },
+      },
+    },
+  },
 });

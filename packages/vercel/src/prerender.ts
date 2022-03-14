@@ -15,6 +15,9 @@ interface PageContext extends PageContextBuiltIn {
 
 export async function execPrerender(resolvedConfig: ResolvedConfig) {
   const isrPages: string[] = [];
+  const isrPagesWhitelist: string[] = Object.keys(
+    resolvedConfig.vercel?.prerenderManifest?.routes ?? [],
+  );
 
   await prerender({
     root: getRoot(resolvedConfig),
@@ -27,7 +30,7 @@ export async function execPrerender(resolvedConfig: ResolvedConfig) {
         path.relative(getOutDir(resolvedConfig, 'client'), filePath),
       );
 
-      if (pageContext.url !== '/fake-404-url') {
+      if (isrPagesWhitelist.includes(pageContext.url)) {
         isrPages.push(pageContext.url);
       }
 

@@ -41,9 +41,13 @@ export interface RoutesManifestDynamicRoute {
   namedRegex?: string;
 }
 
-export interface RoutesManifestDynamicRoutePlugin
-  extends RoutesManifestDynamicRoute {
-  ssr?: boolean;
+export interface RoutesManifestDefault {
+  basePath?: string;
+  pages404?: boolean;
+  redirects?: RoutesManifestRedirect[];
+  headers?: RoutesManifestHeader[];
+  rewrites?: RoutesManifestRewrite[];
+  dynamicRoutes?: RoutesManifestDynamicRoute[];
 }
 
 // FunctionsManifest
@@ -94,4 +98,26 @@ export interface PrerenderManifestDynamicRoute {
   fallback: string | null;
   dataRoute: string;
   dataRouteRegex: string;
+}
+
+export interface PrerenderManifestDefault {
+  routes?: Record<string, Partial<PrerenderManifestRoute>>;
+  dynamicRoutes?: Record<
+    string,
+    Partial<Omit<PrerenderManifestDynamicRoute, 'routeRegex'>>
+  >;
+  preview?: { previewModeId: string | null };
+}
+
+// Vite config for Vercel
+
+export interface ViteVercelConfig {
+  isr?: {
+    initialRevalidateSeconds?: number;
+    prerender?: unknown;
+  };
+  functionsManifest?: Partial<Omit<FunctionsManifest, 'version'>>;
+  routesManifest?: RoutesManifestDefault;
+  prerenderManifest?: PrerenderManifestDefault;
+  apiEndpoints?: string[];
 }
