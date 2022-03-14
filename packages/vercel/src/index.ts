@@ -51,7 +51,7 @@ function vercelPlugin({
 
       // step 3.3:	Generates manifests
       await generateFunctionsManifest(resolvedConfig, fnManifests);
-      await generateRoutesManifest(resolvedConfig, dynamicRoutes);
+      // await generateRoutesManifest(resolvedConfig, dynamicRoutes);
       await generatePrerenderManifest(resolvedConfig, isrPages, dynamicRoutes);
     },
   };
