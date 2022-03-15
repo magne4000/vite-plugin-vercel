@@ -22,10 +22,12 @@ export function getApiEntries(resolvedConfig: ResolvedConfig) {
     .filter((filepath) => !path.basename(filepath).startsWith('_'));
 
   return apiEntries.reduce((entryPoints, filePath) => {
-    const prefix = apiEndpoints.has(filePath) ? 'api/' : '';
     const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
     const parsed = path.parse(outFilePath);
-    entryPoints[`${prefix}${path.join(parsed.dir, parsed.name)}`] = filePath;
+    // const prefix = apiEndpoints.has(filePath) ? 'api/' : '';
+    // entryPoints[`${prefix}${path.join(parsed.dir, parsed.name)}`] = filePath;
+    entryPoints[`api/${path.join(parsed.dir, parsed.name)}`] = filePath;
+    entryPoints[`${path.join(parsed.dir, parsed.name)}`] = filePath;
 
     return entryPoints;
   }, {} as Record<string, string>);

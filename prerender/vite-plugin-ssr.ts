@@ -121,7 +121,7 @@ export const prerender: ViteVercelPrerenderFn = async (
       routes.ssr.rewrites.push({
         source: route,
         // TODO hard coded: how do we retrieve this value?
-        destination: './server/pages/ssr.js',
+        destination: '/api/ssr.js',
         // TODO not sure that .* should be there
         regex: '^' + route + '.*$',
       });
