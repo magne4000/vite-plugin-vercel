@@ -24,10 +24,14 @@ export function getApiEntries(resolvedConfig: ResolvedConfig) {
   return apiEntries.reduce((entryPoints, filePath) => {
     const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
     const parsed = path.parse(outFilePath);
-    // const prefix = apiEndpoints.has(filePath) ? 'api/' : '';
-    // entryPoints[`${prefix}${path.join(parsed.dir, parsed.name)}`] = filePath;
+
+    const apiOnly = apiEndpoints.has(filePath) ? 'api/' : '';
+    // `rewrites` in routes-manifest also rewrites the url for non `/api` pages.
+    // So to ensure urls are kept for ssr pages, `/api` endpoint must be built
     entryPoints[`api/${path.join(parsed.dir, parsed.name)}`] = filePath;
-    entryPoints[`${path.join(parsed.dir, parsed.name)}`] = filePath;
+    if (!apiOnly) {
+      entryPoints[`${path.join(parsed.dir, parsed.name)}`] = filePath;
+    }
 
     return entryPoints;
   }, {} as Record<string, string>);
