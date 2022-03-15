@@ -1,17 +1,13 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createPageRenderer } from 'vite-plugin-ssr';
 
-require('../dist/server/importBuild');
-
 const renderPage = createPageRenderer({ isProduction: true });
 
 export default async function handler(
   request: VercelRequest,
   response: VercelResponse,
 ) {
-  // visible in vercel function logs
-  console.error('/ssr handler', { url: request.url });
-
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const url = request.url!;
   const pageContextInit = {
     url,

@@ -54,6 +54,7 @@ importers:
       '@types/node': ^17.0.21
       '@typescript-eslint/eslint-plugin': ^5.14.0
       '@typescript-eslint/parser': ^5.14.0
+      '@vercel/build-utils': ^2.14.0
       esbuild: ^0.14.25
       eslint: ^8.10.0
       eslint-plugin-solid: ^0.4.4
@@ -63,6 +64,7 @@ importers:
       vite: ^2.8.6
     dependencies:
       '@brillout/libassert': 0.5.4
+      '@vercel/build-utils': 2.14.0
     devDependencies:
       '@types/node': 17.0.21
       '@typescript-eslint/eslint-plugin': 5.14.0_f4054b8c3cd621db16ae1b9d571bccc0
@@ -880,6 +882,13 @@ packages:
       '@typescript-eslint/types': 5.14.0
       eslint-visitor-keys: 3.3.0
     dev: true
+
+  /@vercel/build-utils/2.14.0:
+    resolution:
+      {
+        integrity: sha512-Jdl0FkEJbAdB5oqpolIK4m/FO9GtFK86gKpFJt5jdnd5tMLWdPf2vr8uZkxvfs8wW5KdYXt660OSoWHpfdYu5w==,
+      }
+    dev: false
 
   /@vercel/node/1.13.0:
     resolution:

@@ -12,14 +12,6 @@ export default defineConfig({
       // prerender: populated by vitePluginSsrVercelPlugin
     },
     apiEndpoints: ['./api/post.ts'],
-    prerenderManifest: {
-      routes: {
-        '/isr': {
-          // TODO should be handled by vitePluginSsrVercelPlugin
-          srcRoute: '/ssr',
-        },
-      },
-    },
     /** override examples
     prerenderManifest: {
       routes: {

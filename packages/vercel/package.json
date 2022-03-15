@@ -41,6 +41,7 @@
     "vite": "^2.8.6"
   },
   "dependencies": {
-    "@brillout/libassert": "^0.5.4"
+    "@brillout/libassert": "^0.5.4",
+    "@vercel/build-utils": "^2.14.0"
   }
 }

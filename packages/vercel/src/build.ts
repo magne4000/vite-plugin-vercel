@@ -2,8 +2,14 @@ import { ResolvedConfig } from 'vite';
 import * as glob from 'fast-glob';
 import path from 'path';
 import { getRoot, pathRelativeToApi } from './utils';
-import { build } from 'esbuild';
+import { build, BuildOptions } from 'esbuild';
 import { FunctionsManifest } from './types';
+import { detectBuilders } from '@vercel/build-utils/dist';
+import ssrTemplate from './templates/ssr_.template';
+import fs from 'fs/promises';
+
+// handled by tsup
+const ssr_: string = ssrTemplate as unknown as string;
 
 function getApiEndpoints(resolvedConfig: ResolvedConfig) {
   const apiEndpoints = (resolvedConfig.vercel?.apiEndpoints ?? []).map((p) =>
@@ -21,6 +27,10 @@ export function getApiEntries(resolvedConfig: ResolvedConfig) {
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith('_'));
 
+  detectBuilders(
+    apiEntries.map((p) => 'api/' + pathRelativeToApi(p, resolvedConfig)),
+  ).then(console.log);
+
   return apiEntries.reduce((entryPoints, filePath) => {
     const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
     const parsed = path.parse(outFilePath);
@@ -37,6 +47,15 @@ export function getApiEntries(resolvedConfig: ResolvedConfig) {
   }, {} as Record<string, string>);
 }
 
+const commonBuildOptions: BuildOptions = {
+  bundle: true,
+  target: 'es2020',
+  format: 'cjs',
+  platform: 'node',
+  logLevel: 'info',
+  minify: true,
+};
+
 // TODO build all targets at once, with shared code in [function].nft.json files
 export async function buildFn(
   resolvedConfig: ResolvedConfig,
@@ -44,19 +63,57 @@ export async function buildFn(
   filepath: string,
 ) {
   await build({
-    bundle: true,
-    target: 'es2020',
-    format: 'cjs',
-    platform: 'node',
+    ...commonBuildOptions,
     outfile: path.join(
       getRoot(resolvedConfig),
       '.output/server/pages',
       source + '.js',
     ),
     entryPoints: [filepath],
-    logLevel: 'info',
-    minify: true,
   });
+}
+
+export async function buildFnStdin(resolvedConfig: ResolvedConfig) {
+  const userEndpoint = resolvedConfig.vercel?.ssrEndpoint;
+  const contents = userEndpoint
+    ? await fs.readFile(userEndpoint, 'utf-8')
+    : ssr_;
+  const sourcefile = userEndpoint ?? 'ssr_.ts';
+
+  const outfile = path.join(
+    getRoot(resolvedConfig),
+    '.output/server/pages',
+    'api/ssr_.js',
+  );
+
+  const outfile2 = path.join(
+    getRoot(resolvedConfig),
+    '.output/server/pages',
+    'ssr_.js',
+  );
+
+  await build({
+    ...commonBuildOptions,
+    outfile,
+    stdin: {
+      contents: "import '../dist/server/importBuild';\n" + contents,
+      sourcefile,
+      loader: sourcefile.endsWith('.ts')
+        ? 'ts'
+        : sourcefile.endsWith('.tsx')
+        ? 'tsx'
+        : sourcefile.endsWith('.js')
+        ? 'js'
+        : sourcefile.endsWith('.jsx')
+        ? 'jsx'
+        : 'default',
+      resolveDir: userEndpoint
+        ? path.dirname(userEndpoint)
+        : path.join(getRoot(resolvedConfig), 'api'),
+    },
+  });
+
+  await fs.copyFile(outfile, outfile2);
 }
 
 export async function buildApiEndpoints(
@@ -75,6 +132,18 @@ export async function buildApiEndpoints(
       ...pages[keyJs],
     };
   }
+
+  await buildFnStdin(resolvedConfig);
+
+  fnManifests.ssr_ = {
+    maxDuration: 10,
+    ...(pages.ssr_ ?? pages['api/ssr_']),
+  };
+
+  fnManifests['api/ssr_'] = {
+    maxDuration: 10,
+    ...(pages.ssr_ ?? pages['api/ssr_']),
+  };
 
   return fnManifests;
 }

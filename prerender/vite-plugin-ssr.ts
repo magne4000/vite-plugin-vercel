@@ -119,9 +119,10 @@ export const prerender: ViteVercelPrerenderFn = async (
 
     for (const route of ssrPages) {
       routes.ssr.rewrites.push({
+        // TODO use @vercel/build-utils AND/OR @vercel/routing-utils
+        // TODO can be overriden by user, check duplicate by source before generating
         source: route,
-        // TODO hard coded: how do we retrieve this value?
-        destination: '/api/ssr',
+        destination: '/api/ssr_',
         // TODO not sure that .* should be there
         regex: '^' + route + '.*$',
       });

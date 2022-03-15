@@ -122,6 +122,7 @@ export interface ViteVercelConfig {
   routesManifest?: RoutesManifestDefault;
   prerenderManifest?: PrerenderManifestDefault;
   apiEndpoints?: string[];
+  ssrEndpoint?: string;
 }
 
 export type ViteVercelPrerenderRoute = {

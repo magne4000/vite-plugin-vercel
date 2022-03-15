@@ -9,7 +9,6 @@ import {
 } from './types';
 import path from 'path';
 import { getRoot } from './utils';
-import { assert } from './assert';
 
 // Prerender manifest
 
@@ -23,12 +22,9 @@ export function getPrerenderManifest(
   const routes = Object.entries(isrPages?.routes ?? {}).reduce(
     (acc, [key, val]) => {
       const srcRoute =
-        val?.srcRoute ?? prerenderManifestDefault?.routes?.[key]?.srcRoute;
-
-      assert(
-        typeof srcRoute === 'string',
-        `\`[prerender-manifest] { srcRoute }\` is required for route ${key}`,
-      );
+        val?.srcRoute ??
+        prerenderManifestDefault?.routes?.[key]?.srcRoute ??
+        '/ssr_';
 
       acc[key === '/' ? '/index' : key] = {
         initialRevalidateSeconds:
