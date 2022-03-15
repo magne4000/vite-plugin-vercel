@@ -13,6 +13,7 @@
       "require": "./dist/index.js"
     }
   },
+  "types": "./index.d.ts",
   "description": "Vercel adapter for vite",
   "author": "Joël Charles <joel.charles91@gmail.com>",
   "repository": "https://github.com/magne4000/vite-plugin-vercel",

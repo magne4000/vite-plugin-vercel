@@ -1,7 +1,7 @@
 import path from 'path';
 import fs from 'fs/promises';
 import type { Plugin, ResolvedConfig } from 'vite';
-import { FunctionsManifest } from './types';
+import { FunctionsManifest, ViteVercelPrerenderRoute } from './types';
 import { copyDir, getOutDir, getRoot } from './utils';
 import {
   getFunctionsManifest,
@@ -68,7 +68,7 @@ async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
 
 async function generatePrerenderManifest(
   resolvedConfig: ResolvedConfig,
-  isrPages: string[],
+  isrPages: ViteVercelPrerenderRoute,
 ) {
   await fs.writeFile(
     getPrerenderManifestDestination(resolvedConfig),

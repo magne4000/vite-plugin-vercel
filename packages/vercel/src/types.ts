@@ -1,3 +1,5 @@
+import type { ResolvedConfig } from 'vite';
+
 // RoutesManifest
 
 export interface RoutesManifest {
@@ -114,10 +116,15 @@ export interface PrerenderManifestDefault {
 export interface ViteVercelConfig {
   isr?: {
     initialRevalidateSeconds?: number;
-    prerender?: unknown;
+    prerender?: ViteVercelPrerenderFn;
   };
   functionsManifest?: Partial<Omit<FunctionsManifest, 'version'>>;
   routesManifest?: RoutesManifestDefault;
   prerenderManifest?: PrerenderManifestDefault;
   apiEndpoints?: string[];
 }
+
+export type ViteVercelPrerenderRoute = PrerenderManifestDefault['routes'];
+export type ViteVercelPrerenderFn = (
+  resolvedConfig: ResolvedConfig,
+) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;

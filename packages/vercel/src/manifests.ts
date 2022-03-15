@@ -5,6 +5,7 @@ import {
   PrerenderManifestDynamicRoute,
   PrerenderManifestRoute,
   RoutesManifest,
+  ViteVercelPrerenderRoute,
 } from './types';
 import path from 'path';
 import { getRoot } from './utils';
@@ -14,26 +15,31 @@ import { assert } from './assert';
 
 export function getPrerenderManifest(
   resolvedConfig: ResolvedConfig,
-  isrPages: string[],
+  isrPages: ViteVercelPrerenderRoute,
 ): PrerenderManifest {
   const isr = resolvedConfig.vercel?.isr;
   const prerenderManifestDefault = resolvedConfig.vercel?.prerenderManifest;
 
-  const routes = isrPages.reduce((acc, cur) => {
-    const srcRoute = prerenderManifestDefault?.routes?.[cur]?.srcRoute;
+  const routes = Object.entries(isrPages ?? {}).reduce((acc, [key, val]) => {
+    const srcRoute =
+      val?.srcRoute ?? prerenderManifestDefault?.routes?.[key]?.srcRoute;
 
     assert(
       typeof srcRoute === 'string',
-      `\`[prerender-manifest] { srcRoute }\` is required for route ${cur}`,
+      `\`[prerender-manifest] { srcRoute }\` is required for route ${key}`,
     );
 
-    acc[cur === '/' ? '/index' : cur] = {
+    acc[key === '/' ? '/index' : key] = {
       initialRevalidateSeconds:
-        prerenderManifestDefault?.routes?.[cur]?.initialRevalidateSeconds ??
         isr?.initialRevalidateSeconds ??
+        val?.initialRevalidateSeconds ??
+        prerenderManifestDefault?.routes?.[key]?.initialRevalidateSeconds ??
         30,
       srcRoute: srcRoute,
-      dataRoute: prerenderManifestDefault?.routes?.[cur]?.dataRoute ?? '',
+      dataRoute:
+        val?.dataRoute ??
+        prerenderManifestDefault?.routes?.[key]?.dataRoute ??
+        '',
     };
     return acc;
   }, {} as Record<string, PrerenderManifestRoute>);
@@ -67,7 +73,11 @@ export function getPrerenderManifest(
 export function getPrerenderManifestDestination(
   resolvedConfig: ResolvedConfig,
 ) {
-  return path.join(getRoot(resolvedConfig), '.output/prerender-manifest.json');
+  return path.join(
+    getRoot(resolvedConfig),
+    '.output',
+    'prerender-manifest.json',
+  );
 }
 
 // Routes manifest
