@@ -3,6 +3,8 @@ import './index.css';
 
 export { Page };
 
+export const initialRevalidateSeconds = 10;
+
 function Page(props: { d: string }) {
   return (
     <>

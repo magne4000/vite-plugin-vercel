@@ -9,6 +9,21 @@ import {
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from 'vite-plugin-vercel';
+import { newError } from '@brillout/libassert';
+
+const libName = 'vite-plugin-ssr:vercel';
+
+export function assert(
+  condition: unknown,
+  errorMessage: string,
+): asserts condition {
+  if (condition) {
+    return;
+  }
+
+  const err = newError(`[${libName}][Wrong Usage] ${errorMessage}`, 2);
+  throw err;
+}
 
 interface PageContext extends PageContextBuiltIn {
   _prerenderResult: {
@@ -42,6 +57,13 @@ export const prerender: ViteVercelPrerenderFn = async (
     root: getRoot(resolvedConfig),
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
+      assert(
+        typeof pageContext.pageExports.initialRevalidateSeconds === 'number' ||
+          typeof pageContext.pageExports.initialRevalidateSeconds ===
+            'undefined',
+        ` \`{ initialRevalidateSeconds }\` must be a number`,
+      );
+
       const { filePath } = pageContext._prerenderResult;
       const newFilePath = path.join(
         getRoot(resolvedConfig),
@@ -49,10 +71,13 @@ export const prerender: ViteVercelPrerenderFn = async (
         path.relative(getOutDir(resolvedConfig, 'client'), filePath),
       );
 
-      if (isrPagesWhitelist.includes(pageContext.url)) {
+      if (
+        isrPagesWhitelist.includes(pageContext.url) ||
+        pageContext.pageExports.initialRevalidateSeconds
+      ) {
         isrPages[pageContext.url] = {
-          // TODO
-          // initialRevalidateSeconds
+          initialRevalidateSeconds:
+            pageContext.pageExports.initialRevalidateSeconds,
         };
       }
 

@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import ssr from 'vite-plugin-ssr/plugin';
 import vercel from 'vite-plugin-vercel';
-import { prerender } from './renderer/prerender-vite-plugin-ssr';
+import { prerender } from './prerender/vite-plugin-ssr';
 
 export default defineConfig({
   plugins: [react(), ssr(), vercel()],
@@ -14,9 +14,6 @@ export default defineConfig({
     apiEndpoints: ['./api/post.ts'],
     prerenderManifest: {
       routes: {
-        '/': {
-          srcRoute: '/ssr',
-        },
         '/about': {
           srcRoute: '/ssr',
           initialRevalidateSeconds: 20,
