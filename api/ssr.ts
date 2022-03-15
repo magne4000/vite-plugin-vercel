@@ -9,6 +9,9 @@ export default async function handler(
   request: VercelRequest,
   response: VercelResponse,
 ) {
+  // visible in vercel function logs
+  console.error('/ssr handler', { url: request.url });
+
   const url = request.url!;
   const pageContextInit = {
     url,
