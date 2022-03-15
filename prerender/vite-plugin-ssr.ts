@@ -111,16 +111,17 @@ export const prerender: ViteVercelPrerenderFn = async (
     .filter((p) => !prerenderedPages.includes(p));
   if (ssrPages.length > 0) {
     if (!routes.ssr) {
-      routes.ssr = { dynamicRoutes: [] };
+      routes.ssr = { rewrites: [] };
     }
-    if (!routes.ssr.dynamicRoutes) {
-      routes.ssr.dynamicRoutes = [];
+    if (!routes.ssr.rewrites) {
+      routes.ssr.rewrites = [];
     }
 
     for (const route of ssrPages) {
-      routes.ssr.dynamicRoutes.push({
+      routes.ssr.rewrites.push({
+        source: route,
         // TODO hard coded: how do we retrieve this value?
-        page: '/ssr',
+        destination: '/ssr',
         // TODO not sure that .* should be there
         regex: '^' + route + '.*$',
       });
