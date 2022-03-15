@@ -46,8 +46,8 @@ function vercelPlugin(): Plugin {
 
       // step 3.3:	Generates manifests
       await generateFunctionsManifest(resolvedConfig, fnManifests);
-      await generateRoutesManifest(resolvedConfig);
-      await generatePrerenderManifest(resolvedConfig, isrPages);
+      await generateRoutesManifest(resolvedConfig, isrPages?.ssr);
+      await generatePrerenderManifest(resolvedConfig, isrPages?.isr);
     },
   };
 }
@@ -68,7 +68,7 @@ async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
 
 async function generatePrerenderManifest(
   resolvedConfig: ResolvedConfig,
-  isrPages: ViteVercelPrerenderRoute,
+  isrPages: ViteVercelPrerenderRoute['isr'],
 ) {
   await fs.writeFile(
     getPrerenderManifestDestination(resolvedConfig),
@@ -80,10 +80,13 @@ async function generatePrerenderManifest(
   );
 }
 
-async function generateRoutesManifest(resolvedConfig: ResolvedConfig) {
+async function generateRoutesManifest(
+  resolvedConfig: ResolvedConfig,
+  ssr: ViteVercelPrerenderRoute['ssr'],
+) {
   await fs.writeFile(
     getRoutesManifestDestination(resolvedConfig),
-    JSON.stringify(getRoutesManifest(resolvedConfig), undefined, 2),
+    JSON.stringify(getRoutesManifest(resolvedConfig, ssr), undefined, 2),
   );
 }
 

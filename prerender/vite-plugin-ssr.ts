@@ -10,6 +10,7 @@ import {
   ViteVercelPrerenderRoute,
 } from 'vite-plugin-vercel';
 import { newError } from '@brillout/libassert';
+import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
 
 const libName = 'vite-plugin-ssr:vercel';
 
@@ -25,7 +26,7 @@ export function assert(
   throw err;
 }
 
-interface PageContext extends PageContextBuiltIn {
+interface PageContext extends PageContextBuiltIn, GlobalContext {
   _prerenderResult: {
     filePath: string;
     fileContent: string;
@@ -48,7 +49,9 @@ export function getOutDir(
 export const prerender: ViteVercelPrerenderFn = async (
   resolvedConfig: ResolvedConfig,
 ) => {
-  const isrPages: Exclude<ViteVercelPrerenderRoute, undefined> = {};
+  const routes: NonNullable<ViteVercelPrerenderRoute> = {};
+  const prerenderedPages: string[] = [];
+  let globalContext: GlobalContext | undefined = undefined;
   const isrPagesWhitelist: string[] = Object.keys(
     resolvedConfig.vercel?.prerenderManifest?.routes ?? [],
   );
@@ -57,6 +60,11 @@ export const prerender: ViteVercelPrerenderFn = async (
     root: getRoot(resolvedConfig),
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
+      if (!globalContext) {
+        // TODO use getGlobalContext when moving into vite-plugin-ssr
+        globalContext = pageContext as unknown as GlobalContext;
+      }
+
       assert(
         typeof pageContext.pageExports.initialRevalidateSeconds === 'number' ||
           typeof pageContext.pageExports.initialRevalidateSeconds ===
@@ -75,7 +83,14 @@ export const prerender: ViteVercelPrerenderFn = async (
         isrPagesWhitelist.includes(pageContext.url) ||
         pageContext.pageExports.initialRevalidateSeconds
       ) {
-        isrPages[pageContext.url] = {
+        if (!routes.isr) {
+          routes.isr = { routes: {} };
+        }
+        if (!routes.isr.routes) {
+          routes.isr.routes = {};
+        }
+
+        routes.isr.routes[pageContext.url] = {
           initialRevalidateSeconds:
             pageContext.pageExports.initialRevalidateSeconds === 0
               ? resolvedConfig.vercel?.isr?.initialRevalidateSeconds
@@ -83,12 +98,37 @@ export const prerender: ViteVercelPrerenderFn = async (
         };
       }
 
+      prerenderedPages.push(pageContext.url);
+
       await fs.mkdir(path.dirname(newFilePath), { recursive: true });
       await fs.writeFile(newFilePath, pageContext._prerenderResult.fileContent);
     },
   });
 
-  return isrPages;
+  // Compute data for dynamic ssr pages (routes-manifest)
+  const ssrPages = globalContext!._pageRoutes
+    .map((p) => p.filesystemRoute)
+    .filter((p) => !prerenderedPages.includes(p));
+  if (ssrPages.length > 0) {
+    if (!routes.ssr) {
+      routes.ssr = { rewrites: [] };
+    }
+    if (!routes.ssr.rewrites) {
+      routes.ssr.rewrites = [];
+    }
+
+    for (const route of ssrPages) {
+      routes.ssr.rewrites.push({
+        source: route,
+        // TODO hard coded: how do we retrieve this value?
+        destination: '/ssr',
+        // TODO not sure that .* should be there
+        regex: '^' + route + '.*$',
+      });
+    }
+  }
+
+  return routes;
 };
 
 export function vitePluginSsrVercelPlugin(): Plugin {

@@ -124,7 +124,10 @@ export interface ViteVercelConfig {
   apiEndpoints?: string[];
 }
 
-export type ViteVercelPrerenderRoute = PrerenderManifestDefault['routes'];
+export type ViteVercelPrerenderRoute = {
+  isr?: Pick<PrerenderManifestDefault, 'routes'>;
+  ssr?: Pick<RoutesManifestDefault, 'rewrites'>;
+};
 export type ViteVercelPrerenderFn = (
   resolvedConfig: ResolvedConfig,
 ) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;

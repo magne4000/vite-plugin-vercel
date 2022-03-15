@@ -15,34 +15,37 @@ import { assert } from './assert';
 
 export function getPrerenderManifest(
   resolvedConfig: ResolvedConfig,
-  isrPages: ViteVercelPrerenderRoute,
+  isrPages: ViteVercelPrerenderRoute['isr'],
 ): PrerenderManifest {
   const isr = resolvedConfig.vercel?.isr;
   const prerenderManifestDefault = resolvedConfig.vercel?.prerenderManifest;
 
-  const routes = Object.entries(isrPages ?? {}).reduce((acc, [key, val]) => {
-    const srcRoute =
-      val?.srcRoute ?? prerenderManifestDefault?.routes?.[key]?.srcRoute;
+  const routes = Object.entries(isrPages?.routes ?? {}).reduce(
+    (acc, [key, val]) => {
+      const srcRoute =
+        val?.srcRoute ?? prerenderManifestDefault?.routes?.[key]?.srcRoute;
 
-    assert(
-      typeof srcRoute === 'string',
-      `\`[prerender-manifest] { srcRoute }\` is required for route ${key}`,
-    );
+      assert(
+        typeof srcRoute === 'string',
+        `\`[prerender-manifest] { srcRoute }\` is required for route ${key}`,
+      );
 
-    acc[key === '/' ? '/index' : key] = {
-      initialRevalidateSeconds:
-        val?.initialRevalidateSeconds ??
-        prerenderManifestDefault?.routes?.[key]?.initialRevalidateSeconds ??
-        isr?.initialRevalidateSeconds ??
-        30,
-      srcRoute: srcRoute,
-      dataRoute:
-        val?.dataRoute ??
-        prerenderManifestDefault?.routes?.[key]?.dataRoute ??
-        '',
-    };
-    return acc;
-  }, {} as Record<string, PrerenderManifestRoute>);
+      acc[key === '/' ? '/index' : key] = {
+        initialRevalidateSeconds:
+          val?.initialRevalidateSeconds ??
+          prerenderManifestDefault?.routes?.[key]?.initialRevalidateSeconds ??
+          isr?.initialRevalidateSeconds ??
+          30,
+        srcRoute: srcRoute,
+        dataRoute:
+          val?.dataRoute ??
+          prerenderManifestDefault?.routes?.[key]?.dataRoute ??
+          '',
+      };
+      return acc;
+    },
+    {} as Record<string, PrerenderManifestRoute>,
+  );
 
   const uniqueRoutes = Array.from(
     new Set(Object.values(routes).map((r) => r.srcRoute)),
@@ -84,15 +87,21 @@ export function getPrerenderManifestDestination(
 
 export function getRoutesManifest(
   resolvedConfig: ResolvedConfig,
+  ssr: ViteVercelPrerenderRoute['ssr'],
 ): RoutesManifest {
   const routesManifest = resolvedConfig.vercel?.routesManifest;
+
+  const rewrites = [
+    ...(ssr?.rewrites ?? []),
+    ...(routesManifest?.rewrites ?? []),
+  ];
 
   return {
     version: 3,
     basePath: routesManifest?.basePath ?? '/',
     pages404: routesManifest?.pages404 ?? true,
     dynamicRoutes: routesManifest?.dynamicRoutes,
-    rewrites: routesManifest?.rewrites,
+    rewrites: rewrites.length > 0 ? rewrites : undefined,
     redirects: routesManifest?.redirects,
     headers: routesManifest?.headers,
   };
