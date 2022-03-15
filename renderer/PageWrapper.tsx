@@ -23,8 +23,14 @@ function PageWrapper({
             <Link className="navitem" href="/">
               Home
             </Link>
-            <Link className="navitem" href="/about">
-              About
+            <Link className="navitem" href="/dynamic">
+              Dynamic
+            </Link>
+            <Link className="navitem" href="/static">
+              Static
+            </Link>
+            <Link className="navitem" href="/isr">
+              ISR
             </Link>
           </Sidebar>
           <Content>{children}</Content>

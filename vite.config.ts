@@ -2,16 +2,25 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import ssr from 'vite-plugin-ssr/plugin';
 import vercel from 'vite-plugin-vercel';
-import { prerender } from './prerender/vite-plugin-ssr';
+import { vitePluginSsrVercelPlugin } from './prerender/vite-plugin-ssr';
 
 export default defineConfig({
-  plugins: [react(), ssr(), vercel()],
+  plugins: [react(), ssr(), vercel(), vitePluginSsrVercelPlugin()],
   vercel: {
     isr: {
       initialRevalidateSeconds: 25,
-      prerender,
+      // prerender: populated by vitePluginSsrVercelPlugin
     },
     apiEndpoints: ['./api/post.ts'],
+    prerenderManifest: {
+      routes: {
+        '/isr': {
+          // TODO should be handled by vitePluginSsrVercelPlugin
+          srcRoute: '/ssr',
+        },
+      },
+    },
+    /** override examples
     prerenderManifest: {
       routes: {
         '/about': {
@@ -27,5 +36,6 @@ export default defineConfig({
         },
       },
     },
+   */
   },
 });

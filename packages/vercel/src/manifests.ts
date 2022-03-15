@@ -31,9 +31,9 @@ export function getPrerenderManifest(
 
     acc[key === '/' ? '/index' : key] = {
       initialRevalidateSeconds:
-        isr?.initialRevalidateSeconds ??
         val?.initialRevalidateSeconds ??
         prerenderManifestDefault?.routes?.[key]?.initialRevalidateSeconds ??
+        isr?.initialRevalidateSeconds ??
         30,
       srcRoute: srcRoute,
       dataRoute:

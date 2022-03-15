@@ -1,9 +1,9 @@
-// TODO move in vite-plugin-ssr?
+// TODO move in vite-plugin-ssr
 
 import { prerender as prerenderCli } from 'vite-plugin-ssr/cli';
 import path from 'path';
 import fs from 'fs/promises';
-import { normalizePath, ResolvedConfig, UserConfig } from 'vite';
+import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
 import { PageContextBuiltIn } from 'vite-plugin-ssr';
 import {
   ViteVercelPrerenderFn,
@@ -77,7 +77,9 @@ export const prerender: ViteVercelPrerenderFn = async (
       ) {
         isrPages[pageContext.url] = {
           initialRevalidateSeconds:
-            pageContext.pageExports.initialRevalidateSeconds,
+            pageContext.pageExports.initialRevalidateSeconds === 0
+              ? resolvedConfig.vercel?.isr?.initialRevalidateSeconds
+              : pageContext.pageExports.initialRevalidateSeconds,
         };
       }
 
@@ -88,3 +90,19 @@ export const prerender: ViteVercelPrerenderFn = async (
 
   return isrPages;
 };
+
+export function vitePluginSsrVercelPlugin(): Plugin {
+  return {
+    name: libName,
+    apply: 'build',
+    config(userConfig) {
+      return {
+        vercel: {
+          isr: {
+            prerender: userConfig.vercel?.isr?.prerender ?? prerender,
+          },
+        },
+      };
+    },
+  } as Plugin;
+}
