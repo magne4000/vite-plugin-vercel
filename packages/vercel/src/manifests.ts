@@ -91,17 +91,17 @@ export function getRoutesManifest(
 ): RoutesManifest {
   const routesManifest = resolvedConfig.vercel?.routesManifest;
 
-  const rewrites = [
-    ...(ssr?.rewrites ?? []),
-    ...(routesManifest?.rewrites ?? []),
+  const dynamicRoutes = [
+    ...(ssr?.dynamicRoutes ?? []),
+    ...(routesManifest?.dynamicRoutes ?? []),
   ];
 
   return {
     version: 3,
     basePath: routesManifest?.basePath ?? '/',
     pages404: routesManifest?.pages404 ?? true,
-    dynamicRoutes: routesManifest?.dynamicRoutes,
-    rewrites: rewrites.length > 0 ? rewrites : undefined,
+    dynamicRoutes: dynamicRoutes.length > 0 ? dynamicRoutes : undefined,
+    rewrites: routesManifest?.rewrites,
     redirects: routesManifest?.redirects,
     headers: routesManifest?.headers,
   };
