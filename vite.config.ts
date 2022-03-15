@@ -21,5 +21,12 @@ export default defineConfig({
         },
       },
     },
+    functionsManifest: {
+      pages: {
+        'ssr.js': {
+          maxDuration: 9,
+        },
+      },
+    },
   },
 });

@@ -75,16 +75,16 @@ export function getPrerenderManifestDestination(
 export function getRoutesManifest(
   resolvedConfig: ResolvedConfig,
 ): RoutesManifest {
-  const routesManifestDefault = resolvedConfig.vercel?.routesManifest;
+  const routesManifest = resolvedConfig.vercel?.routesManifest;
 
   return {
     version: 3,
-    basePath: routesManifestDefault?.basePath ?? '/',
-    pages404: routesManifestDefault?.pages404 ?? true,
-    dynamicRoutes: routesManifestDefault?.dynamicRoutes,
-    rewrites: routesManifestDefault?.rewrites,
-    redirects: routesManifestDefault?.redirects,
-    headers: routesManifestDefault?.headers,
+    basePath: routesManifest?.basePath ?? '/',
+    pages404: routesManifest?.pages404 ?? true,
+    dynamicRoutes: routesManifest?.dynamicRoutes,
+    rewrites: routesManifest?.rewrites,
+    redirects: routesManifest?.redirects,
+    headers: routesManifest?.headers,
   };
 }
 
