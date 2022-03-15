@@ -1,25 +1,37 @@
-import { ResolvedConfig, UserConfig } from 'vite';
+import { ResolvedConfig } from 'vite';
 import * as glob from 'fast-glob';
 import path from 'path';
 import { getRoot, pathRelativeToApi } from './utils';
 import { build } from 'esbuild';
 import { FunctionsManifest } from './types';
 
-export function getApiEntries(config: UserConfig | ResolvedConfig) {
+function getApiEndpoints(resolvedConfig: ResolvedConfig) {
+  const apiEndpoints = (resolvedConfig.vercel?.apiEndpoints ?? []).map((p) =>
+    path.isAbsolute(p) ? p : path.resolve(getRoot(resolvedConfig), p),
+  );
+
+  return new Set(apiEndpoints);
+}
+
+export function getApiEntries(resolvedConfig: ResolvedConfig) {
+  const apiEndpoints = getApiEndpoints(resolvedConfig);
+
   const apiEntries = glob
-    .sync(`${getRoot(config)}/api/**/*.*([a-zA-Z0-9])`)
+    .sync(`${getRoot(resolvedConfig)}/api/**/*.*([a-zA-Z0-9])`)
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith('_'));
 
-  const entryPoints: Record<string, string> = {};
-  for (const filePath of apiEntries) {
-    const outFilePath = pathRelativeToApi(filePath, config);
+  return apiEntries.reduce((entryPoints, filePath) => {
+    const prefix = apiEndpoints.has(filePath) ? 'api/' : '';
+    const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
     const parsed = path.parse(outFilePath);
-    entryPoints[`${path.join(parsed.dir, parsed.name)}`] = filePath;
-  }
-  return entryPoints;
+    entryPoints[`${prefix}${path.join(parsed.dir, parsed.name)}`] = filePath;
+
+    return entryPoints;
+  }, {} as Record<string, string>);
 }
 
+// TODO build all targets at once, with shared code in [function].nft.json files
 export async function buildFn(
   resolvedConfig: ResolvedConfig,
   source: string,
@@ -41,7 +53,6 @@ export async function buildFn(
   });
 }
 
-// TODO how to know if file should be generated to ".output/server/pages" or .output/server/pages/api"?
 export async function buildApiEndpoints(
   resolvedConfig: ResolvedConfig,
 ): Promise<FunctionsManifest['pages']> {

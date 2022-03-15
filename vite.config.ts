@@ -9,7 +9,7 @@ export default defineConfig({
     isr: {
       initialRevalidateSeconds: 25,
     },
-    apiEndpoints: ['/ssr'],
+    apiEndpoints: ['./api/post.ts'],
     prerenderManifest: {
       routes: {
         '/': {
