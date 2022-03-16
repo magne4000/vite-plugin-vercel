@@ -221,10 +221,10 @@ export function vitePluginSsrVercelPlugin(): Plugin {
   return {
     name: libName,
     apply: 'build',
-    config(userConfig) {
+    config(userConfig): UserConfig {
       return {
         vercel: {
-          isr: {
+          ssr: {
             prerender: userConfig.vercel?.ssr?.prerender ?? prerender,
           },
           buildApiEndpoints,
