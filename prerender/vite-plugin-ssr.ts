@@ -117,13 +117,18 @@ export const prerender: ViteVercelPrerenderFn = async (
       routes.ssr.rewrites = [];
     }
 
+    const rewrites = resolvedConfig.vercel?.routesManifest?.rewrites ?? [];
+
     for (const route of ssrPages) {
+      // can be overriden by user config or another plugin
+      const overrideRewrite = rewrites.find((r) => r.source === route);
+
       routes.ssr.rewrites.push({
-        // TODO can be overriden by user, check duplicate by source before generating
         source: route,
         destination: '/api/ssr_',
         // TODO not sure that .* should be there
         regex: '^' + route + '.*$',
+        ...overrideRewrite,
       });
     }
   }
