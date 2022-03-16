@@ -86,15 +86,10 @@ export function getRoutesManifest(
   ssr: ViteVercelPrerenderRoute['ssr'],
 ): RoutesManifest {
   const routesManifest = resolvedConfig.vercel?.routesManifest;
-  const redirects = resolvedConfig.vercel?.redirects;
-  // TODO if /:path is present -> dynamicRoutes instead
-  // TODO !! try vercel.json redirects
-  const rewrites = resolvedConfig.vercel?.rewrites ?? [];
 
   const allRewrites: NonNullable<RoutesManifest['rewrites']> = [
     ...(ssr?.rewrites ?? []),
     ...(routesManifest?.rewrites ?? []),
-    // ...rewrites
   ];
 
   return {

@@ -1,5 +1,4 @@
 import type { ResolvedConfig } from 'vite';
-import { Vercel } from "../vercel";
 
 // RoutesManifest
 
@@ -114,13 +113,14 @@ export interface PrerenderManifestDefault {
 
 // Vite config for Vercel
 
-export interface ViteVercelConfig extends Pick<Vercel, 'functions' | 'regions' | 'redirects' | 'rewrites' | 'headers'> {
+export interface ViteVercelConfig {
   isr?: {
     initialRevalidateSeconds?: number;
     prerender?: ViteVercelPrerenderFn;
   };
   apiEndpoints?: string[];
   ssrEndpoint?: string;
+  functionsManifest?: Partial<Omit<FunctionsManifest, 'version'>>;
   routesManifest?: RoutesManifestDefault;
   prerenderManifest?: PrerenderManifestDefault;
 }

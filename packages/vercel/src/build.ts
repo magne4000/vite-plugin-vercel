@@ -5,7 +5,6 @@ import { getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';
 import { FunctionsManifest } from './types';
 import fs from 'fs/promises';
-import { Vercel } from "../vercel";
 
 function getApiEndpoints(resolvedConfig: ResolvedConfig) {
   const apiEndpoints = (resolvedConfig.vercel?.apiEndpoints ?? []).map((p) =>
@@ -119,9 +118,8 @@ export async function buildApiEndpoints(
   resolvedConfig: ResolvedConfig,
 ): Promise<FunctionsManifest['pages']> {
   const entries = getApiEntries(resolvedConfig);
-  const pages = resolvedConfig.vercel?.functions ?? {};
+  const pages = resolvedConfig.vercel?.functionsManifest?.pages ?? {};
   const fnManifests: FunctionsManifest['pages'] = {};
-  const regions = resolvedConfig.vercel?.regions;
 
   for (const [key, val] of Object.entries(entries)) {
     await buildFn(resolvedConfig, key, val);
@@ -129,8 +127,7 @@ export async function buildApiEndpoints(
 
     fnManifests[keyJs] = {
       maxDuration: 10,
-      ...transformPage(pages[keyJs]),
-      regions,
+      ...pages[keyJs],
     };
   }
 
@@ -138,23 +135,13 @@ export async function buildApiEndpoints(
 
   fnManifests.ssr_ = {
     maxDuration: 10,
-    ...transformPage(pages.ssr_ ?? pages['api/ssr_']),
-    regions,
+    ...(pages.ssr_ ?? pages['api/ssr_']),
   };
 
   fnManifests['api/ssr_'] = {
     maxDuration: 10,
-    ...transformPage(pages.ssr_ ?? pages['api/ssr_']),
-    regions,
+    ...(pages.ssr_ ?? pages['api/ssr_']),
   };
 
   return fnManifests;
-}
-
-function transformPage(page?: NonNullable<Vercel['functions']>[string]): FunctionsManifest['pages'][string] | undefined {
-  if (!page) return;
-  // Should we use that?
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { excludeFiles, includeFiles, ...rest } = page;
-  return rest;
 }
