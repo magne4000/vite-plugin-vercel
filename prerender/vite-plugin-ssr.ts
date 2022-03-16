@@ -1,5 +1,5 @@
 // TODO move in vite-plugin-ssr
-
+import '@vercel/node';
 import { prerender as prerenderCli } from 'vite-plugin-ssr/cli';
 import path from 'path';
 import fs from 'fs/promises';
@@ -119,7 +119,6 @@ export const prerender: ViteVercelPrerenderFn = async (
 
     for (const route of ssrPages) {
       routes.ssr.rewrites.push({
-        // TODO use @vercel/build-utils AND/OR @vercel/routing-utils
         // TODO can be overriden by user, check duplicate by source before generating
         source: route,
         destination: '/api/ssr_',

@@ -1,11 +1,11 @@
 import { ResolvedConfig } from 'vite';
-import * as glob from 'fast-glob';
+import * as glob from 'glob';
 import path from 'path';
 import { getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';
 import { FunctionsManifest } from './types';
-import { detectBuilders } from '@vercel/build-utils/dist';
 import fs from 'fs/promises';
+import { Vercel } from "../vercel";
 
 function getApiEndpoints(resolvedConfig: ResolvedConfig) {
   const apiEndpoints = (resolvedConfig.vercel?.apiEndpoints ?? []).map((p) =>
@@ -19,13 +19,9 @@ export function getApiEntries(resolvedConfig: ResolvedConfig) {
   const apiEndpoints = getApiEndpoints(resolvedConfig);
 
   const apiEntries = glob
-    .sync(`${getRoot(resolvedConfig)}/api/**/*.*([a-zA-Z0-9])`)
+    .sync(`${getRoot(resolvedConfig)}/api/**/*.*`)
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith('_'));
-
-  detectBuilders(
-    apiEntries.map((p) => 'api/' + pathRelativeToApi(p, resolvedConfig)),
-  ).then(console.log);
 
   return apiEntries.reduce((entryPoints, filePath) => {
     const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
@@ -123,8 +119,9 @@ export async function buildApiEndpoints(
   resolvedConfig: ResolvedConfig,
 ): Promise<FunctionsManifest['pages']> {
   const entries = getApiEntries(resolvedConfig);
-  const pages = resolvedConfig.vercel?.functionsManifest?.pages ?? {};
+  const pages = resolvedConfig.vercel?.functions ?? {};
   const fnManifests: FunctionsManifest['pages'] = {};
+  const regions = resolvedConfig.vercel?.regions;
 
   for (const [key, val] of Object.entries(entries)) {
     await buildFn(resolvedConfig, key, val);
@@ -132,7 +129,8 @@ export async function buildApiEndpoints(
 
     fnManifests[keyJs] = {
       maxDuration: 10,
-      ...pages[keyJs],
+      ...transformPage(pages[keyJs]),
+      regions,
     };
   }
 
@@ -140,13 +138,23 @@ export async function buildApiEndpoints(
 
   fnManifests.ssr_ = {
     maxDuration: 10,
-    ...(pages.ssr_ ?? pages['api/ssr_']),
+    ...transformPage(pages.ssr_ ?? pages['api/ssr_']),
+    regions,
   };
 
   fnManifests['api/ssr_'] = {
     maxDuration: 10,
-    ...(pages.ssr_ ?? pages['api/ssr_']),
+    ...transformPage(pages.ssr_ ?? pages['api/ssr_']),
+    regions,
   };
 
   return fnManifests;
+}
+
+function transformPage(page?: NonNullable<Vercel['functions']>[string]): FunctionsManifest['pages'][string] | undefined {
+  if (!page) return;
+  // Should we use that?
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { excludeFiles, includeFiles, ...rest } = page;
+  return rest;
 }

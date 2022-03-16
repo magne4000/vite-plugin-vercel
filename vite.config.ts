@@ -12,22 +12,5 @@ export default defineConfig({
       // prerender: populated by vitePluginSsrVercelPlugin
     },
     apiEndpoints: ['./api/post.ts'],
-    /** override examples
-    prerenderManifest: {
-      routes: {
-        '/about': {
-          srcRoute: '/ssr',
-          initialRevalidateSeconds: 20,
-        },
-      },
-    },
-    functionsManifest: {
-      pages: {
-        'ssr.js': {
-          maxDuration: 9,
-        },
-      },
-    },
-   */
   },
 });

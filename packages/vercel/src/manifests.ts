@@ -86,10 +86,15 @@ export function getRoutesManifest(
   ssr: ViteVercelPrerenderRoute['ssr'],
 ): RoutesManifest {
   const routesManifest = resolvedConfig.vercel?.routesManifest;
+  const redirects = resolvedConfig.vercel?.redirects;
+  // TODO if /:path is present -> dynamicRoutes instead
+  // TODO !! try vercel.json redirects
+  const rewrites = resolvedConfig.vercel?.rewrites ?? [];
 
-  const rewrites = [
+  const allRewrites: NonNullable<RoutesManifest['rewrites']> = [
     ...(ssr?.rewrites ?? []),
     ...(routesManifest?.rewrites ?? []),
+    // ...rewrites
   ];
 
   return {
@@ -97,7 +102,7 @@ export function getRoutesManifest(
     basePath: routesManifest?.basePath ?? '/',
     pages404: routesManifest?.pages404 ?? true,
     dynamicRoutes: routesManifest?.dynamicRoutes,
-    rewrites: rewrites.length > 0 ? rewrites : undefined,
+    rewrites: allRewrites.length > 0 ? allRewrites : undefined,
     redirects: routesManifest?.redirects,
     headers: routesManifest?.headers,
   };

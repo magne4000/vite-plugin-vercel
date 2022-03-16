@@ -8,5 +8,10 @@
     "strict": true,
     "skipLibCheck": true,
     "moduleResolution": "Node"
+  },
+  "ts-node": {
+    "moduleTypes": {
+      "vercel-to-ts.ts": "esm"
+    }
   }
 }

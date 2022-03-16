@@ -19,11 +19,12 @@
   "repository": "https://github.com/magne4000/vite-plugin-vercel",
   "license": "MIT",
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "pnpm run gen:vercel-ts && tsup",
+    "dev": "pnpm run gen:vercel-ts && tsup --watch",
     "prepack": "rm -rf dist && pnpm build",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
+    "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist",
+    "gen:vercel-ts": "ts-node-esm vercel-to-ts.ts"
   },
   "peerDependencies": {
     "vite": "^2.8.1"
@@ -35,13 +36,15 @@
     "esbuild": "^0.14.25",
     "eslint": "^8.10.0",
     "eslint-plugin-solid": "^0.4.4",
-    "fast-glob": "^3.2.11",
+    "json-schema-to-typescript": "^10.1.5",
+    "node-fetch": "^3.2.3",
+    "ts-node": "^10.7.0",
     "tsup": "^5.12.0",
     "typescript": "^4.6.2",
     "vite": "^2.8.6"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.4",
-    "@vercel/build-utils": "^2.14.0"
+    "glob": "^7.2.0"
   }
 }
