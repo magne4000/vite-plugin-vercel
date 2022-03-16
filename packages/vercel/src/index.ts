@@ -41,11 +41,17 @@ function vercelPlugin(): Plugin {
       // step 3.1:	Execute vite-plugin-ssr prerender
       const isrPages = await execPrerender(resolvedConfig);
 
-      // step 3.2:	Compile "api/*" to ".output/server/pages"
+      // step 3.2:	Compile "api/*" to ".output/server/pages" and ".output/server/pages/api"
       const fnManifests = await buildApiEndpoints(resolvedConfig);
+      const fnManifestsBis = await resolvedConfig.vercel?.buildApiEndpoints?.(
+        resolvedConfig,
+      );
 
       // step 3.3:	Generates manifests
-      await generateFunctionsManifest(resolvedConfig, fnManifests);
+      await generateFunctionsManifest(resolvedConfig, {
+        ...fnManifests,
+        ...fnManifestsBis,
+      });
       await generateRoutesManifest(resolvedConfig, isrPages?.ssr);
       await generatePrerenderManifest(resolvedConfig, isrPages?.isr);
     },

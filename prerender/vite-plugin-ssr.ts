@@ -11,8 +11,11 @@ import {
 } from 'vite-plugin-vercel';
 import { newError } from '@brillout/libassert';
 import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
+import { build, BuildOptions } from 'esbuild';
 
 const libName = 'vite-plugin-ssr:vercel';
+const ssrEndpointDestination = 'api/ssr_';
+const isrEndpointDestination = 'ssr_';
 
 export function assert(
   condition: unknown,
@@ -91,9 +94,10 @@ export const prerender: ViteVercelPrerenderFn = async (
         }
 
         routes.isr.routes[pageContext.url] = {
+          srcRoute: '/' + isrEndpointDestination,
           initialRevalidateSeconds:
             pageContext.pageExports.initialRevalidateSeconds === 0
-              ? resolvedConfig.vercel?.isr?.initialRevalidateSeconds
+              ? resolvedConfig.vercel?.ssr?.initialRevalidateSeconds
               : pageContext.pageExports.initialRevalidateSeconds,
         };
       }
@@ -125,7 +129,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
       routes.ssr.rewrites.push({
         source: route,
-        destination: '/api/ssr_',
+        destination: '/' + ssrEndpointDestination,
         // TODO not sure that .* should be there
         regex: '^' + route + '.*$',
         ...overrideRewrite,
@@ -136,6 +140,83 @@ export const prerender: ViteVercelPrerenderFn = async (
   return routes;
 };
 
+const commonBuildOptions: BuildOptions = {
+  bundle: true,
+  target: 'es2020',
+  format: 'cjs',
+  platform: 'node',
+  logLevel: 'info',
+  minify: true,
+};
+
+/**
+ * Build `vite-plugin-ssr` specific endpoint
+ *
+ * @param resolvedConfig
+ * @param source path to a file exporting a Vercel handler using `vite-plugin-ssr`. If not specified, default template is used
+ */
+export async function buildApiEndpoints(
+  resolvedConfig: ResolvedConfig,
+  source?: string,
+) {
+  const sourcefile =
+    source ?? path.join(__dirname, 'templates', 'ssr_.template.ts');
+  const contents = await fs.readFile(sourcefile, 'utf-8');
+
+  const outfile = path.join(
+    getRoot(resolvedConfig),
+    '.output/server/pages',
+    `${ssrEndpointDestination}.js`,
+  );
+
+  const outfile2 = path.join(
+    getRoot(resolvedConfig),
+    '.output/server/pages',
+    `${isrEndpointDestination}.js`,
+  );
+
+  const importBuildPath = path.join(
+    getRoot(resolvedConfig),
+    'dist/server/importBuild',
+  );
+  const resolveDir = path.dirname(sourcefile);
+  const relativeImportBuildPath = path.relative(resolveDir, importBuildPath);
+
+  await build({
+    ...commonBuildOptions,
+    outfile,
+    stdin: {
+      contents: `import '${relativeImportBuildPath}';\n` + contents,
+      sourcefile,
+      loader: sourcefile.endsWith('.ts')
+        ? 'ts'
+        : sourcefile.endsWith('.tsx')
+        ? 'tsx'
+        : sourcefile.endsWith('.js')
+        ? 'js'
+        : sourcefile.endsWith('.jsx')
+        ? 'jsx'
+        : 'default',
+      resolveDir,
+    },
+  });
+
+  // `.output/server/pages` for static and ISR pages, `.output/server/pages/api` for SSR pages
+  await fs.copyFile(outfile, outfile2);
+
+  const pages = resolvedConfig.vercel?.functionsManifest?.pages ?? {};
+  return {
+    [isrEndpointDestination]: {
+      maxDuration: 10,
+      ...(pages[isrEndpointDestination] ?? pages[ssrEndpointDestination]),
+    },
+    [ssrEndpointDestination]: {
+      maxDuration: 10,
+      ...(pages[isrEndpointDestination] ?? pages[ssrEndpointDestination]),
+    },
+  };
+}
+
 export function vitePluginSsrVercelPlugin(): Plugin {
   return {
     name: libName,
@@ -144,9 +225,9 @@ export function vitePluginSsrVercelPlugin(): Plugin {
       return {
         vercel: {
           isr: {
-            prerender: userConfig.vercel?.isr?.prerender ?? prerender,
+            prerender: userConfig.vercel?.ssr?.prerender ?? prerender,
           },
-          ssrEndpoint: path.join(__dirname, 'templates', 'ssr_.template.ts'),
+          buildApiEndpoints,
         },
       };
     },

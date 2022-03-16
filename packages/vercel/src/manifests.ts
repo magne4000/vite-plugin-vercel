@@ -9,6 +9,7 @@ import {
 } from './types';
 import path from 'path';
 import { getRoot } from './utils';
+import { assert } from './assert';
 
 // Prerender manifest
 
@@ -16,21 +17,24 @@ export function getPrerenderManifest(
   resolvedConfig: ResolvedConfig,
   isrPages: ViteVercelPrerenderRoute['isr'],
 ): PrerenderManifest {
-  const isr = resolvedConfig.vercel?.isr;
+  const ssr = resolvedConfig.vercel?.ssr;
   const prerenderManifestDefault = resolvedConfig.vercel?.prerenderManifest;
 
   const routes = Object.entries(isrPages?.routes ?? {}).reduce(
     (acc, [key, val]) => {
       const srcRoute =
-        val?.srcRoute ??
-        prerenderManifestDefault?.routes?.[key]?.srcRoute ??
-        '/ssr_';
+        val?.srcRoute ?? prerenderManifestDefault?.routes?.[key]?.srcRoute;
+
+      assert(
+        typeof srcRoute === 'string',
+        `\`[prerender-manifest] { srcRoute }\` is required for route ${key}`,
+      );
 
       acc[key === '/' ? '/index' : key] = {
         initialRevalidateSeconds:
           val?.initialRevalidateSeconds ??
           prerenderManifestDefault?.routes?.[key]?.initialRevalidateSeconds ??
-          isr?.initialRevalidateSeconds ??
+          ssr?.initialRevalidateSeconds ??
           30,
         srcRoute: srcRoute,
         dataRoute:

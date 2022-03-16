@@ -114,14 +114,54 @@ export interface PrerenderManifestDefault {
 // Vite config for Vercel
 
 export interface ViteVercelConfig {
-  isr?: {
+  ssr?: {
+    /**
+     * If ISR is supported, default revalidation time per-page can be overriden
+     * @see {@link https://vercel.com/docs/concepts/next.js/incremental-static-regeneration}
+     */
     initialRevalidateSeconds?: number;
-    prerender?: ViteVercelPrerenderFn;
+    /**
+     * Also known as Server Side Generation, or SSG.
+     * If present, must build static files in `.output/server/pages`.
+     * Can be set to `false` to disable prerendering completely.
+     */
+    prerender?: ViteVercelPrerenderFn | false;
   };
+  /**
+   * By default, all `api/*` endpoints are compiled under `.ouput/server/pages` and `.ouput/server/pages/api`.
+   * If a file must be compiled only under `.ouput/server/pages/api`, it should be added here.
+   *
+   * @example
+   * ```
+   * {
+   *   apiEndpoints: ['./api/post.ts']
+   * }
+   * ```
+   */
   apiEndpoints?: string[];
-  ssrEndpoint?: string;
+  /**
+   * Build endpoints on top of the default ones.
+   * For instance, a framework can leverage this to have a generic ssr endpoint
+   * without requiring the user to write any code.
+   */
+  buildApiEndpoints?: ViteVercelBuildApiEndpointsFn;
+  /**
+   * Advanced configuration to override funtions-manifest.json
+   * @see {@link https://vercel.com/docs/file-system-api#configuration/functions}
+   * @protected
+   */
   functionsManifest?: Partial<Omit<FunctionsManifest, 'version'>>;
+  /**
+   * Advanced configuration to override routes-manifest.json
+   * @see {@link https://vercel.com/docs/file-system-api#configuration/routes}
+   * @protected
+   */
   routesManifest?: RoutesManifestDefault;
+  /**
+   * Advanced configuration to override prerender-manifest.json
+   * @see {@link https://vercel.com/docs/file-system-api#configuration/pre-rendering}
+   * @protected
+   */
   prerenderManifest?: PrerenderManifestDefault;
 }
 
@@ -132,3 +172,6 @@ export type ViteVercelPrerenderRoute = {
 export type ViteVercelPrerenderFn = (
   resolvedConfig: ResolvedConfig,
 ) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;
+export type ViteVercelBuildApiEndpointsFn = (
+  resolvedConfig: ResolvedConfig,
+) => FunctionsManifest['pages'] | Promise<FunctionsManifest['pages']>;

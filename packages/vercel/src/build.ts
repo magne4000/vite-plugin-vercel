@@ -4,7 +4,6 @@ import path from 'path';
 import { getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';
 import { FunctionsManifest } from './types';
-import fs from 'fs/promises';
 
 function getApiEndpoints(resolvedConfig: ResolvedConfig) {
   const apiEndpoints = (resolvedConfig.vercel?.apiEndpoints ?? []).map((p) =>
@@ -64,56 +63,6 @@ export async function buildFn(
   });
 }
 
-export async function buildFnStdin(resolvedConfig: ResolvedConfig) {
-  const userEndpoint = resolvedConfig.vercel?.ssrEndpoint;
-
-  if (!userEndpoint) return;
-
-  const contents = await fs.readFile(userEndpoint, 'utf-8');
-  const sourcefile = userEndpoint;
-
-  const outfile = path.join(
-    getRoot(resolvedConfig),
-    '.output/server/pages',
-    'api/ssr_.js',
-  );
-
-  const outfile2 = path.join(
-    getRoot(resolvedConfig),
-    '.output/server/pages',
-    'ssr_.js',
-  );
-
-  const importBuildPath = path.join(
-    getRoot(resolvedConfig),
-    'dist/server/importBuild',
-  );
-  const resolveDir = path.dirname(userEndpoint);
-  const relativeImportBuildPath = path.relative(resolveDir, importBuildPath);
-
-  await build({
-    ...commonBuildOptions,
-    outfile,
-    stdin: {
-      contents: `import '${relativeImportBuildPath}';\n` + contents,
-      sourcefile,
-      loader: sourcefile.endsWith('.ts')
-        ? 'ts'
-        : sourcefile.endsWith('.tsx')
-        ? 'tsx'
-        : sourcefile.endsWith('.js')
-        ? 'js'
-        : sourcefile.endsWith('.jsx')
-        ? 'jsx'
-        : 'default',
-      resolveDir,
-    },
-  });
-
-  // `.output/server/pages` for static and ISR pages, `.output/server/pages/api` for SSR pages
-  await fs.copyFile(outfile, outfile2);
-}
-
 export async function buildApiEndpoints(
   resolvedConfig: ResolvedConfig,
 ): Promise<FunctionsManifest['pages']> {
@@ -130,18 +79,6 @@ export async function buildApiEndpoints(
       ...pages[keyJs],
     };
   }
-
-  await buildFnStdin(resolvedConfig);
-
-  fnManifests.ssr_ = {
-    maxDuration: 10,
-    ...(pages.ssr_ ?? pages['api/ssr_']),
-  };
-
-  fnManifests['api/ssr_'] = {
-    maxDuration: 10,
-    ...(pages.ssr_ ?? pages['api/ssr_']),
-  };
 
   return fnManifests;
 }
