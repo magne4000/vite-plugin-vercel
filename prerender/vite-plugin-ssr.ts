@@ -142,6 +142,7 @@ export function vitePluginSsrVercelPlugin(): Plugin {
           isr: {
             prerender: userConfig.vercel?.isr?.prerender ?? prerender,
           },
+          ssrEndpoint: path.join(__dirname, 'templates', 'ssr_.template.ts'),
         },
       };
     },

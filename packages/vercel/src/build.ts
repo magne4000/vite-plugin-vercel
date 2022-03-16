@@ -5,11 +5,7 @@ import { getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';
 import { FunctionsManifest } from './types';
 import { detectBuilders } from '@vercel/build-utils/dist';
-import ssrTemplate from './templates/ssr_.template';
 import fs from 'fs/promises';
-
-// handled by tsup
-const ssr_: string = ssrTemplate as unknown as string;
 
 function getApiEndpoints(resolvedConfig: ResolvedConfig) {
   const apiEndpoints = (resolvedConfig.vercel?.apiEndpoints ?? []).map((p) =>
@@ -75,10 +71,11 @@ export async function buildFn(
 
 export async function buildFnStdin(resolvedConfig: ResolvedConfig) {
   const userEndpoint = resolvedConfig.vercel?.ssrEndpoint;
-  const contents = userEndpoint
-    ? await fs.readFile(userEndpoint, 'utf-8')
-    : ssr_;
-  const sourcefile = userEndpoint ?? 'ssr_.ts';
+
+  if (!userEndpoint) return;
+
+  const contents = await fs.readFile(userEndpoint, 'utf-8');
+  const sourcefile = userEndpoint;
 
   const outfile = path.join(
     getRoot(resolvedConfig),
@@ -92,11 +89,18 @@ export async function buildFnStdin(resolvedConfig: ResolvedConfig) {
     'ssr_.js',
   );
 
+  const importBuildPath = path.join(
+    getRoot(resolvedConfig),
+    'dist/server/importBuild',
+  );
+  const resolveDir = path.dirname(userEndpoint);
+  const relativeImportBuildPath = path.relative(resolveDir, importBuildPath);
+
   await build({
     ...commonBuildOptions,
     outfile,
     stdin: {
-      contents: "import '../dist/server/importBuild';\n" + contents,
+      contents: `import '${relativeImportBuildPath}';\n` + contents,
       sourcefile,
       loader: sourcefile.endsWith('.ts')
         ? 'ts'
@@ -107,12 +111,11 @@ export async function buildFnStdin(resolvedConfig: ResolvedConfig) {
         : sourcefile.endsWith('.jsx')
         ? 'jsx'
         : 'default',
-      resolveDir: userEndpoint
-        ? path.dirname(userEndpoint)
-        : path.join(getRoot(resolvedConfig), 'api'),
+      resolveDir,
     },
   });
 
+  // `.output/server/pages` for static and ISR pages, `.output/server/pages/api` for SSR pages
   await fs.copyFile(outfile, outfile2);
 }
 

@@ -10,8 +10,5 @@ export default defineConfig([
     dts: {
       entry: './src/index.ts',
     },
-    loader: {
-      '.template.ts': 'text',
-    },
   },
 ]);
