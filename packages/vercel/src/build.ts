@@ -1,5 +1,5 @@
 import { ResolvedConfig } from 'vite';
-import * as glob from 'glob';
+import * as glob from 'fast-glob';
 import path from 'path';
 import { getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';
@@ -18,7 +18,7 @@ export function getApiEntries(resolvedConfig: ResolvedConfig) {
   const apiEndpoints = getApiEndpoints(resolvedConfig);
 
   const apiEntries = glob
-    .sync(`${getRoot(resolvedConfig)}/api/**/*.*`)
+    .sync(`${getRoot(resolvedConfig)}/api/**/*.*([a-zA-Z0-9])`)
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith('_'));
 
