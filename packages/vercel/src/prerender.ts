@@ -1,14 +1,11 @@
 import type { ResolvedConfig } from 'vite';
 
-export async function execPrerender(resolvedConfig: ResolvedConfig) {
+export function execPrerender(resolvedConfig: ResolvedConfig) {
   const prerender = resolvedConfig.vercel?.prerender;
 
   if (prerender === false) {
     return;
   }
 
-  const result = await prerender?.(resolvedConfig);
-
-  // TODO assert
-  return result;
+  return prerender?.(resolvedConfig);
 }

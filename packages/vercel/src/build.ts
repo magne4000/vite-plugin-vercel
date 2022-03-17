@@ -90,7 +90,14 @@ export async function buildFn(
     if (typeof entry.source === 'string') {
       options.entryPoints = [entry.source];
     } else {
-      // TODO assert
+      assert(
+        typeof entry.source === 'object',
+        `\`{ source }\` must be a string or an object`,
+      );
+      assert(
+        typeof entry.source.contents === 'string',
+        `\`{ contents }\` must be a string`,
+      );
       options.stdin = entry.source;
     }
   }
