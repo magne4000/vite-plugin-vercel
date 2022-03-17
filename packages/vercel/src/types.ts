@@ -143,6 +143,20 @@ export interface ViteVercelConfig {
    * All provided endpoints will also be part of the build process.
    * For instance, a framework can leverage this to have a generic ssr endpoint
    * without requiring the user to write any code.
+   *
+   * @example
+   * ```
+   * {
+   *   additionalEndpoints: [
+   *     {
+   *       // can also be an Object representing an esbuild StdinOptions
+   *       source: '/path/to/file.ts',
+   *       // relative to `.output/server/pages`, without extension
+   *       destination: ['file', '/api/file'],
+   *     }
+   *   ]
+   * }
+   * ```
    */
   additionalEndpoints?: ViteVercelApiEntry[];
   /**
@@ -174,10 +188,16 @@ export type ViteVercelPrerenderFn = (
 ) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;
 
 export interface ViteVercelApiEntry {
+  /**
+   * Path to entry file, or stdin config
+   */
   source: string | StdinOptions;
   /**
    * Relative to `.output/server/pages`, without extension
    */
   destination: string | string[];
+  /**
+   * Override esbuild options
+   */
   buildOptions?: BuildOptions;
 }
