@@ -15,6 +15,13 @@ export function getOutDir(
   return path.join(path.dirname(p), force);
 }
 
+export function getOutput(
+  config: ResolvedConfig,
+  suffix?: 'server/pages' | 'server/pages/api' | 'static',
+): string {
+  return path.join(getRoot(config), '.output', suffix ?? '');
+}
+
 export function pathRelativeToApi(
   filePath: string,
   config: UserConfig | ResolvedConfig,

@@ -8,7 +8,7 @@ import {
   ViteVercelPrerenderRoute,
 } from './types';
 import path from 'path';
-import { getRoot } from './utils';
+import { getOutput } from './utils';
 import { assert } from './assert';
 
 // Prerender manifest
@@ -75,11 +75,7 @@ export function getPrerenderManifest(
 export function getPrerenderManifestDestination(
   resolvedConfig: ResolvedConfig,
 ) {
-  return path.join(
-    getRoot(resolvedConfig),
-    '.output',
-    'prerender-manifest.json',
-  );
+  return path.join(getOutput(resolvedConfig), 'prerender-manifest.json');
 }
 
 // Routes manifest
@@ -107,7 +103,7 @@ export function getRoutesManifest(
 }
 
 export function getRoutesManifestDestination(resolvedConfig: ResolvedConfig) {
-  return path.join(getRoot(resolvedConfig), '.output', 'routes-manifest.json');
+  return path.join(getOutput(resolvedConfig), 'routes-manifest.json');
 }
 
 // Functions manifest
@@ -124,9 +120,5 @@ export function getFunctionsManifest(
 export function getFunctionsManifestDestination(
   resolvedConfig: ResolvedConfig,
 ) {
-  return path.join(
-    getRoot(resolvedConfig),
-    '.output',
-    'functions-manifest.json',
-  );
+  return path.join(getOutput(resolvedConfig), 'functions-manifest.json');
 }

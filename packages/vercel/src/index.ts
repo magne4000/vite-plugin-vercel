@@ -1,8 +1,7 @@
-import path from 'path';
 import fs from 'fs/promises';
 import type { Plugin, ResolvedConfig } from 'vite';
 import { FunctionsManifest, ViteVercelPrerenderRoute } from './types';
-import { copyDir, getOutDir, getRoot } from './utils';
+import { copyDir, getOutDir, getOutput } from './utils';
 import {
   getFunctionsManifest,
   getFunctionsManifestDestination,
@@ -53,14 +52,11 @@ function vercelPlugin(): Plugin {
 }
 
 async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
-  await copyDir(
-    getOutDir(resolvedConfig),
-    path.join(getRoot(resolvedConfig), '.output/static'),
-  );
+  await copyDir(getOutDir(resolvedConfig), getOutput(resolvedConfig, 'static'));
 }
 
 async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
-  await fs.rm(path.join(getRoot(resolvedConfig), '.output'), {
+  await fs.rm(getOutput(resolvedConfig), {
     recursive: true,
     force: true,
   });

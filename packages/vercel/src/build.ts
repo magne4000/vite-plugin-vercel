@@ -1,7 +1,7 @@
 import { ResolvedConfig } from 'vite';
 import * as glob from 'fast-glob';
 import path from 'path';
-import { getRoot, pathRelativeToApi } from './utils';
+import { getOutput, getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';
 import { FunctionsManifest, ViteVercelApiEntry } from './types';
 import { assert } from './assert';
@@ -29,7 +29,7 @@ export function getApiEntries(
     const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
     const parsed = path.parse(outFilePath);
 
-    const apiOnly = apiEndpoints.has(filePath) ? 'api/' : '';
+    const apiOnly = apiEndpoints.has(filePath);
     // `rewrites` in routes-manifest also rewrites the url for non `/api` pages.
     // So to ensure urls are kept for ssr pages, `/api` endpoint must be built
     const entry = {
@@ -76,8 +76,7 @@ export async function buildFn(
   const fnManifests: FunctionsManifest['pages'] = {};
 
   const outfile = path.join(
-    getRoot(resolvedConfig),
-    '.output/server/pages',
+    getOutput(resolvedConfig, 'server/pages'),
     firstDestination + '.js',
   );
 
@@ -106,7 +105,7 @@ export async function buildFn(
   for (const dest of remainingDestinations) {
     await fs.copyFile(
       outfile,
-      path.join(getRoot(resolvedConfig), '.output/server/pages', dest + '.js'),
+      path.join(getOutput(resolvedConfig, 'server/pages'), dest + '.js'),
     );
 
     fnManifests[dest + '.js'] = {
