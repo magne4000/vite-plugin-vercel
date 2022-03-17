@@ -6,12 +6,12 @@ import fs from 'fs/promises';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
 import { PageContextBuiltIn } from 'vite-plugin-ssr';
 import {
+  ViteVercelApiEntry,
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from 'vite-plugin-vercel';
 import { newError } from '@brillout/libassert';
 import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
-import { build, BuildOptions } from 'esbuild';
 
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';
@@ -97,7 +97,7 @@ export const prerender: ViteVercelPrerenderFn = async (
           srcRoute: '/' + isrEndpointDestination,
           initialRevalidateSeconds:
             pageContext.pageExports.initialRevalidateSeconds === 0
-              ? resolvedConfig.vercel?.ssr?.initialRevalidateSeconds
+              ? resolvedConfig.vercel?.initialRevalidateSeconds
               : pageContext.pageExports.initialRevalidateSeconds,
         };
       }
@@ -140,40 +140,14 @@ export const prerender: ViteVercelPrerenderFn = async (
   return routes;
 };
 
-const commonBuildOptions: BuildOptions = {
-  bundle: true,
-  target: 'es2020',
-  format: 'cjs',
-  platform: 'node',
-  logLevel: 'info',
-  minify: true,
-};
-
-/**
- * Build `vite-plugin-ssr` specific endpoint
- *
- * @param resolvedConfig
- * @param source path to a file exporting a Vercel handler using `vite-plugin-ssr`. If not specified, default template is used
- */
-export async function buildApiEndpoints(
-  resolvedConfig: ResolvedConfig,
+export async function getSsrEndpoint(
+  resolvedConfig: UserConfig,
   source?: string,
-) {
+): Promise<ViteVercelApiEntry> {
   const sourcefile =
     source ?? path.join(__dirname, 'templates', 'ssr_.template.ts');
   const contents = await fs.readFile(sourcefile, 'utf-8');
-
-  const outfile = path.join(
-    getRoot(resolvedConfig),
-    '.output/server/pages',
-    `${ssrEndpointDestination}.js`,
-  );
-
-  const outfile2 = path.join(
-    getRoot(resolvedConfig),
-    '.output/server/pages',
-    `${isrEndpointDestination}.js`,
-  );
+  const destination = [ssrEndpointDestination, isrEndpointDestination];
 
   const importBuildPath = path.join(
     getRoot(resolvedConfig),
@@ -182,10 +156,8 @@ export async function buildApiEndpoints(
   const resolveDir = path.dirname(sourcefile);
   const relativeImportBuildPath = path.relative(resolveDir, importBuildPath);
 
-  await build({
-    ...commonBuildOptions,
-    outfile,
-    stdin: {
+  return {
+    source: {
       contents: `import '${relativeImportBuildPath}';\n` + contents,
       sourcefile,
       loader: sourcefile.endsWith('.ts')
@@ -199,21 +171,7 @@ export async function buildApiEndpoints(
         : 'default',
       resolveDir,
     },
-  });
-
-  // `.output/server/pages` for static and ISR pages, `.output/server/pages/api` for SSR pages
-  await fs.copyFile(outfile, outfile2);
-
-  const pages = resolvedConfig.vercel?.functionsManifest?.pages ?? {};
-  return {
-    [isrEndpointDestination]: {
-      maxDuration: 10,
-      ...(pages[isrEndpointDestination] ?? pages[ssrEndpointDestination]),
-    },
-    [ssrEndpointDestination]: {
-      maxDuration: 10,
-      ...(pages[isrEndpointDestination] ?? pages[ssrEndpointDestination]),
-    },
+    destination,
   };
 }
 
@@ -221,13 +179,11 @@ export function vitePluginSsrVercelPlugin(): Plugin {
   return {
     name: libName,
     apply: 'build',
-    config(userConfig): UserConfig {
+    async config(userConfig): Promise<UserConfig> {
       return {
         vercel: {
-          ssr: {
-            prerender: userConfig.vercel?.ssr?.prerender ?? prerender,
-          },
-          buildApiEndpoints,
+          prerender: userConfig.vercel?.prerender ?? prerender,
+          additionalEndpoints: [await getSsrEndpoint(userConfig)],
         },
       };
     },

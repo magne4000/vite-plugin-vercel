@@ -3,7 +3,9 @@ import * as glob from 'fast-glob';
 import path from 'path';
 import { getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';
-import { FunctionsManifest } from './types';
+import { FunctionsManifest, ViteVercelApiEntry } from './types';
+import { assert } from './assert';
+import fs from 'fs/promises';
 
 function getApiEndpoints(resolvedConfig: ResolvedConfig) {
   const apiEndpoints = (resolvedConfig.vercel?.apiEndpoints ?? []).map((p) =>
@@ -13,7 +15,9 @@ function getApiEndpoints(resolvedConfig: ResolvedConfig) {
   return new Set(apiEndpoints);
 }
 
-export function getApiEntries(resolvedConfig: ResolvedConfig) {
+export function getApiEntries(
+  resolvedConfig: ResolvedConfig,
+): ViteVercelApiEntry[] {
   const apiEndpoints = getApiEndpoints(resolvedConfig);
 
   const apiEntries = glob
@@ -28,16 +32,22 @@ export function getApiEntries(resolvedConfig: ResolvedConfig) {
     const apiOnly = apiEndpoints.has(filePath) ? 'api/' : '';
     // `rewrites` in routes-manifest also rewrites the url for non `/api` pages.
     // So to ensure urls are kept for ssr pages, `/api` endpoint must be built
-    entryPoints[`api/${path.join(parsed.dir, parsed.name)}`] = filePath;
+    const entry = {
+      source: filePath,
+      destination: [`api/${path.join(parsed.dir, parsed.name)}`],
+    };
+
     if (!apiOnly) {
-      entryPoints[`${path.join(parsed.dir, parsed.name)}`] = filePath;
+      entry.destination.push(`${path.join(parsed.dir, parsed.name)}`);
     }
 
+    entryPoints.push(entry);
+
     return entryPoints;
-  }, {} as Record<string, string>);
+  }, resolvedConfig.vercel?.additionalEndpoints ?? []);
 }
 
-const commonBuildOptions: BuildOptions = {
+const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
   format: 'cjs',
@@ -49,35 +59,73 @@ const commonBuildOptions: BuildOptions = {
 // TODO build all targets at once, with shared code in [function].nft.json files
 export async function buildFn(
   resolvedConfig: ResolvedConfig,
-  source: string,
-  filepath: string,
-) {
-  await build({
-    ...commonBuildOptions,
-    outfile: path.join(
-      getRoot(resolvedConfig),
-      '.output/server/pages',
-      source + '.js',
-    ),
-    entryPoints: [filepath],
-  });
+  entry: ViteVercelApiEntry,
+  buildOptions?: BuildOptions,
+): Promise<FunctionsManifest['pages']> {
+  if (!Array.isArray(entry.destination)) {
+    entry.destination = [entry.destination];
+  }
+  assert(
+    entry.destination.length > 0,
+    `Endpoint ${
+      typeof entry.source === 'string' ? entry.source : '-'
+    } does not have build destination`,
+  );
+  const [firstDestination, ...remainingDestinations] = entry.destination;
+  const pages = resolvedConfig.vercel?.functionsManifest?.pages ?? {};
+  const fnManifests: FunctionsManifest['pages'] = {};
+
+  const outfile = path.join(
+    getRoot(resolvedConfig),
+    '.output/server/pages',
+    firstDestination + '.js',
+  );
+
+  const options = Object.assign(standardBuildOptions, { outfile });
+
+  if (buildOptions) {
+    Object.assign(options, buildOptions);
+  }
+
+  if (!options.stdin) {
+    if (typeof entry.source === 'string') {
+      options.entryPoints = [entry.source];
+    } else {
+      // TODO assert
+      options.stdin = entry.source;
+    }
+  }
+
+  await build(options);
+
+  fnManifests[firstDestination + '.js'] = {
+    maxDuration: 10,
+    ...pages[firstDestination + '.js'],
+  };
+
+  for (const dest of remainingDestinations) {
+    await fs.copyFile(
+      outfile,
+      path.join(getRoot(resolvedConfig), '.output/server/pages', dest + '.js'),
+    );
+
+    fnManifests[dest + '.js'] = {
+      maxDuration: 10,
+      ...(pages[dest + '.js'] ?? pages[firstDestination + '.js']),
+    };
+  }
+
+  return fnManifests;
 }
 
 export async function buildApiEndpoints(
   resolvedConfig: ResolvedConfig,
 ): Promise<FunctionsManifest['pages']> {
   const entries = getApiEntries(resolvedConfig);
-  const pages = resolvedConfig.vercel?.functionsManifest?.pages ?? {};
   const fnManifests: FunctionsManifest['pages'] = {};
 
-  for (const [key, val] of Object.entries(entries)) {
-    await buildFn(resolvedConfig, key, val);
-    const keyJs = key + '.js';
-
-    fnManifests[keyJs] = {
-      maxDuration: 10,
-      ...pages[keyJs],
-    };
+  for (const entry of entries) {
+    Object.assign(fnManifests, await buildFn(resolvedConfig, entry));
   }
 
   return fnManifests;

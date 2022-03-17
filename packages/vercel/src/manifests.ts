@@ -17,7 +17,6 @@ export function getPrerenderManifest(
   resolvedConfig: ResolvedConfig,
   isrPages: ViteVercelPrerenderRoute['isr'],
 ): PrerenderManifest {
-  const ssr = resolvedConfig.vercel?.ssr;
   const prerenderManifestDefault = resolvedConfig.vercel?.prerenderManifest;
 
   const routes = Object.entries(isrPages?.routes ?? {}).reduce(
@@ -34,7 +33,7 @@ export function getPrerenderManifest(
         initialRevalidateSeconds:
           val?.initialRevalidateSeconds ??
           prerenderManifestDefault?.routes?.[key]?.initialRevalidateSeconds ??
-          ssr?.initialRevalidateSeconds ??
+          resolvedConfig.vercel?.initialRevalidateSeconds ??
           30,
         srcRoute: srcRoute,
         dataRoute:

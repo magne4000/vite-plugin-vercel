@@ -43,15 +43,9 @@ function vercelPlugin(): Plugin {
 
       // step 3.2:	Compile "api/*" to ".output/server/pages" and ".output/server/pages/api"
       const fnManifests = await buildApiEndpoints(resolvedConfig);
-      const fnManifestsBis = await resolvedConfig.vercel?.buildApiEndpoints?.(
-        resolvedConfig,
-      );
 
       // step 3.3:	Generates manifests
-      await generateFunctionsManifest(resolvedConfig, {
-        ...fnManifests,
-        ...fnManifestsBis,
-      });
+      await generateFunctionsManifest(resolvedConfig, fnManifests);
       await generateRoutesManifest(resolvedConfig, isrPages?.ssr);
       await generatePrerenderManifest(resolvedConfig, isrPages?.isr);
     },

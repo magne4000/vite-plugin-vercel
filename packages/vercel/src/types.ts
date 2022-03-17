@@ -1,4 +1,5 @@
 import type { ResolvedConfig } from 'vite';
+import { BuildOptions, StdinOptions } from 'esbuild';
 
 // RoutesManifest
 
@@ -114,19 +115,18 @@ export interface PrerenderManifestDefault {
 // Vite config for Vercel
 
 export interface ViteVercelConfig {
-  ssr?: {
-    /**
-     * If ISR is supported, default revalidation time per-page can be overriden
-     * @see {@link https://vercel.com/docs/concepts/next.js/incremental-static-regeneration}
-     */
-    initialRevalidateSeconds?: number;
-    /**
-     * Also known as Server Side Generation, or SSG.
-     * If present, must build static files in `.output/server/pages`.
-     * Can be set to `false` to disable prerendering completely.
-     */
-    prerender?: ViteVercelPrerenderFn | false;
-  };
+  /**
+   * If ISR is supported, default revalidation time per-page can be overriden.
+   * A `prerender` function is necessary for ISR to work.
+   * @see {@link https://vercel.com/docs/concepts/next.js/incremental-static-regeneration}
+   */
+  initialRevalidateSeconds?: number;
+  /**
+   * Also known as Server Side Generation, or SSG.
+   * If present, must build static files in `.output/server/pages`.
+   * Can be set to `false` to disable prerendering completely.
+   */
+  prerender?: ViteVercelPrerenderFn | false;
   /**
    * By default, all `api/*` endpoints are compiled under `.ouput/server/pages` and `.ouput/server/pages/api`.
    * If a file must be compiled only under `.ouput/server/pages/api`, it should be added here.
@@ -140,11 +140,11 @@ export interface ViteVercelConfig {
    */
   apiEndpoints?: string[];
   /**
-   * Build endpoints on top of the default ones.
+   * All provided endpoints will also be part of the build process.
    * For instance, a framework can leverage this to have a generic ssr endpoint
    * without requiring the user to write any code.
    */
-  buildApiEndpoints?: ViteVercelBuildApiEndpointsFn;
+  additionalEndpoints?: ViteVercelApiEntry[];
   /**
    * Advanced configuration to override funtions-manifest.json
    * @see {@link https://vercel.com/docs/file-system-api#configuration/functions}
@@ -172,6 +172,12 @@ export type ViteVercelPrerenderRoute = {
 export type ViteVercelPrerenderFn = (
   resolvedConfig: ResolvedConfig,
 ) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;
-export type ViteVercelBuildApiEndpointsFn = (
-  resolvedConfig: ResolvedConfig,
-) => FunctionsManifest['pages'] | Promise<FunctionsManifest['pages']>;
+
+export interface ViteVercelApiEntry {
+  source: string | StdinOptions;
+  /**
+   * Relative to `.output/server/pages`, without extension
+   */
+  destination: string | string[];
+  buildOptions?: BuildOptions;
+}
