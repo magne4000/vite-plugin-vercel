@@ -1,57 +1,13 @@
 import type { ResolvedConfig } from 'vite';
 import { BuildOptions, StdinOptions } from 'esbuild';
+import {
+  RoutesManifest,
+  RoutesManifestDefault,
+} from './schemas/manifests/routes';
 
 // RoutesManifest
 
-export interface RoutesManifest {
-  version: 3;
-  basePath: string;
-  pages404: boolean;
-  redirects?: RoutesManifestRedirect[];
-  headers?: RoutesManifestHeader[];
-  rewrites?: RoutesManifestRewrite[];
-  dynamicRoutes?: RoutesManifestDynamicRoute[];
-}
-
-export interface RoutesManifestRedirect {
-  source: string;
-  destination: string;
-  statusCode: 301 | 302 | 307 | 308;
-  regex: string;
-}
-
-export interface RoutesManifestHeader {
-  source: string;
-  headers: { key: string; value: string }[];
-  regex: string;
-}
-
-export interface RoutesManifestRewrite {
-  source: string;
-  has?: {
-    type: 'header' | 'cookie' | 'host' | 'query';
-    key: string;
-    value: string;
-  }[];
-  destination: string;
-  regex: string;
-}
-
-export interface RoutesManifestDynamicRoute {
-  page: string;
-  regex: string;
-  routeKeys?: Record<string, string>;
-  namedRegex?: string;
-}
-
-export interface RoutesManifestDefault {
-  basePath?: string;
-  pages404?: boolean;
-  redirects?: RoutesManifestRedirect[];
-  headers?: RoutesManifestHeader[];
-  rewrites?: RoutesManifestRewrite[];
-  dynamicRoutes?: RoutesManifestDynamicRoute[];
-}
+export type { RoutesManifest, RoutesManifestDefault };
 
 // FunctionsManifest
 
