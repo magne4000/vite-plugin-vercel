@@ -1,13 +1,5 @@
 import { routesManifestSchema } from 'vite-plugin-vercel/src/schemas/manifests/routes';
-import {
-  prepareTestJsonFileContent,
-  testFileExists,
-  testSchema,
-} from '../helpers';
-
-describe('routes-manifest.json - pre tests', function () {
-  testFileExists('.output/routes-manifest.json');
-});
+import { prepareTestJsonFileContent, testSchema } from '../helpers';
 
 prepareTestJsonFileContent('.output/routes-manifest.json', (context) => {
   testSchema(context, routesManifestSchema);

@@ -10,8 +10,11 @@
     "precommit": "lint-staged",
     "test:1": "ts-node-esm tests/01-minimal/before.ts && jest tests/01-minimal",
     "test:2": "ts-node-esm tests/02-additional-endpoints/before.ts && jest tests/02-additional-endpoints",
+    "test:3": "ts-node-esm tests/03-ssr/before.ts && jest tests/03-ssr",
+    "test:4": "ts-node-esm tests/04-isr/before.ts && jest tests/04-isr",
+    "test:5": "ts-node-esm tests/05-vite-plugin-ssr/before.ts && jest tests/05-vite-plugin-ssr",
     "pretest": "pnpm run build:all",
-    "test": "pnpm run test:1 && pnpm run test:2"
+    "test": "pnpm run test:1 && pnpm run test:2 && pnpm run test:3 && pnpm run test:4 && pnpm run test:5"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",

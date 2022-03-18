@@ -7,8 +7,21 @@ prepareTestJsonFileContent('.output/prerender-manifest.json', (context) => {
   it('should have only required default properties', function () {
     expect(context.file).toStrictEqual({
       version: 3,
-      routes: {},
-      dynamicRoutes: {},
+      routes: {
+        '/isr': {
+          initialRevalidateSeconds: 42,
+          srcRoute: 'isr',
+          dataRoute: 'something',
+        },
+      },
+      dynamicRoutes: {
+        isr: {
+          routeRegex: '^isr$',
+          dataRoute: '',
+          fallback: null,
+          dataRouteRegex: '',
+        },
+      },
       preview: {
         previewModeId: null,
       },

@@ -189,3 +189,7 @@ export function vitePluginSsrVercelPlugin(): Plugin {
     },
   } as Plugin;
 }
+
+export default {
+  vitePluginSsrVercelPlugin,
+};

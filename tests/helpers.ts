@@ -8,25 +8,11 @@ export interface TestContext {
   file: unknown;
 }
 
-export function testFs(files: string[]) {
+export function testFs(files: Iterable<string>) {
   it(`should generate the right files`, async function () {
     const entries = await glob('.output/**');
 
-    expect(new Set(entries)).toEqual(new Set(files));
-  });
-}
-
-export function testFileExists(file: string) {
-  it(`${file} should exist`, async function () {
-    const stats = await fs.stat(file);
-
-    expect(stats.isFile()).toBe(true);
-  });
-}
-
-export function testFileNotExists(file: string) {
-  it(`${file} should not exist`, async function () {
-    await expect(fs.stat(file)).rejects.toThrow('ENOENT');
+    expect(new Set(entries)).toStrictEqual(new Set(files));
   });
 }
 
@@ -61,7 +47,7 @@ export async function callBuild(config: InlineConfig) {
     build: {
       rollupOptions: {
         input: {
-          'index.html': './tests/common/index.html',
+          'index.html': 'tests/common/index.html',
         },
       },
     },
@@ -70,7 +56,7 @@ export async function callBuild(config: InlineConfig) {
     ...config,
     build: {
       rollupOptions: {
-        input: './tests/common/index.ts',
+        input: 'tests/common/index.ts',
       },
       ssr: true,
     },

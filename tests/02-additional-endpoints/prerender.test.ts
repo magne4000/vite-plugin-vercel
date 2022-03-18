@@ -1,13 +1,5 @@
-import {
-  prepareTestJsonFileContent,
-  testFileExists,
-  testSchema,
-} from '../helpers';
+import { prepareTestJsonFileContent, testSchema } from '../helpers';
 import { prerenderManifestSchema } from 'vite-plugin-vercel/src/schemas/manifests/prerender';
-
-describe('prerender-manifest.json - pre tests', function () {
-  testFileExists('.output/prerender-manifest.json');
-});
 
 prepareTestJsonFileContent('.output/prerender-manifest.json', (context) => {
   testSchema(context, prerenderManifestSchema);

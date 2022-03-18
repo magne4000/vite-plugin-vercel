@@ -1,6 +1,6 @@
 import myzod, { AnyType, Infer } from 'myzod';
 
-function record(schema: AnyType) {
+function record<T extends AnyType>(schema: T) {
   return myzod.object({
     [myzod.keySignature]: schema,
   });
