@@ -80,7 +80,7 @@ export async function buildFn(
     firstDestination + '.js',
   );
 
-  const options = Object.assign(standardBuildOptions, { outfile });
+  const options = Object.assign({}, standardBuildOptions, { outfile });
 
   if (buildOptions) {
     Object.assign(options, buildOptions);
@@ -110,6 +110,12 @@ export async function buildFn(
   };
 
   for (const dest of remainingDestinations) {
+    await fs.mkdir(
+      path.join(getOutput(resolvedConfig, 'server/pages'), path.dirname(dest)),
+      {
+        recursive: true,
+      },
+    );
     await fs.copyFile(
       outfile,
       path.join(getOutput(resolvedConfig, 'server/pages'), dest + '.js'),

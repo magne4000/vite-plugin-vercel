@@ -9,8 +9,9 @@
     "prepare": "husky install",
     "precommit": "lint-staged",
     "test:1": "ts-node-esm tests/01-minimal/before.ts && jest tests/01-minimal",
+    "test:2": "ts-node-esm tests/02-additional-endpoints/before.ts && jest tests/02-additional-endpoints",
     "pretest": "pnpm run build:all",
-    "test": "pnpm run test:1"
+    "test": "pnpm run test:1 && pnpm run test:2"
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
@@ -20,6 +21,7 @@
     "@types/react-dom": "^17.0.13",
     "@vercel/build-utils": "^2.14.0",
     "@vercel/node": "^1.13.0",
+    "fast-glob": "^3.2.11",
     "husky": "^7.0.4",
     "jest": "^27.5.1",
     "lint-staged": "^12.3.5",

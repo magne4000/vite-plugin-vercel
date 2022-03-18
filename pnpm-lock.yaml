@@ -14,6 +14,7 @@ importers:
       '@vitejs/plugin-react': ^1.2.0
       cross-env: ^7.0.3
       express: ^4.17.3
+      fast-glob: ^3.2.11
       husky: ^7.0.4
       jest: ^27.5.1
       lint-staged: ^12.3.5
@@ -49,6 +50,7 @@ importers:
       '@types/react-dom': 17.0.13
       '@vercel/build-utils': 2.14.0
       '@vercel/node': 1.13.0
+      fast-glob: 3.2.11
       husky: 7.0.4
       jest: 27.5.1_ts-node@10.7.0
       lint-staged: 12.3.5

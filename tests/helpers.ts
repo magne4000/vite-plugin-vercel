@@ -1,9 +1,19 @@
 import fs from 'fs/promises';
 import myzod from 'myzod';
 import { Type } from 'myzod/libs/types';
+import { build, InlineConfig } from 'vite';
+import glob from 'fast-glob';
 
 export interface TestContext {
   file: unknown;
+}
+
+export function testFs(files: string[]) {
+  it(`should generate the right files`, async function () {
+    const entries = await glob('.output/**');
+
+    expect(new Set(entries)).toEqual(new Set(files));
+  });
 }
 
 export function testFileExists(file: string) {
@@ -44,3 +54,29 @@ export function prepareTestJsonFileContent<T extends TestContext>(
 
   callback(context);
 }
+
+export async function callBuild(config: InlineConfig) {
+  await build({
+    ...config,
+    build: {
+      rollupOptions: {
+        input: {
+          'index.html': './tests/common/index.html',
+        },
+      },
+    },
+  });
+  await build({
+    ...config,
+    build: {
+      rollupOptions: {
+        input: './tests/common/index.ts',
+      },
+      ssr: true,
+    },
+  });
+}
+
+export default {
+  callBuild,
+};
