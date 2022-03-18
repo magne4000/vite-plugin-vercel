@@ -1,11 +1,12 @@
 import { testFs } from '../helpers';
+import path from 'path';
 
 describe('fs', function () {
-  testFs([
-    '.output/server/pages/api/post.js',
-    '.output/static/tests/common/index.html',
-    '.output/functions-manifest.json',
-    '.output/prerender-manifest.json',
-    '.output/routes-manifest.json',
+  testFs(path.basename(__dirname), [
+    '/server/pages/api/post.js',
+    '/static/tests/common/index.html',
+    '/functions-manifest.json',
+    '/prerender-manifest.json',
+    '/routes-manifest.json',
   ]);
 });

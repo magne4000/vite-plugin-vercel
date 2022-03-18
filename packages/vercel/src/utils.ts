@@ -19,7 +19,11 @@ export function getOutput(
   config: ResolvedConfig,
   suffix?: 'server/pages' | 'server/pages/api' | 'static',
 ): string {
-  return path.join(getRoot(config), '.output', suffix ?? '');
+  return path.join(
+    config.vercel?.outDir ? '' : getRoot(config),
+    config.vercel?.outDir ?? '.output',
+    suffix ?? '',
+  );
 }
 
 export function pathRelativeToApi(

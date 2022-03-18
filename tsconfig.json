@@ -12,9 +12,6 @@
     "transpileOnly": true,
     "compilerOptions": {
       "module": "CommonJS"
-    },
-    "moduleTypes": {
-      "tests/**/before.ts": "esm"
     }
   }
 }

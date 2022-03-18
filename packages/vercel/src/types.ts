@@ -94,6 +94,11 @@ export interface ViteVercelConfig {
    * @protected
    */
   prerenderManifest?: PrerenderManifestDefault;
+  /**
+   * Defaults to `.output`. Mostly useful for testing prupose
+   * @protected
+   */
+  outDir?: string;
 }
 
 export type ViteVercelPrerenderRoute = {

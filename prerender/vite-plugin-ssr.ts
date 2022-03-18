@@ -40,6 +40,17 @@ export function getRoot(config: UserConfig | ResolvedConfig): string {
   return normalizePath(config.root || process.cwd());
 }
 
+export function getOutput(
+  config: ResolvedConfig,
+  suffix?: 'server/pages' | 'server/pages/api' | 'static',
+): string {
+  return path.join(
+    config.vercel?.outDir ? '' : getRoot(config),
+    config.vercel?.outDir ?? '.output',
+    suffix ?? '',
+  );
+}
+
 export function getOutDir(
   config: ResolvedConfig,
   force?: 'client' | 'server',
@@ -77,8 +88,8 @@ export const prerender: ViteVercelPrerenderFn = async (
 
       const { filePath } = pageContext._prerenderResult;
       const newFilePath = path.join(
-        getRoot(resolvedConfig),
-        '.output/server/pages',
+        getOutput(resolvedConfig),
+        'server/pages',
         path.relative(getOutDir(resolvedConfig, 'client'), filePath),
       );
 

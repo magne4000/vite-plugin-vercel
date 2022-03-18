@@ -1,8 +1,9 @@
+import path from 'path';
+import { setup } from '../setup';
 import react from '@vitejs/plugin-react';
 import vercel from 'vite-plugin-vercel';
-import helpers from '../helpers.js';
 
-await helpers.callBuild({
+const globalSetup = setup(path.basename(__dirname), {
   configFile: false,
   mode: 'production',
   root: process.cwd(),
@@ -10,17 +11,18 @@ await helpers.callBuild({
   vercel: {
     prerender() {
       return {
-        ssr: {
+        isr: {
           // TODO implement dynamicRoutes override
-          rewrites: [
-            {
-              source: 'ssr',
-              destination: 'ssr',
-              regex: '^/ssr$',
+          routes: {
+            '/isr': {
+              initialRevalidateSeconds: 42,
+              dataRoute: 'something',
+              srcRoute: 'isr',
             },
-          ],
+          },
         },
       };
     },
   },
 });
+export default globalSetup;
