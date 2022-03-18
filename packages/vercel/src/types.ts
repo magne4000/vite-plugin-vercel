@@ -1,9 +1,10 @@
 import type { ResolvedConfig } from 'vite';
-import { BuildOptions, StdinOptions } from 'esbuild';
-import {
+import type { BuildOptions, StdinOptions } from 'esbuild';
+import type {
   RoutesManifest,
   RoutesManifestDefault,
 } from './schemas/manifests/routes';
+import type { FunctionsManifest } from './schemas/manifests/functions';
 
 // RoutesManifest
 
@@ -11,31 +12,7 @@ export type { RoutesManifest, RoutesManifestDefault };
 
 // FunctionsManifest
 
-export interface FunctionsManifest {
-  version: 1;
-  pages: { '_middleware.js'?: FunctionsManifestPageWeb } & Record<
-    string,
-    Partial<FunctionsManifestPageWeb> | FunctionsManifestPage
-  >;
-}
-
-export interface FunctionsManifestPage {
-  memory?: number;
-  maxDuration?: number;
-  regions?: string[];
-  runtime?: string;
-  handler?: string;
-}
-
-export interface FunctionsManifestPageWeb extends FunctionsManifestPage {
-  runtime: 'web';
-  env: string[];
-  files: string[];
-  name: string;
-  page: string;
-  regexp: string;
-  sortingIndex: number;
-}
+export type { FunctionsManifest };
 
 // PrerenderManifest
 
