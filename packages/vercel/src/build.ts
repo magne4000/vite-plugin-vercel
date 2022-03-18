@@ -1,5 +1,5 @@
 import { ResolvedConfig } from 'vite';
-import * as glob from 'fast-glob';
+import glob from 'fast-glob';
 import path from 'path';
 import { getOutput, getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';

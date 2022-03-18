@@ -5,6 +5,12 @@ import type {
   RoutesManifestDefault,
 } from './schemas/manifests/routes';
 import type { FunctionsManifest } from './schemas/manifests/functions';
+import {
+  PrerenderManifest,
+  PrerenderManifestDefault,
+  PrerenderManifestDynamicRoute,
+  PrerenderManifestRoute,
+} from './schemas/manifests/prerender';
 
 // RoutesManifest
 
@@ -16,34 +22,12 @@ export type { FunctionsManifest };
 
 // PrerenderManifest
 
-export interface PrerenderManifest {
-  version: 3;
-  routes: Record<string, PrerenderManifestRoute>;
-  dynamicRoutes: Record<string, PrerenderManifestDynamicRoute>;
-  preview: { previewModeId: string | null };
-}
-
-export interface PrerenderManifestRoute {
-  initialRevalidateSeconds: number;
-  srcRoute: string;
-  dataRoute: string;
-}
-
-export interface PrerenderManifestDynamicRoute {
-  routeRegex: string;
-  fallback: string | null;
-  dataRoute: string;
-  dataRouteRegex: string;
-}
-
-export interface PrerenderManifestDefault {
-  routes?: Record<string, Partial<PrerenderManifestRoute>>;
-  dynamicRoutes?: Record<
-    string,
-    Partial<Omit<PrerenderManifestDynamicRoute, 'routeRegex'>>
-  >;
-  preview?: { previewModeId: string | null };
-}
+export type {
+  PrerenderManifest,
+  PrerenderManifestRoute,
+  PrerenderManifestDynamicRoute,
+  PrerenderManifestDefault,
+};
 
 // Vite config for Vercel
 

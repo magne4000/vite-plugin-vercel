@@ -66,8 +66,8 @@ export function getPrerenderManifest(
     version: 3,
     routes,
     dynamicRoutes,
-    preview: prerenderManifestDefault?.preview ?? {
-      previewModeId: null,
+    preview: {
+      previewModeId: prerenderManifestDefault?.preview?.previewModeId ?? null,
     },
   };
 }

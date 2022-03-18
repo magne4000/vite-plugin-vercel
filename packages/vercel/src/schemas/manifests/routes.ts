@@ -1,4 +1,10 @@
-import myzod, { Infer } from 'myzod';
+import myzod, { AnyType, Infer } from 'myzod';
+
+function record(schema: AnyType) {
+  return myzod.object({
+    [myzod.keySignature]: schema,
+  });
+}
 
 export const routesManifestRedirectSchema = myzod.object({
   source: myzod.string(),
@@ -36,7 +42,7 @@ export const routesManifestRewriteSchema = myzod.object({
 export const routesManifestDynamicRouteSchema = myzod.object({
   page: myzod.string(),
   regex: myzod.string(),
-  routeKeys: myzod.record(myzod.string()),
+  routeKeys: record(myzod.string()),
   namedRegex: myzod.string().optional(),
 });
 

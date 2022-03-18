@@ -14,6 +14,12 @@ export function testFileExists(file: string) {
   });
 }
 
+export function testFileNotExists(file: string) {
+  it(`${file} should not exist`, async function () {
+    await expect(fs.stat(file)).rejects.toThrow('ENOENT');
+  });
+}
+
 export function testSchema<T>(context: TestContext, schema: Type<T>) {
   it('should respect schema', function () {
     expect(schema.try(context.file)).not.toBeInstanceOf(myzod.ValidationError);

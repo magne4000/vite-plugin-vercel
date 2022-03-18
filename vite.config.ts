@@ -7,9 +7,7 @@ import { vitePluginSsrVercelPlugin } from './prerender/vite-plugin-ssr';
 export default defineConfig({
   plugins: [react(), ssr(), vercel(), vitePluginSsrVercelPlugin()],
   vercel: {
-    ssr: {
-      initialRevalidateSeconds: 25,
-    },
+    initialRevalidateSeconds: 25,
     apiEndpoints: ['./api/post.ts'],
   },
 });

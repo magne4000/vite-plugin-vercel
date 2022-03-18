@@ -1,4 +1,10 @@
-import myzod, { Infer } from 'myzod';
+import myzod, { AnyType, Infer } from 'myzod';
+
+function record(schema: AnyType) {
+  return myzod.object({
+    [myzod.keySignature]: schema,
+  });
+}
 
 export const functionsManifestSchemaPage = myzod.object({
   runtime: myzod.string().optional(),
@@ -29,7 +35,7 @@ export const functionsManifestSchema = myzod.object({
       '_middleware.js': functionsManifestSchemaPageWeb.optional(),
     })
     .and(
-      myzod.record(
+      record(
         myzod.intersection(
           myzod.partial(
             myzod.omit(functionsManifestSchemaPageWeb, ['runtime']),
