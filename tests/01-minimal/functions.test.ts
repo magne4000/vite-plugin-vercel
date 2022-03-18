@@ -12,8 +12,7 @@ describe('functions-manifest.json - pre tests', function () {
 prepareTestJsonFileContent('.output/functions-manifest.json', (context) => {
   testSchema(context, functionsManifestSchema);
 
-  // TODO ssr/isr endpoint in further scenarii
-  it('should have a unique SSR api function', function () {
+  it('should have a unique api function', function () {
     expect(context.file).toHaveProperty(['pages', 'api/post.js']);
   });
 });

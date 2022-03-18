@@ -16,7 +16,9 @@ await build({
   ...config,
   build: {
     rollupOptions: {
-      input: './tests/common/index.html',
+      input: {
+        './tests/common/index.html': 'index.html',
+      },
     },
   },
 });
