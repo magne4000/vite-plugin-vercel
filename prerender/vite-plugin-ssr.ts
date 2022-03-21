@@ -122,6 +122,7 @@ export const prerender: ViteVercelPrerenderFn = async (
   });
 
   const ssrPages = getSsrPages(globalContext!, prerenderedPages);
+  const rewrites = resolvedConfig.vercel?.routesManifest?.rewrites ?? [];
 
   // Static routes
   if (ssrPages.rewrites.length > 0) {
@@ -131,8 +132,6 @@ export const prerender: ViteVercelPrerenderFn = async (
     if (!routes.ssr.rewrites) {
       routes.ssr.rewrites = [];
     }
-
-    const rewrites = resolvedConfig.vercel?.routesManifest?.rewrites ?? [];
 
     for (const route of ssrPages.rewrites) {
       // can be overriden by user config or another plugin
@@ -176,10 +175,13 @@ export const prerender: ViteVercelPrerenderFn = async (
       routes.ssr.rewrites = [];
     }
 
+    const overrideRewrite = rewrites.find((r) => r.source === '/');
+
     routes.ssr.rewrites.push({
       source: '/',
       destination: '/' + ssrEndpointDestination,
       regex: '^/((?!assets/)(?!api/).*)$',
+      ...overrideRewrite,
     });
   }
 

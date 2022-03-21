@@ -1,5 +1,6 @@
 {
   "redirects": [
-    { "source": "/redirect", "destination": "/static" }
+    { "source": "/redirect", "destination": "/static" },
+    { "source": "/((?!assets/)(?!api).*)", "destination": "/api/ssr_" }
   ]
 }
