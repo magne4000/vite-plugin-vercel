@@ -181,7 +181,7 @@ export const prerender: ViteVercelPrerenderFn = async (
     routes.ssr.rewrites.push({
       source: '/',
       destination: '/' + ssrEndpointDestination,
-      regex: '/(.*)',
+      regex: '^/((?!assets/)(?!api/).*)$',
       ...overrideRewrite,
     });
   }
