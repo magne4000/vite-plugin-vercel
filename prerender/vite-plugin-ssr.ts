@@ -121,14 +121,7 @@ export const prerender: ViteVercelPrerenderFn = async (
     },
   });
 
-  console.log('_pageRoutes', globalContext!._pageRoutes);
-  // console.log('prerenderedPages', prerenderedPages);
-
   const ssrPages = getSsrPages(globalContext!, prerenderedPages);
-
-  console.log('ssrPages.dynamicRoutes', ssrPages.dynamicRoutes);
-  console.log('ssrPages.rewrites', ssrPages.rewrites);
-  console.log('ssrPages.catchAll', ssrPages.catchAll);
 
   if (ssrPages.rewrites.length > 0) {
     if (!routes.ssr) {
