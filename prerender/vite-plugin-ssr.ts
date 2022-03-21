@@ -124,27 +124,6 @@ export const prerender: ViteVercelPrerenderFn = async (
   const ssrPages = getSsrPages(globalContext!, prerenderedPages);
   const rewrites = resolvedConfig.vercel?.routesManifest?.rewrites ?? [];
 
-  // Function routes (should be last)
-  // /!\ Precedence is not taken into account here as the functions are not executed at this step.
-  // TODO: edit https://vite-plugin-ssr.com/route-function#precedence
-  if (ssrPages.hasFunctionRoute) {
-    if (!routes.ssr) {
-      routes.ssr = { rewrites: [] };
-    }
-    if (!routes.ssr.rewrites) {
-      routes.ssr.rewrites = [];
-    }
-
-    const overrideRewrite = rewrites.find((r) => r.source === '/');
-
-    routes.ssr.rewrites.push({
-      source: '/',
-      destination: '/' + ssrEndpointDestination,
-      regex: '^/((?!assets/)(?!api/).*)$',
-      ...overrideRewrite,
-    });
-  }
-
   // Static routes
   if (ssrPages.rewrites.length > 0) {
     if (!routes.ssr) {
@@ -183,6 +162,28 @@ export const prerender: ViteVercelPrerenderFn = async (
         regex,
       });
     }
+  }
+
+  // FIXME not working. See https://github.com/vercel/vercel/discussions/7573#discussioncomment-2408249
+  // Function routes (should be last)
+  // /!\ Precedence is not taken into account here as the functions are not executed at this step.
+  // TODO: edit https://vite-plugin-ssr.com/route-function#precedence
+  if (ssrPages.hasFunctionRoute) {
+    if (!routes.ssr) {
+      routes.ssr = { rewrites: [] };
+    }
+    if (!routes.ssr.rewrites) {
+      routes.ssr.rewrites = [];
+    }
+
+    const overrideRewrite = rewrites.find((r) => r.source === '/');
+
+    routes.ssr.rewrites.push({
+      source: '/',
+      destination: '/' + ssrEndpointDestination,
+      regex: '/(.*)',
+      ...overrideRewrite,
+    });
   }
 
   return routes;
