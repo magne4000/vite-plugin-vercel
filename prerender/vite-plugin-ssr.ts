@@ -165,32 +165,19 @@ export const prerender: ViteVercelPrerenderFn = async (
     }
   }
 
-  // FIXME not working. See https://github.com/vercel/vercel/discussions/7573#discussioncomment-2408249
-  // Function routes (should be last)
-  // /!\ Precedence is not taken into account here as the functions are not executed at this step.
-  // TODO: edit https://vite-plugin-ssr.com/route-function#precedence
-  // if (ssrPages.hasFunctionRoute) {
-  //   if (!routes.ssr) {
-  //     routes.ssr = { rewrites: [] };
-  //   }
-  //   if (!routes.ssr.rewrites) {
-  //     routes.ssr.rewrites = [];
-  //   }
-  //
-  //   const overrideRewrite = rewrites.find((r) => r.source === '/');
-  //
-  //   routes.ssr.rewrites.push({
-  //     source: '/',
-  //     destination: '/' + ssrEndpointDestination,
-  //     regex: '^/((?!assets/)(?!api/).*)$',
-  //     ...overrideRewrite,
-  //   });
-  // }
+  if (ssrPages.hasFunctionRoute) {
+    if (!routes.ssr) {
+      routes.ssr = { dynamicRoutes: [] };
+    }
+    if (!routes.ssr.dynamicRoutes) {
+      routes.ssr.dynamicRoutes = [];
+    }
 
-  assert(
-    !ssrPages.hasFunctionRoute,
-    '.page.route functions are not compatible with vite-plugin-vercel',
-  );
+    routes.ssr.dynamicRoutes.push({
+      page: '/' + ssrEndpointDestination,
+      regex: '^/((?!assets/)(?!api/).*)$',
+    });
+  }
 
   return routes;
 };
@@ -215,10 +202,7 @@ function getSsrPages(globalContext: GlobalContext, prerenderedPages: string[]) {
   return {
     rewrites: fsRoutes,
     dynamicRoutes: paramsRoutes,
-    hasFunctionRoute:
-      functionRoutes.filter(
-        (f) => !f.fileExports.ignoreVercelRouteFunctionError,
-      ).length > 0,
+    hasFunctionRoute: functionRoutes.length > 0,
   };
 }
 
