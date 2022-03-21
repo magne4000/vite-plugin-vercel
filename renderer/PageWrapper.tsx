@@ -32,11 +32,14 @@ function PageWrapper({
             <Link className="navitem" href="/isr">
               ISR
             </Link>
+            <Link className="navitem" href="/named/id-1">
+              Named
+            </Link>
             <Link className="navitem" href="/catch-all/a/b/c">
               Catch-all
             </Link>
-            <Link className="navitem" href="/named/id-1">
-              Named
+            <Link className="navitem" href="/function/a">
+              Function
             </Link>
           </Sidebar>
           <Content>{children}</Content>

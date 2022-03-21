@@ -123,6 +123,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
   const ssrPages = getSsrPages(globalContext!, prerenderedPages);
 
+  // Static routes
   if (ssrPages.rewrites.length > 0) {
     if (!routes.ssr) {
       routes.ssr = { rewrites: [] };
@@ -147,6 +148,7 @@ export const prerender: ViteVercelPrerenderFn = async (
     }
   }
 
+  // Parameterized routes
   if (ssrPages.dynamicRoutes.length > 0) {
     if (!routes.ssr) {
       routes.ssr = { dynamicRoutes: [] };
@@ -161,6 +163,24 @@ export const prerender: ViteVercelPrerenderFn = async (
         regex,
       });
     }
+  }
+
+  // Function routes (should be last)
+  // /!\ Precedence is not taken into account here as the functions are not executed at this step.
+  // TODO: edit https://vite-plugin-ssr.com/route-function#precedence
+  if (ssrPages.hasFunctionRoute) {
+    if (!routes.ssr) {
+      routes.ssr = { rewrites: [] };
+    }
+    if (!routes.ssr.rewrites) {
+      routes.ssr.rewrites = [];
+    }
+
+    routes.ssr.rewrites.push({
+      source: '/',
+      destination: '/' + ssrEndpointDestination,
+      regex: '^/((?!assets/)(?!api/).*)$',
+    });
   }
 
   return routes;
@@ -186,7 +206,7 @@ function getSsrPages(globalContext: GlobalContext, prerenderedPages: string[]) {
   return {
     rewrites: fsRoutes,
     dynamicRoutes: paramsRoutes,
-    withFunction: functionRoutes,
+    hasFunctionRoute: functionRoutes.length > 0,
   };
 }
 
