@@ -12,6 +12,7 @@ import {
 } from 'vite-plugin-vercel';
 import { newError } from '@brillout/libassert';
 import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
+import { getRouteRegex } from './route-regex';
 
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';
@@ -94,7 +95,7 @@ export const prerender: ViteVercelPrerenderFn = async (
       );
 
       if (
-        isrPagesWhitelist.includes(pageContext.url) ||
+        isrPagesWhitelist.includes(pageContext.urlPathname) ||
         pageContext.pageExports.initialRevalidateSeconds
       ) {
         if (!routes.isr) {
@@ -104,7 +105,7 @@ export const prerender: ViteVercelPrerenderFn = async (
           routes.isr.routes = {};
         }
 
-        routes.isr.routes[pageContext.url] = {
+        routes.isr.routes[pageContext.urlPathname] = {
           srcRoute: '/' + isrEndpointDestination,
           initialRevalidateSeconds:
             pageContext.pageExports.initialRevalidateSeconds === 0
@@ -120,11 +121,16 @@ export const prerender: ViteVercelPrerenderFn = async (
     },
   });
 
-  // Compute data for dynamic ssr pages (routes-manifest)
-  const ssrPages = globalContext!._pageRoutes
-    .map((p) => p.filesystemRoute)
-    .filter((p) => !prerenderedPages.includes(p));
-  if (ssrPages.length > 0) {
+  console.log('_pageRoutes', globalContext!._pageRoutes);
+  // console.log('prerenderedPages', prerenderedPages);
+
+  const ssrPages = getSsrPages(globalContext!, prerenderedPages);
+
+  console.log('ssrPages.dynamicRoutes', ssrPages.dynamicRoutes);
+  console.log('ssrPages.rewrites', ssrPages.rewrites);
+  console.log('ssrPages.catchAll', ssrPages.catchAll);
+
+  if (ssrPages.rewrites.length > 0) {
     if (!routes.ssr) {
       routes.ssr = { rewrites: [] };
     }
@@ -134,7 +140,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
     const rewrites = resolvedConfig.vercel?.routesManifest?.rewrites ?? [];
 
-    for (const route of ssrPages) {
+    for (const route of ssrPages.rewrites) {
       // can be overriden by user config or another plugin
       const overrideRewrite = rewrites.find((r) => r.source === route);
 
@@ -148,8 +154,54 @@ export const prerender: ViteVercelPrerenderFn = async (
     }
   }
 
+  if (ssrPages.dynamicRoutes.length > 0) {
+    if (!routes.ssr) {
+      routes.ssr = { dynamicRoutes: [] };
+    }
+    if (!routes.ssr.dynamicRoutes) {
+      routes.ssr.dynamicRoutes = [];
+    }
+
+    const dynamicRoutes =
+      resolvedConfig.vercel?.routesManifest?.dynamicRoutes ?? [];
+
+    for (const route of ssrPages.dynamicRoutes) {
+      // can be overriden by user config or another plugin
+      const overrideRewrite = dynamicRoutes.find((r) => r.page === route.page);
+
+      routes.ssr.dynamicRoutes.push({
+        ...route,
+        ...overrideRewrite,
+      });
+    }
+  }
+
   return routes;
 };
+
+function getSsrPages(globalContext: GlobalContext, prerenderedPages: string[]) {
+  const fsRoutes = globalContext._pageRoutes
+    .filter((p) => !p.pageRouteFile)
+    .map((p) => p.filesystemRoute)
+    .filter((p) => !prerenderedPages.includes(p));
+
+  const paramsRoutes = globalContext._pageRoutes
+    .filter((p) => p.pageRouteFile)
+    .map((p) => p.pageRouteFile!)
+    .filter((p) => typeof p.routeValue === 'string')
+    .map((p) => getRouteRegex(p.routeValue as string));
+
+  const functionRoutes = globalContext._pageRoutes
+    .filter((p) => p.pageRouteFile)
+    .map((p) => p.pageRouteFile!)
+    .filter((p) => typeof p.routeValue === 'function');
+
+  return {
+    rewrites: fsRoutes,
+    dynamicRoutes: paramsRoutes,
+    catchAll: functionRoutes,
+  };
+}
 
 export async function getSsrEndpoint(
   resolvedConfig: UserConfig,
@@ -162,7 +214,8 @@ export async function getSsrEndpoint(
 
   const importBuildPath = path.join(
     getRoot(resolvedConfig),
-    'dist/server/importBuild',
+    resolvedConfig.build?.outDir ?? 'dist/server',
+    'importBuild',
   );
   const resolveDir = path.dirname(sourcefile);
   const relativeImportBuildPath = path.relative(resolveDir, importBuildPath);

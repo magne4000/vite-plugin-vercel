@@ -91,11 +91,16 @@ export function getRoutesManifest(
     ...(routesManifest?.rewrites ?? []),
   ];
 
+  const allDynamicRoutes: NonNullable<RoutesManifest['dynamicRoutes']> = [
+    ...(ssr?.dynamicRoutes ?? []),
+    ...(routesManifest?.dynamicRoutes ?? []),
+  ];
+
   return {
     version: 3,
     basePath: routesManifest?.basePath ?? '/',
     pages404: routesManifest?.pages404 ?? true,
-    dynamicRoutes: routesManifest?.dynamicRoutes,
+    dynamicRoutes: allDynamicRoutes.length > 0 ? allDynamicRoutes : undefined,
     rewrites: allRewrites.length > 0 ? allRewrites : undefined,
     redirects: routesManifest?.redirects,
     headers: routesManifest?.headers,

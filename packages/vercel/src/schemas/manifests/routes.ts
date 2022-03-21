@@ -57,4 +57,7 @@ export const routesManifestSchema = myzod.object({
 });
 
 export type RoutesManifest = Infer<typeof routesManifestSchema>;
+export type RoutesManifestDynamicRoute = Infer<
+  typeof routesManifestDynamicRouteSchema
+>;
 export type RoutesManifestDefault = Partial<Omit<RoutesManifest, 'version'>>;

@@ -2,6 +2,7 @@ import type { ResolvedConfig } from 'vite';
 import type { BuildOptions, StdinOptions } from 'esbuild';
 import type {
   RoutesManifest,
+  RoutesManifestDynamicRoute,
   RoutesManifestDefault,
 } from './schemas/manifests/routes';
 import type { FunctionsManifest } from './schemas/manifests/functions';
@@ -14,7 +15,11 @@ import {
 
 // RoutesManifest
 
-export type { RoutesManifest, RoutesManifestDefault };
+export type {
+  RoutesManifest,
+  RoutesManifestDynamicRoute,
+  RoutesManifestDefault,
+};
 
 // FunctionsManifest
 
@@ -103,7 +108,7 @@ export interface ViteVercelConfig {
 
 export type ViteVercelPrerenderRoute = {
   isr?: Pick<PrerenderManifestDefault, 'routes'>;
-  ssr?: Pick<RoutesManifestDefault, 'rewrites'>;
+  ssr?: Pick<RoutesManifestDefault, 'rewrites' | 'dynamicRoutes'>;
 };
 export type ViteVercelPrerenderFn = (
   resolvedConfig: ResolvedConfig,
