@@ -186,7 +186,7 @@ function getSsrPages(globalContext: GlobalContext, prerenderedPages: string[]) {
   return {
     rewrites: fsRoutes,
     dynamicRoutes: paramsRoutes,
-    catchAll: functionRoutes,
+    withFunction: functionRoutes,
   };
 }
 

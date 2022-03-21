@@ -32,7 +32,7 @@ function PageWrapper({
             <Link className="navitem" href="/isr">
               ISR
             </Link>
-            <Link className="navitem" href="/catch-all">
+            <Link className="navitem" href="/catch-all/a/b/c">
               Catch-all
             </Link>
             <Link className="navitem" href="/named/id-1">
