@@ -25,6 +25,11 @@ describe('fs', function () {
     '/server/pages/isr.html',
     '/server/pages/ssr_.js',
     '/server/pages/static.html',
+    '/server/pages/catch-all/a/b/c.html',
+    '/server/pages/catch-all/a/d.html',
+    '/server/pages/function/a.html',
+    '/server/pages/named/id-1.html',
+    '/server/pages/named/id-2.html',
     ...generatedFiles.map((f) => '/static/' + f),
   ]);
 });

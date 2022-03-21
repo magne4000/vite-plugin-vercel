@@ -13,7 +13,6 @@ import {
 import { newError } from '@brillout/libassert';
 import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
 import { getRouteRegex } from './route-regex';
-import { ignoreVercelRouteFunctionError } from '../pages/function/index.page.route';
 
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';

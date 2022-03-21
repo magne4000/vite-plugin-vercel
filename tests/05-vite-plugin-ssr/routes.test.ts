@@ -12,9 +12,13 @@ prepareTestJsonFileContent(
       expect(context.file).toHaveProperty('rewrites', [
         { destination: '/api/ssr_', regex: '^/dynamic.*$', source: '/dynamic' },
       ]);
+      expect(context.file).toHaveProperty('dynamicRoutes', [
+        { page: '/api/ssr_', regex: '^/catch-all/(.+?)(?:/)?$' },
+        { page: '/api/ssr_', regex: '^/named/([^/]+?)(?:/)?$' },
+        { page: '/api/ssr_', regex: '^/((?!assets/)(?!api/).*)$' },
+      ]);
       expect(context.file).not.toHaveProperty('headers');
       expect(context.file).not.toHaveProperty('redirects');
-      expect(context.file).not.toHaveProperty('dynamicRoutes');
     });
   },
 );
