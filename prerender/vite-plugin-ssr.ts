@@ -13,6 +13,7 @@ import {
 import { newError } from '@brillout/libassert';
 import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
 import { getRouteRegex } from './route-regex';
+import { ignoreVercelRouteFunctionError } from '../pages/function/index.page.route';
 
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';
@@ -168,23 +169,28 @@ export const prerender: ViteVercelPrerenderFn = async (
   // Function routes (should be last)
   // /!\ Precedence is not taken into account here as the functions are not executed at this step.
   // TODO: edit https://vite-plugin-ssr.com/route-function#precedence
-  if (ssrPages.hasFunctionRoute) {
-    if (!routes.ssr) {
-      routes.ssr = { rewrites: [] };
-    }
-    if (!routes.ssr.rewrites) {
-      routes.ssr.rewrites = [];
-    }
+  // if (ssrPages.hasFunctionRoute) {
+  //   if (!routes.ssr) {
+  //     routes.ssr = { rewrites: [] };
+  //   }
+  //   if (!routes.ssr.rewrites) {
+  //     routes.ssr.rewrites = [];
+  //   }
+  //
+  //   const overrideRewrite = rewrites.find((r) => r.source === '/');
+  //
+  //   routes.ssr.rewrites.push({
+  //     source: '/',
+  //     destination: '/' + ssrEndpointDestination,
+  //     regex: '^/((?!assets/)(?!api/).*)$',
+  //     ...overrideRewrite,
+  //   });
+  // }
 
-    const overrideRewrite = rewrites.find((r) => r.source === '/');
-
-    routes.ssr.rewrites.push({
-      source: '/',
-      destination: '/' + ssrEndpointDestination,
-      regex: '^/((?!assets/)(?!api/).*)$',
-      ...overrideRewrite,
-    });
-  }
+  assert(
+    !ssrPages.hasFunctionRoute,
+    '.page.route functions are not compatible with vite-plugin-vercel',
+  );
 
   return routes;
 };
@@ -209,7 +215,10 @@ function getSsrPages(globalContext: GlobalContext, prerenderedPages: string[]) {
   return {
     rewrites: fsRoutes,
     dynamicRoutes: paramsRoutes,
-    hasFunctionRoute: functionRoutes.length > 0,
+    hasFunctionRoute:
+      functionRoutes.filter(
+        (f) => !f.fileExports.ignoreVercelRouteFunctionError,
+      ).length > 0,
   };
 }
 

@@ -7,7 +7,7 @@ export function onBeforeRender() {
     },
   };
 }
-//
-// export async function prerender() {
-//   return ['/function/a'];
-// }
+
+export async function prerender() {
+  return ['/function/a'];
+}
