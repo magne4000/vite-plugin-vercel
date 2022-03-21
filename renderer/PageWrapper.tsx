@@ -32,6 +32,15 @@ function PageWrapper({
             <Link className="navitem" href="/isr">
               ISR
             </Link>
+            <Link className="navitem" href="/isr-params/id-1">
+              /isr-params/id-1 (ISR with param)
+            </Link>
+            <Link className="navitem" href="/isr-params/id-2">
+              /isr-params/id-2 (ISR with param)
+            </Link>
+            <Link className="navitem" href="/isr-params/id-3">
+              /isr-params/id-3 (Dynamic)
+            </Link>
           </Sidebar>
           <Content>{children}</Content>
         </Layout>

@@ -155,16 +155,10 @@ export const prerender: ViteVercelPrerenderFn = async (
       routes.ssr.dynamicRoutes = [];
     }
 
-    const dynamicRoutes =
-      resolvedConfig.vercel?.routesManifest?.dynamicRoutes ?? [];
-
-    for (const route of ssrPages.dynamicRoutes) {
-      // can be overriden by user config or another plugin
-      const overrideRewrite = dynamicRoutes.find((r) => r.page === route.page);
-
+    for (const regex of ssrPages.dynamicRoutes) {
       routes.ssr.dynamicRoutes.push({
-        ...route,
-        ...overrideRewrite,
+        page: '/' + ssrEndpointDestination,
+        regex,
       });
     }
   }

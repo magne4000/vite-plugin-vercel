@@ -4,6 +4,10 @@ export { Page };
 
 export const initialRevalidateSeconds = 15;
 
+function isISR(someId: string) {
+  return someId === 'id-1' || someId === 'id-2';
+}
+
 function Page(props: { d: string; someId: string }) {
   return (
     <>
@@ -11,8 +15,14 @@ function Page(props: { d: string; someId: string }) {
       This page is:
       <ul>
         <li>Static + Dynamic with url parameter: {props.someId}</li>
-        <li>Static html generated</li>
-        <li>ISR: regenerated after {initialRevalidateSeconds} seconds</li>
+        <li>
+          {isISR(props.someId)
+            ? 'Static html generated'
+            : 'No static html generated'}
+        </li>
+        {isISR(props.someId) && (
+          <li>ISR: regenerated after {initialRevalidateSeconds} seconds</li>
+        )}
         <li>{props.d}</li>
       </ul>
     </>

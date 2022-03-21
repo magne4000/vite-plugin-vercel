@@ -42,7 +42,7 @@ export const routesManifestRewriteSchema = myzod.object({
 export const routesManifestDynamicRouteSchema = myzod.object({
   page: myzod.string(),
   regex: myzod.string(),
-  routeKeys: record(myzod.string()),
+  routeKeys: record(myzod.string()).optional(),
   namedRegex: myzod.string().optional(),
 });
 
