@@ -12,5 +12,5 @@ export function onBeforeRender(pageContext: PageContextBuiltIn) {
 }
 
 export async function prerender() {
-  return ['/isr-params/id-1', '/isr-params/id-2'];
+  return ['/named/id-1', '/named/id-2'];
 }

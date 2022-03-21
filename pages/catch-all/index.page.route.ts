@@ -1,0 +1,1 @@
+export default '/catch-all/*';
