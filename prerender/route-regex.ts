@@ -109,7 +109,7 @@ export function getRouteRegex(
 ): RoutesManifestDynamicRoute {
   const result = getParametrizedRoute(normalizedRoute);
   return {
-    page: result.page,
+    page: '/api/ssr_',
     regex: `^${result.regex}(?:/)?$`,
     routeKeys: result.routeKeys,
     namedRegex: `^${result.namedRegex}(?:/)?$`,
