@@ -31,9 +31,7 @@
     "jest": "^27.5.1",
     "lint-staged": "^12.3.5",
     "myzod": "^1.8.7",
-    "prettier": "^2.5.1",
-    "rollup": "^2.70.0",
-    "vitest": "^0.6.0"
+    "prettier": "^2.5.1"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.4",
