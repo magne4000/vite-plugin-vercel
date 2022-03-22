@@ -67,6 +67,17 @@ export const prerender: ViteVercelPrerenderFn = async (
     resolvedConfig.vercel?.prerenderManifest?.routes ?? [],
   );
 
+  const routes: NonNullable<ViteVercelPrerenderRoute> = {
+    ssr: {
+      dynamicRoutes: [
+        {
+          page: '/' + ssrEndpointDestination,
+          regex: '^/((?!assets/)(?!api/).*)$',
+        },
+      ],
+    },
+  };
+
   await prerenderCli({
     root: getRoot(resolvedConfig),
     noExtraDir: true,
@@ -109,17 +120,6 @@ export const prerender: ViteVercelPrerenderFn = async (
       await fs.writeFile(newFilePath, pageContext._prerenderResult.fileContent);
     },
   });
-
-  const routes: NonNullable<ViteVercelPrerenderRoute> = {
-    ssr: {
-      dynamicRoutes: [
-        {
-          page: '/' + ssrEndpointDestination,
-          regex: '^/((?!assets/)(?!api/).*)$',
-        },
-      ],
-    },
-  };
 
   return routes;
 };
