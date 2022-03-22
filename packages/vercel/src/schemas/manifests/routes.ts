@@ -1,63 +1,71 @@
-import * as myzod from 'myzod';
+import { z } from 'zod';
 
-function record(schema: myzod.AnyType) {
-  return myzod.object({
-    [myzod.keySignature]: schema,
-  });
-}
+export const routesManifestRedirectSchema = z
+  .object({
+    source: z.string(),
+    destination: z.string(),
+    statusCode: z.number().refine((n) => [301, 302, 307, 308].includes(n)),
+    regex: z.string(),
+  })
+  .strict();
 
-export const routesManifestRedirectSchema = myzod.object({
-  source: myzod.string(),
-  destination: myzod.string(),
-  statusCode: myzod.literals(301, 302, 307, 308),
-  regex: myzod.string(),
-});
+export const routesManifestHeaderSchema = z
+  .object({
+    source: z.string(),
+    headers: z.array(
+      z
+        .object({
+          key: z.string(),
+          value: z.string(),
+        })
+        .strict(),
+    ),
+    regex: z.string(),
+  })
+  .strict();
 
-export const routesManifestHeaderSchema = myzod.object({
-  source: myzod.string(),
-  headers: myzod.array(
-    myzod.object({
-      key: myzod.string(),
-      value: myzod.string(),
-    }),
-  ),
-  regex: myzod.string(),
-});
+export const routesManifestRewriteSchema = z
+  .object({
+    source: z.string(),
+    has: z
+      .array(
+        z
+          .object({
+            key: z.string(),
+            value: z.string(),
+            type: z.enum(['header', 'cookie', 'host', 'query']),
+          })
+          .strict(),
+      )
+      .optional(),
+    destination: z.string(),
+    regex: z.string(),
+  })
+  .strict();
 
-export const routesManifestRewriteSchema = myzod.object({
-  source: myzod.string(),
-  has: myzod
-    .array(
-      myzod.object({
-        key: myzod.string(),
-        value: myzod.string(),
-        type: myzod.literals('header', 'cookie', 'host', 'query'),
-      }),
-    )
-    .optional(),
-  destination: myzod.string(),
-  regex: myzod.string(),
-});
+export const routesManifestDynamicRouteSchema = z
+  .object({
+    page: z.string(),
+    regex: z.string(),
+    routeKeys: z.record(z.string()).optional(),
+    namedRegex: z.string().optional(),
+  })
+  .strict();
 
-export const routesManifestDynamicRouteSchema = myzod.object({
-  page: myzod.string(),
-  regex: myzod.string(),
-  routeKeys: record(myzod.string()).optional(),
-  namedRegex: myzod.string().optional(),
-});
+export const routesManifestSchema = z
+  .object({
+    version: z.literal(3),
+    basePath: z.string().regex(/^\/.*/),
+    pages404: z.boolean(),
+    redirects: z.array(routesManifestRedirectSchema).optional(),
+    headers: z.array(routesManifestHeaderSchema).optional(),
+    rewrites: z.array(routesManifestRewriteSchema).optional(),
+    dynamicRoutes: z.array(routesManifestDynamicRouteSchema).optional(),
+  })
+  .strict();
 
-export const routesManifestSchema = myzod.object({
-  version: myzod.literal(3),
-  basePath: myzod.string().pattern(/^\/.*/),
-  pages404: myzod.boolean(),
-  redirects: myzod.array(routesManifestRedirectSchema).optional(),
-  headers: myzod.array(routesManifestHeaderSchema).optional(),
-  rewrites: myzod.array(routesManifestRewriteSchema).optional(),
-  dynamicRoutes: myzod.array(routesManifestDynamicRouteSchema).optional(),
-});
-
-export type RoutesManifest = myzod.Infer<typeof routesManifestSchema>;
-export type RoutesManifestDynamicRoute = myzod.Infer<
+export type RoutesManifest = z.infer<typeof routesManifestSchema>;
+export type RoutesManifestDynamicRoute = z.infer<
   typeof routesManifestDynamicRouteSchema
 >;
 export type RoutesManifestDefault = Partial<Omit<RoutesManifest, 'version'>>;

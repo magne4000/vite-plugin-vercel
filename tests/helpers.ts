@@ -1,6 +1,5 @@
 import fs from 'fs/promises';
-import myzod from 'myzod';
-import { Type } from 'myzod/libs/types';
+import { ZodSchema } from 'zod';
 import { build, InlineConfig } from 'vite';
 import glob from 'fast-glob';
 import os from 'os';
@@ -29,9 +28,9 @@ export function testFs(dirname: string, files: Iterable<string>) {
   });
 }
 
-export function testSchema<T>(context: TestContext, schema: Type<T>) {
+export function testSchema<T>(context: TestContext, schema: ZodSchema<T>) {
   it('should respect schema', function () {
-    expect(schema.try(context.file)).not.toBeInstanceOf(myzod.ValidationError);
+    expect(schema.safeParse(context.file)).not.toHaveProperty('error');
   });
 }
 

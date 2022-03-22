@@ -65,19 +65,14 @@ export function getPrerenderManifest(
     return acc;
   }, {} as Record<string, PrerenderManifestDynamicRoute>);
 
-  return prerenderManifestSchema.parse(
-    {
-      version: 3,
-      routes,
-      dynamicRoutes,
-      preview: {
-        previewModeId: prerenderManifestDefault?.preview?.previewModeId ?? null,
-      },
+  return prerenderManifestSchema.parse({
+    version: 3,
+    routes,
+    dynamicRoutes,
+    preview: {
+      previewModeId: prerenderManifestDefault?.preview?.previewModeId ?? null,
     },
-    {
-      collectErrors: true,
-    },
-  );
+  });
 }
 
 export function getPrerenderManifestDestination(
@@ -104,20 +99,15 @@ export function getRoutesManifest(
     ...(routesManifest?.dynamicRoutes ?? []),
   ];
 
-  return routesManifestSchema.parse(
-    {
-      version: 3,
-      basePath: routesManifest?.basePath ?? '/',
-      pages404: routesManifest?.pages404 ?? true,
-      dynamicRoutes: allDynamicRoutes.length > 0 ? allDynamicRoutes : undefined,
-      rewrites: allRewrites.length > 0 ? allRewrites : undefined,
-      redirects: routesManifest?.redirects,
-      headers: routesManifest?.headers,
-    },
-    {
-      collectErrors: true,
-    },
-  );
+  return routesManifestSchema.parse({
+    version: 3,
+    basePath: routesManifest?.basePath ?? '/',
+    pages404: routesManifest?.pages404 ?? true,
+    dynamicRoutes: allDynamicRoutes.length > 0 ? allDynamicRoutes : undefined,
+    rewrites: allRewrites.length > 0 ? allRewrites : undefined,
+    redirects: routesManifest?.redirects,
+    headers: routesManifest?.headers,
+  });
 }
 
 export function getRoutesManifestDestination(resolvedConfig: ResolvedConfig) {
@@ -129,15 +119,10 @@ export function getRoutesManifestDestination(resolvedConfig: ResolvedConfig) {
 export function getFunctionsManifest(
   pages: FunctionsManifest['pages'],
 ): FunctionsManifest {
-  return functionsManifestSchema.parse(
-    {
-      version: 1,
-      pages,
-    },
-    {
-      collectErrors: true,
-    },
-  );
+  return functionsManifestSchema.parse({
+    version: 1,
+    pages,
+  });
 }
 
 export function getFunctionsManifestDestination(

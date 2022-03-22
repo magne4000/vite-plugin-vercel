@@ -1,49 +1,47 @@
-import * as myzod from 'myzod';
+import { z } from 'zod';
 
-function record(schema: myzod.AnyType) {
-  return myzod.object({
-    [myzod.keySignature]: schema,
-  });
-}
+export const functionsManifestSchemaPage = z
+  .object({
+    runtime: z.string().optional(),
+    handler: z.string().optional(),
+    regions: z.array(z.string()).optional(),
+    maxDuration: z.number().min(1).max(900).optional(),
+    memory: z.number().min(128).max(3008).optional(),
+  })
+  .strict();
 
-export const functionsManifestSchemaPage = myzod.object({
-  runtime: myzod.string().optional(),
-  handler: myzod.string().optional(),
-  regions: myzod.array(myzod.string()).optional(),
-  maxDuration: myzod.number().min(1).max(900).optional(),
-  memory: myzod.number().min(128).max(3008).optional(),
-});
-
-export const functionsManifestSchemaPageWeb = myzod
-  .omit(functionsManifestSchemaPage, ['runtime'])
-  .and(
-    myzod.object({
-      runtime: myzod.literal('web'),
-      env: myzod.array(myzod.string()),
-      files: myzod.array(myzod.string()),
-      name: myzod.string(),
-      page: myzod.string(),
-      regexp: myzod.string(),
-      sortingIndex: myzod.number(),
-    }),
+export const functionsManifestSchemaPageWeb = functionsManifestSchemaPage
+  .omit({
+    runtime: true,
+  })
+  .merge(
+    z
+      .object({
+        runtime: z.literal('web'),
+        env: z.array(z.string()),
+        files: z.array(z.string()),
+        name: z.string(),
+        page: z.string(),
+        regexp: z.string(),
+        sortingIndex: z.number(),
+      })
+      .strict(),
   );
 
-export const functionsManifestSchema = myzod.object({
-  version: myzod.literal(1),
-  pages: myzod
+export const functionsManifestSchema = z.object({
+  version: z.literal(1),
+  pages: z
     .object({
       '_middleware.js': functionsManifestSchemaPageWeb.optional(),
     })
     .and(
-      record(
-        myzod.intersection(
-          myzod.partial(
-            myzod.omit(functionsManifestSchemaPageWeb, ['runtime']),
-          ),
+      z.record(
+        z.intersection(
+          functionsManifestSchemaPageWeb.partial(),
           functionsManifestSchemaPage,
         ),
       ),
     ),
 });
 
-export type FunctionsManifest = myzod.Infer<typeof functionsManifestSchema>;
+export type FunctionsManifest = z.infer<typeof functionsManifestSchema>;

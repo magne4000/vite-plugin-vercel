@@ -1,38 +1,40 @@
-import * as myzod from 'myzod';
+import { z } from 'zod';
 
-function record<T extends myzod.AnyType>(schema: T) {
-  return myzod.object({
-    [myzod.keySignature]: schema,
-  });
-}
+export const prerenderManifestSchemaRoute = z
+  .object({
+    initialRevalidateSeconds: z.number(),
+    srcRoute: z.string(),
+    dataRoute: z.string(),
+  })
+  .strict();
 
-export const prerenderManifestSchemaRoute = myzod.object({
-  initialRevalidateSeconds: myzod.number(),
-  srcRoute: myzod.string(),
-  dataRoute: myzod.string(),
-});
+export const prerenderManifestSchemaDynamicRoute = z
+  .object({
+    routeRegex: z.string(),
+    fallback: z.string().or(z.null()),
+    dataRoute: z.string(),
+    dataRouteRegex: z.string(),
+  })
+  .strict();
 
-export const prerenderManifestSchemaDynamicRoute = myzod.object({
-  routeRegex: myzod.string(),
-  fallback: myzod.string().or(myzod.null()),
-  dataRoute: myzod.string(),
-  dataRouteRegex: myzod.string(),
-});
+export const prerenderManifestSchema = z
+  .object({
+    version: z.literal(3),
+    routes: z.record(prerenderManifestSchemaRoute),
+    dynamicRoutes: z.record(prerenderManifestSchemaDynamicRoute),
+    preview: z
+      .object({
+        previewModeId: z.string().or(z.null()),
+      })
+      .strict(),
+  })
+  .strict();
 
-export const prerenderManifestSchema = myzod.object({
-  version: myzod.literal(3),
-  routes: record(prerenderManifestSchemaRoute),
-  dynamicRoutes: record(prerenderManifestSchemaDynamicRoute),
-  preview: myzod.object({
-    previewModeId: myzod.string().or(myzod.null()),
-  }),
-});
-
-export type PrerenderManifest = myzod.Infer<typeof prerenderManifestSchema>;
-export type PrerenderManifestRoute = myzod.Infer<
+export type PrerenderManifest = z.infer<typeof prerenderManifestSchema>;
+export type PrerenderManifestRoute = z.infer<
   typeof prerenderManifestSchemaRoute
 >;
-export type PrerenderManifestDynamicRoute = myzod.Infer<
+export type PrerenderManifestDynamicRoute = z.infer<
   typeof prerenderManifestSchemaDynamicRoute
 >;
 

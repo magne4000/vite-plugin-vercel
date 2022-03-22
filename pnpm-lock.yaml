@@ -20,7 +20,6 @@ importers:
       husky: ^7.0.4
       jest: ^27.5.1
       lint-staged: ^12.3.5
-      myzod: ^1.8.7
       prettier: ^2.5.1
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -28,7 +27,8 @@ importers:
       typescript: ^4.6.2
       vite: ^2.8.6
       vite-plugin-ssr: ^0.3.59
-      vite-plugin-vercel: ^1.0.0
+      vite-plugin-vercel: ^0.0.2
+      zod: ^3.14.2
     dependencies:
       '@brillout/libassert': 0.5.4
       '@vitejs/plugin-react': 1.2.0
@@ -55,8 +55,8 @@ importers:
       husky: 7.0.4
       jest: 27.5.1_ts-node@10.7.0
       lint-staged: 12.3.5
-      myzod: 1.8.7
       prettier: 2.5.1
+      zod: 3.14.2
 
   packages/vercel:
     specifiers:
@@ -68,14 +68,14 @@ importers:
       eslint: ^8.10.0
       eslint-plugin-solid: ^0.4.4
       fast-glob: ^3.2.11
-      myzod: ^1.8.7
       tsup: ^5.12.0
       typescript: ^4.6.2
+      zod: ^3.14.2
     dependencies:
       '@brillout/libassert': 0.5.4
       esbuild: 0.14.25
       fast-glob: 3.2.11
-      myzod: 1.8.7
+      zod: 3.14.2
     devDependencies:
       '@types/node': 17.0.21
       '@typescript-eslint/eslint-plugin': 5.14.0_f4054b8c3cd621db16ae1b9d571bccc0
@@ -5034,12 +5034,6 @@ packages:
       }
     dev: false
 
-  /myzod/1.8.7:
-    resolution:
-      {
-        integrity: sha512-H/Nmst+ZIGQppKVeOq6ufieRnnK0u+UfDLgCrG1Rtn6W/GzMoz6Ur9/iLBwB0N8s6ZE/4hhbRTUt3Pg7nH4X2Q==,
-      }
-
   /mz/2.7.0:
     resolution:
       {
@@ -6754,3 +6748,9 @@ packages:
       }
     engines: { node: '>=10' }
     dev: false
+
+  /zod/3.14.2:
+    resolution:
+      {
+        integrity: sha512-iF+wrtzz7fQfkmn60PG6XFxaWBhYYKzp2i+nv24WbLUWb2JjymdkHlzBwP0erpc78WotwP5g9AAu7Sk8GWVVNw==,
+      }
