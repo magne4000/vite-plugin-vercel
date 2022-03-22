@@ -4,7 +4,7 @@ import path from 'path';
 describe('fs', function () {
   testFs(path.basename(__dirname), [
     '/server/pages/api/post.js',
-    '/server/pages/post.js',
+    '/server/pages/api/page.js',
     '/static/tests/common/index.html',
     '/functions-manifest.json',
     '/prerender-manifest.json',

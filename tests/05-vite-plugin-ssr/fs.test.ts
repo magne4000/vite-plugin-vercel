@@ -21,6 +21,8 @@ describe('fs', function () {
     // ISR + Static pages
     '/server/pages/404.html',
     '/server/pages/api/ssr_.js',
+    '/server/pages/api/page.js',
+    '/server/pages/page.js',
     '/server/pages/index.html',
     '/server/pages/isr.html',
     '/server/pages/ssr_.js',
