@@ -38,6 +38,11 @@ export type {
 
 export interface ViteVercelConfig {
   /**
+   * How long Functions should be allowed to run for every request in seconds.
+   * If left empty, default value for your plan will is used.
+   */
+  defaultMaxDuration?: number;
+  /**
    * If ISR is supported, default revalidation time per-page can be overriden.
    * A `prerender` function is necessary for ISR to work.
    * @see {@link https://vercel.com/docs/concepts/next.js/incremental-static-regeneration}

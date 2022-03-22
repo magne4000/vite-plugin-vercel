@@ -10,7 +10,7 @@ export const functionsManifestSchemaPage = myzod.object({
   runtime: myzod.string().optional(),
   handler: myzod.string().optional(),
   regions: myzod.array(myzod.string()).optional(),
-  maxDuration: myzod.number().optional(),
+  maxDuration: myzod.number().min(1).max(900).optional(),
   memory: myzod.number().min(128).max(3008).optional(),
 });
 

@@ -105,7 +105,7 @@ export async function buildFn(
   await build(options);
 
   fnManifests[firstDestination + '.js'] = {
-    maxDuration: 10,
+    maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
     ...pages[firstDestination + '.js'],
   };
 
@@ -122,7 +122,7 @@ export async function buildFn(
     );
 
     fnManifests[dest + '.js'] = {
-      maxDuration: 10,
+      maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
       ...(pages[dest + '.js'] ?? pages[firstDestination + '.js']),
     };
   }
