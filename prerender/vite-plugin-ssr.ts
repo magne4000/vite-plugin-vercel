@@ -12,7 +12,6 @@ import {
 } from 'vite-plugin-vercel';
 import { newError } from '@brillout/libassert';
 import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
-import { getRouteRegex } from './route-regex';
 
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';
@@ -64,9 +63,6 @@ export function getOutDir(
 export const prerender: ViteVercelPrerenderFn = async (
   resolvedConfig: ResolvedConfig,
 ) => {
-  const routes: NonNullable<ViteVercelPrerenderRoute> = {};
-  const prerenderedPages: string[] = [];
-  let globalContext: GlobalContext | undefined = undefined;
   const isrPagesWhitelist: string[] = Object.keys(
     resolvedConfig.vercel?.prerenderManifest?.routes ?? [],
   );
@@ -75,11 +71,6 @@ export const prerender: ViteVercelPrerenderFn = async (
     root: getRoot(resolvedConfig),
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
-      if (!globalContext) {
-        // TODO use getGlobalContext when moving into vite-plugin-ssr
-        globalContext = pageContext as unknown as GlobalContext;
-      }
-
       assert(
         typeof pageContext.pageExports.initialRevalidateSeconds === 'number' ||
           typeof pageContext.pageExports.initialRevalidateSeconds ===
@@ -114,96 +105,24 @@ export const prerender: ViteVercelPrerenderFn = async (
         };
       }
 
-      prerenderedPages.push(pageContext.url);
-
       await fs.mkdir(path.dirname(newFilePath), { recursive: true });
       await fs.writeFile(newFilePath, pageContext._prerenderResult.fileContent);
     },
   });
 
-  const ssrPages = getSsrPages(globalContext!, prerenderedPages);
-  const rewrites = resolvedConfig.vercel?.routesManifest?.rewrites ?? [];
-
-  // Static routes
-  if (ssrPages.rewrites.length > 0) {
-    if (!routes.ssr) {
-      routes.ssr = { rewrites: [] };
-    }
-    if (!routes.ssr.rewrites) {
-      routes.ssr.rewrites = [];
-    }
-
-    for (const route of ssrPages.rewrites) {
-      // can be overriden by user config or another plugin
-      const overrideRewrite = rewrites.find((r) => r.source === route);
-
-      routes.ssr.rewrites.push({
-        source: route,
-        destination: '/' + ssrEndpointDestination,
-        // TODO not sure that .* should be there
-        regex: '^' + route + '.*$',
-        ...overrideRewrite,
-      });
-    }
-  }
-
-  // Parameterized routes
-  if (ssrPages.dynamicRoutes.length > 0) {
-    if (!routes.ssr) {
-      routes.ssr = { dynamicRoutes: [] };
-    }
-    if (!routes.ssr.dynamicRoutes) {
-      routes.ssr.dynamicRoutes = [];
-    }
-
-    for (const regex of ssrPages.dynamicRoutes) {
-      routes.ssr.dynamicRoutes.push({
-        page: '/' + ssrEndpointDestination,
-        regex,
-      });
-    }
-  }
-
-  if (ssrPages.hasFunctionRoute) {
-    if (!routes.ssr) {
-      routes.ssr = { dynamicRoutes: [] };
-    }
-    if (!routes.ssr.dynamicRoutes) {
-      routes.ssr.dynamicRoutes = [];
-    }
-
-    routes.ssr.dynamicRoutes.push({
-      page: '/' + ssrEndpointDestination,
-      regex: '^/((?!assets/)(?!api/).*)$',
-    });
-  }
+  const routes: NonNullable<ViteVercelPrerenderRoute> = {
+    ssr: {
+      dynamicRoutes: [
+        {
+          page: '/' + ssrEndpointDestination,
+          regex: '^/((?!assets/)(?!api/).*)$',
+        },
+      ],
+    },
+  };
 
   return routes;
 };
-
-function getSsrPages(globalContext: GlobalContext, prerenderedPages: string[]) {
-  const fsRoutes = globalContext._pageRoutes
-    .filter((p) => !p.pageRouteFile)
-    .map((p) => p.filesystemRoute)
-    .filter((p) => !prerenderedPages.includes(p));
-
-  const paramsRoutes = globalContext._pageRoutes
-    .filter((p) => p.pageRouteFile)
-    .map((p) => p.pageRouteFile!)
-    .filter((p) => typeof p.routeValue === 'string')
-    .map((p) => getRouteRegex(p.routeValue as string));
-
-  const functionRoutes = globalContext._pageRoutes
-    .filter((p) => p.pageRouteFile)
-    .map((p) => p.pageRouteFile!)
-    .filter((p) => typeof p.routeValue === 'function');
-
-  return {
-    rewrites: fsRoutes,
-    dynamicRoutes: paramsRoutes,
-    hasFunctionRoute: functionRoutes.length > 0,
-  };
-}
 
 export async function getSsrEndpoint(
   resolvedConfig: UserConfig,
