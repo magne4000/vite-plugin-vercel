@@ -14,7 +14,8 @@
     "test:04": "jest tests/04-isr",
     "test:05": "jest tests/05-vite-plugin-ssr",
     "pretest": "pnpm run build:all",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "pnpm run build:all && jest"
   },
   "devDependencies": {
     "@swc/core": "^1.2.158",
