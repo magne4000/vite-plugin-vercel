@@ -13,6 +13,8 @@ import {
 import { buildApiEndpoints } from './build';
 import { execPrerender } from './prerender';
 
+export * from './types';
+
 function vercelPlugin(): Plugin {
   let resolvedConfig: ResolvedConfig;
 
