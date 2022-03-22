@@ -10,6 +10,9 @@ import {
 import path from 'path';
 import { getOutput } from './utils';
 import { assert } from './assert';
+import { routesManifestSchema } from './schemas/manifests/routes';
+import { functionsManifestSchema } from './schemas/manifests/functions';
+import { prerenderManifestSchema } from './schemas/manifests/prerender';
 
 // Prerender manifest
 
@@ -34,7 +37,7 @@ export function getPrerenderManifest(
           val?.initialRevalidateSeconds ??
           prerenderManifestDefault?.routes?.[key]?.initialRevalidateSeconds ??
           resolvedConfig.vercel?.initialRevalidateSeconds ??
-          30,
+          86400,
         srcRoute: srcRoute,
         dataRoute:
           val?.dataRoute ??
@@ -62,14 +65,19 @@ export function getPrerenderManifest(
     return acc;
   }, {} as Record<string, PrerenderManifestDynamicRoute>);
 
-  return {
-    version: 3,
-    routes,
-    dynamicRoutes,
-    preview: {
-      previewModeId: prerenderManifestDefault?.preview?.previewModeId ?? null,
+  return prerenderManifestSchema.parse(
+    {
+      version: 3,
+      routes,
+      dynamicRoutes,
+      preview: {
+        previewModeId: prerenderManifestDefault?.preview?.previewModeId ?? null,
+      },
     },
-  };
+    {
+      collectErrors: true,
+    },
+  );
 }
 
 export function getPrerenderManifestDestination(
@@ -96,15 +104,20 @@ export function getRoutesManifest(
     ...(routesManifest?.dynamicRoutes ?? []),
   ];
 
-  return {
-    version: 3,
-    basePath: routesManifest?.basePath ?? '/',
-    pages404: routesManifest?.pages404 ?? true,
-    dynamicRoutes: allDynamicRoutes.length > 0 ? allDynamicRoutes : undefined,
-    rewrites: allRewrites.length > 0 ? allRewrites : undefined,
-    redirects: routesManifest?.redirects,
-    headers: routesManifest?.headers,
-  };
+  return routesManifestSchema.parse(
+    {
+      version: 3,
+      basePath: routesManifest?.basePath ?? '/',
+      pages404: routesManifest?.pages404 ?? true,
+      dynamicRoutes: allDynamicRoutes.length > 0 ? allDynamicRoutes : undefined,
+      rewrites: allRewrites.length > 0 ? allRewrites : undefined,
+      redirects: routesManifest?.redirects,
+      headers: routesManifest?.headers,
+    },
+    {
+      collectErrors: true,
+    },
+  );
 }
 
 export function getRoutesManifestDestination(resolvedConfig: ResolvedConfig) {
@@ -116,10 +129,15 @@ export function getRoutesManifestDestination(resolvedConfig: ResolvedConfig) {
 export function getFunctionsManifest(
   pages: FunctionsManifest['pages'],
 ): FunctionsManifest {
-  return {
-    version: 1,
-    pages,
-  };
+  return functionsManifestSchema.parse(
+    {
+      version: 1,
+      pages,
+    },
+    {
+      collectErrors: true,
+    },
+  );
 }
 
 export function getFunctionsManifestDestination(

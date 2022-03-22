@@ -45,6 +45,7 @@ export interface ViteVercelConfig {
   /**
    * If ISR is supported, default revalidation time per-page can be overriden.
    * A `prerender` function is necessary for ISR to work.
+   * Defaults to 86400 seconds (24h).
    * @see {@link https://vercel.com/docs/concepts/next.js/incremental-static-regeneration}
    */
   initialRevalidateSeconds?: number;
