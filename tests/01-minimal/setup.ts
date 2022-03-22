@@ -8,8 +8,5 @@ const globalSetup = setup(path.basename(__dirname), {
   mode: 'production',
   root: process.cwd(),
   plugins: [react(), vercel()],
-  vercel: {
-    apiEndpoints: ['./api/post.ts'],
-  },
 });
 export default globalSetup;

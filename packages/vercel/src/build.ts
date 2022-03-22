@@ -7,8 +7,8 @@ import { FunctionsManifest, ViteVercelApiEntry } from './types';
 import { assert } from './assert';
 import fs from 'fs/promises';
 
-function getApiEndpoints(resolvedConfig: ResolvedConfig) {
-  const apiEndpoints = (resolvedConfig.vercel?.apiEndpoints ?? []).map((p) =>
+function getPagesEndpoints(resolvedConfig: ResolvedConfig) {
+  const apiEndpoints = (resolvedConfig.vercel?.pagesEndpoints ?? []).map((p) =>
     path.isAbsolute(p) ? p : path.resolve(getRoot(resolvedConfig), p),
   );
 
@@ -18,7 +18,7 @@ function getApiEndpoints(resolvedConfig: ResolvedConfig) {
 export function getApiEntries(
   resolvedConfig: ResolvedConfig,
 ): ViteVercelApiEntry[] {
-  const apiEndpoints = getApiEndpoints(resolvedConfig);
+  const pagesEndpoints = getPagesEndpoints(resolvedConfig);
 
   const apiEntries = glob
     .sync(`${getRoot(resolvedConfig)}/api/**/*.*([a-zA-Z0-9])`)
@@ -29,7 +29,7 @@ export function getApiEntries(
     const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
     const parsed = path.parse(outFilePath);
 
-    const apiOnly = apiEndpoints.has(filePath);
+    const alsoPage = pagesEndpoints.has(filePath);
     // `rewrites` in routes-manifest also rewrites the url for non `/api` pages.
     // So to ensure urls are kept for ssr pages, `/api` endpoint must be built
     const entry = {
@@ -37,7 +37,7 @@ export function getApiEntries(
       destination: [`api/${path.join(parsed.dir, parsed.name)}`],
     };
 
-    if (!apiOnly) {
+    if (alsoPage) {
       entry.destination.push(`${path.join(parsed.dir, parsed.name)}`);
     }
 

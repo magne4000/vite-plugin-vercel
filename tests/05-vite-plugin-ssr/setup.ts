@@ -12,7 +12,7 @@ const globalSetup = setup(path.basename(__dirname), {
   plugins: [react(), ssr(), vitePluginSsrVercelPlugin(), vercel()],
   vercel: {
     initialRevalidateSeconds: 25,
-    apiEndpoints: ['./api/post.ts'],
+    pagesEndpoints: ['./api/page.ts'],
   },
   build: {
     outDir: 'dist',

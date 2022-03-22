@@ -91,6 +91,4 @@ export async function callBuild(dirname: string, config: InlineConfig) {
     },
     logLevel: 'info',
   });
-
-  console.log('TMP', getTmpDir(dirname));
 }

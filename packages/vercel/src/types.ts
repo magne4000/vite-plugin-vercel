@@ -50,17 +50,17 @@ export interface ViteVercelConfig {
    */
   prerender?: ViteVercelPrerenderFn | false;
   /**
-   * By default, all `api/*` endpoints are compiled under `.ouput/server/pages` and `.ouput/server/pages/api`.
-   * If a file must be compiled only under `.ouput/server/pages/api`, it should be added here.
+   * By default, all `api/*` endpoints are compiled under `.ouput/server/pages/api`.
+   * If a file must also be compiled only under `.ouput/server/pages`, it should be added here.
    *
    * @example
    * ```
    * {
-   *   apiEndpoints: ['./api/post.ts']
+   *   pagesEndpoints: ['./api/page.ts']
    * }
    * ```
    */
-  apiEndpoints?: string[];
+  pagesEndpoints?: string[];
   /**
    * All provided endpoints will also be part of the build process.
    * For instance, a framework can leverage this to have a generic ssr endpoint

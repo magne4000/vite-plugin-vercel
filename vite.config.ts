@@ -8,6 +8,6 @@ export default defineConfig({
   plugins: [react(), ssr(), vercel(), vitePluginSsrVercelPlugin()],
   vercel: {
     initialRevalidateSeconds: 25,
-    apiEndpoints: ['./api/post.ts'],
+    pagesEndpoints: ['./api/page.ts'],
   },
 });
