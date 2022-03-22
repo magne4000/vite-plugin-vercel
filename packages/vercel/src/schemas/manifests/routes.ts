@@ -1,6 +1,6 @@
-import myzod, { AnyType, Infer } from 'myzod';
+import * as myzod from 'myzod';
 
-function record(schema: AnyType) {
+function record(schema: myzod.AnyType) {
   return myzod.object({
     [myzod.keySignature]: schema,
   });
@@ -56,8 +56,8 @@ export const routesManifestSchema = myzod.object({
   dynamicRoutes: myzod.array(routesManifestDynamicRouteSchema).optional(),
 });
 
-export type RoutesManifest = Infer<typeof routesManifestSchema>;
-export type RoutesManifestDynamicRoute = Infer<
+export type RoutesManifest = myzod.Infer<typeof routesManifestSchema>;
+export type RoutesManifestDynamicRoute = myzod.Infer<
   typeof routesManifestDynamicRouteSchema
 >;
 export type RoutesManifestDefault = Partial<Omit<RoutesManifest, 'version'>>;

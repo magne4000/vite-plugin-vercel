@@ -1,6 +1,6 @@
-import myzod, { AnyType, Infer } from 'myzod';
+import * as myzod from 'myzod';
 
-function record<T extends AnyType>(schema: T) {
+function record<T extends myzod.AnyType>(schema: T) {
   return myzod.object({
     [myzod.keySignature]: schema,
   });
@@ -28,9 +28,11 @@ export const prerenderManifestSchema = myzod.object({
   }),
 });
 
-export type PrerenderManifest = Infer<typeof prerenderManifestSchema>;
-export type PrerenderManifestRoute = Infer<typeof prerenderManifestSchemaRoute>;
-export type PrerenderManifestDynamicRoute = Infer<
+export type PrerenderManifest = myzod.Infer<typeof prerenderManifestSchema>;
+export type PrerenderManifestRoute = myzod.Infer<
+  typeof prerenderManifestSchemaRoute
+>;
+export type PrerenderManifestDynamicRoute = myzod.Infer<
   typeof prerenderManifestSchemaDynamicRoute
 >;
 

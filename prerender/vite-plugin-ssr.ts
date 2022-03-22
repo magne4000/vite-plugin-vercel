@@ -165,10 +165,21 @@ export function vitePluginSsrVercelPlugin(): Plugin {
     name: libName,
     apply: 'build',
     async config(userConfig): Promise<UserConfig> {
+      const additionalEndpoints = userConfig.vercel?.additionalEndpoints
+        ?.flatMap((e) => e.destination)
+        .some(
+          (d) => d === ssrEndpointDestination || d === isrEndpointDestination,
+        )
+        ? userConfig.vercel?.additionalEndpoints
+        : [
+            ...(userConfig.vercel?.additionalEndpoints ?? []),
+            await getSsrEndpoint(userConfig),
+          ];
+
       return {
         vercel: {
           prerender: userConfig.vercel?.prerender ?? prerender,
-          additionalEndpoints: [await getSsrEndpoint(userConfig)],
+          additionalEndpoints,
         },
       };
     },

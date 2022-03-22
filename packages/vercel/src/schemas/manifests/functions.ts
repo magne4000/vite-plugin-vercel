@@ -1,6 +1,6 @@
-import myzod, { AnyType, Infer } from 'myzod';
+import * as myzod from 'myzod';
 
-function record(schema: AnyType) {
+function record(schema: myzod.AnyType) {
   return myzod.object({
     [myzod.keySignature]: schema,
   });
@@ -46,4 +46,4 @@ export const functionsManifestSchema = myzod.object({
     ),
 });
 
-export type FunctionsManifest = Infer<typeof functionsManifestSchema>;
+export type FunctionsManifest = myzod.Infer<typeof functionsManifestSchema>;
