@@ -25,6 +25,15 @@ function vercelPlugin(): Plugin {
       resolvedConfig = config;
     },
     async buildStart() {
+      if (
+        process.env.VERCEL_ENV === 'production' &&
+        !process.env.ENABLE_FILE_SYSTEM_API
+      ) {
+        throw new Error(
+          'Missing ENABLE_FILE_SYSTEM_API=1 to your environment variables in your project settings',
+        );
+      }
+
       if (resolvedConfig.build.ssr) return;
       // step 1:	Clean .output dir
       await cleanOutputDirectory(resolvedConfig);

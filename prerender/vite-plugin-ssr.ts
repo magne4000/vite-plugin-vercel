@@ -89,7 +89,7 @@ export const prerender: ViteVercelPrerenderFn = async (
         ` \`{ initialRevalidateSeconds }\` must be a number`,
       );
 
-      const { filePath } = pageContext._prerenderResult;
+      const { filePath, fileContent } = pageContext._prerenderResult;
       const newFilePath = path.join(
         getOutput(resolvedConfig),
         'server/pages',
@@ -117,7 +117,7 @@ export const prerender: ViteVercelPrerenderFn = async (
       }
 
       await fs.mkdir(path.dirname(newFilePath), { recursive: true });
-      await fs.writeFile(newFilePath, pageContext._prerenderResult.fileContent);
+      await fs.writeFile(newFilePath, fileContent);
     },
   });
 
@@ -125,7 +125,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 };
 
 export async function getSsrEndpoint(
-  resolvedConfig: UserConfig,
+  userConfig: UserConfig,
   source?: string,
 ): Promise<ViteVercelApiEntry> {
   const sourcefile =
@@ -134,8 +134,8 @@ export async function getSsrEndpoint(
   const destination = [ssrEndpointDestination, isrEndpointDestination];
 
   const importBuildPath = path.join(
-    getRoot(resolvedConfig),
-    resolvedConfig.build?.outDir ?? 'dist/server',
+    getRoot(userConfig),
+    userConfig.build?.outDir ?? 'dist/server',
     'importBuild',
   );
   const resolveDir = path.dirname(sourcefile);
