@@ -37,7 +37,11 @@ export const functionsManifestSchema = z.object({
     .and(
       z.record(
         z.intersection(
-          functionsManifestSchemaPageWeb.partial(),
+          functionsManifestSchemaPageWeb
+            .omit({
+              runtime: true,
+            })
+            .partial(),
           functionsManifestSchemaPage,
         ),
       ),
