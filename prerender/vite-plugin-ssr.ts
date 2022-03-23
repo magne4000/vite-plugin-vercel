@@ -148,13 +148,21 @@ export const prerender: ViteVercelPrerenderFn = async (
           `prerenderManifest route ${pageContext.urlPathname} has no \`initialRevalidateSeconds\``,
         );
 
-        routes.isr.routes[pageContext.urlPathname] = {
-          srcRoute: '/' + isrEndpointDestination,
-          initialRevalidateSeconds: isr ?? override?.initialRevalidateSeconds,
-          ...resolvedConfig.vercel?.prerenderManifest?.routes?.[
-            pageContext.urlPathname
-          ],
-        };
+        if (filePath.endsWith('.html')) {
+          routes.isr.routes[pageContext.urlPathname] = {
+            ...routes.isr.routes[pageContext.urlPathname],
+            srcRoute: '/' + isrEndpointDestination,
+            initialRevalidateSeconds: isr ?? override?.initialRevalidateSeconds,
+            ...resolvedConfig.vercel?.prerenderManifest?.routes?.[
+              pageContext.urlPathname
+            ],
+          };
+        } else if (filePath.endsWith('.pageContext.json')) {
+          routes.isr.routes[pageContext.urlPathname] = {
+            ...routes.isr.routes[pageContext.urlPathname],
+            dataRoute: pageContext.urlPathname + '.pageContext',
+          };
+        }
       }
 
       await fs.mkdir(path.dirname(newFilePath), { recursive: true });
