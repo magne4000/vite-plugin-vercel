@@ -83,10 +83,11 @@ export const prerender: ViteVercelPrerenderFn = async (
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
       assert(
-        typeof pageContext.pageExports.initialRevalidateSeconds === 'number' ||
+        (typeof pageContext.pageExports.initialRevalidateSeconds === 'number' &&
+          pageContext.pageExports.initialRevalidateSeconds > 0) ||
           typeof pageContext.pageExports.initialRevalidateSeconds ===
             'undefined',
-        ` \`{ initialRevalidateSeconds }\` must be a number`,
+        ` \`{ initialRevalidateSeconds }\` must be a number and greater than 0`,
       );
 
       const { filePath, fileContent } = pageContext._prerenderResult;
@@ -110,9 +111,7 @@ export const prerender: ViteVercelPrerenderFn = async (
         routes.isr.routes[pageContext.urlPathname] = {
           srcRoute: '/' + isrEndpointDestination,
           initialRevalidateSeconds:
-            pageContext.pageExports.initialRevalidateSeconds === 0
-              ? resolvedConfig.vercel?.initialRevalidateSeconds
-              : pageContext.pageExports.initialRevalidateSeconds,
+            pageContext.pageExports.initialRevalidateSeconds,
         };
       }
 

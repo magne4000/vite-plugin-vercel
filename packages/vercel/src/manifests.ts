@@ -36,7 +36,6 @@ export function getPrerenderManifest(
         initialRevalidateSeconds:
           val?.initialRevalidateSeconds ??
           prerenderManifestDefault?.routes?.[key]?.initialRevalidateSeconds ??
-          resolvedConfig.vercel?.initialRevalidateSeconds ??
           86400,
         srcRoute: srcRoute,
         dataRoute:

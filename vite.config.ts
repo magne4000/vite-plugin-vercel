@@ -7,7 +7,6 @@ import { vitePluginSsrVercelPlugin } from './prerender/vite-plugin-ssr';
 export default defineConfig({
   plugins: [react(), ssr(), vercel(), vitePluginSsrVercelPlugin()],
   vercel: {
-    initialRevalidateSeconds: 25,
     pagesEndpoints: ['./api/page.ts'],
   },
 });
