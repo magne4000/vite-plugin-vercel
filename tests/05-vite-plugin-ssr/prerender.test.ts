@@ -34,12 +34,12 @@ prepareTestJsonFileContent(
           },
           '/named/id-1': {
             dataRoute: '',
-            initialRevalidateSeconds: 15,
+            initialRevalidateSeconds: 25,
             srcRoute: '/ssr_',
           },
           '/named/id-2': {
             dataRoute: '',
-            initialRevalidateSeconds: 15,
+            initialRevalidateSeconds: 25,
             srcRoute: '/ssr_',
           },
         },

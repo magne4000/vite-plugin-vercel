@@ -60,6 +60,43 @@ export function getOutDir(
   return path.join(path.dirname(p), force);
 }
 
+function assertIsr(
+  resolvedConfig: ResolvedConfig,
+  pageContext: PageContext,
+): number | null {
+  if (!('isr' in pageContext.pageExports)) return null;
+  const isr = pageContext.pageExports.isr;
+
+  assert(
+    typeof isr === 'boolean' ||
+      (typeof isr === 'object' &&
+        typeof (isr as Record<string, unknown>).initialRevalidateSeconds ===
+          'number' &&
+        (
+          isr as {
+            initialRevalidateSeconds: number;
+          }
+        ).initialRevalidateSeconds > 0),
+    ` \`{ initialRevalidateSeconds }\` must be a positive number`,
+  );
+
+  if (isr === true) {
+    assert(
+      typeof resolvedConfig.vercel?.initialRevalidateSeconds === 'number' &&
+        resolvedConfig.vercel?.initialRevalidateSeconds > 0,
+      '`export const isr = true;` requires a default positive value for `initialRevalidateSeconds` in vite config',
+    );
+
+    return resolvedConfig.vercel?.initialRevalidateSeconds;
+  }
+
+  return (
+    isr as {
+      initialRevalidateSeconds: number;
+    }
+  ).initialRevalidateSeconds;
+}
+
 export const prerender: ViteVercelPrerenderFn = async (
   resolvedConfig: ResolvedConfig,
 ) => {
@@ -82,12 +119,7 @@ export const prerender: ViteVercelPrerenderFn = async (
     root: getRoot(resolvedConfig),
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
-      assert(
-        typeof pageContext.pageExports.initialRevalidateSeconds === 'number' ||
-          typeof pageContext.pageExports.initialRevalidateSeconds ===
-            'undefined',
-        ` \`{ initialRevalidateSeconds }\` must be a number`,
-      );
+      const isr = assertIsr(resolvedConfig, pageContext);
 
       const { filePath, fileContent } = pageContext._prerenderResult;
       const newFilePath = path.join(
@@ -96,10 +128,12 @@ export const prerender: ViteVercelPrerenderFn = async (
         path.relative(getOutDir(resolvedConfig, 'client'), filePath),
       );
 
-      if (
-        isrPagesWhitelist.includes(pageContext.urlPathname) ||
-        pageContext.pageExports.initialRevalidateSeconds
-      ) {
+      if (isrPagesWhitelist.includes(pageContext.urlPathname) || isr) {
+        const override =
+          resolvedConfig.vercel?.prerenderManifest?.routes?.[
+            pageContext.urlPathname
+          ];
+
         if (!routes.isr) {
           routes.isr = { routes: {} };
         }
@@ -107,12 +141,19 @@ export const prerender: ViteVercelPrerenderFn = async (
           routes.isr.routes = {};
         }
 
+        assert(
+          isr ??
+            (typeof override?.initialRevalidateSeconds === 'number' &&
+              override.initialRevalidateSeconds > 0),
+          `prerenderManifest route ${pageContext.urlPathname} has no \`initialRevalidateSeconds\``,
+        );
+
         routes.isr.routes[pageContext.urlPathname] = {
           srcRoute: '/' + isrEndpointDestination,
-          initialRevalidateSeconds:
-            pageContext.pageExports.initialRevalidateSeconds === 0
-              ? resolvedConfig.vercel?.initialRevalidateSeconds
-              : pageContext.pageExports.initialRevalidateSeconds,
+          initialRevalidateSeconds: isr ?? override?.initialRevalidateSeconds,
+          ...resolvedConfig.vercel?.prerenderManifest?.routes?.[
+            pageContext.urlPathname
+          ],
         };
       }
 

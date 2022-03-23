@@ -3,7 +3,7 @@ import { Link } from '../../renderer/Link';
 
 export { Page };
 
-export const initialRevalidateSeconds = 15;
+export const isr = true;
 
 function isISR(someId: string) {
   return someId === 'id-1' || someId === 'id-2';
@@ -54,9 +54,7 @@ function Page(props: { d: string; someId: string }) {
             ? 'Static html generated'
             : 'No static html generated'}
         </li>
-        {isISR(props.someId) && (
-          <li>ISR: regenerated after {initialRevalidateSeconds} seconds</li>
-        )}
+        {isISR(props.someId) && <li>ISR: regenerated after # seconds</li>}
         <li>{props.d}</li>
       </ul>
     </>
