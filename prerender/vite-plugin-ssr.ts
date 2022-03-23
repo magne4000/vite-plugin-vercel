@@ -187,6 +187,7 @@ export const prerender: ViteVercelPrerenderFn = async (
       dataRouteRegex: '',
     };
 
+    // FIXME not verified
     // routes-manifest.json dynamicRoutes have priority against prerender-manifest.json dynamicRoutes.
     // We want prerender-manifest.json dynamicRoutes to be taken inbto account, so we must exclude its regex
     // from routes-manifest.json dynamicRoutes.
