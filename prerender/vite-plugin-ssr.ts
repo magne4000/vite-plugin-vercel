@@ -17,7 +17,6 @@ import { getComplementaryRoutesRegex, getRoutesRegex } from './route-regex';
 
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';
-// FIXME should be able to only use `api/ssr_`
 const isrEndpointDestination = 'ssr_';
 
 export function assert(
@@ -152,7 +151,7 @@ export const prerender: ViteVercelPrerenderFn = async (
         );
 
         routes.isr.routes[pageContext.urlPathname] = {
-          srcRoute: '/' + ssrEndpointDestination,
+          srcRoute: '/' + isrEndpointDestination,
           dataRoute: '', // TODO .pageContext.json support
           initialRevalidateSeconds: isr ?? override?.initialRevalidateSeconds,
           ...resolvedConfig.vercel?.prerenderManifest?.routes?.[
