@@ -151,7 +151,7 @@ export const prerender: ViteVercelPrerenderFn = async (
         );
 
         routes.isr.routes[pageContext.urlPathname] = {
-          srcRoute: '/' + isrEndpointDestination,
+          srcRoute: '/' + ssrEndpointDestination,
           dataRoute: '', // TODO .pageContext.json support
           initialRevalidateSeconds: isr ?? override?.initialRevalidateSeconds,
           ...resolvedConfig.vercel?.prerenderManifest?.routes?.[
