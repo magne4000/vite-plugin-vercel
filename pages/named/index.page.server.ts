@@ -1,7 +1,5 @@
 import { PageContextBuiltIn } from 'vite-plugin-ssr/types';
 
-export const doNotPrerender = true;
-
 export function onBeforeRender(pageContext: PageContextBuiltIn) {
   return {
     pageContext: {
@@ -13,6 +11,6 @@ export function onBeforeRender(pageContext: PageContextBuiltIn) {
   };
 }
 
-// export async function prerender() {
-//   return ['/named/id-1', '/named/id-2'];
-// }
+export async function prerender() {
+  return ['/named/id-1', '/named/id-2'];
+}
