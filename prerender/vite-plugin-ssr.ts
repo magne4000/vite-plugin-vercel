@@ -183,13 +183,13 @@ export const prerender: ViteVercelPrerenderFn = async (
 
     // routes.isr.dynamicRoutes['/' + ssrEndpointDestination] = {
     // routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
-    routes.isr.dynamicRoutes['/named/id-1'] = {
-      // routeRegex: regex,
-      routeRegex: '/named/id-3',
-      fallback: null,
-      dataRoute: '',
-      dataRouteRegex: '',
-    };
+    // routes.isr.dynamicRoutes['/named/id-1'] = {
+    //   // routeRegex: regex,
+    //   routeRegex: '/named/id-3',
+    //   fallback: null,
+    //   dataRoute: '',
+    //   dataRouteRegex: '',
+    // };
 
     // FIXME not verified
     // routes-manifest.json dynamicRoutes have priority against prerender-manifest.json dynamicRoutes.
