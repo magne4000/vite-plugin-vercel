@@ -181,14 +181,14 @@ export const prerender: ViteVercelPrerenderFn = async (
     console.log('regex', regex);
 
     // routes.isr.dynamicRoutes['/' + ssrEndpointDestination] = {
-    // routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
-    // routes.isr.dynamicRoutes['/named/id-1'] = {
-    //   // routeRegex: regex,
-    //   routeRegex: '/named/id-3',
-    //   fallback: null,
-    //   dataRoute: '',
-    //   dataRouteRegex: '',
-    // };
+    routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
+      // routes.isr.dynamicRoutes['/named/id-1'] = {
+      // routeRegex: regex,
+      routeRegex: '/named/id-3',
+      fallback: null,
+      dataRoute: '',
+      dataRouteRegex: '',
+    };
 
     // FIXME not verified
     // routes-manifest.json dynamicRoutes have priority against prerender-manifest.json dynamicRoutes.
@@ -202,15 +202,15 @@ export const prerender: ViteVercelPrerenderFn = async (
     //   regex: regex,
     // });
 
-    routes.ssr!.dynamicRoutes!.push({
-      // page: '/' + ssrEndpointDestination,
-      page: '/named/id-1',
-      regex: '/named/id-3',
-      routeKeys: {
-        originalUrl: 'originalUrl',
-      },
-      namedRegex: '^(?<originalUrl>/named/id-3)$',
-    });
+    // routes.ssr!.dynamicRoutes!.push({
+    //   // page: '/' + ssrEndpointDestination,
+    //   page: '/named/id-1',
+    //   regex: '/named/id-3',
+    //   routeKeys: {
+    //     originalUrl: 'originalUrl',
+    //   },
+    //   namedRegex: '^(?<originalUrl>/named/id-3)$',
+    // });
 
     // routes.ssr!.dynamicRoutes!.push({
     //   // page: '/' + isrEndpointDestination,
