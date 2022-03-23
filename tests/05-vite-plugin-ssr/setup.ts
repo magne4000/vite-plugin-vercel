@@ -11,6 +11,7 @@ const globalSetup = setup(path.basename(__dirname), {
   root: process.cwd(),
   plugins: [react(), ssr(), vitePluginSsrVercelPlugin(), vercel()],
   vercel: {
+    initialRevalidateSeconds: 25,
     pagesEndpoints: ['./api/page.ts'],
   },
   build: {
