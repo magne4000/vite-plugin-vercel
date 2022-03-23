@@ -13,12 +13,11 @@ import {
 import { newError } from '@brillout/libassert';
 import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
 import { PageRoutes } from 'vite-plugin-ssr/dist/cjs/shared/route/loadPageRoutes';
-import { getRoutesRegex } from './route-regex';
+import { getComplementaryRoutesRegex, getRoutesRegex } from './route-regex';
 
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';
 const isrEndpointDestination = 'ssr_';
-const dynamicIsrEndpointDestination = 'ssr2_';
 
 export function assert(
   condition: unknown,
@@ -110,12 +109,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
   const routes: NonNullable<ViteVercelPrerenderRoute> = {
     ssr: {
-      dynamicRoutes: [
-        {
-          page: '/' + ssrEndpointDestination,
-          regex: '^/((?!assets/)(?!api/).*)$',
-        },
-      ],
+      dynamicRoutes: [],
     },
   };
 
@@ -186,12 +180,23 @@ export const prerender: ViteVercelPrerenderFn = async (
     const regex = getRoutesRegex(dynamicIsrRoutes);
     console.log('regex', regex);
 
-    routes.isr.dynamicRoutes['/' + dynamicIsrEndpointDestination] = {
+    routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
       routeRegex: regex,
       fallback: null,
       dataRoute: '',
       dataRouteRegex: '',
     };
+
+    // routes-manifest.json dynamicRoutes have priority against prerender-manifest.json dynamicRoutes.
+    // We want prerender-manifest.json dynamicRoutes to be taken inbto account, so we must exclude its regex
+    // from routes-manifest.json dynamicRoutes.
+    const appendToIsrRouteManifest =
+      getComplementaryRoutesRegex(dynamicIsrRoutes);
+
+    routes.ssr!.dynamicRoutes!.push({
+      page: '/' + ssrEndpointDestination,
+      regex: `^((?!/assets/.*)(?!/api/.*)${appendToIsrRouteManifest})$`,
+    });
   }
 
   return routes;
@@ -218,11 +223,7 @@ export async function getSsrEndpoint(
   const sourcefile =
     source ?? path.join(__dirname, 'templates', 'ssr_.template.ts');
   const contents = await fs.readFile(sourcefile, 'utf-8');
-  const destination = [
-    ssrEndpointDestination,
-    isrEndpointDestination,
-    dynamicIsrEndpointDestination,
-  ];
+  const destination = [ssrEndpointDestination, isrEndpointDestination];
 
   const importBuildPath = path.join(
     getRoot(userConfig),

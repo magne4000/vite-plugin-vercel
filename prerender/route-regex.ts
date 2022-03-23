@@ -20,3 +20,10 @@ export function getRoutesRegex(normalizedRoutes: string[]): string {
   const results = normalizedRoutes.map(getParametrizedRoute);
   return `^(${results.join('|')})(?:/)?$`;
 }
+
+export function getComplementaryRoutesRegex(
+  normalizedRoutes: string[],
+): string {
+  const results = normalizedRoutes.map(getParametrizedRoute);
+  return results.map((r) => `(?!${r})`).join('');
+}
