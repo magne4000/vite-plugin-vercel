@@ -184,7 +184,7 @@ export const prerender: ViteVercelPrerenderFn = async (
     routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
       // routes.isr.dynamicRoutes['/named/id-3'] = {
       // routeRegex: regex,
-      routeRegex: '.*named.*',
+      routeRegex: '.*',
       fallback: null,
       dataRoute: '',
       dataRouteRegex: '',
