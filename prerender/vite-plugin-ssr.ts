@@ -201,11 +201,11 @@ export const prerender: ViteVercelPrerenderFn = async (
     //   regex: regex,
     // });
     //
-    // routes.ssr!.dynamicRoutes!.push({
-    //   page: '/' + ssrEndpointDestination,
-    //   regex: `^/((?!assets/)(?!api/).*)$`,
-    //   // regex: `^((?!/assets/.*)(?!/api/.*)${appendToIsrRouteManifest})$`,
-    // });
+    routes.ssr!.dynamicRoutes!.push({
+      page: '/' + ssrEndpointDestination,
+      regex: `^/((?!assets/)(?!api/).*)$`,
+      // regex: `^((?!/assets/.*)(?!/api/.*)${appendToIsrRouteManifest})$`,
+    });
   }
 
   return routes;
