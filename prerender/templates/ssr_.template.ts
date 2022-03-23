@@ -13,6 +13,7 @@ export default async function handler(
   response: VercelResponse,
 ) {
   console.error('url', request.url);
+  console.error('query', request.query);
   console.error('headers', request.headers);
   const pageContextInit = getDefaultPageContextInit(request);
   const pageContext = await renderPage(pageContextInit);

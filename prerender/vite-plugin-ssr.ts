@@ -203,8 +203,12 @@ export const prerender: ViteVercelPrerenderFn = async (
     // });
 
     routes.ssr!.dynamicRoutes!.push({
-      page: '/named/id-1',
+      page: '/' + isrEndpointDestination + '?originalUrl=[originalUrl]',
       regex: '/named/id-3',
+      routeKeys: {
+        originalUrl: 'originalUrl',
+      },
+      namedRegex: '^(?<originalUrl>.*)$',
     });
 
     // routes.ssr!.dynamicRoutes!.push({
