@@ -18,6 +18,7 @@ import { getRoutesRegex } from './route-regex';
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';
 const isrEndpointDestination = 'ssr_';
+const dynamicIsrEndpointDestination = 'ssr2_';
 
 export function assert(
   condition: unknown,
@@ -157,7 +158,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
         routes.isr.routes[pageContext.urlPathname] = {
           srcRoute: '/' + isrEndpointDestination,
-          dataRoute: '',
+          dataRoute: '', // TODO .pageContext.json support
           initialRevalidateSeconds: isr ?? override?.initialRevalidateSeconds,
           ...resolvedConfig.vercel?.prerenderManifest?.routes?.[
             pageContext.urlPathname
@@ -185,7 +186,7 @@ export const prerender: ViteVercelPrerenderFn = async (
     const regex = getRoutesRegex(dynamicIsrRoutes);
     console.log('regex', regex);
 
-    routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
+    routes.isr.dynamicRoutes['/' + dynamicIsrEndpointDestination] = {
       routeRegex: regex,
       fallback: null,
       dataRoute: '',
@@ -217,7 +218,11 @@ export async function getSsrEndpoint(
   const sourcefile =
     source ?? path.join(__dirname, 'templates', 'ssr_.template.ts');
   const contents = await fs.readFile(sourcefile, 'utf-8');
-  const destination = [ssrEndpointDestination, isrEndpointDestination];
+  const destination = [
+    ssrEndpointDestination,
+    isrEndpointDestination,
+    dynamicIsrEndpointDestination,
+  ];
 
   const importBuildPath = path.join(
     getRoot(userConfig),
