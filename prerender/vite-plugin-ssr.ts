@@ -160,7 +160,7 @@ export const prerender: ViteVercelPrerenderFn = async (
         } else if (filePath.endsWith('.pageContext.json')) {
           routes.isr.routes[pageContext.urlPathname] = {
             ...routes.isr.routes[pageContext.urlPathname],
-            dataRoute: pageContext.urlPathname + '.pageContext',
+            dataRoute: pageContext.urlPathname + '.pageContext.json',
           };
         }
       }
