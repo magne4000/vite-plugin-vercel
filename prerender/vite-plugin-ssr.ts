@@ -203,22 +203,22 @@ export const prerender: ViteVercelPrerenderFn = async (
     //   regex: regex,
     // });
 
-    routes.ssr!.dynamicRoutes!.push({
-      page: '/' + ssrEndpointDestination,
-      // page: '/named/id-1',
-      regex: '/named/id-3',
-      routeKeys: {
-        originalUrl: 'originalUrl',
-      },
-      namedRegex: '^(?<originalUrl>/named/id-3)$',
-    });
-
     // routes.ssr!.dynamicRoutes!.push({
-    //   // page: '/' + isrEndpointDestination,
     //   page: '/' + ssrEndpointDestination,
-    //   regex: `^/((?!assets/)(?!api/).*)$`,
-    //   // regex: `^((?!/assets/.*)(?!/api/.*)${appendToIsrRouteManifest})$`,
+    //   // page: '/named/id-1',
+    //   regex: '/named/id-3',
+    //   routeKeys: {
+    //     originalUrl: 'originalUrl',
+    //   },
+    //   namedRegex: '^(?<originalUrl>/named/id-3)$',
     // });
+
+    routes.ssr!.dynamicRoutes!.push({
+      // page: '/' + isrEndpointDestination,
+      page: '/' + ssrEndpointDestination,
+      regex: `^/((?!assets/)(?!api/).*)$`,
+      // regex: `^((?!/assets/.*)(?!/api/.*)${appendToIsrRouteManifest})$`,
+    });
   }
 
   return routes;
