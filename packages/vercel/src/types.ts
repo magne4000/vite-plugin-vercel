@@ -113,7 +113,7 @@ export interface ViteVercelConfig {
 }
 
 export type ViteVercelPrerenderRoute = {
-  isr?: Pick<PrerenderManifestDefault, 'routes'>;
+  isr?: Pick<PrerenderManifestDefault, 'routes' | 'dynamicRoutes'>;
   ssr?: Pick<RoutesManifestDefault, 'rewrites' | 'dynamicRoutes'>;
 };
 export type ViteVercelPrerenderFn = (

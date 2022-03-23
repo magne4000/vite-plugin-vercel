@@ -49,21 +49,35 @@ export function getPrerenderManifest(
     {} as Record<string, PrerenderManifestRoute>,
   );
 
-  const uniqueRoutes = Array.from(
-    new Set(Object.values(routes).map((r) => r.srcRoute)),
+  const dynamicRoutes = Object.entries(isrPages?.dynamicRoutes ?? {}).reduce(
+    (acc, [key, val]) => {
+      const override = prerenderManifestDefault?.dynamicRoutes?.[key];
+      const routeRegex = val?.routeRegex ?? override?.routeRegex;
+
+      const fallback =
+        val?.fallback === null || typeof val?.fallback === 'string'
+          ? val?.fallback
+          : override?.fallback === null ||
+            typeof override?.fallback === 'string'
+          ? override?.fallback
+          : null;
+
+      assert(
+        routeRegex,
+        `\`[prerender-manifest] { routeRegex }\` is required for route ${key}`,
+      );
+
+      acc[key] = {
+        routeRegex,
+        fallback,
+        dataRoute: val?.dataRoute ?? override?.dataRoute ?? '',
+        dataRouteRegex: val?.dataRouteRegex ?? override?.dataRouteRegex ?? '',
+      };
+
+      return acc;
+    },
+    {} as Record<string, PrerenderManifestDynamicRoute>,
   );
-  const dynamicRoutes = uniqueRoutes.reduce((acc, cur) => {
-    acc[cur] = {
-      routeRegex: '^' + cur + '$',
-      dataRoute:
-        prerenderManifestDefault?.dynamicRoutes?.[cur]?.dataRoute ?? '',
-      fallback:
-        prerenderManifestDefault?.dynamicRoutes?.[cur]?.fallback ?? null,
-      dataRouteRegex:
-        prerenderManifestDefault?.dynamicRoutes?.[cur]?.dataRouteRegex ?? '',
-    };
-    return acc;
-  }, {} as Record<string, PrerenderManifestDynamicRoute>);
 
   return prerenderManifestSchema.parse({
     version: 3,

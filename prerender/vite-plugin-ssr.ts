@@ -12,6 +12,8 @@ import {
 } from 'vite-plugin-vercel';
 import { newError } from '@brillout/libassert';
 import { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
+import { PageRoutes } from 'vite-plugin-ssr/dist/cjs/shared/route/loadPageRoutes';
+import { getRoutesRegex } from './route-regex';
 
 const libName = 'vite-plugin-ssr:vercel';
 const ssrEndpointDestination = 'api/ssr_';
@@ -100,6 +102,7 @@ function assertIsr(
 export const prerender: ViteVercelPrerenderFn = async (
   resolvedConfig: ResolvedConfig,
 ) => {
+  let globalContext: GlobalContext | undefined = undefined;
   const isrPagesWhitelist: string[] = Object.keys(
     resolvedConfig.vercel?.prerenderManifest?.routes ?? [],
   );
@@ -119,6 +122,10 @@ export const prerender: ViteVercelPrerenderFn = async (
     root: getRoot(resolvedConfig),
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
+      if (!globalContext) {
+        // TODO use getGlobalContext when moving into vite-plugin-ssr
+        globalContext = pageContext as unknown as GlobalContext;
+      }
       const isr = assertIsr(resolvedConfig, pageContext);
 
       const { filePath, fileContent } = pageContext._prerenderResult;
@@ -150,6 +157,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
         routes.isr.routes[pageContext.urlPathname] = {
           srcRoute: '/' + isrEndpointDestination,
+          dataRoute: '/' + isrEndpointDestination,
           initialRevalidateSeconds: isr ?? override?.initialRevalidateSeconds,
           ...resolvedConfig.vercel?.prerenderManifest?.routes?.[
             pageContext.urlPathname
@@ -162,8 +170,45 @@ export const prerender: ViteVercelPrerenderFn = async (
     },
   });
 
+  const dynamicIsrRoutes = getRouteDynamicIsrRoutes(globalContext!._pageRoutes);
+
+  console.log('dynamicIsrRoutes', dynamicIsrRoutes);
+
+  if (dynamicIsrRoutes.length > 0) {
+    if (!routes.isr) {
+      routes.isr = { dynamicRoutes: {} };
+    }
+    if (!routes.isr.dynamicRoutes) {
+      routes.isr.dynamicRoutes = {};
+    }
+
+    const regex = getRoutesRegex(dynamicIsrRoutes);
+    console.log('regex', regex);
+
+    routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
+      routeRegex: regex,
+      fallback: null,
+      dataRoute: '',
+      dataRouteRegex: '',
+    };
+  }
+
   return routes;
 };
+
+function getRouteDynamicIsrRoutes(pageRoutes: PageRoutes) {
+  const routes: string[] = [];
+
+  for (const route of pageRoutes) {
+    if (route.pageRouteFile) {
+      if (typeof route.pageRouteFile.routeValue === 'string') {
+        routes.push(route.pageRouteFile.routeValue);
+      }
+    }
+  }
+
+  return routes;
+}
 
 export async function getSsrEndpoint(
   userConfig: UserConfig,
