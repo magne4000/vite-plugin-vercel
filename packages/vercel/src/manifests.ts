@@ -116,7 +116,7 @@ export function getRoutesManifest(
   return routesManifestSchema.parse({
     version: 3,
     basePath: routesManifest?.basePath ?? '/',
-    pages404: routesManifest?.pages404 ?? false,
+    pages404: routesManifest?.pages404 ?? true,
     dynamicRoutes: allDynamicRoutes.length > 0 ? allDynamicRoutes : undefined,
     rewrites: allRewrites.length > 0 ? allRewrites : undefined,
     redirects: routesManifest?.redirects,
