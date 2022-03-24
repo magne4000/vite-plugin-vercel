@@ -181,14 +181,14 @@ export const prerender: ViteVercelPrerenderFn = async (
     console.log('regex', regex);
 
     // routes.isr.dynamicRoutes['/' + ssrEndpointDestination] = {
-    routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
-      // routes.isr.dynamicRoutes['/named/id-3'] = {
-      // routeRegex: regex,
-      routeRegex: '.*',
-      fallback: null,
-      dataRoute: '',
-      dataRouteRegex: '',
-    };
+    // routes.isr.dynamicRoutes['/' + isrEndpointDestination] = {
+    //   // routes.isr.dynamicRoutes['/named/id-3'] = {
+    //   // routeRegex: regex,
+    //   routeRegex: '.*',
+    //   fallback: null,
+    //   dataRoute: '',
+    //   dataRouteRegex: '',
+    // };
 
     // FIXME not verified
     // routes-manifest.json dynamicRoutes have priority against prerender-manifest.json dynamicRoutes.
@@ -218,6 +218,19 @@ export const prerender: ViteVercelPrerenderFn = async (
       regex: `^/((?!assets/)(?!api/).*)$`,
       // regex: `^((?!/assets/.*)(?!/api/.*)${appendToIsrRouteManifest})$`,
     });
+
+    routes.ssr!.headers = [
+      {
+        source: '/',
+        headers: [
+          {
+            key: 'cache-control',
+            value: 's-maxage=15, stale-while-revalidate=15',
+          },
+        ],
+        regex: regex,
+      },
+    ];
   }
 
   return routes;

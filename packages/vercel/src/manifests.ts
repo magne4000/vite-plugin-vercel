@@ -113,6 +113,11 @@ export function getRoutesManifest(
     ...(routesManifest?.dynamicRoutes ?? []),
   ];
 
+  const allHeaders: NonNullable<RoutesManifest['headers']> = [
+    ...(ssr?.headers ?? []),
+    ...(routesManifest?.headers ?? []),
+  ];
+
   return routesManifestSchema.parse({
     version: 3,
     basePath: routesManifest?.basePath ?? '/',
@@ -120,7 +125,7 @@ export function getRoutesManifest(
     dynamicRoutes: allDynamicRoutes.length > 0 ? allDynamicRoutes : undefined,
     rewrites: allRewrites.length > 0 ? allRewrites : undefined,
     redirects: routesManifest?.redirects,
-    headers: routesManifest?.headers,
+    headers: allHeaders.length > 0 ? allHeaders : undefined,
   });
 }
 
