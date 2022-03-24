@@ -218,19 +218,6 @@ export const prerender: ViteVercelPrerenderFn = async (
       regex: `^/((?!assets/)(?!api/).*)$`,
       // regex: `^((?!/assets/.*)(?!/api/.*)${appendToIsrRouteManifest})$`,
     });
-
-    routes.ssr!.headers = [
-      {
-        source: '/',
-        headers: [
-          {
-            key: 'cache-control',
-            value: 's-maxage=15, stale-while-revalidate=15',
-          },
-        ],
-        regex: regex,
-      },
-    ];
   }
 
   return routes;

@@ -1,3 +1,14 @@
 {
-  "redirects": [{ "source": "/redirect", "destination": "/static" }]
+  "redirects": [{ "source": "/redirect", "destination": "/static" }],
+  "headers": [
+    {
+      "source": "/named/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=15, stale-while-revalidate=15"
+        }
+      ]
+    }
+  ]
 }
