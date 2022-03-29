@@ -104,18 +104,18 @@ export function getRoutesManifest(
   const routesManifest = resolvedConfig.vercel?.routesManifest;
 
   const allRewrites: NonNullable<RoutesManifest['rewrites']> = [
-    ...(ssr?.rewrites ?? []),
     ...(routesManifest?.rewrites ?? []),
+    ...(ssr?.rewrites ?? []),
   ];
 
   const allDynamicRoutes: NonNullable<RoutesManifest['dynamicRoutes']> = [
-    ...(ssr?.dynamicRoutes ?? []),
     ...(routesManifest?.dynamicRoutes ?? []),
+    ...(ssr?.dynamicRoutes ?? []),
   ];
 
   const allHeaders: NonNullable<RoutesManifest['headers']> = [
-    ...(ssr?.headers ?? []),
     ...(routesManifest?.headers ?? []),
+    ...(ssr?.headers ?? []),
   ];
 
   return routesManifestSchema.parse({
