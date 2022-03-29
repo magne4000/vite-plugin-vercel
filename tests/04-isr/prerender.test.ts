@@ -18,14 +18,15 @@ prepareTestJsonFileContent(
             dataRoute: 'something',
           },
         },
-        dynamicRoutes: {
-          isr: {
-            routeRegex: '^isr$',
-            dataRoute: '',
-            fallback: null,
-            dataRouteRegex: '',
-          },
-        },
+        // dynamicRoutes: {
+        //   isr: {
+        //     routeRegex: '^isr$',
+        //     dataRoute: '',
+        //     fallback: null,
+        //     dataRouteRegex: '',
+        //   },
+        // },
+        dynamicRoutes: {},
         preview: {
           previewModeId: null,
         },

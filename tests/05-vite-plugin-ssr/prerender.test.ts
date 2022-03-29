@@ -43,14 +43,15 @@ prepareTestJsonFileContent(
             srcRoute: '/ssr_',
           },
         },
-        dynamicRoutes: {
-          '/ssr_': {
-            routeRegex: '^/ssr_$',
-            dataRoute: '',
-            fallback: null,
-            dataRouteRegex: '',
-          },
-        },
+        // dynamicRoutes: {
+        //   '/ssr_': {
+        //     routeRegex: '^/ssr_$',
+        //     dataRoute: '',
+        //     fallback: null,
+        //     dataRouteRegex: '',
+        //   },
+        // },
+        dynamicRoutes: {},
         preview: {
           previewModeId: null,
         },
