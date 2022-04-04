@@ -21,6 +21,7 @@ function vercelPlugin(): Plugin {
   return {
     apply: 'build',
     name: 'vite-plugin-vercel',
+    enforce: 'post',
     configResolved(config) {
       resolvedConfig = config;
     },
@@ -34,18 +35,17 @@ function vercelPlugin(): Plugin {
         );
       }
 
-      if (resolvedConfig.build.ssr) return;
-      // step 1:	Clean .output dir
-      await cleanOutputDirectory(resolvedConfig);
-    },
-    async writeBundle() {
-      if (!resolvedConfig.build?.ssr) {
+      if (!resolvedConfig.build.ssr) {
+        // step 1:	Clean .output dir
+        await cleanOutputDirectory(resolvedConfig);
+      } else {
         // step 2:		Client side built by vite-plugin-ssr
         // step 2.1:	Copy dist/client to .output/static
         await copyDistClientToOutputStatic(resolvedConfig);
-
-        return;
       }
+    },
+    async writeBundle() {
+      if (!resolvedConfig.build?.ssr) return;
 
       // step 3:		Server side built by vite-plugin-ssr
       // step 3.1:	Execute vite-plugin-ssr prerender
@@ -63,7 +63,10 @@ function vercelPlugin(): Plugin {
 }
 
 async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
-  await copyDir(getOutDir(resolvedConfig), getOutput(resolvedConfig, 'static'));
+  await copyDir(
+    getOutDir(resolvedConfig, 'client'),
+    getOutput(resolvedConfig, 'static'),
+  );
 }
 
 async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
