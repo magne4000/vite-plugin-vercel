@@ -78,7 +78,11 @@ export interface ViteVercelConfig {
    *
    * @protected
    */
-  isr?: Record<string, VercelOutputIsr>;
+  isr?:
+    | Record<string, VercelOutputIsr>
+    | (() =>
+        | Promise<Record<string, VercelOutputIsr>>
+        | Record<string, VercelOutputIsr>);
   /**
    * Defaults to `.vercel/output`. Mostly useful for testing prupose
    * @protected

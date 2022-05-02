@@ -6,6 +6,7 @@ import {
   vercelOutputPrerenderConfigSchema,
 } from './schemas/config/prerender-config';
 import fs from 'fs/promises';
+import { VercelOutputIsr } from './types';
 
 export function execPrerender(resolvedConfig: ResolvedConfig) {
   const prerender = resolvedConfig.vercel?.prerender;
@@ -66,7 +67,14 @@ export function getPrerenderSymlinkInfo(
 export async function buildPrerenderConfigs(
   resolvedConfig: ResolvedConfig,
 ): Promise<{ src: string; dest: string }[]> {
-  const entries = Object.entries(resolvedConfig.vercel?.isr ?? {});
+  let isr = resolvedConfig.vercel?.isr ?? {};
+  if (typeof isr === 'function') {
+    isr = await isr();
+  }
+
+  const entries = Object.entries(
+    (isr as Record<string, VercelOutputIsr>) ?? {},
+  );
   const rewrites: { src: string; dest: string }[] = [];
 
   for (const [destination, { symlink, route, ...isr }] of entries) {

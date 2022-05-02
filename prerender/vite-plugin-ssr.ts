@@ -249,55 +249,57 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
     name: 'vite-plugin-ssr:vercel-isr',
     apply: 'build',
     async config(userConfig): Promise<UserConfig> {
-      setProductionEnvVar();
-      setSsrEnv({
-        isProduction: true,
-        root: process.cwd(),
-        outDir: 'dist',
-        viteDevServer: undefined,
-        baseUrl: '/',
-        baseAssets: null,
-      });
-      const globalContext: GlobalContext = await getGlobalContext();
-
-      const allPages = await Promise.all(
-        globalContext._allPageFiles['.page'].map(async (p) => {
-          return {
-            filePath: p.filePath,
-            pageExports: await p.loadFile(),
-          };
-        }),
-      );
-
-      const pagesWithIsr = globalContext._allPageIds.map((pageId) => {
-        const page = findPageFile(allPages, pageId)!;
-        const route =
-          getRouteDynamicRoute(globalContext._pageRoutes, pageId) ??
-          getRouteFsRoute(globalContext._pageRoutes, pageId);
-        return {
-          _pageId: pageId,
-          filePath: page.filePath,
-          isr: assertIsr(userConfig, page.pageExports),
-          route: route ? getParametrizedRoute(route) : null,
-        };
-      });
-
-      const isr = pagesWithIsr
-        .filter((p) => typeof p.isr === 'number')
-        .reduce((acc, cur) => {
-          const path = cur._pageId.replace(/\/index$/g, '') + '-' + nanoid();
-          acc[path] = {
-            expiration: cur.isr!,
-            symlink: rendererDestination,
-            route: cur.route ?? undefined,
-          };
-          return acc;
-        }, {} as Record<string, VercelOutputIsr>);
+      if (!userConfig.build?.ssr) return {};
 
       return {
         vercel: {
-          prerender: userConfig.vercel?.prerender ?? prerender,
-          isr,
+          isr: async () => {
+            setProductionEnvVar();
+            setSsrEnv({
+              isProduction: true,
+              root: process.cwd(),
+              outDir: 'dist',
+              viteDevServer: undefined,
+              baseUrl: '/',
+              baseAssets: null,
+            });
+            const globalContext: GlobalContext = await getGlobalContext();
+
+            const allPages = await Promise.all(
+              globalContext._allPageFiles['.page'].map(async (p) => {
+                return {
+                  filePath: p.filePath,
+                  pageExports: await p.loadFile(),
+                };
+              }),
+            );
+
+            const pagesWithIsr = globalContext._allPageIds.map((pageId) => {
+              const page = findPageFile(allPages, pageId)!;
+              const route =
+                getRouteDynamicRoute(globalContext._pageRoutes, pageId) ??
+                getRouteFsRoute(globalContext._pageRoutes, pageId);
+              return {
+                _pageId: pageId,
+                filePath: page.filePath,
+                isr: assertIsr(userConfig, page.pageExports),
+                route: route ? getParametrizedRoute(route) : null,
+              };
+            });
+
+            return pagesWithIsr
+              .filter((p) => typeof p.isr === 'number')
+              .reduce((acc, cur) => {
+                const path =
+                  cur._pageId.replace(/\/index$/g, '') + '-' + nanoid();
+                acc[path] = {
+                  expiration: cur.isr!,
+                  symlink: rendererDestination,
+                  route: cur.route ?? undefined,
+                };
+                return acc;
+              }, {} as Record<string, VercelOutputIsr>);
+          },
         },
       };
     },
