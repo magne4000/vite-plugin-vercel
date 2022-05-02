@@ -27,3 +27,10 @@ export function getComplementaryRoutesRegex(
   const results = normalizedRoutes.map(getParametrizedRoute);
   return results.map((r) => `(?!${r})`).join('');
 }
+
+export function getVercelPattern(route: string): string {
+  if (route.endsWith('/*')) {
+    return route.replace(/\/\*/g, '/:any*');
+  }
+  return route;
+}

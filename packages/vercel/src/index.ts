@@ -1,17 +1,9 @@
 import fs from 'fs/promises';
 import type { Plugin, ResolvedConfig } from 'vite';
-import { FunctionsManifest, ViteVercelPrerenderRoute } from './types';
 import { copyDir, getOutDir, getOutput } from './utils';
-import {
-  getFunctionsManifest,
-  getFunctionsManifestDestination,
-  getPrerenderManifest,
-  getPrerenderManifestDestination,
-  getRoutesManifest,
-  getRoutesManifestDestination,
-} from './manifests';
-import { buildApiEndpoints } from './build';
-import { execPrerender } from './prerender';
+import { writeConfig } from './config';
+import { buildEndpoints } from './build';
+import { buildPrerenderConfigs, execPrerender } from './prerender';
 
 export * from './types';
 
@@ -36,11 +28,11 @@ function vercelPlugin(): Plugin {
       }
 
       if (!resolvedConfig.build.ssr) {
-        // step 1:	Clean .output dir
+        // step 1:	Clean .vercel/ouput dir
         await cleanOutputDirectory(resolvedConfig);
       } else {
         // step 2:		Client side built by vite-plugin-ssr
-        // step 2.1:	Copy dist/client to .output/static
+        // step 2.1:	Copy dist/client to .vercel/output/static
         await copyDistClientToOutputStatic(resolvedConfig);
       }
     },
@@ -49,15 +41,19 @@ function vercelPlugin(): Plugin {
 
       // step 3:		Server side built by vite-plugin-ssr
       // step 3.1:	Execute vite-plugin-ssr prerender
-      const isrPages = await execPrerender(resolvedConfig);
+      const overrides = await execPrerender(resolvedConfig);
 
-      // step 3.2:	Compile "api/*" to ".output/server/pages" and ".output/server/pages/api"
-      const fnManifests = await buildApiEndpoints(resolvedConfig);
+      // step 3.2:	Compile serverless functions to ".vercel/output/functions"
+      await buildEndpoints(resolvedConfig);
 
-      // step 3.3:	Generates manifests
-      await generateFunctionsManifest(resolvedConfig, fnManifests);
-      await generateRoutesManifest(resolvedConfig, isrPages?.ssr);
-      await generatePrerenderManifest(resolvedConfig, isrPages?.isr);
+      // step 3.3:	Generate prerender config files
+      const rewrites = await buildPrerenderConfigs(resolvedConfig);
+
+      // step 3.4:	Generate config file
+      await writeConfig(resolvedConfig, {
+        routes: [{ handle: 'filesystem' }, ...rewrites],
+        overrides,
+      });
     },
   };
 }
@@ -74,40 +70,6 @@ async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
     recursive: true,
     force: true,
   });
-}
-
-async function generatePrerenderManifest(
-  resolvedConfig: ResolvedConfig,
-  isrPages: ViteVercelPrerenderRoute['isr'],
-) {
-  await fs.writeFile(
-    getPrerenderManifestDestination(resolvedConfig),
-    JSON.stringify(
-      getPrerenderManifest(resolvedConfig, isrPages),
-      undefined,
-      2,
-    ),
-  );
-}
-
-async function generateRoutesManifest(
-  resolvedConfig: ResolvedConfig,
-  ssr: ViteVercelPrerenderRoute['ssr'],
-) {
-  await fs.writeFile(
-    getRoutesManifestDestination(resolvedConfig),
-    JSON.stringify(getRoutesManifest(resolvedConfig, ssr), undefined, 2),
-  );
-}
-
-async function generateFunctionsManifest(
-  resolvedConfig: ResolvedConfig,
-  fnManifests: FunctionsManifest['pages'],
-) {
-  await fs.writeFile(
-    getFunctionsManifestDestination(resolvedConfig),
-    JSON.stringify(getFunctionsManifest(fnManifests), undefined, 2),
-  );
 }
 
 function allPlugins(): Plugin[] {

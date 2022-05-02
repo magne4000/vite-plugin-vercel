@@ -15,7 +15,7 @@ const globalSetup = setup(path.basename(__dirname), {
           // TODO implement dynamicRoutes override
           routes: {
             '/isr': {
-              initialRevalidateSeconds: 42,
+              expiration: 42,
               dataRoute: 'something',
               srcRoute: 'isr',
             },

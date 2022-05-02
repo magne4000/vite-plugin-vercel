@@ -14,32 +14,32 @@ prepareTestJsonFileContent(
         routes: {
           '/catch-all/a/b/c': {
             dataRoute: '',
-            initialRevalidateSeconds: 15,
+            expiration: 15,
             srcRoute: '/ssr_',
           },
           '/catch-all/a/d': {
             dataRoute: '',
-            initialRevalidateSeconds: 15,
+            expiration: 15,
             srcRoute: '/ssr_',
           },
           '/function/a': {
             dataRoute: '',
-            initialRevalidateSeconds: 15,
+            expiration: 15,
             srcRoute: '/ssr_',
           },
           '/isr': {
             dataRoute: '',
-            initialRevalidateSeconds: 15,
+            expiration: 15,
             srcRoute: '/ssr_',
           },
           '/named/id-1': {
             dataRoute: '',
-            initialRevalidateSeconds: 25,
+            expiration: 25,
             srcRoute: '/ssr_',
           },
           '/named/id-2': {
             dataRoute: '',
-            initialRevalidateSeconds: 25,
+            expiration: 25,
             srcRoute: '/ssr_',
           },
         },

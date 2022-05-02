@@ -12,14 +12,14 @@ export default async function handler(
   request: VercelRequest,
   response: VercelResponse,
 ) {
-  console.error('url', request.url);
-  console.error('query', request.query);
-  console.error('headers', request.headers);
+  console.debug('url', request.url);
+  console.debug('query', request.query);
+  console.debug('headers', request.headers);
   const pageContextInit = getDefaultPageContextInit(request);
   const pageContext = await renderPage(pageContextInit);
   const { httpResponse } = pageContext;
 
-  console.error('httpResponse', httpResponse);
+  console.debug('httpResponse', httpResponse);
 
   if (!httpResponse) {
     return getDefaultEmptyResponseHandler(response);

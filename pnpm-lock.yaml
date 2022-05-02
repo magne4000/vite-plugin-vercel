@@ -11,8 +11,8 @@ importers:
       '@types/node': ^17.0.21
       '@types/react': ^17.0.40
       '@types/react-dom': ^17.0.13
-      '@vercel/build-utils': ^2.14.0
-      '@vercel/node': ^1.13.0
+      '@vercel/build-utils': ^2.15.1
+      '@vercel/node': ^1.14.1
       '@vitejs/plugin-react': ^1.2.0
       cross-env: ^7.0.3
       express: ^4.17.3
@@ -20,6 +20,7 @@ importers:
       husky: ^7.0.4
       jest: ^27.5.1
       lint-staged: ^12.3.5
+      nanoid: ^3.3.3
       prettier: ^2.5.1
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -27,7 +28,7 @@ importers:
       typescript: ^4.6.2
       vite: ^2.8.6
       vite-plugin-ssr: ^0.3.59
-      vite-plugin-vercel: ^0.0.2
+      vite-plugin-vercel: ^0.0.4
       zod: ^3.14.2
     dependencies:
       '@brillout/libassert': 0.5.4
@@ -49,12 +50,13 @@ importers:
       '@types/node': 17.0.21
       '@types/react': 17.0.40
       '@types/react-dom': 17.0.13
-      '@vercel/build-utils': 2.14.0
-      '@vercel/node': 1.13.0
+      '@vercel/build-utils': 2.15.1
+      '@vercel/node': 1.14.1
       fast-glob: 3.2.11
       husky: 7.0.4
       jest: 27.5.1_ts-node@10.7.0
       lint-staged: 12.3.5
+      nanoid: 3.3.3
       prettier: 2.5.1
       zod: 3.14.2
 
@@ -64,6 +66,7 @@ importers:
       '@types/node': ^17.0.21
       '@typescript-eslint/eslint-plugin': ^5.14.0
       '@typescript-eslint/parser': ^5.14.0
+      '@vercel/routing-utils': ^1.13.1
       esbuild: ^0.14.25
       eslint: ^8.10.0
       eslint-plugin-solid: ^0.4.4
@@ -73,6 +76,7 @@ importers:
       zod: ^3.14.2
     dependencies:
       '@brillout/libassert': 0.5.4
+      '@vercel/routing-utils': 1.13.1
       esbuild: 0.14.25
       fast-glob: 3.2.11
       zod: 3.14.2
@@ -1604,23 +1608,42 @@ packages:
       eslint-visitor-keys: 3.3.0
     dev: true
 
-  /@vercel/build-utils/2.14.0:
+  /@vercel/build-utils/2.15.1:
     resolution:
       {
-        integrity: sha512-Jdl0FkEJbAdB5oqpolIK4m/FO9GtFK86gKpFJt5jdnd5tMLWdPf2vr8uZkxvfs8wW5KdYXt660OSoWHpfdYu5w==,
+        integrity: sha512-7qwC7wd2Q/MwtD07/La5qIR5nfpfNVPvISp1cfwYs8fe/FUKjDdbhvGLDFrry+DeoeMFJhnJgK2qmvCnucq+GA==,
       }
     dev: true
 
-  /@vercel/node/1.13.0:
+  /@vercel/node-bridge/2.2.0:
     resolution:
       {
-        integrity: sha512-AqdUuJC0+r3q1lcL+Knjb+dHsSDSCRfwFPJ7odRkHO7sfoAkhJI4RussIDFTF7Yvt0e+GmWuYGFAgwSiv4FWEg==,
+        integrity: sha512-ydYlZyIQfsuriF6qTt/F4vaAt+nb4ZKhLEl2o5AQFa5ED7LoPS5w01Xbujy+25pqS1ODu8/bsqOCUSX8y/+tSQ==,
+      }
+    dev: true
+
+  /@vercel/node/1.14.1:
+    resolution:
+      {
+        integrity: sha512-/R1tERotQMTBoB4gw390B8wJAOS9IO4iejing9jqLFSISdW7uVU6kgkUbLM8OtuN0DGwi1qYQ6DcdxySX2qYzw==,
       }
     dependencies:
       '@types/node': 17.0.21
+      '@vercel/node-bridge': 2.2.0
       ts-node: 8.9.1_typescript@4.3.4
       typescript: 4.3.4
     dev: true
+
+  /@vercel/routing-utils/1.13.1:
+    resolution:
+      {
+        integrity: sha512-LNKkr9AuX4dX79eJIhPJw5EcStYHxHFp/htFRHtuMVSHmxpDQQ2Wv4LqgQY+dMzvpQ207h9JKIRlI1XQqiswpw==,
+      }
+    dependencies:
+      path-to-regexp: 6.1.0
+    optionalDependencies:
+      ajv: 6.12.6
+    dev: false
 
   /@vitejs/plugin-react/1.2.0:
     resolution:
@@ -1746,7 +1769,6 @@ packages:
       fast-json-stable-stringify: 2.1.0
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
-    dev: true
 
   /ansi-escapes/4.3.2:
     resolution:
@@ -3246,7 +3268,6 @@ packages:
       {
         integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==,
       }
-    dev: true
 
   /fast-glob/3.2.11:
     resolution:
@@ -3266,7 +3287,6 @@ packages:
       {
         integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==,
       }
-    dev: true
 
   /fast-levenshtein/2.0.6:
     resolution: { integrity: sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc= }
@@ -4687,7 +4707,6 @@ packages:
       {
         integrity: sha512-xbbCH5dCYU5T8LcEhhuh7HJ88HXuW3qsI3Y0zOZFKfZEHcpWiHU/Jxzk629Brsab/mMiHQti9wMP+845RPe3Vg==,
       }
-    dev: true
 
   /json-stable-stringify-without-jsonify/1.0.1:
     resolution: { integrity: sha1-nbe1lJatPzz+8wp1FC0tkwrXJlE= }
@@ -5045,14 +5064,13 @@ packages:
       thenify-all: 1.6.0
     dev: true
 
-  /nanoid/3.3.1:
+  /nanoid/3.3.3:
     resolution:
       {
-        integrity: sha512-n6Vs/3KGyxPQd6uO0eH4Bv0ojGSUvuLlIHtC3Y0kEO23YRge8H9x1GCzLn28YX0H66pMkxuaeESFq4tKISKwdw==,
+        integrity: sha512-p1sjXuopFs0xg+fPASzQ28agW1oHD7xDsd9Xkf3T15H3c/cifrFHVwrh74PdoklAPi+i7MdRsE47vm2r6JoB+w==,
       }
     engines: { node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1 }
     hasBin: true
-    dev: false
 
   /natural-compare/1.4.0:
     resolution: { integrity: sha1-Sr6/7tdUHywnrPspvbvRXI1bpPc= }
@@ -5302,6 +5320,13 @@ packages:
     resolution: { integrity: sha1-32BBeABfUi8V60SQ5yR6G/qmf4w= }
     dev: false
 
+  /path-to-regexp/6.1.0:
+    resolution:
+      {
+        integrity: sha512-h9DqehX3zZZDCEm+xbfU0ZmwCGFCAAraPJWMXJ4+v32NjZJilVg3k1TcKsRgIb8IQ/izZSaydDc1OhJCZvs2Dw==,
+      }
+    dev: false
+
   /path-type/4.0.0:
     resolution:
       {
@@ -5365,7 +5390,7 @@ packages:
       }
     engines: { node: ^10 || ^12 || >=14 }
     dependencies:
-      nanoid: 3.3.1
+      nanoid: 3.3.3
       picocolors: 1.0.0
       source-map-js: 1.0.2
     dev: false
@@ -5439,7 +5464,6 @@ packages:
         integrity: sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==,
       }
     engines: { node: '>=6' }
-    dev: true
 
   /qs/6.9.7:
     resolution:
@@ -6421,7 +6445,6 @@ packages:
       }
     dependencies:
       punycode: 2.1.1
-    dev: true
 
   /utils-merge/1.0.1:
     resolution: { integrity: sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM= }

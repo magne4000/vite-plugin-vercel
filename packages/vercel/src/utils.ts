@@ -17,11 +17,11 @@ export function getOutDir(
 
 export function getOutput(
   config: ResolvedConfig,
-  suffix?: 'server/pages' | 'server/pages/api' | 'static',
+  suffix?: 'functions' | `functions/${string}.func` | 'static',
 ): string {
   return path.join(
     config.vercel?.outDir ? '' : getRoot(config),
-    config.vercel?.outDir ?? '.output',
+    config.vercel?.outDir ?? '.vercel/output',
     suffix ?? '',
   );
 }

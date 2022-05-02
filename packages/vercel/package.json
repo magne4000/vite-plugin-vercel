@@ -39,6 +39,7 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.4",
+    "@vercel/routing-utils": "^1.13.1",
     "esbuild": "^0.14.25",
     "fast-glob": "^3.2.11",
     "zod": "^3.14.2"

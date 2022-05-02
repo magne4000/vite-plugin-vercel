@@ -3,7 +3,7 @@ import { Link } from '../../renderer/Link';
 
 export { Page };
 
-export const isr = { initialRevalidateSeconds: 15 };
+export const isr = { expiration: 15 };
 
 function Page(props: { d: string }) {
   return (

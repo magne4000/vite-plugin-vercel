@@ -93,6 +93,7 @@ dist
 
 # Vercel
 .output
+.vercel
 
 # Gatsby files
 .cache/

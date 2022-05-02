@@ -13,7 +13,7 @@ prepareTestJsonFileContent(
         version: 3,
         routes: {
           '/isr': {
-            initialRevalidateSeconds: 42,
+            expiration: 42,
             srcRoute: 'isr',
             dataRoute: 'something',
           },
