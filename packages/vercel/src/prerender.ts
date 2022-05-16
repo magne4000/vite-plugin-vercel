@@ -67,14 +67,9 @@ export function getPrerenderSymlinkInfo(
 export async function buildPrerenderConfigs(
   resolvedConfig: ResolvedConfig,
 ): Promise<{ src: string; dest: string }[]> {
-  let isr = resolvedConfig.vercel?.isr ?? {};
-  if (typeof isr === 'function') {
-    isr = await isr();
-  }
+  const isr = await getIsrConfig(resolvedConfig);
 
-  const entries = Object.entries(
-    (isr as Record<string, VercelOutputIsr>) ?? {},
-  );
+  const entries = Object.entries(isr);
   const rewrites: { src: string; dest: string }[] = [];
 
   for (const [destination, { symlink, route, ...isr }] of entries) {
@@ -99,4 +94,14 @@ export async function buildPrerenderConfigs(
   }
 
   return rewrites;
+}
+
+async function getIsrConfig(
+  resolvedConfig: ResolvedConfig,
+): Promise<Record<string, VercelOutputIsr>> {
+  const isr = resolvedConfig.vercel?.isr ?? {};
+  if (typeof isr === 'function') {
+    return await isr();
+  }
+  return isr;
 }

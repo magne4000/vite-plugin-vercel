@@ -5,6 +5,40 @@
 
 import { z } from 'zod';
 
+const HasOrMissing = z
+  .array(
+    z.union([
+      z
+        .object({
+          type: z.literal('host'),
+          value: z.string(),
+        })
+        .strict(),
+      z
+        .object({
+          type: z.literal('header'),
+          key: z.string(),
+          value: z.string().optional(),
+        })
+        .strict(),
+      z
+        .object({
+          type: z.literal('cookie'),
+          key: z.string(),
+          value: z.string().optional(),
+        })
+        .strict(),
+      z
+        .object({
+          type: z.literal('query'),
+          key: z.string(),
+          value: z.string().optional(),
+        })
+        .strict(),
+    ]),
+  )
+  .optional();
+
 export const vercelOutputConfigSchema = z
   .object({
     version: z.literal(3),
@@ -14,16 +48,40 @@ export const vercelOutputConfigSchema = z
         z.union([
           z
             .object({
-              src: z.string().optional(),
+              src: z.string(),
               dest: z.string().optional(),
               headers: z.record(z.string()).optional(),
               methods: z.array(z.string()).optional(),
               status: z.number().int().positive().optional(),
               continue: z.boolean().optional(),
+              check: z.boolean().optional(),
+              missing: HasOrMissing,
+              has: HasOrMissing,
+              locale: z
+                .object({
+                  redirect: z.record(z.string()).optional(),
+                  cookie: z.string().optional(),
+                })
+                .strict()
+                .optional(),
               middlewarePath: z.string().optional(),
             })
             .strict(),
-          z.object({ handle: z.literal('filesystem') }).strict(),
+          z
+            .object({
+              handle: z.union([
+                z.literal('rewrite'),
+                z.literal('filesystem'),
+                z.literal('resource'),
+                z.literal('miss'),
+                z.literal('hit'),
+                z.literal('error'),
+              ]),
+              src: z.string().optional(),
+              dest: z.string().optional(),
+              status: z.number().optional(),
+            })
+            .strict(),
         ]),
       )
       .optional(),
@@ -37,6 +95,8 @@ export const vercelOutputConfigSchema = z
         domains: z.array(z.string()).min(1).optional(),
         minimumCacheTTL: z.number().int().positive().optional(),
         formats: z.array(z.string()).min(1),
+        dangerouslyAllowSVG: z.boolean().optional(),
+        contentSecurityPolicy: z.string().optional(),
       })
       .strict()
       .optional(),
