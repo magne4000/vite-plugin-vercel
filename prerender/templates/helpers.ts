@@ -1,5 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import type { renderPage } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
+import { parse } from 'querystring';
 
 // TODO export this type from vite-plugin-ssr
 type HttpResponse = NonNullable<
@@ -8,6 +9,12 @@ type HttpResponse = NonNullable<
 
 export function getDefaultPageContextInit(request: VercelRequest) {
   const query: Record<string, string | string[]> = request.query ?? {};
+  const matches =
+    typeof request.headers['x-now-route-matches'] === 'string'
+      ? parse(request.headers['x-now-route-matches'])
+      : null;
+  console.debug('x-now-route-matches', request.headers['x-now-route-matches']);
+  console.debug('x-now-route-matches parsed', matches);
   const url: string =
     typeof query.__original_path === 'string'
       ? query.__original_path
