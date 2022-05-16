@@ -6,7 +6,7 @@ export default defineConfig([
     external: ['esbuild', 'vite-plugin-ssr'],
     format: ['esm', 'cjs'],
     platform: 'node',
-    target: 'node14',
+    target: 'node16',
     dts: {
       entry: './src/index.ts',
     },

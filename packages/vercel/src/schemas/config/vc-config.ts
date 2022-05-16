@@ -24,9 +24,20 @@ export const vercelOutputServerlessVcConfigSchema = z
   })
   .strict();
 
+export const vercelOutputServerlessNodeVcConfigSchema =
+  vercelOutputServerlessVcConfigSchema
+    .extend({
+      launcherType: z.literal('Nodejs'),
+      shouldAddHelpers: z.boolean().optional(),
+      shouldAddSourcemapSupport: z.boolean().optional(),
+      awsLambdaHandler: z.string().optional(),
+    })
+    .strict();
+
 export const vercelOutputVcConfigSchema = z.union([
   vercelOutputEdgeVcConfigSchema,
   vercelOutputServerlessVcConfigSchema,
+  vercelOutputServerlessNodeVcConfigSchema,
 ]);
 
 export type VercelOutputVcConfig = z.infer<typeof vercelOutputVcConfigSchema>;

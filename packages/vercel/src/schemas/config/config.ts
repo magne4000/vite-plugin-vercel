@@ -42,7 +42,6 @@ const HasOrMissing = z
 export const vercelOutputConfigSchema = z
   .object({
     version: z.literal(3),
-    // FIXME when doc updated https://vercel.com/docs/build-output-api/v3#build-output-configuration/routes
     routes: z
       .array(
         z.union([

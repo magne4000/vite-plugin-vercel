@@ -108,9 +108,12 @@ export async function writeVcConfig(
     vcConfig,
     JSON.stringify(
       vercelOutputVcConfigSchema.parse({
-        runtime: 'nodejs14.x',
+        runtime: 'nodejs16.x',
         handler: 'index.js',
         maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
+        launcherType: 'Nodejs',
+        shouldAddHelpers: true,
+        shouldAddSourcemapSupport: true,
       }),
       undefined,
       2,
