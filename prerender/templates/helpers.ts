@@ -13,8 +13,6 @@ export function getDefaultPageContextInit(request: VercelRequest) {
     typeof request.headers['x-now-route-matches'] === 'string'
       ? parse(request.headers['x-now-route-matches'])
       : null;
-  console.debug('x-now-route-matches', request.headers['x-now-route-matches']);
-  console.debug('x-now-route-matches parsed', matches);
   const url: string =
     typeof query.__original_path === 'string'
       ? query.__original_path
