@@ -35,24 +35,24 @@ export async function writePrerenderConfig(
     parsed.name + '.prerender-config.json',
   );
 
-  await fs.mkdir(
-    path.join(getOutput(resolvedConfig, 'functions'), parsed.dir),
-    { recursive: true },
-  );
-
-  await fs.writeFile(
-    outfile,
-    JSON.stringify(
-      vercelOutputPrerenderConfigSchema.parse({
-        group: group++,
-        allowQuery: ['x', 'a'],
-        ...isr,
-      }),
-      undefined,
-      2,
-    ),
-    'utf-8',
-  );
+  // await fs.mkdir(
+  //   path.join(getOutput(resolvedConfig, 'functions'), parsed.dir),
+  //   { recursive: true },
+  // );
+  //
+  // await fs.writeFile(
+  //   outfile,
+  //   JSON.stringify(
+  //     vercelOutputPrerenderConfigSchema.parse({
+  //       group: group++,
+  //       allowQuery: ['x', 'a'],
+  //       ...isr,
+  //     }),
+  //     undefined,
+  //     2,
+  //   ),
+  //   'utf-8',
+  // );
 }
 
 export function getPrerenderSymlinkInfo(
@@ -92,10 +92,10 @@ export async function buildPrerenderConfigs(
         destination,
         symlink,
       );
-      await fs.symlink(
-        path.relative(path.dirname(info.link), info.target),
-        info.link,
-      );
+      // await fs.symlink(
+      //   path.relative(path.dirname(info.link), info.target),
+      //   info.link,
+      // );
     }
     if (route) {
       rewrites.push({
