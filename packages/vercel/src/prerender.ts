@@ -99,7 +99,7 @@ export async function buildPrerenderConfigs(
     if (route) {
       rewrites.push({
         src: `(${route})`,
-        dest: `${destination}?__original_path=$1`,
+        dest: `${destination}?original_path=$1&a=b`,
       });
     }
   }
