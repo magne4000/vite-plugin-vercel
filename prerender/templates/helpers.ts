@@ -18,6 +18,8 @@ export function getDefaultPageContextInit(request: VercelRequest) {
   const url: string =
     typeof query.__original_path === 'string'
       ? query.__original_path
+      : matches && typeof matches!['1'] === 'string'
+      ? matches['1']
       : request.url!;
   return {
     url,
