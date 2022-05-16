@@ -7,7 +7,11 @@ type HttpResponse = NonNullable<
 >;
 
 export function getDefaultPageContextInit(request: VercelRequest) {
-  const url = request.url!;
+  const query: Record<string, string | string[]> = request.query ?? {};
+  const url: string =
+    typeof query.__original_path === 'string'
+      ? query.__original_path
+      : request.url!;
   return {
     url,
     body: request.body,

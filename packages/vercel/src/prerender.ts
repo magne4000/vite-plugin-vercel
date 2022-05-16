@@ -98,8 +98,8 @@ export async function buildPrerenderConfigs(
     }
     if (route) {
       rewrites.push({
-        src: route,
-        dest: destination,
+        src: `(${route})`,
+        dest: `${destination}?__original_path=$1`,
       });
     }
   }
