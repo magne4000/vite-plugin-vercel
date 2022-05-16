@@ -40,19 +40,18 @@ export async function writePrerenderConfig(
     { recursive: true },
   );
 
-  // await fs.writeFile(
-  //   outfile,
-  //   JSON.stringify(
-  //     vercelOutputPrerenderConfigSchema.parse({
-  //       group: group++,
-  //       allowQuery: ['x', 'a'],
-  //       ...isr,
-  //     }),
-  //     undefined,
-  //     2,
-  //   ),
-  //   'utf-8',
-  // );
+  await fs.writeFile(
+    outfile,
+    JSON.stringify(
+      vercelOutputPrerenderConfigSchema.parse({
+        group: group++,
+        ...isr,
+      }),
+      undefined,
+      2,
+    ),
+    'utf-8',
+  );
 }
 
 export function getPrerenderSymlinkInfo(
