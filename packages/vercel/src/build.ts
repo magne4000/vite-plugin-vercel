@@ -112,7 +112,6 @@ export async function writeVcConfig(
         handler: 'index.js',
         maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
         launcherType: 'Nodejs',
-        allowQuery: ['x', 'a'],
       }),
       undefined,
       2,
