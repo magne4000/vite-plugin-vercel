@@ -104,20 +104,20 @@ export async function writeVcConfig(
     '.vc-config.json',
   );
 
-  await fs.writeFile(
-    vcConfig,
-    JSON.stringify(
-      vercelOutputVcConfigSchema.parse({
-        runtime: 'nodejs16.x',
-        handler: 'index.js',
-        maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
-        launcherType: 'Nodejs',
-      }),
-      undefined,
-      2,
-    ),
-    'utf-8',
-  );
+  // await fs.writeFile(
+  //   vcConfig,
+  //   JSON.stringify(
+  //     vercelOutputVcConfigSchema.parse({
+  //       runtime: 'nodejs16.x',
+  //       handler: 'index.js',
+  //       maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
+  //       launcherType: 'Nodejs',
+  //     }),
+  //     undefined,
+  //     2,
+  //   ),
+  //   'utf-8',
+  // );
 }
 
 export async function buildEndpoints(
