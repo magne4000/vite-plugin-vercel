@@ -18,6 +18,10 @@ export function execPrerender(resolvedConfig: ResolvedConfig) {
   return prerender?.(resolvedConfig);
 }
 
+// FIXME https://github.com/orgs/vercel/discussions/577#discussioncomment-2759412
+
+let group = 1;
+
 export async function writePrerenderConfig(
   resolvedConfig: ResolvedConfig,
   destination: string,
@@ -38,7 +42,14 @@ export async function writePrerenderConfig(
 
   await fs.writeFile(
     outfile,
-    JSON.stringify(vercelOutputPrerenderConfigSchema.parse(isr), undefined, 2),
+    JSON.stringify(
+      vercelOutputPrerenderConfigSchema.parse({
+        group: group++,
+        ...isr,
+      }),
+      undefined,
+      2,
+    ),
     'utf-8',
   );
 }
