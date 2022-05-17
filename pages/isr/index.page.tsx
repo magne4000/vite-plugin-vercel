@@ -10,8 +10,7 @@ function Page(props: { d: string }) {
       <h1>Welcome</h1>
       This page is:
       <ul>
-        <li>Static + Dynamic</li>
-        <li>Static html generated</li>
+        <li>ISR</li>
         <li>ISR: regenerated after {isr.expiration} seconds</li>
         <li>{props.d}</li>
       </ul>

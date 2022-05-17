@@ -123,6 +123,8 @@ export const prerender: ViteVercelPrerenderFn = async (
         relPath,
       );
 
+      // TODO do not prerender static
+
       const parsed = path.parse(relPath);
       const pathJoined = path.join(parsed.dir, parsed.name);
 
