@@ -23,7 +23,7 @@ export function getConfig(
     ...resolvedConfig.vercel?.config,
     routes: [
       ...(routes ?? []),
-      ...(config?.routes ?? []).filter((r) => !r.src?.includes('named')),
+      ...(config?.routes ?? []),
       ...(resolvedConfig.vercel?.config?.routes ?? []),
     ],
     overrides: {
@@ -43,12 +43,6 @@ export async function writeConfig(
 ): Promise<void> {
   await fs.writeFile(
     getConfigDestination(resolvedConfig),
-    JSON.stringify(getConfig(resolvedConfig, config), undefined, 2),
-    'utf-8',
-  );
-
-  await fs.writeFile(
-    path.join(getOutput(resolvedConfig), 'static', 'config.json'),
     JSON.stringify(getConfig(resolvedConfig, config), undefined, 2),
     'utf-8',
   );
