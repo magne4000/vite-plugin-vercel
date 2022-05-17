@@ -3,6 +3,7 @@ import { Link } from '../../renderer/Link';
 
 export { Page };
 
+// Should warn when building because it's incompatible with route function
 export const isr = { expiration: 15 };
 
 function Page(props: { d: string }) {
@@ -21,7 +22,7 @@ function Page(props: { d: string }) {
           </ul>
         </li>
         <li>
-          All other pages are ISR, e.g.:
+          All other pages are dynamic, e.g.:
           <ul>
             <li>
               <Link href="/function/b">/function/b</Link>

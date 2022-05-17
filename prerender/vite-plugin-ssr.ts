@@ -160,11 +160,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
 function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
-    if (
-      route.pageId === pageId &&
-      route.pageRouteFile &&
-      typeof route.pageRouteFile.routeValue === 'string'
-    ) {
+    if (route.pageId === pageId && route.pageRouteFile) {
       return route.pageRouteFile.routeValue;
     }
   }
@@ -288,11 +284,24 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
               const route =
                 getRouteDynamicRoute(globalContext._pageRoutes, pageId) ??
                 getRouteFsRoute(globalContext._pageRoutes, pageId);
+              let isr = assertIsr(userConfig, page.pageExports);
+
+              // if ISR + Function routing -> warn because ISR is not unsupported in this case
+              if (typeof route === 'function' && isr) {
+                console.warn(
+                  `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` export or use a route string if possible.`,
+                );
+                isr = null;
+              }
+
               return {
                 _pageId: pageId,
                 filePath: page.filePath,
-                isr: assertIsr(userConfig, page.pageExports),
-                route: route ? getParametrizedRoute(route) : null,
+                isr,
+                route:
+                  typeof route === 'string'
+                    ? getParametrizedRoute(route)
+                    : null,
               };
             });
 
