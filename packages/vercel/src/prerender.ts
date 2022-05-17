@@ -1,6 +1,6 @@
 import type { ResolvedConfig } from 'vite';
 import path from 'path';
-import { getOutput } from './utils';
+import { copyDir, getOutput } from './utils';
 import {
   VercelOutputPrerenderConfig,
   vercelOutputPrerenderConfigSchema,
@@ -91,10 +91,11 @@ export async function buildPrerenderConfigs(
         destination,
         symlink,
       );
-      await fs.symlink(
-        path.relative(path.dirname(info.link), info.target),
-        info.link,
-      );
+      // await fs.symlink(
+      //   path.relative(path.dirname(info.link), info.target),
+      //   info.link,
+      // );
+      await copyDir(info.target, info.link);
     }
     if (route) {
       rewrites.push({
