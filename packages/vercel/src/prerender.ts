@@ -91,6 +91,7 @@ export async function buildPrerenderConfigs(
         destination,
         symlink,
       );
+      // FIXME https://github.com/orgs/vercel/discussions/577#discussioncomment-2767120
       // await fs.symlink(
       //   path.relative(path.dirname(info.link), info.target),
       //   info.link,

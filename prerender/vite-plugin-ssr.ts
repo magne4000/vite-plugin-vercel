@@ -41,6 +41,8 @@ interface PageContext extends PageContextBuiltIn, GlobalContext {
     filePath: string;
     fileContent: string;
   };
+  _pageId: string;
+  is404?: boolean;
 }
 
 export function getRoot(config: UserConfig | ResolvedConfig): string {
@@ -113,6 +115,24 @@ export const prerender: ViteVercelPrerenderFn = async (
     root: getRoot(resolvedConfig),
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
+      const isr = assertIsr(resolvedConfig, pageContext.pageExports);
+
+      const route = pageContext._pageRoutes.find(
+        (r) => r.pageId === pageContext._pageId,
+      );
+
+      if (!pageContext.is404) {
+        assert(route, `Page with id ${pageContext._pageId} not found`);
+
+        // if ISR + Filesystem routing -> ISR prevails
+        if (
+          !pageContext.is404 &&
+          typeof isr === 'number' &&
+          !route.pageRouteFile
+        )
+          return;
+      }
+
       const { filePath, fileContent } = pageContext._prerenderResult;
       const relPath = path.relative(
         getOutDir(resolvedConfig, 'client'),
@@ -122,8 +142,6 @@ export const prerender: ViteVercelPrerenderFn = async (
         getOutput(resolvedConfig, 'static'),
         relPath,
       );
-
-      // TODO do not prerender static
 
       const parsed = path.parse(relPath);
       const pathJoined = path.join(parsed.dir, parsed.name);
