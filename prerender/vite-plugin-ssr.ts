@@ -220,7 +220,12 @@ export function vitePluginSsrVercelPlugin(): Plugin {
           prerender: userConfig.vercel?.prerender ?? prerender,
           additionalEndpoints,
           config: {
-            routes: [{ src: '(/.*)', dest: `/${rendererDestination}` }],
+            routes: [
+              {
+                handle: 'miss',
+              },
+              { src: '(/.*)', dest: `/${rendererDestination}` },
+            ],
           },
         },
       };
