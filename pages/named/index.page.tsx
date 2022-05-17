@@ -6,7 +6,7 @@ export { Page };
 export const isr = true;
 
 function isISR(someId: string) {
-  return someId === 'id-1' || someId === 'id-2';
+  return someId !== 'id-1' && someId !== 'id-2';
 }
 
 function Page(props: { d: string; someId: string }) {
@@ -15,9 +15,9 @@ function Page(props: { d: string; someId: string }) {
       <h1>Welcome</h1>
       This page is:
       <ul>
-        <li>Static + Dynamic with url parameter: {props.someId}</li>
+        <li>Static with url parameter: {props.someId}</li>
         <li>
-          ISR for some pages:
+          Some pages are static:
           <ul>
             <li>
               <Link href="/named/id-1">/named/id-1</Link>
@@ -28,7 +28,7 @@ function Page(props: { d: string; someId: string }) {
           </ul>
         </li>
         <li>
-          All other pages are dynamic, e.g.:
+          All other pages are ISR, e.g.:
           <ul>
             <li>
               <Link href="/named/id-3">/named/id-3</Link>
@@ -49,12 +49,7 @@ function Page(props: { d: string; someId: string }) {
             </li>
           </ul>
         </li>
-        <li>
-          {isISR(props.someId)
-            ? 'Static html generated'
-            : 'No static html generated'}
-        </li>
-        {isISR(props.someId) && <li>ISR: regenerated after # seconds</li>}
+        <li>{isISR(props.someId) ? 'ISR' : 'Static'}</li>
         <li>{props.d}</li>
       </ul>
     </>

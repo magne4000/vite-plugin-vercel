@@ -13,7 +13,7 @@ function Page(props: { d: string }) {
       <ul>
         <li>Using a route function</li>
         <li>
-          ISR for some pages:
+          Some pages are static:
           <ul>
             <li>
               <Link href="/function/a">/function/a</Link>
@@ -21,7 +21,7 @@ function Page(props: { d: string }) {
           </ul>
         </li>
         <li>
-          All other pages are dynamic, e.g.:
+          All other pages are ISR, e.g.:
           <ul>
             <li>
               <Link href="/function/b">/function/b</Link>
