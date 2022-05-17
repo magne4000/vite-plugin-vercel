@@ -223,8 +223,8 @@ export function vitePluginSsrVercelPlugin(): Plugin {
             routes: [
               {
                 handle: 'miss',
+                dest: `/${rendererDestination}`,
               },
-              { src: '(/.*)', dest: `/${rendererDestination}` },
             ],
           },
         },
