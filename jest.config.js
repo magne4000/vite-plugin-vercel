@@ -23,6 +23,7 @@ function getProject(folder) {
     globalSetup,
     globalTeardown,
     displayName: folder,
+    setupFilesAfterEnv: ['jest-extended/all'],
     testMatch: [`<rootDir>/tests/${folder}/*.test.[jt]s?(x)`],
   };
 }
@@ -32,7 +33,7 @@ module.exports = {
   projects: [
     getProject('01-minimal'),
     getProject('02-additional-endpoints'),
-    getProject('03-ssr'),
+    getProject('03-prerender'),
     getProject('04-isr'),
     getProject('05-vite-plugin-ssr'),
   ],

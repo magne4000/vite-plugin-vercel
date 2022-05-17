@@ -65,6 +65,7 @@ export function getPrerenderSymlinkInfo(
   return {
     target: path.join(
       getOutput(resolvedConfig, 'functions'),
+      targetParsed.dir,
       targetParsed.name + '.func',
     ),
     link: path.join(

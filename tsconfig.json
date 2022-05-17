@@ -6,7 +6,8 @@
     "target": "ES2020",
     "lib": ["ESNext"],
     "jsx": "react",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "types": ["jest-extended"]
   },
   "ts-node": {
     "transpileOnly": true,

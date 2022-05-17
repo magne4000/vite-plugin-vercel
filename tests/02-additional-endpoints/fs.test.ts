@@ -3,15 +3,15 @@ import path from 'path';
 
 describe('fs', function () {
   testFs(path.basename(__dirname), [
-    '/server/pages/api/post.js',
-    '/server/pages/api/page.js',
-    '/server/pages/index2.js',
-    '/server/pages/index3.js',
-    '/server/pages/api/index3.js',
-    '/server/pages/index4.js',
+    '/config.json',
+    '/functions/api/page.func/index.js',
+    '/functions/api/page.func/.vc-config.json',
+    '/functions/api/post.func/index.js',
+    '/functions/api/post.func/.vc-config.json',
+    '/functions/index2.func/index.js',
+    '/functions/index2.func/.vc-config.json',
+    '/functions/index3.func/index.js',
+    '/functions/index3.func/.vc-config.json',
     '/static/tests/common/index.html',
-    '/functions-manifest.json',
-    '/prerender-manifest.json',
-    '/routes-manifest.json',
   ]);
 });

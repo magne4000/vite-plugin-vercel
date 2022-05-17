@@ -15,16 +15,12 @@ const globalSetup = setup(path.basename(__dirname), {
         destination: 'index2',
       },
       {
-        source: './tests/common/index2.ts',
-        destination: ['index3', 'api/index3'],
-      },
-      {
         source: {
           contents: 'console.log("hi");',
           sourcefile: 'hi.ts',
           loader: 'ts',
         },
-        destination: 'index4',
+        destination: 'index3',
       },
     ],
   },

@@ -12,14 +12,7 @@ const globalSetup = setup(path.basename(__dirname), {
     prerender() {
       return {
         ssr: {
-          // TODO implement dynamicRoutes override
-          rewrites: [
-            {
-              source: 'ssr',
-              destination: 'ssr',
-              regex: '^/ssr$',
-            },
-          ],
+          path: 'ssr_',
         },
       };
     },

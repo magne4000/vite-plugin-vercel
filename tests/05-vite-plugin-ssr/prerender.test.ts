@@ -1,60 +1,47 @@
 import { prepareTestJsonFileContent, testSchema } from '../helpers';
-import { prerenderManifestSchema } from 'vite-plugin-vercel/src/schemas/manifests/prerender';
+import { vercelOutputPrerenderConfigSchema } from 'vite-plugin-vercel/src/schemas/config/prerender-config';
 import path from 'path';
 
 prepareTestJsonFileContent(
   path.basename(__dirname),
-  '/prerender-manifest.json',
+  '/functions/pages/catch-all-*.prerender-config.json',
   (context) => {
-    testSchema(context, prerenderManifestSchema);
+    testSchema(context, vercelOutputPrerenderConfigSchema);
 
-    it('should have only required default properties', function () {
+    it('should have only necessary properties', function () {
       expect(context.file).toStrictEqual({
-        version: 3,
-        routes: {
-          '/catch-all/a/b/c': {
-            dataRoute: '',
-            expiration: 15,
-            srcRoute: '/ssr_',
-          },
-          '/catch-all/a/d': {
-            dataRoute: '',
-            expiration: 15,
-            srcRoute: '/ssr_',
-          },
-          '/function/a': {
-            dataRoute: '',
-            expiration: 15,
-            srcRoute: '/ssr_',
-          },
-          '/isr': {
-            dataRoute: '',
-            expiration: 15,
-            srcRoute: '/ssr_',
-          },
-          '/named/id-1': {
-            dataRoute: '',
-            expiration: 25,
-            srcRoute: '/ssr_',
-          },
-          '/named/id-2': {
-            dataRoute: '',
-            expiration: 25,
-            srcRoute: '/ssr_',
-          },
-        },
-        // dynamicRoutes: {
-        //   '/ssr_': {
-        //     routeRegex: '^/ssr_$',
-        //     dataRoute: '',
-        //     fallback: null,
-        //     dataRouteRegex: '',
-        //   },
-        // },
-        dynamicRoutes: {},
-        preview: {
-          previewModeId: null,
-        },
+        expiration: 15,
+        group: 1,
+      });
+    });
+  },
+);
+
+prepareTestJsonFileContent(
+  path.basename(__dirname),
+  '/functions/pages/isr-*.prerender-config.json',
+  (context) => {
+    testSchema(context, vercelOutputPrerenderConfigSchema);
+
+    it('should have only necessary properties', function () {
+      expect(context.file).toStrictEqual({
+        expiration: 15,
+        group: 2,
+      });
+    });
+  },
+);
+
+prepareTestJsonFileContent(
+  path.basename(__dirname),
+  '/functions/pages/named-*.prerender-config.json',
+  (context) => {
+    testSchema(context, vercelOutputPrerenderConfigSchema);
+
+    it('should have only necessary properties', function () {
+      expect(context.file).toStrictEqual({
+        expiration: 25,
+        group: 3,
       });
     });
   },
