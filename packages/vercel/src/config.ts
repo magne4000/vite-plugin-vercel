@@ -23,8 +23,8 @@ export function getConfig(
     ...resolvedConfig.vercel?.config,
     routes: [
       ...(routes ?? []),
-      ...(config?.routes ?? []),
       ...(resolvedConfig.vercel?.config?.routes ?? []),
+      ...(config?.routes ?? []),
     ],
     overrides: {
       ...resolvedConfig.vercel?.config?.overrides,

@@ -51,8 +51,7 @@ function vercelPlugin(): Plugin {
 
       // step 3.4:	Generate config file
       await writeConfig(resolvedConfig, {
-        // routes: [{ handle: 'filesystem' }, ...rewrites],
-        routes: [...rewrites],
+        routes: [{ handle: 'filesystem' }, ...rewrites],
         overrides,
       });
     },
