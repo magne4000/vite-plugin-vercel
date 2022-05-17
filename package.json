@@ -2,9 +2,9 @@
   "name": "vite-plugin-vercel-workspace-root",
   "private": "true",
   "scripts": {
-    "dev:all": "pnpm -r --parallel dev --filter ./packages",
+    "dev:all": "pnpm -r --filter ./packages --parallel dev",
     "dev": "ts-node ./server/index.ts",
-    "build:all": "pnpm -r build --filter ./packages",
+    "build:all": "pnpm -r --filter ./packages build",
     "build": "vite build && vite build --ssr",
     "prepare": "husky install",
     "precommit": "lint-staged",
