@@ -113,10 +113,10 @@ export const prerender: ViteVercelPrerenderFn = async (
     root: getRoot(resolvedConfig),
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
-      const isr = assertIsr(resolvedConfig, pageContext.pageExports);
-
-      // ISR pages cannot be prerendered
-      if (typeof isr === 'number') return;
+      // TODO remove comment
+      // // ISR pages cannot be prerendered
+      // const isr = assertIsr(resolvedConfig, pageContext.pageExports);
+      // if (typeof isr === 'number') return;
 
       const { filePath, fileContent } = pageContext._prerenderResult;
       const relPath = path.relative(
