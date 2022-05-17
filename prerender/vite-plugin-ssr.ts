@@ -113,11 +113,6 @@ export const prerender: ViteVercelPrerenderFn = async (
     root: getRoot(resolvedConfig),
     noExtraDir: true,
     async onPagePrerender(pageContext: PageContext) {
-      // TODO remove comment
-      // // ISR pages cannot be prerendered
-      // const isr = assertIsr(resolvedConfig, pageContext.pageExports);
-      // if (typeof isr === 'number') return;
-
       const { filePath, fileContent } = pageContext._prerenderResult;
       const relPath = path.relative(
         getOutDir(resolvedConfig, 'client'),
@@ -142,20 +137,6 @@ export const prerender: ViteVercelPrerenderFn = async (
 
   return routes;
 };
-
-function getRouteDynamicIsrRoutes(pageRoutes: PageRoutes) {
-  const routes: string[] = [];
-
-  for (const route of pageRoutes) {
-    if (route.pageRouteFile) {
-      if (typeof route.pageRouteFile.routeValue === 'string') {
-        routes.push(route.pageRouteFile.routeValue);
-      }
-    }
-  }
-
-  return routes;
-}
 
 function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
@@ -238,6 +219,9 @@ export function vitePluginSsrVercelPlugin(): Plugin {
         vercel: {
           prerender: userConfig.vercel?.prerender ?? prerender,
           additionalEndpoints,
+          config: {
+            routes: [{ src: '(/.*)', dest: `/${rendererDestination}` }],
+          },
         },
       };
     },
