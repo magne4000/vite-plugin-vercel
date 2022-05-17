@@ -11,7 +11,7 @@ prepareTestJsonFileContent(
     it('should have only necessary properties', function () {
       expect(context.file).toStrictEqual({
         expiration: 42,
-        group: 1,
+        group: expect.toBeNumber(),
       });
     });
   },

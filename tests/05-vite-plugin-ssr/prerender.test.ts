@@ -11,7 +11,7 @@ prepareTestJsonFileContent(
     it('should have only necessary properties', function () {
       expect(context.file).toStrictEqual({
         expiration: 15,
-        group: 1,
+        group: expect.toBeNumber(),
       });
     });
   },
@@ -26,7 +26,7 @@ prepareTestJsonFileContent(
     it('should have only necessary properties', function () {
       expect(context.file).toStrictEqual({
         expiration: 15,
-        group: 2,
+        group: expect.toBeNumber(),
       });
     });
   },
@@ -41,7 +41,7 @@ prepareTestJsonFileContent(
     it('should have only necessary properties', function () {
       expect(context.file).toStrictEqual({
         expiration: 25,
-        group: 3,
+        group: expect.toBeNumber(),
       });
     });
   },
