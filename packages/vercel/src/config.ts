@@ -46,4 +46,10 @@ export async function writeConfig(
     JSON.stringify(getConfig(resolvedConfig, config), undefined, 2),
     'utf-8',
   );
+
+  await fs.writeFile(
+    path.join(getOutput(resolvedConfig), 'static', 'config.json'),
+    JSON.stringify(getConfig(resolvedConfig, config), undefined, 2),
+    'utf-8',
+  );
 }
