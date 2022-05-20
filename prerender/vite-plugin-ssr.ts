@@ -146,9 +146,11 @@ export const prerender: ViteVercelPrerenderFn = async (
       const parsed = path.parse(relPath);
       const pathJoined = path.join(parsed.dir, parsed.name);
 
-      routes[relPath] = {
-        path: pathJoined === 'index' ? '' : pathJoined,
-      };
+      if (relPath.endsWith('.html')) {
+        routes[relPath] = {
+          path: pathJoined === 'index' ? '' : pathJoined,
+        };
+      }
 
       await fs.mkdir(path.dirname(newFilePath), { recursive: true });
       await fs.writeFile(newFilePath, fileContent);
