@@ -25,19 +25,19 @@ prepareTestJsonFileContent(
           dest: expect.stringMatching(
             '/pages/catch-all-([^/]+?)/\\?__original_path=\\$1',
           ),
-          src: '(/catch-all/(.+?))',
+          src: '(/catch-all/(.+?)(?:\\.pageContext\\.json)?)',
         },
         {
           dest: expect.stringMatching(
             '/pages/isr-([^/]+?)/\\?__original_path=\\$1',
           ),
-          src: '(/isr)',
+          src: '(/isr(?:\\.pageContext\\.json)?)',
         },
         {
           dest: expect.stringMatching(
             '/pages/named-([^/]+?)/\\?__original_path=\\$1',
           ),
-          src: '(/named/([^/]+?))',
+          src: '(/named/([^/]+?)(?:\\.pageContext\\.json)?)',
         },
         { dest: '/ssr_/?__original_path=$1', src: '(/.*)' },
       ]);
