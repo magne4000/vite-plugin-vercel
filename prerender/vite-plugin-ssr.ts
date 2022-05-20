@@ -19,7 +19,7 @@ import { findPageFile } from '../node_modules/vite-plugin-ssr/dist/cjs/shared/ge
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
 import { VercelOutputIsr } from 'vite-plugin-vercel/src/index';
-import { newError } from './libassert/newError';
+import { newError } from '@brillout/libassert';
 
 const libName = 'vite-plugin-ssr:vercel';
 const rendererDestination = 'ssr_';
