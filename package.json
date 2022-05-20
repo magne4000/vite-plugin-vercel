@@ -1,6 +1,7 @@
 {
   "name": "vite-plugin-vercel-workspace-root",
   "private": "true",
+  "type": "module",
   "scripts": {
     "dev:all": "pnpm -r --filter \"./packages/*\" --parallel dev",
     "dev": "ts-node ./server/index.ts",

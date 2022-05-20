@@ -1,16 +1,17 @@
 {
   "name": "vite-plugin-vercel",
   "version": "0.0.4",
-  "module": "./dist/index.mjs",
+  "type": "module",
+  "module": "./dist/index.js",
   "files": [
     "dist",
     "*.d.ts"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "types": "./index.d.ts",

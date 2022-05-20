@@ -49,7 +49,6 @@ const standardBuildOptions: BuildOptions = {
   minify: true,
 };
 
-// TODO build all targets at once
 export async function buildFn(
   resolvedConfig: ResolvedConfig,
   entry: ViteVercelApiEntry,
