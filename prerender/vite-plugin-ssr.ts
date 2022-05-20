@@ -315,7 +315,9 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
                 acc[path] = {
                   expiration: cur.isr!,
                   symlink: rendererDestination,
-                  route: cur.route ?? undefined,
+                  route: cur.route
+                    ? cur.route + '(?:\\.pageContext\\.json)?'
+                    : undefined,
                 };
                 return acc;
               }, {} as Record<string, VercelOutputIsr>);
