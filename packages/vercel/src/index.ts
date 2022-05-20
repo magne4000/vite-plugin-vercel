@@ -20,10 +20,10 @@ function vercelPlugin(): Plugin {
     async buildStart() {
       if (
         process.env.VERCEL_ENV === 'production' &&
-        !process.env.ENABLE_FILE_SYSTEM_API
+        !process.env.ENABLE_VC_BUILD
       ) {
         throw new Error(
-          'Missing ENABLE_FILE_SYSTEM_API=1 to your environment variables in your project settings',
+          'Missing ENABLE_VC_BUILD=1 to your environment variables in your project settings',
         );
       }
 
