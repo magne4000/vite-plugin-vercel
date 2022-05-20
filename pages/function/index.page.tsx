@@ -3,7 +3,8 @@ import { Link } from '../../renderer/Link';
 
 export { Page };
 
-export const isr = { initialRevalidateSeconds: 15 };
+// Should warn when building because it's incompatible with route function
+export const isr = { expiration: 15 };
 
 function Page(props: { d: string }) {
   return (
@@ -13,7 +14,7 @@ function Page(props: { d: string }) {
       <ul>
         <li>Using a route function</li>
         <li>
-          ISR for some pages:
+          Some pages are static:
           <ul>
             <li>
               <Link href="/function/a">/function/a</Link>

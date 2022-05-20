@@ -2,7 +2,7 @@ import React from 'react';
 
 export { Page };
 
-export const isr = { initialRevalidateSeconds: 15 };
+export const isr = { expiration: 15 };
 
 function Page(props: { d: string }) {
   return (
@@ -10,9 +10,8 @@ function Page(props: { d: string }) {
       <h1>Welcome</h1>
       This page is:
       <ul>
-        <li>Static + Dynamic</li>
-        <li>Static html generated</li>
-        <li>ISR: regenerated after {isr.initialRevalidateSeconds} seconds</li>
+        <li>ISR</li>
+        <li>ISR: regenerated after {isr.expiration} seconds</li>
         <li>{props.d}</li>
       </ul>
     </>

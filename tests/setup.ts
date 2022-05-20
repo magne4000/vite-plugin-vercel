@@ -1,9 +1,9 @@
 import path from 'path';
 import os from 'os';
 import fs from 'fs/promises';
-import { Config } from '@jest/types';
+import type { Config } from '@jest/types';
 import { callBuild } from './helpers';
-import { InlineConfig } from 'vite';
+import type { InlineConfig } from 'vite';
 
 export async function setup(displayName: string, inlineConfig: InlineConfig) {
   return async (config: Config.GlobalConfig) => {

@@ -1,34 +1,17 @@
 import { prepareTestJsonFileContent, testSchema } from '../helpers';
-import { prerenderManifestSchema } from 'vite-plugin-vercel/src/schemas/manifests/prerender';
+import { vercelOutputPrerenderConfigSchema } from 'vite-plugin-vercel/src/schemas/config/prerender-config';
 import path from 'path';
 
 prepareTestJsonFileContent(
   path.basename(__dirname),
-  '/prerender-manifest.json',
+  '/functions/page1.prerender-config.json',
   (context) => {
-    testSchema(context, prerenderManifestSchema);
+    testSchema(context, vercelOutputPrerenderConfigSchema);
 
-    it('should have only required default properties', function () {
+    it('should have only necessary properties', function () {
       expect(context.file).toStrictEqual({
-        version: 3,
-        routes: {
-          '/isr': {
-            initialRevalidateSeconds: 42,
-            srcRoute: 'isr',
-            dataRoute: 'something',
-          },
-        },
-        dynamicRoutes: {
-          isr: {
-            routeRegex: '^isr$',
-            dataRoute: '',
-            fallback: null,
-            dataRouteRegex: '',
-          },
-        },
-        preview: {
-          previewModeId: null,
-        },
+        expiration: 42,
+        group: expect.toBeNumber(),
       });
     });
   },

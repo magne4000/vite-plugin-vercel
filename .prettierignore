@@ -93,6 +93,7 @@ dist
 
 # Vercel
 .output
+.vercel
 
 # Gatsby files
 .cache/
@@ -105,7 +106,6 @@ dist
 
 # vuepress v2.x temp and cache directory
 .temp
-.cache
 
 # Serverless directories
 .serverless/
@@ -129,8 +129,12 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+# pnpm
+pnpm-lock.yaml
+
 # Local files
 *.local.*
 
+# IDE
 .idea
 

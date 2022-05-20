@@ -3,7 +3,7 @@ import { Link } from '../../renderer/Link';
 
 export { Page };
 
-export const initialRevalidateSeconds = 15;
+export const isr = { expiration: 15 };
 
 function Page(props: { d: string }) {
   return (
@@ -13,7 +13,7 @@ function Page(props: { d: string }) {
       <ul>
         <li>Catch-all /catch-all routes</li>
         <li>
-          ISR for some pages:
+          Some pages are static:
           <ul>
             <li>
               <Link href="/catch-all/a/b/c">/catch-all/a/b/c</Link>
@@ -24,7 +24,7 @@ function Page(props: { d: string }) {
           </ul>
         </li>
         <li>
-          All other pages are dynamic, e.g.:
+          All other pages are ISR, e.g.:
           <ul>
             <li>
               <Link href="/catch-all/a">/catch-all/a</Link>

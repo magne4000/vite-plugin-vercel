@@ -9,19 +9,12 @@ const globalSetup = setup(path.basename(__dirname), {
   root: process.cwd(),
   plugins: [react(), vercel()],
   vercel: {
-    prerender() {
-      return {
-        isr: {
-          // TODO implement dynamicRoutes override
-          routes: {
-            '/isr': {
-              initialRevalidateSeconds: 42,
-              dataRoute: 'something',
-              srcRoute: 'isr',
-            },
-          },
-        },
-      };
+    isr: {
+      page1: {
+        expiration: 42,
+        route: '/page1',
+        symlink: 'api/page',
+      },
     },
   },
 });

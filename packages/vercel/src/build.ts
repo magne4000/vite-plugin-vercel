@@ -3,23 +3,21 @@ import glob from 'fast-glob';
 import path from 'path';
 import { getOutput, getRoot, pathRelativeToApi } from './utils';
 import { build, BuildOptions } from 'esbuild';
-import { FunctionsManifest, ViteVercelApiEntry } from './types';
+import { ViteVercelApiEntry } from './types';
 import { assert } from './assert';
+import { vercelOutputVcConfigSchema } from './schemas/config/vc-config';
 import fs from 'fs/promises';
 
-function getPagesEndpoints(resolvedConfig: ResolvedConfig) {
-  const apiEndpoints = (resolvedConfig.vercel?.pagesEndpoints ?? []).map((p) =>
-    path.isAbsolute(p) ? p : path.resolve(getRoot(resolvedConfig), p),
-  );
-
-  return new Set(apiEndpoints);
+export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
+  return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
+    ...e,
+    destination: e.destination + '.func',
+  }));
 }
 
-export function getApiEntries(
+export function getEntries(
   resolvedConfig: ResolvedConfig,
 ): ViteVercelApiEntry[] {
-  const pagesEndpoints = getPagesEndpoints(resolvedConfig);
-
   const apiEntries = glob
     .sync(`${getRoot(resolvedConfig)}/api/**/*.*([a-zA-Z0-9])`)
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
@@ -29,22 +27,17 @@ export function getApiEntries(
     const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
     const parsed = path.parse(outFilePath);
 
-    const alsoPage = pagesEndpoints.has(filePath);
     // `rewrites` in routes-manifest also rewrites the url for non `/api` pages.
     // So to ensure urls are kept for ssr pages, `/api` endpoint must be built
     const entry = {
       source: filePath,
-      destination: [`api/${path.join(parsed.dir, parsed.name)}`],
+      destination: `api/${path.join(parsed.dir, parsed.name)}.func`,
     };
-
-    if (alsoPage) {
-      entry.destination.push(`${path.join(parsed.dir, parsed.name)}`);
-    }
 
     entryPoints.push(entry);
 
     return entryPoints;
-  }, resolvedConfig.vercel?.additionalEndpoints ?? []);
+  }, getAdditionalEndpoints(resolvedConfig));
 }
 
 const standardBuildOptions: BuildOptions = {
@@ -56,28 +49,22 @@ const standardBuildOptions: BuildOptions = {
   minify: true,
 };
 
-// TODO build all targets at once, with shared code in [function].nft.json files
 export async function buildFn(
   resolvedConfig: ResolvedConfig,
   entry: ViteVercelApiEntry,
   buildOptions?: BuildOptions,
-): Promise<FunctionsManifest['pages']> {
-  if (!Array.isArray(entry.destination)) {
-    entry.destination = [entry.destination];
-  }
+): Promise<void> {
   assert(
     entry.destination.length > 0,
     `Endpoint ${
       typeof entry.source === 'string' ? entry.source : '-'
     } does not have build destination`,
   );
-  const [firstDestination, ...remainingDestinations] = entry.destination;
-  const pages = resolvedConfig.vercel?.functionsManifest?.pages ?? {};
-  const fnManifests: FunctionsManifest['pages'] = {};
 
   const outfile = path.join(
-    getOutput(resolvedConfig, 'server/pages'),
-    firstDestination + '.js',
+    getOutput(resolvedConfig, 'functions'),
+    entry.destination,
+    'index.js',
   );
 
   const options = Object.assign({}, standardBuildOptions, { outfile });
@@ -103,42 +90,42 @@ export async function buildFn(
   }
 
   await build(options);
-
-  fnManifests[firstDestination + '.js'] = {
-    maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
-    ...pages[firstDestination + '.js'],
-  };
-
-  for (const dest of remainingDestinations) {
-    await fs.mkdir(
-      path.join(getOutput(resolvedConfig, 'server/pages'), path.dirname(dest)),
-      {
-        recursive: true,
-      },
-    );
-    await fs.copyFile(
-      outfile,
-      path.join(getOutput(resolvedConfig, 'server/pages'), dest + '.js'),
-    );
-
-    fnManifests[dest + '.js'] = {
-      maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
-      ...(pages[dest + '.js'] ?? pages[firstDestination + '.js']),
-    };
-  }
-
-  return fnManifests;
+  await writeVcConfig(resolvedConfig, entry.destination);
 }
 
-export async function buildApiEndpoints(
+export async function writeVcConfig(
   resolvedConfig: ResolvedConfig,
-): Promise<FunctionsManifest['pages']> {
-  const entries = getApiEntries(resolvedConfig);
-  const fnManifests: FunctionsManifest['pages'] = {};
+  destination: string,
+): Promise<void> {
+  const vcConfig = path.join(
+    getOutput(resolvedConfig, 'functions'),
+    destination,
+    '.vc-config.json',
+  );
+
+  await fs.writeFile(
+    vcConfig,
+    JSON.stringify(
+      vercelOutputVcConfigSchema.parse({
+        runtime: 'nodejs16.x',
+        handler: 'index.js',
+        maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
+        launcherType: 'Nodejs',
+        shouldAddHelpers: true,
+      }),
+      undefined,
+      2,
+    ),
+    'utf-8',
+  );
+}
+
+export async function buildEndpoints(
+  resolvedConfig: ResolvedConfig,
+): Promise<void> {
+  const entries = getEntries(resolvedConfig);
 
   for (const entry of entries) {
-    Object.assign(fnManifests, await buildFn(resolvedConfig, entry));
+    await buildFn(resolvedConfig, entry);
   }
-
-  return fnManifests;
 }

@@ -1,37 +1,13 @@
 import type { ResolvedConfig } from 'vite';
 import type { BuildOptions, StdinOptions } from 'esbuild';
-import type {
-  RoutesManifest,
-  RoutesManifestDynamicRoute,
-  RoutesManifestDefault,
-} from './schemas/manifests/routes';
-import type { FunctionsManifest } from './schemas/manifests/functions';
-import {
-  PrerenderManifest,
-  PrerenderManifestDefault,
-  PrerenderManifestDynamicRoute,
-  PrerenderManifestRoute,
-} from './schemas/manifests/prerender';
-
-// RoutesManifest
+import type { VercelOutputConfig } from './schemas/config/config';
+import type { VercelOutputVcConfig } from './schemas/config/vc-config';
+import type { VercelOutputPrerenderConfig } from './schemas/config/prerender-config';
 
 export type {
-  RoutesManifest,
-  RoutesManifestDynamicRoute,
-  RoutesManifestDefault,
-};
-
-// FunctionsManifest
-
-export type { FunctionsManifest };
-
-// PrerenderManifest
-
-export type {
-  PrerenderManifest,
-  PrerenderManifestRoute,
-  PrerenderManifestDynamicRoute,
-  PrerenderManifestDefault,
+  VercelOutputConfig,
+  VercelOutputVcConfig,
+  VercelOutputPrerenderConfig,
 };
 
 // Vite config for Vercel
@@ -43,32 +19,21 @@ export interface ViteVercelConfig {
    */
   defaultMaxDuration?: number;
   /**
-   * If ISR is supported, default revalidation time per-page can be overriden.
-   * A `prerender` function is necessary for ISR to work.
+   * Default expiration time (in seconds) for prerender functions.
    * Defaults to 86400 seconds (24h).
    * @see {@link https://vercel.com/docs/concepts/next.js/incremental-static-regeneration}
+   * @see {@link https://vercel.com/docs/build-output-api/v3#vercel-primitives/prerender-functions/configuration}
    */
-  initialRevalidateSeconds?: number;
+  expiration?: number;
   /**
    * Also known as Server Side Generation, or SSG.
-   * If present, must build static files in `.output/server/pages`.
+   * If present, must build static files in `.vercel/output/static`.
    * Can be set to `false` to disable prerendering completely.
    */
   prerender?: ViteVercelPrerenderFn | false;
   /**
-   * By default, all `api/*` endpoints are compiled under `.ouput/server/pages/api`.
-   * If a file must also be compiled only under `.ouput/server/pages`, it should be added here.
-   *
-   * @example
-   * ```
-   * {
-   *   pagesEndpoints: ['./api/page.ts']
-   * }
-   * ```
-   */
-  pagesEndpoints?: string[];
-  /**
-   * All provided endpoints will also be part of the build process.
+   * By default, all `api/*` endpoints are compiled under `.vercel/output/functions/api/*.func`.
+   * If others serverless functions need to be compiled under `.vercel/output/functions`, they should be added here.
    * For instance, a framework can leverage this to have a generic ssr endpoint
    * without requiring the user to write any code.
    *
@@ -79,8 +44,8 @@ export interface ViteVercelConfig {
    *     {
    *       // can also be an Object representing an esbuild StdinOptions
    *       source: '/path/to/file.ts',
-   *       // relative to `.output/server/pages`, without extension
-   *       destination: ['file', '/api/file'],
+   *       // URL path of the handler, will be generated to `.vercel/output/functions/api/file.func/index.js`
+   *       destination: '/api/file',
    *     }
    *   ]
    * }
@@ -88,34 +53,52 @@ export interface ViteVercelConfig {
    */
   additionalEndpoints?: ViteVercelApiEntry[];
   /**
-   * Advanced configuration to override funtions-manifest.json
-   * @see {@link https://vercel.com/docs/file-system-api#configuration/functions}
+   * Advanced configuration to override .vercel/output/config.json
+   * @see {@link https://vercel.com/docs/build-output-api/v3#build-output-configuration}
    * @protected
    */
-  functionsManifest?: Partial<Omit<FunctionsManifest, 'version'>>;
+  config?: Partial<Omit<VercelOutputConfig, 'version'>>;
   /**
-   * Advanced configuration to override routes-manifest.json
-   * @see {@link https://vercel.com/docs/file-system-api#configuration/routes}
+   * ISR and SSG pages are mutually exclusive. If a page is found in both, ISR prevails.
+   * Keys are path relative to .vercel/output/functions directory, either without extension,
+   * or with `.prerender-config.json` extension.
+   * If you have multiple isr configurations pointing to the same underlying function, you can leverage the `symlink`
+   * property. See example below.
+   *
+   * @example
+   * ```
+   * // Here `ssr_` means that a function is available under `.vercel/output/functions/ssr_.func`
+   * isr: {
+   *   '/pages/a': { expiration: 15, symlink: 'ssr_', route: '^/a/.*$' },
+   *   '/pages/b/c': { expiration: 15, symlink: 'ssr_', route: '^/b/c/.*$' },
+   *   '/pages/d': { expiration: 15, symlink: 'ssr_', route: '^/d$' },
+   *   '/pages/e': { expiration: 25 }
+   * }
+   * ```
+   *
    * @protected
    */
-  routesManifest?: RoutesManifestDefault;
+  isr?:
+    | Record<string, VercelOutputIsr>
+    | (() =>
+        | Promise<Record<string, VercelOutputIsr>>
+        | Record<string, VercelOutputIsr>);
   /**
-   * Advanced configuration to override prerender-manifest.json
-   * @see {@link https://vercel.com/docs/file-system-api#configuration/pre-rendering}
-   * @protected
-   */
-  prerenderManifest?: PrerenderManifestDefault;
-  /**
-   * Defaults to `.output`. Mostly useful for testing prupose
+   * Defaults to `.vercel/output`. Mostly useful for testing prupose
    * @protected
    */
   outDir?: string;
 }
 
-export type ViteVercelPrerenderRoute = {
-  isr?: Pick<PrerenderManifestDefault, 'routes'>;
-  ssr?: Pick<RoutesManifestDefault, 'rewrites' | 'dynamicRoutes'>;
-};
+export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
+  symlink?: string;
+  route?: string;
+}
+
+/**
+ * Keys are path relative to .vercel/output/static directory
+ */
+export type ViteVercelPrerenderRoute = VercelOutputConfig['overrides'];
 export type ViteVercelPrerenderFn = (
   resolvedConfig: ResolvedConfig,
 ) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;
@@ -126,9 +109,9 @@ export interface ViteVercelApiEntry {
    */
   source: string | StdinOptions;
   /**
-   * Relative to `.output/server/pages`, without extension
+   * Relative to `.vercel/output/functions`, without extension
    */
-  destination: string | string[];
+  destination: string;
   /**
    * Override esbuild options
    */
