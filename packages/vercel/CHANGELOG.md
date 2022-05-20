@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.0.7
+
+### Patch Changes
+
+- remove references to API v2
+
 ## 0.0.6
 
 ### Patch Changes
