@@ -8,8 +8,5 @@
     "jsx": "react",
     "esModuleInterop": true,
     "types": ["jest-extended"]
-  },
-  "ts-node": {
-    "transpileOnly": true
   }
 }

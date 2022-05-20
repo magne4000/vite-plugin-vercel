@@ -3,7 +3,11 @@
 import express from 'express';
 import { createPageRenderer } from 'vite-plugin-ssr';
 import * as vite from 'vite';
+import { fileURLToPath } from 'url';
+import path from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const root = `${__dirname}/..`;
 
 startServer();
@@ -36,7 +40,8 @@ async function startServer() {
     const pageContext = await renderPage(pageContextInit);
     const { httpResponse } = pageContext;
     if (!httpResponse) return next();
-    const { statusCode, body } = httpResponse;
+    const { statusCode, body, contentType } = httpResponse;
+    res.setHeader('Content-Type', contentType);
     res.status(statusCode).send(body);
   });
 
