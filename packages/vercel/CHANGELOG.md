@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.1.0
+
+### Minor Changes
+
+- Vercel API v3 beta release with ISR support fix
+
 ## 0.0.7
 
 ### Patch Changes
