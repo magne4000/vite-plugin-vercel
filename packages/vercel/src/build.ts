@@ -43,7 +43,7 @@ export function getEntries(
 const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
-  format: 'esm',
+  format: 'cjs',
   platform: 'node',
   logLevel: 'info',
   minify: true,
