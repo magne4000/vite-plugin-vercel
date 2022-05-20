@@ -84,16 +84,19 @@ export const vercelOutputConfigSchema = z
         ]),
       )
       .optional(),
-    // FIXME when doc updated https://vercel.com/docs/build-output-api/v3#build-output-configuration/images
     images: z
       .object({
         sizes: z.tuple([
           z.number().int().positive(),
           z.number().int().positive(),
         ]),
-        domains: z.array(z.string()).min(1).optional(),
+        domains: z.array(z.string()).nonempty().optional(),
         minimumCacheTTL: z.number().int().positive().optional(),
-        formats: z.array(z.string()).min(1),
+        formats: z
+          .union([z.literal('image/avif'), z.literal('image/webp')])
+          .array()
+          .nonempty()
+          .optional(),
         dangerouslyAllowSVG: z.boolean().optional(),
         contentSecurityPolicy: z.string().optional(),
       })

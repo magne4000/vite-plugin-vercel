@@ -10,6 +10,7 @@ type HttpResponse = NonNullable<
 export function getDefaultPageContextInit(request: VercelRequest) {
   const query: Record<string, string | string[]> = request.query ?? {};
   const matches =
+    // FIXME x-now-route-matches is not definitive https://github.com/orgs/vercel/discussions/577#discussioncomment-2769478
     typeof request.headers['x-now-route-matches'] === 'string'
       ? parse(request.headers['x-now-route-matches'])
       : null;

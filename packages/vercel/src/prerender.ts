@@ -18,8 +18,7 @@ export function execPrerender(resolvedConfig: ResolvedConfig) {
   return prerender?.(resolvedConfig);
 }
 
-// FIXME https://github.com/orgs/vercel/discussions/577#discussioncomment-2759412
-
+// FIXME { group } will be made optional https://github.com/orgs/vercel/discussions/577#discussioncomment-2759412
 let group = 1;
 
 export async function writePrerenderConfig(
@@ -92,7 +91,7 @@ export async function buildPrerenderConfigs(
         destination,
         symlink,
       );
-      // FIXME https://github.com/orgs/vercel/discussions/577#discussioncomment-2767120
+      // FIXME symlinks are currently broken https://github.com/orgs/vercel/discussions/577#discussioncomment-2767120
       // await fs.symlink(
       //   path.relative(path.dirname(info.link), info.target),
       //   info.link,
