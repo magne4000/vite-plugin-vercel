@@ -5,6 +5,7 @@ importers:
   .:
     specifiers:
       '@brillout/libassert': ^0.5.6
+      '@jest/types': ^28.1.0
       '@swc/core': ^1.2.186
       '@swc/jest': ^0.2.21
       '@types/express': ^4.17.13
@@ -45,6 +46,7 @@ importers:
       vite-plugin-ssr: 0.3.64_vite@2.9.9
       vite-plugin-vercel: link:packages/vercel
     devDependencies:
+      '@jest/types': 28.1.0
       '@swc/core': 1.2.186
       '@swc/jest': 0.2.21_@swc+core@1.2.186
       '@types/express': 4.17.13

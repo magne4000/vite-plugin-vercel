@@ -21,6 +21,7 @@
     "publish:stable": "pnpm run prepublishOnly && pnpm publish -r"
   },
   "devDependencies": {
+    "@jest/types": "^28.1.0",
     "@swc/core": "^1.2.186",
     "@swc/jest": "^0.2.21",
     "@types/express": "^4.17.13",
