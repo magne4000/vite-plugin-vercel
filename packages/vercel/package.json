@@ -39,7 +39,6 @@
     "typescript": "^4.6.4"
   },
   "dependencies": {
-    "@brillout/libassert": "^0.5.5",
     "@vercel/routing-utils": "^1.13.2",
     "esbuild": "^0.14.39",
     "fast-glob": "^3.2.11",

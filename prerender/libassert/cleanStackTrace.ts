@@ -1,3 +1,5 @@
+export { cleanStackTrace };
+
 function cleanStackTrace(
   err: Error,
   numberOfStackTraceLinesToRemove: number,
@@ -45,37 +47,4 @@ function isStackTraceLine(line: string): boolean {
 function splitByLine(str: string): string[] {
   // https://stackoverflow.com/questions/21895233/how-in-node-to-split-string-by-newline-n
   return str.split(/\r?\n/);
-}
-
-export { newError };
-
-function newError(
-  errorMessage: string,
-  numberOfStackTraceLinesToRemove: number,
-) {
-  let err;
-  {
-    const stackTraceLimit__original = Error.stackTraceLimit;
-    Error.stackTraceLimit = Infinity;
-    err = new Error(errorMessage);
-    Error.stackTraceLimit = stackTraceLimit__original;
-  }
-
-  cleanStackTrace(err, numberOfStackTraceLinesToRemove);
-
-  return err;
-}
-
-const libName = 'vite-plugin-vercel';
-
-export function assert(
-  condition: unknown,
-  errorMessage: string,
-): asserts condition {
-  if (condition) {
-    return;
-  }
-
-  const err = newError(`[${libName}][Wrong Usage] ${errorMessage}`, 2);
-  throw err;
 }

@@ -1,8 +1,8 @@
 // TODO move in vite-plugin-ssr
 import '@vercel/node';
 import { prerender as prerenderCli } from 'vite-plugin-ssr/cli';
-import path from 'path';
 import fs from 'fs/promises';
+import path from 'path';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
 import { PageContextBuiltIn } from 'vite-plugin-ssr';
 import {
@@ -10,7 +10,6 @@ import {
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from 'vite-plugin-vercel';
-import { newError } from '@brillout/libassert';
 import type { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
 import type { PageRoutes } from 'vite-plugin-ssr/dist/cjs/shared/route/loadPageRoutes';
 import '../node_modules/vite-plugin-ssr/dist/cjs/node/page-files/setup';
@@ -20,6 +19,7 @@ import { findPageFile } from '../node_modules/vite-plugin-ssr/dist/cjs/shared/ge
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
 import { VercelOutputIsr } from 'vite-plugin-vercel/src/index';
+import { newError } from './libassert/newError';
 
 const libName = 'vite-plugin-ssr:vercel';
 const rendererDestination = 'ssr_';
