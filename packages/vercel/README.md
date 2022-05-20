@@ -54,3 +54,7 @@ export default defineConfig(async ({ command, mode }) => {
   };
 });
 ```
+
+### Config
+
+[./src/types.ts#L15](./src/types.ts#L15)
