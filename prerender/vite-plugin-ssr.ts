@@ -134,7 +134,7 @@ export const prerender: ViteVercelPrerenderFn = async (
       }
 
       const { filePath, fileContent } = pageContext._prerenderResult;
-      const relPath = path.relative(
+      const relPath = path.posix.relative(
         getOutDir(resolvedConfig, 'client'),
         filePath,
       );
@@ -198,7 +198,10 @@ export async function getSsrEndpoint(
     'importBuild',
   );
   const resolveDir = path.dirname(sourcefile);
-  const relativeImportBuildPath = path.relative(resolveDir, importBuildPath);
+  const relativeImportBuildPath = path.posix.relative(
+    resolveDir,
+    importBuildPath,
+  );
 
   return {
     source: {

@@ -31,7 +31,7 @@ export function getEntries(
     // So to ensure urls are kept for ssr pages, `/api` endpoint must be built
     const entry = {
       source: filePath,
-      destination: `api/${path.join(parsed.dir, parsed.name)}.func`,
+      destination: `api/${path.posix.join(parsed.dir, parsed.name)}.func`,
     };
 
     entryPoints.push(entry);
