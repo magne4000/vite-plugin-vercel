@@ -14,8 +14,7 @@
     "test:03": "jest tests/03-prerender",
     "test:04": "jest tests/04-isr",
     "test:05": "jest tests/05-vite-plugin-ssr",
-    "pretest": "pnpm run build:all",
-    "test": "jest",
+    "test": "pnpm run build:all && jest",
     "prepublishOnly": "pnpm run build:all && jest && pnpm changeset version",
     "publish:beta": "pnpm run prepublishOnly && pnpm changeset publish -r --tag beta",
     "publish:stable": "pnpm run prepublishOnly && pnpm changeset publish -r"
