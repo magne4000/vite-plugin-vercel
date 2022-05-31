@@ -4,6 +4,8 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
+    "dev": "esno ./server/index.ts",
+    "build": "vite build && vite build --ssr",
     "test": "pnpm run test:01 & pnpm run test:02 & pnpm run test:03 & pnpm run test:04 & pnpm run test:05",
     "test:01": "vitest run --dir tests/01-minimal --config tests/01-minimal/vitest.config.ts",
     "test:02": "vitest run --dir tests/02-additional-endpoints --config tests/02-additional-endpoints/vitest.config.ts",

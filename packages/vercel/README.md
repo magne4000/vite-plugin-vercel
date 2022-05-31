@@ -8,16 +8,16 @@ Its purpose is to help you bundle your application in `.vercel` folder as suppor
 ## Features
 
 - [x] [SSG/Static files support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/static-files)
-  - see [`prerender` config](./src/types.ts#L33)
+  - see [`prerender` config](/packages/vercel/src/types.ts#L33)
 - [x] [SSR/Serverless functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/serverless-functions)
   - `.[jt]s` files under the `<root>/api` folder of your project are automatically bundled as Serverless functions under `.vercel/output/functions/api/*.func`
-  - see [`additionalEndpoints` config](./src/types.ts#L54)
+  - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L54)
 - [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/prerender-functions)
-  - see [`isr` config](./src/types.ts#L81). Also see implementation of [vite-plugin-ssr](./prerender/vite-plugin-ssr.ts) for example
+  - see [`isr` config](/packages/vercel/src/types.ts#L81). Also see implementation of [vite-plugin-ssr](./prerender/vite-plugin-ssr.ts) for example
 - [ ] [Edge functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/edge-functions)
 - [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3#build-output-configuration/supported-properties/images)
 - [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3#features/preview-mode)
-- [x] [Advanced config override](./src/types.ts#L15)
+- [x] [Advanced config override](/packages/vercel/src/types.ts#L15)
   - [ ] Complete config override
 
 ## Usage
@@ -41,7 +41,7 @@ export default defineConfig({
 [vite-plugin-ssr](https://vite-plugin-ssr.com/) will support this plugin when stable.
 In the meantime, you can add experimental support yourself.
 
-First copy [prerender](../../prerender) folder to the root of your project.
+First copy [prerender](/prerender) folder to the root of your project.
 Then, update your vercel config:
 
 ```ts
@@ -77,7 +77,7 @@ export default defineConfig(async ({ command, mode }) => {
 
 ### Config
 
-See [TS types](./src/types.ts#L15) for details.
+See [TS types](/packages/vercel/src/types.ts#L15) for details.
 
 ## Demo
 
