@@ -17,7 +17,6 @@ export default defineConfig(async () => {
     plugins: [react(), ssr(), vercel(), vitePluginSsrVercelPlugin.default()],
     vercel: {
       expiration: 25,
-      outDir: '../../.vercel',
     },
   };
 });
