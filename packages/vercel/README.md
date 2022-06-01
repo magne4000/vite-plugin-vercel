@@ -3,7 +3,7 @@
 This is a **Work In Progress** Vercel adapter for [`vite`](https://vitejs.dev/).
 
 Its purpose is to help you bundle your application in `.vercel` folder as supported by
-([Vercel API v3](https://vercel.com/docs/build-output-api/v3)).
+[Vercel API v3](https://vercel.com/docs/build-output-api/v3).
 
 ## Features
 
@@ -13,7 +13,7 @@ Its purpose is to help you bundle your application in `.vercel` folder as suppor
   - `.[jt]s` files under the `<root>/api` folder of your project are automatically bundled as Serverless functions under `.vercel/output/functions/api/*.func`
   - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L54)
 - [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/prerender-functions)
-  - see [`isr` config](/packages/vercel/src/types.ts#L81). Also see implementation of [vite-plugin-ssr](./prerender/vite-plugin-ssr.ts) for example
+  - see [`isr` config](/packages/vercel/src/types.ts#L81). Also see implementation of [vite-plugin-ssr](/packages/vite-plugin-ssr/vite-plugin-ssr.ts) for example
 - [ ] [Edge functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/edge-functions)
 - [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3#build-output-configuration/supported-properties/images)
 - [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3#features/preview-mode)
