@@ -41,30 +41,18 @@ export default defineConfig({
 [vite-plugin-ssr](https://vite-plugin-ssr.com/) will support this plugin when stable.
 In the meantime, you can add experimental support yourself.
 
-First copy [prerender](/prerender) folder to the root of your project.
-Then, update your vercel config:
+Install `vite-plugin-vercel-ssr` package, and update your vite config:
 
 ```ts
-// vercel.config.ts
-// A TS config is prefered if your project is of { type: "module" }
-
-import module from 'module';
+// vite.config.ts
 import { defineConfig } from 'vite';
 import ssr from 'vite-plugin-ssr/plugin';
 import vercel from 'vite-plugin-vercel';
-
-// FIX esbuild bug https://github.com/evanw/esbuild/pull/2067
-// probably not necessary when `./prerender/vite-plugin-ssr` will be included in `vite-plugin-ssr`
-// eslint-disable-next-line no-undef
-globalThis.require = module.createRequire(import.meta.url);
+import vercelSsr from 'vite-plugin-vercel-ssr';
 
 export default defineConfig(async ({ command, mode }) => {
-  // Dynamic import to bypass esbuild compilation issue.
-  // If you are not using ESM, could me move as a top synchronous import
-  const vitePluginSsrVercelPlugin = await import('./prerender/vite-plugin-ssr');
-
   return {
-    plugins: [ssr(), vercel(), vitePluginSsrVercelPlugin.default()],
+    plugins: [ssr(), vercel(), vercelSsr()],
     build: {
       polyfillDynamicImport: false,
     },

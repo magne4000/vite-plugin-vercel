@@ -1,5 +1,5 @@
-// TODO move in vite-plugin-ssr
-import '@vercel/node';
+import './hack';
+import { fileURLToPath } from 'url';
 import { prerender as prerenderCli } from 'vite-plugin-ssr/cli';
 import fs from 'fs/promises';
 import path from 'path';
@@ -12,13 +12,13 @@ import {
 } from 'vite-plugin-vercel';
 import type { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
 import type { PageRoutes } from 'vite-plugin-ssr/dist/cjs/shared/route/loadPageRoutes';
-import '../node_modules/vite-plugin-ssr/dist/cjs/node/page-files/setup';
-import { getGlobalContext } from '../node_modules/vite-plugin-ssr/dist/cjs/node/renderPage';
-import { setSsrEnv } from '../node_modules/vite-plugin-ssr/dist/cjs/node/ssrEnv';
-import { findPageFile } from '../node_modules/vite-plugin-ssr/dist/cjs/shared/getPageFiles';
+import './node_modules/vite-plugin-ssr/dist/cjs/node/page-files/setup';
+import { getGlobalContext } from './node_modules/vite-plugin-ssr/dist/cjs/node/renderPage';
+import { setSsrEnv } from './node_modules/vite-plugin-ssr/dist/cjs/node/ssrEnv';
+import { findPageFile } from './node_modules/vite-plugin-ssr/dist/cjs/shared/getPageFiles';
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
-import { VercelOutputIsr } from 'vite-plugin-vercel/src/index';
+import type { VercelOutputIsr } from 'vite-plugin-vercel';
 import { newError } from '@brillout/libassert';
 
 const libName = 'vite-plugin-ssr:vercel';
@@ -189,7 +189,7 @@ export async function getSsrEndpoint(
   source?: string,
 ): Promise<ViteVercelApiEntry> {
   const sourcefile =
-    source ?? path.join(__dirname, 'templates', 'ssr_.template.ts');
+    source ?? path.join(__dirname, '..', 'templates', 'ssr_.template.ts');
   const contents = await fs.readFile(sourcefile, 'utf-8');
 
   const importBuildPath = path.join(

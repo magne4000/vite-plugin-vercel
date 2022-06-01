@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "esno ./server/index.ts",
     "build": "vite build && vite build --ssr",
-    "test": "pnpm run test:01 & pnpm run test:02 & pnpm run test:03 & pnpm run test:04 & pnpm run test:05",
+    "test": "pnpm run test:01 && pnpm run test:02 && pnpm run test:03 && pnpm run test:04 && pnpm run test:05",
     "test:01": "vitest run --dir tests/01-minimal --config tests/01-minimal/vitest.config.ts",
     "test:02": "vitest run --dir tests/02-additional-endpoints --config tests/02-additional-endpoints/vitest.config.ts",
     "test:03": "vitest run --dir tests/03-prerender --config tests/03-prerender/vitest.config.ts",
@@ -23,7 +23,7 @@
     "@vercel/node": "^1.15.3",
     "esno": "^0.16.3",
     "fast-glob": "^3.2.11",
-    "vitest": "^0.13.0",
+    "vitest": "^0.13.1",
     "zod": "^3.17.3"
   },
   "dependencies": {
@@ -35,6 +35,7 @@
     "typescript": "^4.7.2",
     "vite": "^2.9.9",
     "vite-plugin-ssr": "^0.3.64",
-    "vite-plugin-vercel": "workspace:^"
+    "vite-plugin-vercel": "workspace:^",
+    "vite-plugin-vercel-ssr": "workspace:^"
   }
 }
