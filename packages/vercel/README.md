@@ -41,14 +41,14 @@ export default defineConfig({
 [vite-plugin-ssr](https://vite-plugin-ssr.com/) will support this plugin when stable.
 In the meantime, you can add experimental support yourself.
 
-Install `vite-plugin-vercel-ssr` package, and update your vite config:
+Install `@magne4000/vite-plugin-vercel-ssr` package, and update your vite config:
 
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
 import ssr from 'vite-plugin-ssr/plugin';
 import vercel from 'vite-plugin-vercel';
-import vercelSsr from 'vite-plugin-vercel-ssr';
+import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
 
 export default defineConfig(async ({ command, mode }) => {
   return {

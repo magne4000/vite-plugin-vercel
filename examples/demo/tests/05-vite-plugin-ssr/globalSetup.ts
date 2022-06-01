@@ -4,7 +4,7 @@ import { setup as _setup } from '../common/setup';
 import { teardown as _teardown } from '../common/teardown';
 import react from '@vitejs/plugin-react';
 import vercel from 'vite-plugin-vercel';
-import vitePluginSsrVercelPlugin from 'vite-plugin-vercel-ssr';
+import vitePluginSsrVercelPlugin from '@magne4000/vite-plugin-vercel-ssr';
 
 export const setup = _setup(path.basename(__dirname), {
   configFile: false,
