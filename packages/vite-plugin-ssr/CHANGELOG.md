@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.0.4
+
+### Patch Changes
+
+- Include templates folder
+
 ## 0.0.3
 
 ### Patch Changes

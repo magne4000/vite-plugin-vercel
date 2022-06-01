@@ -1,9 +1,10 @@
 {
   "name": "@magne4000/vite-plugin-vercel-ssr",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "files": [
     "dist",
+    "templates",
     "*.d.ts"
   ],
   "description": "Use vite-plugin-ssr with vite-plugin-vercel",
