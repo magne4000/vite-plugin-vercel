@@ -1,12 +1,14 @@
 {
   "name": "@magne4000/vite-plugin-vercel-ssr",
-  "version": "0.0.1",
-  "description": "",
+  "version": "0.0.3",
   "type": "module",
   "files": [
     "dist",
     "*.d.ts"
   ],
+  "description": "Use vite-plugin-ssr with vite-plugin-vercel",
+  "author": "Joël Charles <joel.charles91@gmail.com>",
+  "repository": "https://github.com/magne4000/vite-plugin-vercel",
   "main": "./dist/vite-plugin-ssr.cjs",
   "module": "./dist/vite-plugin-ssr.js",
   "exports": {

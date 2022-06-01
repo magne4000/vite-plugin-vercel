@@ -37,5 +37,6 @@
     "vite-plugin-ssr": "^0.3.64",
     "vite-plugin-vercel": "workspace:^",
     "@magne4000/vite-plugin-vercel-ssr": "workspace:^"
-  }
+  },
+  "version": null
 }

@@ -1,14 +1,14 @@
 import './hack';
-import { fileURLToPath } from 'url';
 import { prerender as prerenderCli } from 'vite-plugin-ssr/cli';
 import fs from 'fs/promises';
 import path from 'path';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
-import { PageContextBuiltIn } from 'vite-plugin-ssr';
-import {
+import type { PageContextBuiltIn } from 'vite-plugin-ssr';
+import type {
   ViteVercelApiEntry,
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
+  VercelOutputIsr,
 } from 'vite-plugin-vercel';
 import type { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
 import type { PageRoutes } from 'vite-plugin-ssr/dist/cjs/shared/route/loadPageRoutes';
@@ -18,7 +18,6 @@ import { setSsrEnv } from './node_modules/vite-plugin-ssr/dist/cjs/node/ssrEnv';
 import { findPageFile } from './node_modules/vite-plugin-ssr/dist/cjs/shared/getPageFiles';
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
-import type { VercelOutputIsr } from 'vite-plugin-vercel';
 import { newError } from '@brillout/libassert';
 
 const libName = 'vite-plugin-ssr:vercel';

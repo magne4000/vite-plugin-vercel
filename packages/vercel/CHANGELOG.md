@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.1.1
+
+### Patch Changes
+
+- Create a dedicated package for vite-plugin-ssr integration
+
 ## 0.1.0
 
 ### Minor Changes
