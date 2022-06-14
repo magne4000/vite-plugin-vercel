@@ -24,6 +24,12 @@ prepareTestJsonFileContent(
         { handle: 'filesystem' },
       ]);
       expect(context.file).toHaveProperty('overrides', {
+        'test.html': {
+          path: 'test',
+        },
+        'tests/common/index.html': {
+          path: 'tests/common/index',
+        },
         ssr: { path: 'ssr_' },
       });
       expect(Object.keys(context.file as any).sort()).toEqual(

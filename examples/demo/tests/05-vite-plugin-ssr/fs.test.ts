@@ -37,6 +37,7 @@ describe('fs', function () {
     '/static/named/id-1.pageContext.json',
     '/static/named/id-2.html',
     '/static/named/id-2.pageContext.json',
+    '/static/test.html',
     '/static/tests/common/index.html',
     new RegExp('/functions/pages/catch-all-([^/]+?)\\.prerender-config\\.json'),
     new RegExp('/functions/pages/catch-all-([^/]+?)\\.func/index\\.js'),
