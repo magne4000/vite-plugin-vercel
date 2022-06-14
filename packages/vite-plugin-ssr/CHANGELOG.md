@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.0.7
+
+### Patch Changes
+
+- Change config syntax
+
 ## 0.0.6
 
 ### Patch Changes
