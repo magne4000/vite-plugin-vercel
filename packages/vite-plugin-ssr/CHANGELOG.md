@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.0.6
+
+### Patch Changes
+
+- Default SSR route excludes /api
+
 ## 0.0.5
 
 ### Patch Changes
