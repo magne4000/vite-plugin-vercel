@@ -43,6 +43,12 @@ prepareTestJsonFileContent(
         { dest: '/ssr_/?__original_path=$1', src: '(/.*)' },
       ]);
       expect(context.file).toHaveProperty('overrides', {
+        'test.html': {
+          path: 'test',
+        },
+        'tests/common/index.html': {
+          path: 'tests/common/index',
+        },
         '404.html': {
           path: '404',
         },

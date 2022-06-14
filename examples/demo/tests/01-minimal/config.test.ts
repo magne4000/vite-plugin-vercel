@@ -23,7 +23,14 @@ prepareTestJsonFileContent(
         },
         { handle: 'filesystem' },
       ]);
-      expect(context.file).toHaveProperty('overrides', {});
+      expect(context.file).toHaveProperty('overrides', {
+        'test.html': {
+          path: 'test',
+        },
+        'tests/common/index.html': {
+          path: 'tests/common/index',
+        },
+      });
       expect(Object.keys(context.file as any).sort()).toMatchObject(
         ['version', 'overrides', 'routes'].sort(),
       );
