@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.1.2
+
+### Patch Changes
+
+- Truncate user provided static html files
+
 ## 0.1.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.0.5
+
+### Patch Changes
+
+- isr config can now be overriden when using vite-plugin-ssr integration
+
 ## 0.0.4
 
 ### Patch Changes

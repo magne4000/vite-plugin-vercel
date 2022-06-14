@@ -1,6 +1,6 @@
 {
   "name": "@magne4000/vite-plugin-vercel-ssr",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "type": "module",
   "files": [
     "dist",
