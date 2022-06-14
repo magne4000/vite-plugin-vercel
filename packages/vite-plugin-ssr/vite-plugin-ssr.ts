@@ -221,7 +221,17 @@ export async function getSsrEndpoint(
   };
 }
 
-export function vitePluginSsrVercelPlugin(): Plugin {
+export interface Options {
+  /**
+   * Path regex to catch SSR routes. This route is inserted last, just before error routes.
+   * Capturing parenthesis are mandatory and MUST contain the whole path.
+   * Defaults to `^((?!/api).*)$`
+   * @protected
+   */
+  ssrRoute?: string;
+}
+
+export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
   return {
     name: libName,
     apply: 'build',
@@ -242,7 +252,7 @@ export function vitePluginSsrVercelPlugin(): Plugin {
           config: {
             routes: [
               {
-                src: '(/.*)',
+                src: options.ssrRoute ?? '^((?!/api).*)$',
                 dest: `/${rendererDestination}/?__original_path=$1`,
               },
             ],
@@ -346,6 +356,6 @@ function setProductionEnvVar() {
   env['NODE_ENV'] = 'production';
 }
 
-export default function allPlugins(): Plugin[] {
-  return [vitePluginSsrVercelIsrPlugin(), vitePluginSsrVercelPlugin()];
+export default function allPlugins(options: Options = {}): Plugin[] {
+  return [vitePluginSsrVercelIsrPlugin(), vitePluginSsrVercelPlugin(options)];
 }

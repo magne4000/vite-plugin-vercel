@@ -40,7 +40,7 @@ prepareTestJsonFileContent(
           ),
           src: '(/named/([^/]+?)(?:\\.pageContext\\.json)?)',
         },
-        { dest: '/ssr_/?__original_path=$1', src: '(/.*)' },
+        { dest: '/ssr_/?__original_path=$1', src: '^((?!/api).*)$' },
       ]);
       expect(context.file).toHaveProperty('overrides', {
         'test.html': {
