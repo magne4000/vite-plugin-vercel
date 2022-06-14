@@ -263,6 +263,15 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
       return {
         vercel: {
           isr: async () => {
+            let userIsr: Record<string, VercelOutputIsr> = {};
+            if (userConfig.vercel?.isr) {
+              if (typeof userConfig.vercel.isr === 'function') {
+                userIsr = await userConfig.vercel.isr();
+              } else {
+                userIsr = userConfig.vercel.isr;
+              }
+            }
+
             setProductionEnvVar();
             setSsrEnv({
               isProduction: true,
@@ -322,7 +331,7 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
                     : undefined,
                 };
                 return acc;
-              }, {} as Record<string, VercelOutputIsr>);
+              }, userIsr);
           },
         },
       };
