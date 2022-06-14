@@ -4,6 +4,8 @@ import { copyDir, getOutDir, getOutput } from './utils';
 import { writeConfig } from './config';
 import { buildEndpoints } from './build';
 import { buildPrerenderConfigs, execPrerender } from './prerender';
+import path from 'path';
+import type { ViteVercelPrerenderRoute } from './types';
 
 export * from './types';
 
@@ -39,6 +41,9 @@ function vercelPlugin(): Plugin {
     async writeBundle() {
       if (!resolvedConfig.build?.ssr) return;
 
+      // step 2.2:	Compute overrides for static HTML files
+      const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
+
       // step 3:		Server side built by vite-plugin-ssr
       // step 3.1:	Execute vite-plugin-ssr prerender
       const overrides = await execPrerender(resolvedConfig);
@@ -52,7 +57,10 @@ function vercelPlugin(): Plugin {
       // step 3.4:	Generate config file
       await writeConfig(resolvedConfig, {
         routes: [{ handle: 'filesystem' }, ...rewrites],
-        overrides,
+        overrides: {
+          ...userOverrides,
+          ...overrides,
+        },
       });
     },
   };
@@ -70,6 +78,40 @@ async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
     recursive: true,
     force: true,
   });
+}
+
+async function computeStaticHtmlOverrides(
+  resolvedConfig: ResolvedConfig,
+): Promise<NonNullable<ViteVercelPrerenderRoute>> {
+  const staticAbsolutePath = getOutput(resolvedConfig, 'static');
+  const files = await getStaticHtmlFiles(resolvedConfig, staticAbsolutePath);
+
+  return files.reduce((acc, curr) => {
+    const relPath = path.relative(staticAbsolutePath, curr);
+    const parsed = path.parse(relPath);
+    const pathJoined = path.join(parsed.dir, parsed.name);
+    acc[relPath] = {
+      path: pathJoined,
+    };
+    return acc;
+  }, {} as NonNullable<ViteVercelPrerenderRoute>);
+}
+
+async function getStaticHtmlFiles(resolvedConfig: ResolvedConfig, src: string) {
+  const entries = await fs.readdir(src, { withFileTypes: true });
+  const htmlFiles: string[] = [];
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+
+    entry.isDirectory()
+      ? htmlFiles.push(...(await getStaticHtmlFiles(resolvedConfig, srcPath)))
+      : srcPath.endsWith('.html')
+      ? htmlFiles.push(srcPath)
+      : undefined;
+  }
+
+  return htmlFiles;
 }
 
 function allPlugins(): Plugin[] {

@@ -6,9 +6,11 @@ import {
   vercelOutputPrerenderConfigSchema,
 } from './schemas/config/prerender-config';
 import fs from 'fs/promises';
-import { VercelOutputIsr } from './types';
+import type { VercelOutputIsr, ViteVercelPrerenderRoute } from './types';
 
-export function execPrerender(resolvedConfig: ResolvedConfig) {
+export function execPrerender(
+  resolvedConfig: ResolvedConfig,
+): ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute> {
   const prerender = resolvedConfig.vercel?.prerender;
 
   if (prerender === false) {
