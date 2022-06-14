@@ -228,7 +228,10 @@ export interface Options {
    * Defaults to `^((?!/api).*)$`
    * @protected
    */
-  ssrRoute?: string;
+  route?: {
+    src?: string;
+    check?: boolean;
+  };
 }
 
 export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
@@ -252,8 +255,9 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
           config: {
             routes: [
               {
-                src: options.ssrRoute ?? '^((?!/api).*)$',
+                src: options.route?.src ?? '^((?!/api).*)$',
                 dest: `/${rendererDestination}/?__original_path=$1`,
+                check: options.route?.check,
               },
             ],
           },
