@@ -11,7 +11,8 @@ import fs from 'fs/promises';
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
     ...e,
-    destination: e.destination + '.func',
+    // path.resolve removes the trailing slash if any
+    destination: path.resolve(e.destination) + '.func',
   }));
 }
 
@@ -23,18 +24,27 @@ export function getEntries(
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith('_'));
 
-  return apiEntries.reduce((entryPoints, filePath) => {
+  if (apiEntries.length > 0) {
+    console.warn(
+      '@vercel/build is currently force building /api files itself, with no way to disable it. ' +
+        'In order to avoid double compilation, you should temporarily rename /api to /_api while using this plugin. ' +
+        '/_api functions are compiled under .vercel/output/functions/api/*.func as if they were in /api.',
+    );
+  }
+
+  const otherApiEntries = glob
+    .sync(`${getRoot(resolvedConfig)}/_api/**/*.*([a-zA-Z0-9])`)
+    // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
+    .filter((filepath) => !path.basename(filepath).startsWith('_'));
+
+  return [...apiEntries, ...otherApiEntries].reduce((entryPoints, filePath) => {
     const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
     const parsed = path.parse(outFilePath);
 
-    // `rewrites` in routes-manifest also rewrites the url for non `/api` pages.
-    // So to ensure urls are kept for ssr pages, `/api` endpoint must be built
-    const entry = {
+    entryPoints.push({
       source: filePath,
       destination: `api/${path.posix.join(parsed.dir, parsed.name)}.func`,
-    };
-
-    entryPoints.push(entry);
+    });
 
     return entryPoints;
   }, getAdditionalEndpoints(resolvedConfig));
