@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.1.3
+
+### Patch Changes
+
+- Support rewrites/redirects options (prefered over config.routes)
+
 ## 0.1.2
 
 ### Patch Changes

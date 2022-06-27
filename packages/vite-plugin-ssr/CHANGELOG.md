@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.0.8
+
+### Patch Changes
+
+- Support rewrites/redirects options (prefered over config.routes)
+
 ## 0.0.7
 
 ### Patch Changes
