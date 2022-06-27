@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.0.9
+
+### Patch Changes
+
+- Fix duplicate route entries
+
 ## 0.0.8
 
 ### Patch Changes
