@@ -11,6 +11,13 @@ export type {
   VercelOutputPrerenderConfig,
 };
 
+export type ViteVercelRewrite = NonNullable<
+  VercelConfig['rewrites']
+>[number] & { enforce?: 'pre' | 'post' };
+export type ViteVercelRedirect = NonNullable<
+  VercelConfig['redirects']
+>[number] & { enforce?: 'pre' | 'post' };
+
 // Vite config for Vercel
 
 export interface ViteVercelConfig {
@@ -52,8 +59,8 @@ export interface ViteVercelConfig {
    * }
    * ```
    */
-  rewrites?: VercelConfig['rewrites'];
-  redirects?: VercelConfig['redirects'];
+  rewrites?: ViteVercelRewrite[];
+  redirects?: ViteVercelRedirect[];
   cleanUrls?: VercelConfig['cleanUrls'];
   trailingSlash?: VercelConfig['trailingSlash'];
   additionalEndpoints?: ViteVercelApiEntry[];

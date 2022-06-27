@@ -224,15 +224,12 @@ export async function getSsrEndpoint(
 
 export interface Options {
   /**
-   * Path regex to catch SSR routes. This route is inserted last, just before error routes.
-   * Capturing parenthesis are mandatory and MUST contain the whole path.
-   * Defaults to `^((?!/api).*)$`
-   * @protected
+   * A pattern that matches each incoming pathname that should be caught by vite-plugin-ssr.
+   * As this rule is inserted last, a simple catch-all rule excluding /api/* should be enough.
+   * Defaults to `(?!/api).*`
+   * @see {@link https://vercel.com/docs/project-configuration#project-configuration/rewrites}
    */
-  route?: {
-    src?: string;
-    check?: boolean;
-  };
+  source?: string;
 }
 
 export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
@@ -249,19 +246,18 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
             await getSsrEndpoint(userConfig),
           ];
 
+      const rewrites = userConfig.vercel?.rewrites ?? [];
+      rewrites.push({
+        source: options.source ? `(${options.source})` : '((?!/api).*)',
+        destination: `/${rendererDestination}/?__original_path=$1`,
+        enforce: 'post',
+      });
+
       return {
         vercel: {
           prerender: userConfig.vercel?.prerender ?? prerender,
           additionalEndpoints,
-          config: {
-            routes: [
-              {
-                src: options.route?.src ?? '^((?!/api).*)$',
-                dest: `/${rendererDestination}/?__original_path=$1`,
-                check: options.route?.check,
-              },
-            ],
-          },
+          rewrites,
         },
       };
     },

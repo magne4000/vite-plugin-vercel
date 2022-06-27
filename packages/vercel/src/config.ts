@@ -7,22 +7,35 @@ import {
 } from './schemas/config/config';
 import fs from 'fs/promises';
 import { getTransformedRoutes, VercelConfig } from '@vercel/routing-utils';
+import { ViteVercelRewrite } from './types';
+
+function reorderEnforce<T extends { enforce?: 'pre' | 'post' }>(arr: T[]) {
+  return [
+    ...arr.filter((r) => r.enforce === 'pre'),
+    ...arr.filter((r) => !r.enforce),
+    ...arr.filter((r) => r.enforce === 'post'),
+  ];
+}
 
 export function getConfig(
   resolvedConfig: ResolvedConfig,
-  rewrites?: VercelConfig['rewrites'],
+  rewrites?: ViteVercelRewrite[],
   overrides?: VercelOutputConfig['overrides'],
 ): VercelOutputConfig {
+  const _rewrites: ViteVercelRewrite[] = [
+    // User provided config always comes first
+    ...(resolvedConfig.vercel?.rewrites ?? []),
+    ...(rewrites ?? []),
+  ];
+
   const { routes, error } = getTransformedRoutes({
     nowConfig: {
       cleanUrls: resolvedConfig.vercel?.cleanUrls ?? true,
       trailingSlash: resolvedConfig.vercel?.trailingSlash,
-      rewrites: [
-        // User provided config always comes first
-        ...(resolvedConfig.vercel?.rewrites ?? []),
-        ...(rewrites ?? []),
-      ],
-      redirects: resolvedConfig.vercel?.redirects,
+      rewrites: reorderEnforce(_rewrites),
+      redirects: resolvedConfig.vercel?.redirects
+        ? reorderEnforce(resolvedConfig.vercel?.redirects)
+        : undefined,
     },
   });
 
