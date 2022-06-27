@@ -3,6 +3,7 @@ import type { BuildOptions, StdinOptions } from 'esbuild';
 import type { VercelOutputConfig } from './schemas/config/config';
 import type { VercelOutputVcConfig } from './schemas/config/vc-config';
 import type { VercelOutputPrerenderConfig } from './schemas/config/prerender-config';
+import type { VercelConfig } from '@vercel/routing-utils';
 
 export type {
   VercelOutputConfig,
@@ -51,6 +52,10 @@ export interface ViteVercelConfig {
    * }
    * ```
    */
+  rewrites?: VercelConfig['rewrites'];
+  redirects?: VercelConfig['redirects'];
+  cleanUrls?: VercelConfig['cleanUrls'];
+  trailingSlash?: VercelConfig['trailingSlash'];
   additionalEndpoints?: ViteVercelApiEntry[];
   /**
    * Advanced configuration to override .vercel/output/config.json
@@ -116,4 +121,9 @@ export interface ViteVercelApiEntry {
    * Override esbuild options
    */
   buildOptions?: BuildOptions;
+  /**
+   * Automatically add a route for the function (mimics defaults Vercel behavior)
+   * Set to `false` to disable
+   */
+  addRoute?: boolean;
 }

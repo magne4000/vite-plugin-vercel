@@ -26,12 +26,13 @@ export function getOutput(
   );
 }
 
-export function pathRelativeToApi(
+export function pathRelativeTo(
   filePath: string,
   config: UserConfig | ResolvedConfig,
+  rel: string,
 ): string {
   const root = getRoot(config);
-  return normalizePath(path.relative(path.join(root, 'api'), filePath));
+  return normalizePath(path.relative(path.join(root, rel), filePath));
 }
 
 export async function copyDir(src: string, dest: string) {

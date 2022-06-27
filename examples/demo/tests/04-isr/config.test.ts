@@ -22,7 +22,17 @@ prepareTestJsonFileContent(
           status: 308,
         },
         { handle: 'filesystem' },
-        { dest: 'page1/?__original_path=$1', src: '(/page1)' },
+        {
+          check: true,
+          src: '^/api/page$',
+          dest: '/api/page',
+        },
+        {
+          check: true,
+          src: '^/api/post$',
+          dest: '/api/post',
+        },
+        { check: true, dest: 'page1/?__original_path=$1', src: '^(/page1)$' },
       ]);
       expect(context.file).toHaveProperty('overrides', {
         'test.html': {

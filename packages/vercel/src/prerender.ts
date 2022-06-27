@@ -7,6 +7,7 @@ import {
 } from './schemas/config/prerender-config';
 import fs from 'fs/promises';
 import type { VercelOutputIsr, ViteVercelPrerenderRoute } from './types';
+import type { VercelConfig } from '@vercel/routing-utils';
 
 export function execPrerender(
   resolvedConfig: ResolvedConfig,
@@ -79,11 +80,11 @@ export function getPrerenderSymlinkInfo(
 
 export async function buildPrerenderConfigs(
   resolvedConfig: ResolvedConfig,
-): Promise<{ src: string; dest: string }[]> {
+): Promise<NonNullable<VercelConfig['rewrites']>> {
   const isr = await getIsrConfig(resolvedConfig);
 
   const entries = Object.entries(isr);
-  const rewrites: { src: string; dest: string }[] = [];
+  const rewrites: VercelConfig['rewrites'] = [];
 
   for (const [destination, { symlink, route, ...isr }] of entries) {
     await writePrerenderConfig(resolvedConfig, destination, isr);
@@ -102,8 +103,8 @@ export async function buildPrerenderConfigs(
     }
     if (route) {
       rewrites.push({
-        src: `(${route})`,
-        dest: `${destination}/?__original_path=$1`,
+        source: `(${route})`,
+        destination: `${destination}/?__original_path=$1`,
       });
     }
   }

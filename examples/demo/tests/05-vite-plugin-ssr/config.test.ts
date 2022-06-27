@@ -23,22 +23,35 @@ prepareTestJsonFileContent(
         },
         { handle: 'filesystem' },
         {
+          check: true,
+          src: '^/api/page$',
+          dest: '/api/page',
+        },
+        {
+          check: true,
+          src: '^/api/post$',
+          dest: '/api/post',
+        },
+        {
+          check: true,
           dest: expect.stringMatching(
             '/pages/catch-all-([^/]+?)/\\?__original_path=\\$1',
           ),
-          src: '(/catch-all/(.+?)(?:\\.pageContext\\.json)?)',
+          src: '^(/catch-all/.+?(?:\\.pageContext\\.json)?)$',
         },
         {
+          check: true,
           dest: expect.stringMatching(
             '/pages/isr-([^/]+?)/\\?__original_path=\\$1',
           ),
-          src: '(/isr(?:\\.pageContext\\.json)?)',
+          src: '^(/isr(?:\\.pageContext\\.json)?)$',
         },
         {
+          check: true,
           dest: expect.stringMatching(
             '/pages/named-([^/]+?)/\\?__original_path=\\$1',
           ),
-          src: '(/named/([^/]+?)(?:\\.pageContext\\.json)?)',
+          src: '^(/named/[^/]+(?:\\.pageContext\\.json)?)$',
         },
         { dest: '/ssr_/?__original_path=$1', src: '^((?!/api).*)$' },
       ]);

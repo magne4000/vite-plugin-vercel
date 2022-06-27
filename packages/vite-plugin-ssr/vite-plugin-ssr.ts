@@ -218,6 +218,7 @@ export async function getSsrEndpoint(
       resolveDir,
     },
     destination: rendererDestination,
+    addRoute: false,
   };
 }
 

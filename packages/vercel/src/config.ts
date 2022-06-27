@@ -6,29 +6,50 @@ import {
   vercelOutputConfigSchema,
 } from './schemas/config/config';
 import fs from 'fs/promises';
-import { getTransformedRoutes } from '@vercel/routing-utils';
+import { getTransformedRoutes, VercelConfig } from '@vercel/routing-utils';
 
 export function getConfig(
   resolvedConfig: ResolvedConfig,
-  config?: Partial<VercelOutputConfig>,
+  rewrites?: VercelConfig['rewrites'],
+  overrides?: VercelOutputConfig['overrides'],
 ): VercelOutputConfig {
-  const { routes } = getTransformedRoutes({
+  const { routes, error } = getTransformedRoutes({
     nowConfig: {
-      cleanUrls: true,
+      cleanUrls: resolvedConfig.vercel?.cleanUrls ?? true,
+      trailingSlash: resolvedConfig.vercel?.trailingSlash,
+      rewrites: [
+        // User provided config always comes first
+        ...(resolvedConfig.vercel?.rewrites ?? []),
+        ...(rewrites ?? []),
+      ],
+      redirects: resolvedConfig.vercel?.redirects,
     },
   });
+
+  if (error) {
+    throw error;
+  }
+
+  if (
+    resolvedConfig.vercel?.config?.routes &&
+    resolvedConfig.vercel.config.routes.length > 0
+  ) {
+    console.warn(
+      'It is discouraged to use `vercel.config.routes` to override routes. ' +
+        'Prefer using `vercel.rewrites` and `vercel.redirects`.',
+    );
+  }
 
   return vercelOutputConfigSchema.parse({
     version: 3,
     ...resolvedConfig.vercel?.config,
     routes: [
       ...(routes ?? []),
-      ...(config?.routes ?? []),
       ...(resolvedConfig.vercel?.config?.routes ?? []),
     ],
     overrides: {
       ...resolvedConfig.vercel?.config?.overrides,
-      ...config?.overrides,
+      ...overrides,
     },
   });
 }
@@ -39,11 +60,16 @@ export function getConfigDestination(resolvedConfig: ResolvedConfig) {
 
 export async function writeConfig(
   resolvedConfig: ResolvedConfig,
-  config?: Partial<VercelOutputConfig>,
+  rewrites?: VercelConfig['rewrites'],
+  overrides?: VercelOutputConfig['overrides'],
 ): Promise<void> {
   await fs.writeFile(
     getConfigDestination(resolvedConfig),
-    JSON.stringify(getConfig(resolvedConfig, config), undefined, 2),
+    JSON.stringify(
+      getConfig(resolvedConfig, rewrites, overrides),
+      undefined,
+      2,
+    ),
     'utf-8',
   );
 }

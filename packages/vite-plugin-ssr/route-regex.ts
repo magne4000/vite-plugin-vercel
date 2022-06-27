@@ -4,11 +4,11 @@ export function escapeStringRegexp(str: string) {
 
 function getSegmentRegex(segment: string): string {
   if (segment.startsWith(':')) {
-    return '/([^/]+?)';
+    return '/[^/]+';
   } else if (segment === '*') {
-    return '/(.+?)';
+    return '/.+?';
   }
-  return `/${escapeStringRegexp(segment)}`;
+  return `/` + segment;
 }
 
 export function getParametrizedRoute(route: string): string {

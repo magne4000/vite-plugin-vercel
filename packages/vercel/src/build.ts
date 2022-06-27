@@ -1,18 +1,20 @@
 import { ResolvedConfig } from 'vite';
 import glob from 'fast-glob';
 import path from 'path';
-import { getOutput, getRoot, pathRelativeToApi } from './utils';
+import { getOutput, getRoot, pathRelativeTo } from './utils';
 import { build, BuildOptions } from 'esbuild';
 import { ViteVercelApiEntry } from './types';
 import { assert } from './assert';
 import { vercelOutputVcConfigSchema } from './schemas/config/vc-config';
 import fs from 'fs/promises';
+import { VercelConfig } from '@vercel/routing-utils';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
     ...e,
+    addRoute: e.addRoute ?? true,
     // path.resolve removes the trailing slash if any
-    destination: path.resolve(e.destination) + '.func',
+    destination: path.resolve('/', e.destination) + '.func',
   }));
 }
 
@@ -38,12 +40,17 @@ export function getEntries(
     .filter((filepath) => !path.basename(filepath).startsWith('_'));
 
   return [...apiEntries, ...otherApiEntries].reduce((entryPoints, filePath) => {
-    const outFilePath = pathRelativeToApi(filePath, resolvedConfig);
+    const outFilePath = pathRelativeTo(
+      filePath,
+      resolvedConfig,
+      filePath.includes('/_api/') ? '_api' : 'api',
+    );
     const parsed = path.parse(outFilePath);
 
     entryPoints.push({
       source: filePath,
       destination: `api/${path.posix.join(parsed.dir, parsed.name)}.func`,
+      addRoute: true,
     });
 
     return entryPoints;
@@ -130,12 +137,27 @@ export async function writeVcConfig(
   );
 }
 
+function getSourceAndDestination(destination: string) {
+  if (destination.startsWith('api/')) {
+    return path.posix.resolve('/', destination);
+  }
+  return path.posix.resolve('/', destination, ':match*');
+}
+
 export async function buildEndpoints(
   resolvedConfig: ResolvedConfig,
-): Promise<void> {
+): Promise<NonNullable<VercelConfig['rewrites']>> {
   const entries = getEntries(resolvedConfig);
 
   for (const entry of entries) {
     await buildFn(resolvedConfig, entry);
   }
+
+  return entries
+    .filter((e) => e.addRoute !== false)
+    .map((e) => e.destination.replace(/\.func$/, ''))
+    .map((destination) => ({
+      source: getSourceAndDestination(destination),
+      destination: getSourceAndDestination(destination),
+    }));
 }
