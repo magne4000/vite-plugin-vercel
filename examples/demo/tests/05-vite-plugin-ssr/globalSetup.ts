@@ -12,6 +12,7 @@ export const setup = _setup(path.basename(__dirname), {
   root: process.cwd(),
   plugins: [react(), ssr(), vercel(), vitePluginSsrVercelPlugin()],
   vercel: {
+    rewrites: [],
     expiration: 25,
   },
   build: {

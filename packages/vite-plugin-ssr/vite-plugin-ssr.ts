@@ -246,18 +246,17 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
             await getSsrEndpoint(userConfig),
           ];
 
-      const rewrites = userConfig.vercel?.rewrites ?? [];
-      rewrites.push({
-        source: options.source ? `(${options.source})` : '((?!/api).*)',
-        destination: `/${rendererDestination}/?__original_path=$1`,
-        enforce: 'post',
-      });
-
       return {
         vercel: {
           prerender: userConfig.vercel?.prerender ?? prerender,
           additionalEndpoints,
-          rewrites,
+          rewrites: [
+            {
+              source: options.source ? `(${options.source})` : '((?!/api).*)',
+              destination: `/${rendererDestination}/?__original_path=$1`,
+              enforce: 'post',
+            },
+          ],
         },
       };
     },
