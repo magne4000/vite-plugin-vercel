@@ -28,18 +28,17 @@ function vercelPlugin(): Plugin {
           'Missing ENABLE_VC_BUILD=1 to your environment variables in your project settings',
         );
       }
-
-      if (!resolvedConfig.build.ssr) {
-        // step 1:	Clean .vercel/ouput dir
-        await cleanOutputDirectory(resolvedConfig);
-      } else {
-        // step 2:		Client side built by vite-plugin-ssr
-        // step 2.1:	Copy dist/client to .vercel/output/static
-        await copyDistClientToOutputStatic(resolvedConfig);
-      }
     },
     async writeBundle() {
-      if (!resolvedConfig.build?.ssr) return;
+      // step 1:	Clean .vercel/ouput dir
+      await cleanOutputDirectory(resolvedConfig);
+
+      // step 2:		Client side built by vite-plugin-ssr
+      // step 2.1:	Copy dist/client to .vercel/output/static
+      // FIXME mode to packages/vite-plugin-ssr
+      // await copyDistClientToOutputStatic(resolvedConfig);
+
+      // if (!resolvedConfig.build?.ssr) return;
 
       // step 2.2:	Compute overrides for static HTML files
       const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
@@ -63,6 +62,7 @@ function vercelPlugin(): Plugin {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
   await copyDir(
     getOutDir(resolvedConfig, 'client'),
@@ -95,6 +95,12 @@ async function computeStaticHtmlOverrides(
 }
 
 async function getStaticHtmlFiles(resolvedConfig: ResolvedConfig, src: string) {
+  try {
+    await fs.stat(src);
+  } catch (e) {
+    return [];
+  }
+
   const entries = await fs.readdir(src, { withFileTypes: true });
   const htmlFiles: string[] = [];
 

@@ -11,5 +11,8 @@ export default defineConfig(async () => {
     vercel: {
       expiration: 25,
     },
+    server: {
+      port: 3000,
+    },
   };
 });

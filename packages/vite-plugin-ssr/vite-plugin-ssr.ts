@@ -1,21 +1,27 @@
 import './hack';
-import { prerender as prerenderCli } from 'vite-plugin-ssr/cli';
+import { prerender as prerenderCli } from 'vite-plugin-ssr/prerender';
 import fs from 'fs/promises';
 import path from 'path';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
 import type { PageContextBuiltIn } from 'vite-plugin-ssr';
 import type {
+  VercelOutputIsr,
   ViteVercelApiEntry,
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
-  VercelOutputIsr,
 } from 'vite-plugin-vercel';
-import type { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
-import type { PageRoutes } from 'vite-plugin-ssr/dist/cjs/shared/route/loadPageRoutes';
 import './node_modules/vite-plugin-ssr/dist/cjs/node/page-files/setup';
-import { getGlobalContext } from './node_modules/vite-plugin-ssr/dist/cjs/node/renderPage';
-import { setSsrEnv } from './node_modules/vite-plugin-ssr/dist/cjs/node/ssrEnv';
-import { findPageFile } from './node_modules/vite-plugin-ssr/dist/cjs/shared/getPageFiles';
+import type { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/globalContext';
+import {
+  loadPageRoutes,
+  type PageRoutes,
+} from './node_modules/vite-plugin-ssr/dist/cjs/shared/route/loadPageRoutes';
+import { getGlobalContext } from './node_modules/vite-plugin-ssr/dist/cjs/node/globalContext';
+import { route } from './node_modules/vite-plugin-ssr/dist/cjs/shared/route';
+import {
+  getPageFilesAllServerSide,
+  type PageFile,
+} from './node_modules/vite-plugin-ssr/dist/cjs/shared/getPageFiles';
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
 import { newError } from '@brillout/libassert';
@@ -35,14 +41,21 @@ export function assert(
   throw err;
 }
 
-interface PageContext extends PageContextBuiltIn, GlobalContext {
+interface MissingPageContextOverrides {
   _prerenderResult: {
     filePath: string;
     fileContent: string;
   };
   _pageId: string;
   is404?: boolean;
+  _urlProcessor: (url: string) => string;
+  _pageFilesAll: PageFile[];
+  _allPageIds: string[];
 }
+
+type PageContext = PageContextBuiltIn &
+  GlobalContext &
+  MissingPageContextOverrides;
 
 export function getRoot(config: UserConfig | ResolvedConfig): string {
   return normalizePath(config.root || process.cwd());
@@ -70,11 +83,11 @@ export function getOutDir(
 
 function assertIsr(
   resolvedConfig: UserConfig | ResolvedConfig,
-  pageExports: unknown,
+  exports: unknown,
 ): number | null {
-  if (pageExports === null || typeof pageExports !== 'object') return null;
-  if (!('isr' in pageExports)) return null;
-  const isr = (pageExports as { isr: unknown }).isr;
+  if (exports === null || typeof exports !== 'object') return null;
+  if (!('isr' in exports)) return null;
+  const isr = (exports as { isr: unknown }).isr;
 
   assert(
     typeof isr === 'boolean' ||
@@ -111,23 +124,37 @@ export const prerender: ViteVercelPrerenderFn = async (
   const routes: ViteVercelPrerenderRoute = {};
 
   await prerenderCli({
-    root: getRoot(resolvedConfig),
-    noExtraDir: true,
-    async onPagePrerender(pageContext: PageContext) {
-      const isr = assertIsr(resolvedConfig, pageContext.pageExports);
+    viteConfig: {
+      root: getRoot(resolvedConfig),
+      vitePluginSsr: {
+        noExtraDir: true,
+      },
+    } as any,
 
-      const route = pageContext._pageRoutes.find(
-        (r) => r.pageId === pageContext._pageId,
-      );
+    async onPagePrerender(pageContext: PageContext) {
+      const isr = assertIsr(resolvedConfig, pageContext.exports);
+
+      // bypass these check https://github.com/brillout/vite-plugin-ssr/blob/dcc91ac31824ca3240c107380789209d52d0dff9/vite-plugin-ssr/shared/addComputedUrlProps.ts#L25
+      delete (pageContext as any).urlPathname;
+      delete (pageContext as any).urlParsed;
+
+      const foundRoute = await route(pageContext);
+
+      if ('hookError' in foundRoute) {
+        throw foundRoute.hookError;
+      }
 
       if (!pageContext.is404) {
-        assert(route, `Page with id ${pageContext._pageId} not found`);
+        assert(foundRoute, `Page with id ${pageContext._pageId} not found`);
+        const routeMatch = foundRoute.pageContextAddendum._routeMatches?.[0];
 
         // if ISR + Filesystem routing -> ISR prevails
         if (
           !pageContext.is404 &&
           typeof isr === 'number' &&
-          !route.pageRouteFile
+          routeMatch &&
+          typeof routeMatch !== 'string' &&
+          routeMatch.routeType === 'FILESYSTEM'
         )
           return;
       }
@@ -190,21 +217,11 @@ export async function getSsrEndpoint(
   const sourcefile =
     source ?? path.join(__dirname, '..', 'templates', 'ssr_.template.ts');
   const contents = await fs.readFile(sourcefile, 'utf-8');
-
-  const importBuildPath = path.join(
-    getRoot(userConfig),
-    userConfig.build?.outDir ?? 'dist/server',
-    'importBuild',
-  );
   const resolveDir = path.dirname(sourcefile);
-  const relativeImportBuildPath = path.posix.relative(
-    resolveDir,
-    importBuildPath,
-  );
 
   return {
     source: {
-      contents: `import '${relativeImportBuildPath}';\n` + contents,
+      contents: contents,
       sourcefile,
       loader: sourcefile.endsWith('.ts')
         ? 'ts'
@@ -263,13 +280,17 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
   } as Plugin;
 }
 
+function findPageFile(pageId: string, pageFilesAll: PageFile[]) {
+  return pageFilesAll.find(
+    (p) => p.pageId === pageId && p.fileType !== '.page.route',
+  );
+}
+
 export function vitePluginSsrVercelIsrPlugin(): Plugin {
   return {
     name: 'vite-plugin-ssr:vercel-isr',
     apply: 'build',
     async config(userConfig): Promise<UserConfig> {
-      if (!userConfig.build?.ssr) return {};
-
       return {
         vercel: {
           isr: async () => {
@@ -283,31 +304,21 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
             }
 
             setProductionEnvVar();
-            setSsrEnv({
-              isProduction: true,
-              root: process.cwd(),
-              outDir: 'dist',
-              viteDevServer: undefined,
-              baseUrl: '/',
-              baseAssets: null,
+            await getGlobalContext(false);
+            const { pageFilesAll, allPageIds } =
+              await getPageFilesAllServerSide(true);
+            const { pageRoutes } = await loadPageRoutes({
+              _pageFilesAll: pageFilesAll,
+              _allPageIds: allPageIds,
             });
-            const globalContext: GlobalContext = await getGlobalContext();
 
-            const allPages = await Promise.all(
-              globalContext._allPageFiles['.page'].map(async (p) => {
-                return {
-                  filePath: p.filePath,
-                  pageExports: await p.loadFile(),
-                };
-              }),
-            );
+            const pagesWithIsr = allPageIds.map((pageId) => {
+              const page = findPageFile(pageId, pageFilesAll)!;
 
-            const pagesWithIsr = globalContext._allPageIds.map((pageId) => {
-              const page = findPageFile(allPages, pageId)!;
               const route =
-                getRouteDynamicRoute(globalContext._pageRoutes, pageId) ??
-                getRouteFsRoute(globalContext._pageRoutes, pageId);
-              let isr = assertIsr(userConfig, page.pageExports);
+                getRouteDynamicRoute(pageRoutes, pageId) ??
+                getRouteFsRoute(pageRoutes, pageId);
+              let isr = assertIsr(userConfig, page.fileExports);
 
               // if ISR + Function routing -> warn because ISR is not unsupported in this case
               if (typeof route === 'function' && isr) {

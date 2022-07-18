@@ -10,7 +10,17 @@ export const setup = _setup(path.basename(__dirname), {
   configFile: false,
   mode: 'production',
   root: process.cwd(),
-  plugins: [react(), ssr(), vercel(), vitePluginSsrVercelPlugin()],
+  plugins: [
+    react(),
+    ssr({
+      prerender: {
+        disableAutoRun: true,
+      },
+      // disableAutoFullBuild: true,
+    }),
+    vercel(),
+    vitePluginSsrVercelPlugin(),
+  ],
   vercel: {
     rewrites: [],
     expiration: 25,

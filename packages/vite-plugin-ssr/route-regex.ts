@@ -3,7 +3,7 @@ export function escapeStringRegexp(str: string) {
 }
 
 function getSegmentRegex(segment: string): string {
-  if (segment.startsWith(':')) {
+  if (segment.startsWith('@')) {
     return '/[^/]+';
   } else if (segment === '*') {
     return '/.+?';

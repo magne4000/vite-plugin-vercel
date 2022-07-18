@@ -33,8 +33,8 @@
     "nanoid": "^3.3.4",
     "tsup": "^6.1.3",
     "typescript": "^4.7.4",
-    "vite": "^2.9.14",
-    "vite-plugin-ssr": "^0.3.64",
+    "vite": "^3.0.1",
+    "vite-plugin-ssr": "^0.4.9",
     "vite-plugin-vercel": "workspace:*"
   },
   "license": "MIT"

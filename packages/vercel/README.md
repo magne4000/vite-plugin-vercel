@@ -53,9 +53,6 @@ import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
 export default defineConfig(async ({ command, mode }) => {
   return {
     plugins: [ssr(), vercel(), vercelSsr()],
-    build: {
-      polyfillDynamicImport: false,
-    },
     vercel: {
       // Tweak what you need, check TS definition for details
     },

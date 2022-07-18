@@ -16,29 +16,13 @@ export async function callBuild(dirname: string, config: InlineConfig) {
       outDir: tmpdir,
     },
     build: {
-      outDir: tmpdir + '/_ignore/client',
+      ...config.build,
+      outDir: tmpdir + '/_ignore',
       rollupOptions: {
         input: {
           'index.html': 'tests/common/index.html',
         },
       },
-      ...config.build,
-    },
-    logLevel: 'info',
-  });
-  await build({
-    ...config,
-    vercel: {
-      ...config.vercel,
-      outDir: getTmpDir(dirname),
-    },
-    build: {
-      outDir: tmpdir + '/_ignore/server',
-      rollupOptions: {
-        input: 'tests/common/index.ts',
-      },
-      ssr: true,
-      ...config.build,
     },
     logLevel: 'info',
   });

@@ -49,7 +49,6 @@ export function prepareTestJsonFileContent<T extends TestContext>(
   file: string,
   callback: (context: T) => void,
 ) {
-  const filesContent: Record<string, string> = {};
   const context = {
     file: undefined,
   } as T;
