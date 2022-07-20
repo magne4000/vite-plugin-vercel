@@ -10,18 +10,16 @@ import type {
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from 'vite-plugin-vercel';
-import './node_modules/vite-plugin-ssr/dist/cjs/node/page-files/setup';
-import type { GlobalContext } from 'vite-plugin-ssr/dist/cjs/node/globalContext';
+import 'vite-plugin-ssr/page-files/setup';
 import {
   loadPageRoutes,
   type PageRoutes,
-} from './node_modules/vite-plugin-ssr/dist/cjs/shared/route/loadPageRoutes';
-import { getGlobalContext } from './node_modules/vite-plugin-ssr/dist/cjs/node/globalContext';
-import { route } from './node_modules/vite-plugin-ssr/dist/cjs/shared/route';
+  route,
+} from 'vite-plugin-ssr/shared/route';
 import {
   getPageFilesAllServerSide,
   type PageFile,
-} from './node_modules/vite-plugin-ssr/dist/cjs/shared/getPageFiles';
+} from 'vite-plugin-ssr/shared/getPageFiles';
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
 import { newError } from '@brillout/libassert';
@@ -47,15 +45,14 @@ interface MissingPageContextOverrides {
     fileContent: string;
   };
   _pageId: string;
+  _baseUrl: string;
   is404?: boolean;
   _urlProcessor: (url: string) => string;
   _pageFilesAll: PageFile[];
   _allPageIds: string[];
 }
 
-type PageContext = PageContextBuiltIn &
-  GlobalContext &
-  MissingPageContextOverrides;
+type PageContext = PageContextBuiltIn & MissingPageContextOverrides;
 
 export function getRoot(config: UserConfig | ResolvedConfig): string {
   return normalizePath(config.root || process.cwd());
@@ -304,7 +301,6 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
             }
 
             setProductionEnvVar();
-            await getGlobalContext(false);
             const { pageFilesAll, allPageIds } =
               await getPageFilesAllServerSide(true);
             const { pageRoutes } = await loadPageRoutes({
