@@ -79,6 +79,20 @@ export function getOutDir(
   return path.join(path.dirname(p), force);
 }
 
+async function copyDir(src: string, dest: string) {
+  await fs.mkdir(dest, { recursive: true });
+  const entries = await fs.readdir(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    entry.isDirectory()
+      ? await copyDir(srcPath, destPath)
+      : await fs.copyFile(srcPath, destPath);
+  }
+}
+
 function assertIsr(
   resolvedConfig: UserConfig | ResolvedConfig,
   exports: unknown,
@@ -363,6 +377,30 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
   } as Plugin;
 }
 
+export function vitePluginSsrVercelCopyStaticAssetsPlugins(): Plugin {
+  let resolvedConfig: ResolvedConfig;
+
+  return {
+    apply: 'build',
+    name: 'vite-plugin-ssr:vercel-copy-static-assets',
+    enforce: 'post',
+    configResolved(config) {
+      resolvedConfig = config;
+    },
+    async writeBundle() {
+      if (!resolvedConfig.build?.ssr) return;
+      await copyDistClientToOutputStatic(resolvedConfig);
+    },
+  };
+}
+
+async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
+  await copyDir(
+    getOutDir(resolvedConfig, 'client'),
+    getOutput(resolvedConfig, 'static'),
+  );
+}
+
 function setProductionEnvVar() {
   // The statement `process.env['NODE_ENV'] = 'production'` chokes webpack v4 (which Cloudflare Workers uses)
   const proc = process;
@@ -371,5 +409,9 @@ function setProductionEnvVar() {
 }
 
 export default function allPlugins(options: Options = {}): Plugin[] {
-  return [vitePluginSsrVercelIsrPlugin(), vitePluginSsrVercelPlugin(options)];
+  return [
+    vitePluginSsrVercelIsrPlugin(),
+    vitePluginSsrVercelPlugin(options),
+    vitePluginSsrVercelCopyStaticAssetsPlugins(),
+  ];
 }

@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import type { Plugin, ResolvedConfig } from 'vite';
-import { copyDir, getOutDir, getOutput } from './utils';
+import { getOutput } from './utils';
 import { writeConfig } from './config';
 import { buildEndpoints } from './build';
 import { buildPrerenderConfigs, execPrerender } from './prerender';
@@ -30,20 +30,13 @@ function vercelPlugin(): Plugin {
       }
     },
     async writeBundle() {
-      // wait for vite-plugin-ssr second build step with `ssr` flag
-      if (!resolvedConfig.build?.ssr) return;
-
-      // step 1:	Clean .vercel/ouput dir
-      await cleanOutputDirectory(resolvedConfig);
-
-      // step 2:		Client side built by vite-plugin-ssr
-      // step 2.1:	Copy dist/client to .vercel/output/static
-      // FIXME mode to packages/vite-plugin-ssr
-      // await copyDistClientToOutputStatic(resolvedConfig);
-
-      // if (!resolvedConfig.build?.ssr) return;
-
-      // step 2.2:	Compute overrides for static HTML files
+      if (!resolvedConfig.build?.ssr) {
+        // step 1:	Clean .vercel/ouput dir
+        await cleanOutputDirectory(resolvedConfig);
+        return;
+      }
+      // step 2:    Wait for vite-plugin-ssr second build step with `ssr` flag
+      // step 2.1:	Compute overrides for static HTML files
       const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
 
       // step 3:		Server side built by vite-plugin-ssr
@@ -63,14 +56,6 @@ function vercelPlugin(): Plugin {
       });
     },
   };
-}
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
-  await copyDir(
-    getOutDir(resolvedConfig, 'client'),
-    getOutput(resolvedConfig, 'static'),
-  );
 }
 
 async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
