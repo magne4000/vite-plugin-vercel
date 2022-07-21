@@ -10,20 +10,16 @@ import type {
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from 'vite-plugin-vercel';
-import 'vite-plugin-ssr/page-files/setup';
+import 'vite-plugin-ssr/__internal/setup';
 import {
-  loadPageRoutes,
-  type PageRoutes,
   route,
-} from 'vite-plugin-ssr/shared/route';
-import {
-  getPageFilesAllServerSide,
-  type PageFile,
-} from 'vite-plugin-ssr/shared/getPageFiles';
+  getPagesAndRoutes,
+  PageFile,
+  PageRoutes,
+} from 'vite-plugin-ssr/__internal';
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
 import { newError } from '@brillout/libassert';
-import { getGlobalContext } from 'vite-plugin-ssr/dist/cjs/node/globalContext';
 
 const libName = 'vite-plugin-ssr:vercel';
 const rendererDestination = 'ssr_';
@@ -318,43 +314,44 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
               }
             }
 
-            setProductionEnvVar();
-            await getGlobalContext(true);
-            const { pageFilesAll, allPageIds } =
-              await getPageFilesAllServerSide(true);
-            const { pageRoutes } = await loadPageRoutes({
-              _pageFilesAll: pageFilesAll,
-              _allPageIds: allPageIds,
-            });
+            const { pageFilesAll, allPageIds, pageRoutes } =
+              await getPagesAndRoutes();
 
             await Promise.all(pageFilesAll.map((p) => p.loadFile?.()));
 
-            const pagesWithIsr = allPageIds.map((pageId) => {
-              const page = findPageFile(pageId, pageFilesAll)!;
+            const pagesWithIsr = await Promise.all(
+              allPageIds.map(async (pageId) => {
+                const page = await findPageFile(pageId, pageFilesAll);
 
-              const route =
-                getRouteDynamicRoute(pageRoutes, pageId) ??
-                getRouteFsRoute(pageRoutes, pageId);
-              let isr = assertIsr(userConfig, page.fileExports);
-
-              // if ISR + Function routing -> warn because ISR is not unsupported in this case
-              if (typeof route === 'function' && isr) {
-                console.warn(
-                  `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` export or use a route string if possible.`,
+                assert(
+                  page,
+                  `Cannot find page ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
                 );
-                isr = null;
-              }
 
-              return {
-                _pageId: pageId,
-                filePath: page.filePath,
-                isr,
-                route:
-                  typeof route === 'string'
-                    ? getParametrizedRoute(route)
-                    : null,
-              };
-            });
+                const route =
+                  getRouteDynamicRoute(pageRoutes, pageId) ??
+                  getRouteFsRoute(pageRoutes, pageId);
+                let isr = assertIsr(userConfig, page.fileExports);
+
+                // if ISR + Function routing -> warn because ISR is not unsupported in this case
+                if (typeof route === 'function' && isr) {
+                  console.warn(
+                    `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` export or use a route string if possible.`,
+                  );
+                  isr = null;
+                }
+
+                return {
+                  _pageId: pageId,
+                  filePath: page.filePath,
+                  isr,
+                  route:
+                    typeof route === 'string'
+                      ? getParametrizedRoute(route)
+                      : null,
+                };
+              }),
+            );
 
             return pagesWithIsr
               .filter((p) => typeof p.isr === 'number')
