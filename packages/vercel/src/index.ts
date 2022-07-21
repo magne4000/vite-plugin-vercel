@@ -30,6 +30,9 @@ function vercelPlugin(): Plugin {
       }
     },
     async writeBundle() {
+      // wait for vite-plugin-ssr second build step with `ssr` flag
+      if (!resolvedConfig.build?.ssr) return;
+
       // step 1:	Clean .vercel/ouput dir
       await cleanOutputDirectory(resolvedConfig);
 

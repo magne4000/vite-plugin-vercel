@@ -23,6 +23,7 @@ import {
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
 import { newError } from '@brillout/libassert';
+import { getGlobalContext } from 'vite-plugin-ssr/dist/cjs/node/globalContext';
 
 const libName = 'vite-plugin-ssr:vercel';
 const rendererDestination = 'ssr_';
@@ -251,6 +252,9 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
     name: libName,
     apply: 'build',
     async config(userConfig): Promise<UserConfig> {
+      // wait for vite-plugin-ssr second build step with `ssr` flag
+      if (!userConfig.build?.ssr) return {};
+
       const additionalEndpoints = userConfig.vercel?.additionalEndpoints
         ?.flatMap((e) => e.destination)
         .some((d) => d === rendererDestination)
@@ -301,12 +305,15 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
             }
 
             setProductionEnvVar();
+            await getGlobalContext(true);
             const { pageFilesAll, allPageIds } =
               await getPageFilesAllServerSide(true);
             const { pageRoutes } = await loadPageRoutes({
               _pageFilesAll: pageFilesAll,
               _allPageIds: allPageIds,
             });
+
+            await Promise.all(pageFilesAll.map((p) => p.loadFile?.()));
 
             const pagesWithIsr = allPageIds.map((pageId) => {
               const page = findPageFile(pageId, pageFilesAll)!;
