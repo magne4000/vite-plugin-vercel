@@ -23,6 +23,9 @@ export async function callBuild(dirname: string, config: InlineConfig) {
           'index.html': 'tests/common/index.html',
         },
       },
+      vitePluginSsr: {
+        prerender: true,
+      },
     },
     logLevel: 'info',
   });
