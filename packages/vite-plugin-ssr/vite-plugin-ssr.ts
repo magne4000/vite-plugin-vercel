@@ -55,6 +55,14 @@ export function getRoot(config: UserConfig | ResolvedConfig): string {
   return normalizePath(config.root || process.cwd());
 }
 
+function getOutDirRoot(config: ResolvedConfig) {
+  const outDir = config.build.outDir;
+
+  return outDir.endsWith('/server') || outDir.endsWith('/client')
+    ? path.normalize(path.join(outDir, '..'))
+    : outDir;
+}
+
 export function getOutput(
   config: ResolvedConfig,
   suffix?: 'functions' | `functions/${string}.func` | 'static',
@@ -70,7 +78,7 @@ export function getOutDir(
   config: ResolvedConfig,
   force?: 'client' | 'server',
 ): string {
-  const p = normalizePath(config.build.outDir);
+  const p = path.join(config.root, normalizePath(config.build.outDir));
   if (!force) return p;
   return path.join(path.dirname(p), force);
 }
@@ -138,6 +146,9 @@ export const prerender: ViteVercelPrerenderFn = async (
         prerender: {
           noExtraDir: true,
         },
+      },
+      build: {
+        outDir: getOutDirRoot(resolvedConfig),
       },
     } as any,
 
@@ -386,7 +397,7 @@ export function vitePluginSsrVercelCopyStaticAssetsPlugins(): Plugin {
     configResolved(config) {
       resolvedConfig = config;
     },
-    async writeBundle() {
+    async closeBundle() {
       if (!resolvedConfig.build?.ssr) return;
       await copyDistClientToOutputStatic(resolvedConfig);
     },

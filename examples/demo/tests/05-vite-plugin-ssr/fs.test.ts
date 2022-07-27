@@ -38,7 +38,6 @@ describe('fs', function () {
     '/static/named/id-2.html',
     '/static/named/id-2.pageContext.json',
     '/static/test.html',
-    '/static/tests/common/index.html',
     new RegExp('/functions/pages/catch-all-([^/]+?)\\.prerender-config\\.json'),
     new RegExp('/functions/pages/catch-all-([^/]+?)\\.func/index\\.js'),
     new RegExp(
@@ -54,6 +53,11 @@ describe('fs', function () {
   ];
 
   testFs(path.basename(__dirname), (entries) => {
+    console.log({
+      expected: expected.sort(),
+      entries: entries.sort(),
+    });
+
     expect(entries).toHaveLength(expected.length);
     entries.forEach((entry) => {
       expect(entry).toSatisfy((elt: string) => {
