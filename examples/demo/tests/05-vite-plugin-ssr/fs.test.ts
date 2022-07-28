@@ -5,11 +5,15 @@ import { testFs } from '../common/helpers';
 describe('fs', function () {
   const buildManifest = require('../../dist/client/manifest.json');
 
-  const generatedFiles = Object.values(buildManifest)
-    .filter((e: any): e is any => Boolean(e.file))
-    .map((e) => [e.file, ...(e.assets ?? []), ...(e.css ?? [])])
-    .flat(1)
-    .filter((f) => f.startsWith('assets/'));
+  const generatedFiles = Array.from(
+    new Set(
+      Object.values(buildManifest)
+        .filter((e: any): e is any => Boolean(e.file))
+        .map((e) => [e.file, ...(e.assets ?? []), ...(e.css ?? [])])
+        .flat(1)
+        .filter((f) => f.startsWith('assets/')),
+    ),
+  );
 
   const expected = [
     '/config.json',
@@ -53,11 +57,6 @@ describe('fs', function () {
   ];
 
   testFs(path.basename(__dirname), (entries) => {
-    console.log({
-      expected: expected.sort(),
-      entries: entries.sort(),
-    });
-
     expect(entries).toHaveLength(expected.length);
     entries.forEach((entry) => {
       expect(entry).toSatisfy((elt: string) => {
