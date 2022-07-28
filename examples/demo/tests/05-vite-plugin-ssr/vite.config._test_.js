@@ -25,12 +25,4 @@ export default {
     rewrites: [],
     expiration: 25,
   },
-  // TODO
-  // - ensure that `_api` functions are compiled (at the correct place) in tests
-  vitePluginSsr: {
-    prerender: {
-      noExtraDir: true,
-      disableAutoRun: true,
-    },
-  },
 };
