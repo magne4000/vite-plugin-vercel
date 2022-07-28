@@ -5,7 +5,8 @@
   "files": [
     "dist",
     "templates",
-    "*.d.ts"
+    "*.d.ts",
+    "helpers.js"
   ],
   "description": "Use vite-plugin-ssr with vite-plugin-vercel",
   "author": "Joël Charles <joel.charles91@gmail.com>",
