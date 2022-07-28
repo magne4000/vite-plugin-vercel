@@ -153,6 +153,11 @@ export const prerender: ViteVercelPrerenderFn = async (
     } as any,
 
     async onPagePrerender(pageContext: PageContext) {
+      // FIXME https://github.com/brillout/vite-plugin-ssr/pull/387
+      const { filePath, fileContent } = JSON.parse(
+        JSON.stringify(pageContext._prerenderResult),
+      );
+
       const isr = assertIsr(resolvedConfig, pageContext.exports);
 
       // bypass this check https://github.com/brillout/vite-plugin-ssr/blob/dcc91ac31824ca3240c107380789209d52d0dff9/vite-plugin-ssr/shared/addComputedUrlProps.ts#L25
@@ -171,16 +176,15 @@ export const prerender: ViteVercelPrerenderFn = async (
 
         // if ISR + Filesystem routing -> ISR prevails
         if (
-          !pageContext.is404 &&
           typeof isr === 'number' &&
           routeMatch &&
           typeof routeMatch !== 'string' &&
           routeMatch.routeType === 'FILESYSTEM'
-        )
+        ) {
           return;
+        }
       }
 
-      const { filePath, fileContent } = pageContext._prerenderResult;
       const relPath = path.posix.relative(
         getOutDir(resolvedConfig, 'client'),
         filePath,
@@ -288,6 +292,11 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
           ];
 
       return {
+        vitePluginSsr: {
+          prerender: {
+            disableAutoRun: true,
+          },
+        },
         vercel: {
           prerender: userConfig.vercel?.prerender ?? prerender,
           additionalEndpoints,
@@ -299,7 +308,7 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
             },
           ],
         },
-      };
+      } as any;
     },
   } as Plugin;
 }
