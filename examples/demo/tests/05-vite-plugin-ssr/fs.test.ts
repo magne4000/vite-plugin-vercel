@@ -5,11 +5,15 @@ import { testFs } from '../common/helpers';
 describe('fs', function () {
   const buildManifest = require('../../dist/client/manifest.json');
 
-  const generatedFiles = Object.values(buildManifest)
-    .filter((e: any): e is any => Boolean(e.file))
-    .map((e) => [e.file, ...(e.assets ?? []), ...(e.css ?? [])])
-    .flat(1)
-    .filter((f) => f.startsWith('assets/'));
+  const generatedFiles = Array.from(
+    new Set(
+      Object.values(buildManifest)
+        .filter((e: any): e is any => Boolean(e.file))
+        .map((e) => [e.file, ...(e.assets ?? []), ...(e.css ?? [])])
+        .flat(1)
+        .filter((f) => f.startsWith('assets/')),
+    ),
+  );
 
   const expected = [
     '/config.json',
@@ -38,7 +42,6 @@ describe('fs', function () {
     '/static/named/id-2.html',
     '/static/named/id-2.pageContext.json',
     '/static/test.html',
-    '/static/tests/common/index.html',
     new RegExp('/functions/pages/catch-all-([^/]+?)\\.prerender-config\\.json'),
     new RegExp('/functions/pages/catch-all-([^/]+?)\\.func/index\\.js'),
     new RegExp(

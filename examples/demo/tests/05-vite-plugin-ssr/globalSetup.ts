@@ -1,22 +1,15 @@
 import path from 'path';
-import ssr from 'vite-plugin-ssr/plugin';
 import { setup as _setup } from '../common/setup';
 import { teardown as _teardown } from '../common/teardown';
-import react from '@vitejs/plugin-react';
-import vercel from 'vite-plugin-vercel';
-import vitePluginSsrVercelPlugin from '@magne4000/vite-plugin-vercel-ssr';
+// @ts-ignore
+import config from './vite.config._test_';
 
 export const setup = _setup(path.basename(__dirname), {
-  configFile: false,
-  mode: 'production',
-  root: process.cwd(),
-  plugins: [react(), ssr(), vercel(), vitePluginSsrVercelPlugin()],
-  vercel: {
-    rewrites: [],
-    expiration: 25,
-  },
+  // vite-plugin-ssr passes `configFile` to build subprocess.
+  configFile: path.join(__dirname, './vite.config._test_.js'),
   build: {
-    outDir: 'dist',
+    ...config.build,
+    ssr: false,
   },
 });
 

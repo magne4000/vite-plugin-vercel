@@ -1,12 +1,10 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { createPageRenderer } from 'vite-plugin-ssr';
+import { renderPage } from 'vite-plugin-ssr';
 import {
   getDefaultEmptyResponseHandler,
   getDefaultPageContextInit,
   getDefaultResponseHandler,
 } from './helpers';
-
-const renderPage = createPageRenderer({ isProduction: true });
 
 export default async function handler(
   request: VercelRequest,

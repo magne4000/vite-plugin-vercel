@@ -16,9 +16,11 @@ export function testFs(
   it(`should generate the right files`, async function () {
     const tmpdir = getTmpDir(dirname);
     const entries = await glob(tmpdir + '/**', { dot: true });
-    const mappedEntries = entries
+    let mappedEntries = entries
       .map((e) => e.replace(tmpdir, ''))
       .filter((e) => !e.startsWith('/_ignore'));
+
+    mappedEntries = Array.from(new Set(mappedEntries));
 
     if (typeof filesOrCallback === 'function') {
       filesOrCallback(mappedEntries);
@@ -49,7 +51,6 @@ export function prepareTestJsonFileContent<T extends TestContext>(
   file: string,
   callback: (context: T) => void,
 ) {
-  const filesContent: Record<string, string> = {};
   const context = {
     file: undefined,
   } as T;
@@ -62,11 +63,11 @@ export function prepareTestJsonFileContent<T extends TestContext>(
       throw new Error(`Multiple or no file matches ${dest}`);
     }
 
-    context.file = JSON.parse(
-      await fs.readFile(entries[0], {
-        encoding: 'utf-8',
-      }),
-    );
+    const fileContent = await fs.readFile(entries[0], {
+      encoding: 'utf-8',
+    });
+
+    context.file = JSON.parse(fileContent);
   });
 
   describe(file, function () {

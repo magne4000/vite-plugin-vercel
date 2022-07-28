@@ -38,8 +38,7 @@ export default defineConfig({
 
 ### Usage with vite-plugin-ssr
 
-[vite-plugin-ssr](https://vite-plugin-ssr.com/) will support this plugin when stable.
-In the meantime, you can add experimental support yourself.
+[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@magne4000/vite-plugin-vercel-ssr](/packages/vite-plugin-ssr/README.md) plugin.
 
 Install `@magne4000/vite-plugin-vercel-ssr` package, and update your vite config:
 
@@ -53,9 +52,6 @@ import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
 export default defineConfig(async ({ command, mode }) => {
   return {
     plugins: [ssr(), vercel(), vercelSsr()],
-    build: {
-      polyfillDynamicImport: false,
-    },
     vercel: {
       // Tweak what you need, check TS definition for details
     },

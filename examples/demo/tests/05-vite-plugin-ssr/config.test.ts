@@ -55,12 +55,9 @@ prepareTestJsonFileContent(
         },
         { dest: '/ssr_/?__original_path=$1', src: '^((?!/api).*)$' },
       ]);
-      expect(context.file).toHaveProperty('overrides', {
+      expect((context.file as any).overrides).toMatchObject({
         'test.html': {
           path: 'test',
-        },
-        'tests/common/index.html': {
-          path: 'tests/common/index',
         },
         '404.html': {
           path: '404',

@@ -6,6 +6,25 @@ export function getTmpDir(displayName: string) {
   return path.join(os.tmpdir(), displayName);
 }
 
+declare module 'vite' {
+  interface BuildOptions {
+    vitePluginSsr?: {
+      prerender?:
+        | boolean
+        | {
+            noExtraDir?: boolean;
+            parallel?: boolean | number;
+            partial?: boolean;
+            disableAutoRun?: boolean;
+          };
+      pageFiles?: { include?: string[] };
+      disableAutoFullBuild?: boolean;
+      includeCSS?: string[];
+      includeAssetsImportedByServer?: boolean;
+    };
+  }
+}
+
 export async function callBuild(dirname: string, config: InlineConfig) {
   const tmpdir = getTmpDir(dirname);
 
@@ -16,29 +35,14 @@ export async function callBuild(dirname: string, config: InlineConfig) {
       outDir: tmpdir,
     },
     build: {
-      outDir: tmpdir + '/_ignore/client',
+      ssr: true,
+      ...config.build,
+      outDir: tmpdir + '/static',
       rollupOptions: {
         input: {
           'index.html': 'tests/common/index.html',
         },
       },
-      ...config.build,
-    },
-    logLevel: 'info',
-  });
-  await build({
-    ...config,
-    vercel: {
-      ...config.vercel,
-      outDir: getTmpDir(dirname),
-    },
-    build: {
-      outDir: tmpdir + '/_ignore/server',
-      rollupOptions: {
-        input: 'tests/common/index.ts',
-      },
-      ssr: true,
-      ...config.build,
     },
     logLevel: 'info',
   });
