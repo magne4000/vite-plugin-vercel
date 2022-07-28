@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.1.1
+
+### Patch Changes
+
+- Add missing helper file in bundle
+
 ## 0.1.0
 
 ### Minor Changes
