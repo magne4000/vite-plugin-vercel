@@ -19,8 +19,8 @@
       "require": "./dist/vite-plugin-ssr.cjs"
     },
     "./helpers": {
-      "import": "./templates/helpers/index.js",
-      "require": "./templates/helpers/index.cjs"
+      "import": "./dist/templates/helpers.js",
+      "require": "./dist/templates/helpers.cjs"
     }
   },
   "types": "./dist/vite-plugin-ssr.d.ts",
