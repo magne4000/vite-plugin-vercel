@@ -16,6 +16,10 @@ export function getOutput(
   );
 }
 
+export function getPublic(config: ResolvedConfig): string {
+  return path.join(getRoot(config), config.publicDir || 'public');
+}
+
 export function pathRelativeTo(
   filePath: string,
   config: UserConfig | ResolvedConfig,

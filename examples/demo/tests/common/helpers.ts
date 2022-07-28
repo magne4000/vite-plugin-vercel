@@ -63,11 +63,11 @@ export function prepareTestJsonFileContent<T extends TestContext>(
       throw new Error(`Multiple or no file matches ${dest}`);
     }
 
-    context.file = JSON.parse(
-      await fs.readFile(entries[0], {
-        encoding: 'utf-8',
-      }),
-    );
+    const fileContent = await fs.readFile(entries[0], {
+      encoding: 'utf-8',
+    });
+
+    context.file = JSON.parse(fileContent);
   });
 
   describe(file, function () {

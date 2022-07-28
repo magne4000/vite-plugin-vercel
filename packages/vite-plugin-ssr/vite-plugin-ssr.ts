@@ -12,10 +12,10 @@ import type {
 } from 'vite-plugin-vercel';
 import 'vite-plugin-ssr/__internal/setup';
 import {
-  route,
   getPagesAndRoutes,
   PageFile,
   PageRoutes,
+  route,
 } from 'vite-plugin-ssr/__internal';
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
@@ -91,9 +91,11 @@ async function copyDir(src: string, dest: string) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
 
-    entry.isDirectory()
-      ? await copyDir(srcPath, destPath)
-      : await fs.copyFile(srcPath, destPath);
+    if (entry.isDirectory()) {
+      await copyDir(srcPath, destPath);
+    } else {
+      await fs.copyFile(srcPath, destPath);
+    }
   }
 }
 
@@ -319,9 +321,9 @@ function findPageFile(pageId: string, pageFilesAll: PageFile[]) {
   );
 }
 
-export function vitePluginSsrVercelIsrPlugin(): Plugin {
+export function vitePluginVercelVpsIsrPlugin(): Plugin {
   return {
-    name: 'vite-plugin-ssr:vercel-isr',
+    name: 'vite-plugin-vercel:vps-isr',
     apply: 'build',
     async config(userConfig): Promise<UserConfig> {
       return {
@@ -396,12 +398,12 @@ export function vitePluginSsrVercelIsrPlugin(): Plugin {
   } as Plugin;
 }
 
-export function vitePluginSsrVercelCopyStaticAssetsPlugins(): Plugin {
+export function vitePluginVercelVpsCopyStaticAssetsPlugins(): Plugin {
   let resolvedConfig: ResolvedConfig;
 
   return {
     apply: 'build',
-    name: 'vite-plugin-ssr:vercel-copy-static-assets',
+    name: 'vite-plugin-vercel:vps-copy-static-assets',
     enforce: 'post',
     configResolved(config) {
       resolvedConfig = config;
@@ -429,8 +431,8 @@ function setProductionEnvVar() {
 
 export default function allPlugins(options: Options = {}): Plugin[] {
   return [
-    vitePluginSsrVercelIsrPlugin(),
+    vitePluginVercelVpsIsrPlugin(),
     vitePluginSsrVercelPlugin(options),
-    vitePluginSsrVercelCopyStaticAssetsPlugins(),
+    vitePluginVercelVpsCopyStaticAssetsPlugins(),
   ];
 }
