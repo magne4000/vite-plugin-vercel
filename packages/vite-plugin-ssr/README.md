@@ -2,8 +2,8 @@
 
 [`vite-plugin-ssr`](https://github.com/brillout/vite-plugin-ssr) integration for `vite-plugin-vercel`.
 
-- Versions `0.2.x` are compatible with vite-plugin-ssr@0.4.x
-- Versions `0.1.x` are compatible with vite-plugin-ssr@0.3.x
+- Versions `0.1.x` are compatible with vite-plugin-ssr@0.4.x
+- Versions `0.0.x` are compatible with vite-plugin-ssr@0.3.x
 
 ## Features
 

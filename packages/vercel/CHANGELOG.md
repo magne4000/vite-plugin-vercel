@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.1.4
+
+### Patch Changes
+
+- Support for vite@3
+
 ## 0.1.3
 
 ### Patch Changes
