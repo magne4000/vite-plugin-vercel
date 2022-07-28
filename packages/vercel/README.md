@@ -38,7 +38,7 @@ export default defineConfig({
 
 ### Usage with vite-plugin-ssr
 
-[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@magne4000/vite-plugin-vercel-ssr](packages/vite-plugin-ssr/README.md) plugin.
+[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@magne4000/vite-plugin-vercel-ssr](/packages/vite-plugin-ssr/README.md) plugin.
 
 Install `@magne4000/vite-plugin-vercel-ssr` package, and update your vite config:
 
