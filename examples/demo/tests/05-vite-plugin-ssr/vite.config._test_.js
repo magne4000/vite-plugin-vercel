@@ -23,6 +23,14 @@ export default {
   vercel: {
     outDir: tmpdir,
     rewrites: [],
+    additionalEndpoints: [
+      {
+        source: 'endpoints/edge.ts',
+        destination: `edge`,
+        edge: true,
+        addRoute: true,
+      },
+    ],
     expiration: 25,
   },
 };

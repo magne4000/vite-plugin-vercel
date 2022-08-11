@@ -19,6 +19,14 @@ export default defineConfig(async () => {
     ],
     vercel: {
       expiration: 25,
+      additionalEndpoints: [
+        {
+          source: 'endpoints/edge.ts',
+          destination: `edge`,
+          edge: true,
+          addRoute: true,
+        },
+      ],
     },
     server: {
       port: 3000,

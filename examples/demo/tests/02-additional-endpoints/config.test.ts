@@ -24,6 +24,11 @@ prepareTestJsonFileContent(
         },
         { handle: 'filesystem' },
         {
+          src: '^/edge(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$',
+          dest: '/edge/$1',
+          check: true,
+        },
+        {
           check: true,
           src: '^/index2(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$',
           dest: '/index2/$1',

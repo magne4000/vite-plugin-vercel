@@ -24,3 +24,18 @@ prepareTestJsonFilesContent(
     });
   },
 );
+
+prepareTestJsonFilesContent(
+  path.basename(__dirname),
+  ['/functions/edge.func/.vc-config.json'],
+  (context) => {
+    testSchema(context, vercelOutputVcConfigSchema);
+
+    it('should have only necessary properties', function () {
+      expect(context.file).toStrictEqual({
+        runtime: 'edge',
+        entrypoint: 'index.js',
+      });
+    });
+  },
+);

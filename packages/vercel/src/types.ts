@@ -96,7 +96,7 @@ export interface ViteVercelConfig {
         | Promise<Record<string, VercelOutputIsr>>
         | Record<string, VercelOutputIsr>);
   /**
-   * Defaults to `.vercel/output`. Mostly useful for testing prupose
+   * Defaults to `.vercel/output`. Mostly useful for testing purpose
    * @protected
    */
   outDir?: string;
@@ -133,4 +133,8 @@ export interface ViteVercelApiEntry {
    * Set to `false` to disable
    */
   addRoute?: boolean;
+  /**
+   * Set to `true` to mark this function as an Edge Function
+   */
+  edge?: boolean;
 }

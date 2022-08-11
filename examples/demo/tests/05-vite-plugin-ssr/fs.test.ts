@@ -21,6 +21,8 @@ describe('fs', function () {
     '/functions/api/page.func/.vc-config.json',
     '/functions/api/post.func/index.js',
     '/functions/api/post.func/.vc-config.json',
+    '/functions/edge.func/index.js',
+    '/functions/edge.func/.vc-config.json',
     '/static/vite-plugin-ssr.json',
     '/static/manifest.json',
     // ISR + Static pages

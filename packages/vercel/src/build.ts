@@ -107,12 +107,13 @@ export async function buildFn(
   }
 
   await build(options);
-  await writeVcConfig(resolvedConfig, entry.destination);
+  await writeVcConfig(resolvedConfig, entry.destination, Boolean(entry.edge));
 }
 
 export async function writeVcConfig(
   resolvedConfig: ResolvedConfig,
   destination: string,
+  edge: boolean,
 ): Promise<void> {
   const vcConfig = path.join(
     getOutput(resolvedConfig, 'functions'),
@@ -123,13 +124,20 @@ export async function writeVcConfig(
   await fs.writeFile(
     vcConfig,
     JSON.stringify(
-      vercelOutputVcConfigSchema.parse({
-        runtime: 'nodejs16.x',
-        handler: 'index.js',
-        maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
-        launcherType: 'Nodejs',
-        shouldAddHelpers: true,
-      }),
+      vercelOutputVcConfigSchema.parse(
+        edge
+          ? {
+              runtime: 'edge',
+              entrypoint: 'index.js',
+            }
+          : {
+              runtime: 'nodejs16.x',
+              handler: 'index.js',
+              maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
+              launcherType: 'Nodejs',
+              shouldAddHelpers: true,
+            },
+      ),
       undefined,
       2,
     ),

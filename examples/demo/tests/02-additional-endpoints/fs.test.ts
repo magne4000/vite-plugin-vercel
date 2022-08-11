@@ -9,6 +9,8 @@ describe('fs', function () {
     '/functions/api/page.func/.vc-config.json',
     '/functions/api/post.func/index.js',
     '/functions/api/post.func/.vc-config.json',
+    '/functions/edge.func/index.js',
+    '/functions/edge.func/.vc-config.json',
     '/functions/index2.func/index.js',
     '/functions/index2.func/.vc-config.json',
     '/functions/index3.func/index.js',

@@ -281,10 +281,7 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
         ?.flatMap((e) => e.destination)
         .some((d) => d === rendererDestination)
         ? userConfig.vercel?.additionalEndpoints
-        : [
-            ...(userConfig.vercel?.additionalEndpoints ?? []),
-            await getSsrEndpoint(userConfig),
-          ];
+        : [await getSsrEndpoint(userConfig)];
 
       return {
         vitePluginSsr: {
