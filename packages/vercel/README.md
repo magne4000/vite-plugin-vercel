@@ -14,7 +14,7 @@ Its purpose is to help you bundle your application in `.vercel` folder as suppor
   - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L54)
 - [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/prerender-functions)
   - see [`isr` config](/packages/vercel/src/types.ts#L81). Also see implementation of [vite-plugin-ssr](/packages/vite-plugin-ssr/vite-plugin-ssr.ts) for example
-- [ ] [Edge functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/edge-functions)
+- [x] [Edge functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/edge-functions)
 - [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3#build-output-configuration/supported-properties/images)
 - [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3#features/preview-mode)
 - [x] [Advanced config override](/packages/vercel/src/types.ts#L15)

@@ -41,6 +41,9 @@ function PageWrapper({
             <Link className="navitem" href="/function/a">
               Function
             </Link>
+            <Link className="navitem" href="/edge">
+              Edge Function endpoint
+            </Link>
           </Sidebar>
           <Content>{children}</Content>
         </Layout>
