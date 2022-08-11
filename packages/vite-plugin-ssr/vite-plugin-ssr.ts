@@ -155,10 +155,7 @@ export const prerender: ViteVercelPrerenderFn = async (
     } as any,
 
     async onPagePrerender(pageContext: PageContext) {
-      // FIXME https://github.com/brillout/vite-plugin-ssr/pull/387
-      const { filePath, fileContent } = JSON.parse(
-        JSON.stringify(pageContext._prerenderResult),
-      );
+      const { filePath, fileContent } = pageContext._prerenderResult;
 
       const isr = assertIsr(resolvedConfig, pageContext.exports);
 
