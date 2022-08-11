@@ -168,10 +168,6 @@ export const prerender: ViteVercelPrerenderFn = async (
 
       const foundRoute = await route(pageContext);
 
-      if ('hookError' in foundRoute) {
-        throw foundRoute.hookError;
-      }
-
       if (!pageContext.is404) {
         assert(foundRoute, `Page with id ${pageContext._pageId} not found`);
         const routeMatch = foundRoute.pageContextAddendum._routeMatches?.[0];
