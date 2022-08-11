@@ -1,8 +1,5 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
-
-export default async function handler(
-  request: VercelRequest,
-  response: VercelResponse,
-) {
-  return response.send('Edge Function: OK');
+export default async function handler() {
+  return new Response('Edge Function: OK', {
+    status: 200,
+  });
 }
