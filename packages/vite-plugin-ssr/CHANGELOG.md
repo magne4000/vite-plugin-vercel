@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.1.3
+
+### Patch Changes
+
+- Edge Functions support
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.1.5
+
+### Patch Changes
+
+- Edge Functions support
+
 ## 0.1.4
 
 ### Patch Changes
