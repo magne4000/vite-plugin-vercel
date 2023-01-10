@@ -10,7 +10,6 @@ export default {
     react(),
     ssr({
       prerender: {
-        noExtraDir: true,
         disableAutoRun: true,
       },
     }),

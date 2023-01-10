@@ -145,11 +145,6 @@ export const prerender: ViteVercelPrerenderFn = async (
   await prerenderCli({
     viteConfig: {
       root: getRoot(resolvedConfig),
-      vitePluginSsr: {
-        prerender: {
-          noExtraDir: true,
-        },
-      },
       build: {
         outDir: getOutDirRoot(resolvedConfig),
       },
