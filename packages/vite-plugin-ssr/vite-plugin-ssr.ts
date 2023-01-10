@@ -186,7 +186,10 @@ export const prerender: ViteVercelPrerenderFn = async (
       );
 
       const parsed = path.parse(relPath);
-      const pathJoined = path.join(parsed.dir, parsed.name);
+      const pathJoined =
+        parsed.name === 'index'
+          ? parsed.dir
+          : path.join(parsed.dir, parsed.name);
 
       if (relPath.endsWith('.html')) {
         routes[relPath] = {
