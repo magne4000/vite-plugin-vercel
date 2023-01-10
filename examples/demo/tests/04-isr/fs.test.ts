@@ -14,7 +14,5 @@ describe('fs', function () {
     '/functions/page1.func/index.js',
     '/functions/page1.func/.vc-config.json',
     '/functions/page1.prerender-config.json',
-    '/static/test.html',
-    '/static/tests/common/index.html',
   ]);
 });

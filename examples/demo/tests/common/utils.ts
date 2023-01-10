@@ -46,7 +46,6 @@ export async function callBuild(dirname: string, config: InlineConfig) {
     build: {
       ssr: true,
       ...config.build,
-      outDir: tmpdir + '/static',
       rollupOptions: {
         input: {
           'index.html': 'tests/common/index.html',

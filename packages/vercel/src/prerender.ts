@@ -83,8 +83,6 @@ export async function buildPrerenderConfigs(
 ): Promise<NonNullable<Rewrite[]>> {
   const isr = await getIsrConfig(resolvedConfig);
 
-  console.log('isr config', isr);
-
   const entries = Object.entries(isr);
   const rewrites: Rewrite[] = [];
 
@@ -133,7 +131,6 @@ async function getIsrConfig(
 ): Promise<Record<string, VercelOutputIsr>> {
   const isr = resolvedConfig.vercel?.isr ?? {};
   if (typeof isr === 'function') {
-    console.log('CALLK');
     return await isr();
   }
   return isr;

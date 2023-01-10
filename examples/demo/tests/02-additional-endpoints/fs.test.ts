@@ -15,7 +15,5 @@ describe('fs', function () {
     '/functions/index2.func/.vc-config.json',
     '/functions/index3.func/index.js',
     '/functions/index3.func/.vc-config.json',
-    '/static/test.html',
-    '/static/tests/common/index.html',
   ]);
 });

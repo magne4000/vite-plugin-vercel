@@ -15,7 +15,6 @@ export function testFs(
 ) {
   it(`should generate the right files`, async function () {
     const tmpdir = getTmpDir(dirname);
-    console.log('tmpdir', tmpdir);
     const entries = await glob(tmpdir + '/**', { dot: true });
     let mappedEntries = entries
       .map((e) => e.replace(tmpdir, ''))

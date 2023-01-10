@@ -207,13 +207,13 @@ export const prerender: ViteVercelPrerenderFn = async (
 
 function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
-    if (
-      route.pageId === pageId &&
-      route.pageRouteFilePath &&
-      route.routeType === 'STRING'
-    ) {
-      console.log('ROUTE', pageId, route);
-      return getParametrizedRoute(route.routeString);
+    if (route.pageId === pageId && route.pageRouteFilePath) {
+      if (route.routeType === 'STRING') {
+        return getParametrizedRoute(route.routeString);
+      } else {
+        // route.routeType === 'FUNCTION'
+        return () => {};
+      }
     }
   }
 
@@ -371,8 +371,6 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
                 };
               }),
             );
-
-            console.log('pagesWithIsr', pagesWithIsr);
 
             return pagesWithIsr
               .filter((p) => typeof p.isr === 'number')

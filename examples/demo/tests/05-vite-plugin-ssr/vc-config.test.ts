@@ -1,10 +1,10 @@
 import path from 'path';
 import { expect, it } from 'vitest';
 import { vercelOutputVcConfigSchema } from '../../../../packages/vercel/src/schemas/config/vc-config';
-import { prepareTestJsonFilesContent, testSchema } from '../common/helpers';
+import { testSchema } from '../common/helpers';
+import { prepareTestJsonFilesContent } from './utils';
 
 prepareTestJsonFilesContent(
-  path.basename(__dirname),
   [
     '/functions/api/page.func/.vc-config.json',
     '/functions/api/post.func/.vc-config.json',
@@ -28,7 +28,6 @@ prepareTestJsonFilesContent(
 );
 
 prepareTestJsonFilesContent(
-  path.basename(__dirname),
   ['/functions/edge.func/.vc-config.json'],
   (context) => {
     testSchema(context, vercelOutputVcConfigSchema);

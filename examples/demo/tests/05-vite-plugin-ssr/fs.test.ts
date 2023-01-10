@@ -1,6 +1,6 @@
 import path from 'path';
-import { describe, expect } from 'vitest';
-import { testFs } from '../common/helpers';
+import glob from 'fast-glob';
+import { describe, expect, it } from 'vitest';
 
 describe('fs', function () {
   const buildManifest = require('../../dist/client/manifest.json');
@@ -14,8 +14,6 @@ describe('fs', function () {
         .filter((f) => f.startsWith('assets/')),
     ),
   );
-
-  console.log('generatedFiles', generatedFiles);
 
   const expected = [
     '/config.json',
@@ -33,18 +31,18 @@ describe('fs', function () {
     '/static/404.html',
     '/static/index.html',
     '/static/index.pageContext.json',
-    '/static/static.html',
-    '/static/static.pageContext.json',
-    '/static/catch-all/a/b/c.html',
-    '/static/catch-all/a/b/c.pageContext.json',
-    '/static/catch-all/a/d.html',
-    '/static/catch-all/a/d.pageContext.json',
-    '/static/function/a.html',
-    '/static/function/a.pageContext.json',
-    '/static/named/id-1.html',
-    '/static/named/id-1.pageContext.json',
-    '/static/named/id-2.html',
-    '/static/named/id-2.pageContext.json',
+    '/static/static/index.html',
+    '/static/static/index.pageContext.json',
+    '/static/catch-all/a/b/c/index.html',
+    '/static/catch-all/a/b/c/index.pageContext.json',
+    '/static/catch-all/a/d/index.html',
+    '/static/catch-all/a/d/index.pageContext.json',
+    '/static/function/a/index.html',
+    '/static/function/a/index.pageContext.json',
+    '/static/named/id-1/index.html',
+    '/static/named/id-1/index.pageContext.json',
+    '/static/named/id-2/index.html',
+    '/static/named/id-2/index.pageContext.json',
     '/static/test.html',
     new RegExp('/functions/pages/catch-all-([^/]+?)\\.prerender-config\\.json'),
     new RegExp('/functions/pages/catch-all-([^/]+?)\\.func/index\\.js'),
@@ -60,9 +58,17 @@ describe('fs', function () {
     ...generatedFiles.map((f) => '/static/' + f),
   ];
 
-  testFs(path.basename(__dirname), (entries) => {
+  it(`should generate the right files`, async function () {
+    const dir = path.join(__dirname, '../../.vercel/output');
+    const entries = await glob(dir + '/**', { dot: true });
+    let mappedEntries = entries
+      .map((e) => e.replace(dir, ''))
+      .filter((e) => !e.startsWith('/_ignore'));
+
+    mappedEntries = Array.from(new Set(mappedEntries));
+
     expect(entries).toHaveLength(expected.length);
-    entries.forEach((entry) => {
+    mappedEntries.forEach((entry) => {
       expect(entry).toSatisfy((elt: string) => {
         for (const exp of expected) {
           if (typeof exp === 'string') {

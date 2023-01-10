@@ -11,7 +11,7 @@
     "test:02": "vitest run --dir tests/02-additional-endpoints --config tests/02-additional-endpoints/vitest.config.ts",
     "test:03": "vitest run --dir tests/03-prerender --config tests/03-prerender/vitest.config.ts",
     "test:04": "vitest run --dir tests/04-isr --config tests/04-isr/vitest.config.ts",
-    "test:05": "vitest run --dir tests/05-vite-plugin-ssr --config tests/05-vite-plugin-ssr/vitest.config.ts"
+    "test:05": "vite build && vitest run --dir tests/05-vite-plugin-ssr --config tests/05-vite-plugin-ssr/vitest.config.ts"
   },
   "license": "MIT",
   "devDependencies": {

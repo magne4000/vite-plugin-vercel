@@ -11,7 +11,5 @@ describe('fs', function () {
     '/functions/api/post.func/.vc-config.json',
     '/functions/edge.func/index.js',
     '/functions/edge.func/.vc-config.json',
-    '/static/test.html',
-    '/static/tests/common/index.html',
   ]);
 });

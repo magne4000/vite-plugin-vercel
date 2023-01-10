@@ -31,13 +31,10 @@ function vercelPlugin(): Plugin {
     },
     async writeBundle() {
       if (!resolvedConfig.build?.ssr) {
-        console.log('CLIENT CLEAN', getOutput(resolvedConfig));
         // step 1:	Clean .vercel/ouput dir
         await cleanOutputDirectory(resolvedConfig);
         return;
       }
-
-      console.log('SERVER CLEAN', getOutput(resolvedConfig));
 
       // step 2:		Server side built by vite-plugin-ssr
       // step 2.1:	Execute vite-plugin-ssr prerender

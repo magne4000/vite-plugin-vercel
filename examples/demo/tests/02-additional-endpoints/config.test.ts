@@ -49,14 +49,7 @@ prepareTestJsonFileContent(
           dest: '/api/post',
         },
       ]);
-      expect(context.file).toHaveProperty('overrides', {
-        'test.html': {
-          path: 'test',
-        },
-        'tests/common/index.html': {
-          path: 'tests/common/index',
-        },
-      });
+      expect(context.file).toHaveProperty('overrides', {});
       expect(Object.keys(context.file as any).sort()).toEqual(
         ['version', 'overrides', 'routes'].sort(),
       );
