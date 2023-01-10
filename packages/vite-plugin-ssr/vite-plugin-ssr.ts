@@ -1,4 +1,3 @@
-import './hack';
 import { prerender as prerenderCli } from 'vite-plugin-ssr/prerender';
 import fs from 'fs/promises';
 import path from 'path';
@@ -47,6 +46,8 @@ interface MissingPageContextOverrides {
   _urlProcessor: (url: string) => string;
   _pageFilesAll: PageFile[];
   _allPageIds: string[];
+  _baseServer: string;
+  _urlHandler: null | ((url: string) => string);
 }
 
 type PageContext = PageContextBuiltIn & MissingPageContextOverrides;
@@ -208,8 +209,8 @@ export const prerender: ViteVercelPrerenderFn = async (
 
 function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
-    if (route.pageId === pageId && route.pageRouteFile) {
-      return route.pageRouteFile.routeValue;
+    if (route.pageId === pageId && route.pageRouteFilePath) {
+      return route.pageRouteFilePath;
     }
   }
 
@@ -220,10 +221,10 @@ function getRouteFsRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
     if (
       route.pageId === pageId &&
-      !route.pageRouteFile &&
-      route.filesystemRoute
+      !route.pageRouteFilePath &&
+      route.routeType === 'FILESYSTEM'
     ) {
-      return route.filesystemRoute;
+      return route.routeString;
     }
   }
 

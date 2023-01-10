@@ -7,7 +7,7 @@ import { ViteVercelApiEntry } from './types';
 import { assert } from './assert';
 import { vercelOutputVcConfigSchema } from './schemas/config/vc-config';
 import fs from 'fs/promises';
-import { VercelConfig } from '@vercel/routing-utils';
+import type { Rewrite } from '@vercel/routing-utils';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -154,7 +154,7 @@ function getSourceAndDestination(destination: string) {
 
 export async function buildEndpoints(
   resolvedConfig: ResolvedConfig,
-): Promise<NonNullable<VercelConfig['rewrites']>> {
+): Promise<NonNullable<Rewrite[]>> {
   const entries = getEntries(resolvedConfig);
 
   for (const entry of entries) {

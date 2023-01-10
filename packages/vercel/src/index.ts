@@ -31,10 +31,13 @@ function vercelPlugin(): Plugin {
     },
     async writeBundle() {
       if (!resolvedConfig.build?.ssr) {
+        console.log('CLIENT CLEAN', getOutput(resolvedConfig));
         // step 1:	Clean .vercel/ouput dir
-        await cleanOutputDirectory(resolvedConfig);
+        // await cleanOutputDirectory(resolvedConfig);
         return;
       }
+
+      console.log('SERVER CLEAN', getOutput(resolvedConfig));
 
       // step 2:		Server side built by vite-plugin-ssr
       // step 2.1:	Execute vite-plugin-ssr prerender
@@ -59,6 +62,7 @@ function vercelPlugin(): Plugin {
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
   await fs.rm(getOutput(resolvedConfig), {
     recursive: true,

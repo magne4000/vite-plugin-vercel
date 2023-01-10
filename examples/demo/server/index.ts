@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 import express from 'express';
-import { createPageRenderer } from 'vite-plugin-ssr';
+import { renderPage } from 'vite-plugin-ssr';
 import * as vite from 'vite';
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -25,12 +25,6 @@ async function startServer() {
   });
 
   app.use(viteDevServer.middlewares);
-
-  const renderPage = createPageRenderer({
-    viteDevServer,
-    root,
-    isProduction: false,
-  });
 
   app.get('*', async (req, res, next) => {
     const url = req.originalUrl;

@@ -6,7 +6,7 @@ import {
   vercelOutputConfigSchema,
 } from './schemas/config/config';
 import fs from 'fs/promises';
-import { getTransformedRoutes, VercelConfig } from '@vercel/routing-utils';
+import { getTransformedRoutes, Rewrite } from '@vercel/routing-utils';
 import { ViteVercelRewrite } from './types';
 
 function reorderEnforce<T extends { enforce?: 'pre' | 'post' }>(arr: T[]) {
@@ -29,14 +29,12 @@ export function getConfig(
   ];
 
   const { routes, error } = getTransformedRoutes({
-    nowConfig: {
-      cleanUrls: resolvedConfig.vercel?.cleanUrls ?? true,
-      trailingSlash: resolvedConfig.vercel?.trailingSlash,
-      rewrites: reorderEnforce(_rewrites),
-      redirects: resolvedConfig.vercel?.redirects
-        ? reorderEnforce(resolvedConfig.vercel?.redirects)
-        : undefined,
-    },
+    cleanUrls: resolvedConfig.vercel?.cleanUrls ?? true,
+    trailingSlash: resolvedConfig.vercel?.trailingSlash,
+    rewrites: reorderEnforce(_rewrites),
+    redirects: resolvedConfig.vercel?.redirects
+      ? reorderEnforce(resolvedConfig.vercel?.redirects)
+      : undefined,
   });
 
   if (error) {
@@ -73,7 +71,7 @@ export function getConfigDestination(resolvedConfig: ResolvedConfig) {
 
 export async function writeConfig(
   resolvedConfig: ResolvedConfig,
-  rewrites?: VercelConfig['rewrites'],
+  rewrites?: Rewrite[],
   overrides?: VercelOutputConfig['overrides'],
 ): Promise<void> {
   await fs.writeFile(

@@ -3,7 +3,7 @@ import type { BuildOptions, StdinOptions } from 'esbuild';
 import type { VercelOutputConfig } from './schemas/config/config';
 import type { VercelOutputVcConfig } from './schemas/config/vc-config';
 import type { VercelOutputPrerenderConfig } from './schemas/config/prerender-config';
-import type { VercelConfig } from '@vercel/routing-utils';
+import type { Rewrite, Redirect } from '@vercel/routing-utils';
 
 export type {
   VercelOutputConfig,
@@ -11,12 +11,8 @@ export type {
   VercelOutputPrerenderConfig,
 };
 
-export type ViteVercelRewrite = NonNullable<
-  VercelConfig['rewrites']
->[number] & { enforce?: 'pre' | 'post' };
-export type ViteVercelRedirect = NonNullable<
-  VercelConfig['redirects']
->[number] & { enforce?: 'pre' | 'post' };
+export type ViteVercelRewrite = Rewrite & { enforce?: 'pre' | 'post' };
+export type ViteVercelRedirect = Redirect & { enforce?: 'pre' | 'post' };
 
 // Vite config for Vercel
 
@@ -61,8 +57,8 @@ export interface ViteVercelConfig {
    */
   rewrites?: ViteVercelRewrite[];
   redirects?: ViteVercelRedirect[];
-  cleanUrls?: VercelConfig['cleanUrls'];
-  trailingSlash?: VercelConfig['trailingSlash'];
+  cleanUrls?: boolean;
+  trailingSlash?: boolean;
   additionalEndpoints?: ViteVercelApiEntry[];
   /**
    * Advanced configuration to override .vercel/output/config.json

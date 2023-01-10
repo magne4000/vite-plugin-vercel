@@ -2,9 +2,6 @@ import react from '@vitejs/plugin-react';
 import ssr from 'vite-plugin-ssr/plugin';
 import vercel from 'vite-plugin-vercel';
 import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
-import { getTmpDir } from '../common/utils';
-
-const tmpdir = getTmpDir('05-vite-plugin-ssr');
 
 export default {
   mode: 'production',
@@ -21,7 +18,6 @@ export default {
     vercelSsr(),
   ],
   vercel: {
-    outDir: tmpdir,
     rewrites: [],
     additionalEndpoints: [
       {

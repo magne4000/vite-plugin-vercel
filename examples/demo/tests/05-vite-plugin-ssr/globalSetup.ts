@@ -9,7 +9,7 @@ export const setup = _setup(path.basename(__dirname), {
   configFile: path.join(__dirname, './vite.config._test_.js'),
   build: {
     ...config.build,
-    ssr: false,
+    // ssr: false,
   },
 });
 

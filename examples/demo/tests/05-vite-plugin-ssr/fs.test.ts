@@ -15,6 +15,8 @@ describe('fs', function () {
     ),
   );
 
+  console.log('generatedFiles', generatedFiles);
+
   const expected = [
     '/config.json',
     '/functions/api/page.func/index.js',
