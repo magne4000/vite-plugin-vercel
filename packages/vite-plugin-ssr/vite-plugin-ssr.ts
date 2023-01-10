@@ -383,7 +383,7 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
                   expiration: cur.isr!,
                   symlink: rendererDestination,
                   route: cur.route
-                    ? cur.route + '(?:\\.pageContext\\.json)?'
+                    ? cur.route + '(?:\\/index\\.pageContext\\.json)?'
                     : undefined,
                 };
                 return acc;
