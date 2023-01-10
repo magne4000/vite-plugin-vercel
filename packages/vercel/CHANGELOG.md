@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.1.6
+
+### Patch Changes
+
+- Upgrade dependencies. Fixes #9 and #10
+
 ## 0.1.5
 
 ### Patch Changes
