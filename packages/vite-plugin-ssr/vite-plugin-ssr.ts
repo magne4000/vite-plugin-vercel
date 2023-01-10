@@ -17,7 +17,7 @@ import {
   route,
 } from 'vite-plugin-ssr/__internal';
 import { nanoid } from 'nanoid';
-import { getParametrizedRoute } from './route-regex';
+import { getParametrizedRoute, getRoutesRegex } from './route-regex';
 import { newError } from '@brillout/libassert';
 
 const libName = 'vite-plugin-ssr:vercel';
@@ -207,8 +207,13 @@ export const prerender: ViteVercelPrerenderFn = async (
 
 function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
-    if (route.pageId === pageId && route.pageRouteFilePath) {
-      return route.pageRouteFilePath;
+    if (
+      route.pageId === pageId &&
+      route.pageRouteFilePath &&
+      route.routeType === 'STRING'
+    ) {
+      console.log('ROUTE', pageId, route);
+      return getParametrizedRoute(route.routeString);
     }
   }
 
@@ -306,7 +311,7 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
 
 function findPageFile(pageId: string, pageFilesAll: PageFile[]) {
   return pageFilesAll.find(
-    (p) => p.pageId === pageId && p.fileType !== '.page.route',
+    (p) => p.pageId === pageId && p.fileType === '.page',
   );
 }
 
@@ -356,6 +361,7 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
 
                 return {
                   _pageId: pageId,
+                  // used for debug purpose
                   filePath: page.filePath,
                   isr,
                   route:
@@ -365,6 +371,8 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
                 };
               }),
             );
+
+            console.log('pagesWithIsr', pagesWithIsr);
 
             return pagesWithIsr
               .filter((p) => typeof p.isr === 'number')
