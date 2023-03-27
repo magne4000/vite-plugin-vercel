@@ -180,7 +180,7 @@ export const prerender: ViteVercelPrerenderFn = async (
         }
       }
 
-      const relPath = path.posix.relative(
+      const relPath = path.relative(
         getOutDir(resolvedConfig, 'client'),
         filePath,
       );

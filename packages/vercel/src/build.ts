@@ -14,7 +14,7 @@ export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
     ...e,
     addRoute: e.addRoute ?? true,
     // path.resolve removes the trailing slash if any
-    destination: path.resolve('/', e.destination) + '.func',
+    destination: path.posix.resolve('/', e.destination) + '.func',
   }));
 }
 
@@ -45,7 +45,7 @@ export function getEntries(
       resolvedConfig,
       filePath.includes('/_api/') ? '_api' : 'api',
     );
-    const parsed = path.parse(outFilePath);
+    const parsed = path.posix.parse(outFilePath);
 
     entryPoints.push({
       source: filePath,

@@ -26,5 +26,7 @@ export function pathRelativeTo(
   rel: string,
 ): string {
   const root = getRoot(config);
-  return normalizePath(path.relative(path.join(root, rel), filePath));
+  return normalizePath(
+    path.relative(normalizePath(path.join(root, rel)), filePath),
+  );
 }
