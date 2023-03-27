@@ -15,10 +15,12 @@
   "module": "./dist/vite-plugin-ssr.js",
   "exports": {
     ".": {
+      "types": "./dist/vite-plugin-ssr.d.ts",
       "import": "./dist/vite-plugin-ssr.js",
       "require": "./dist/vite-plugin-ssr.cjs"
     },
     "./helpers": {
+      "types": "./dist/templates/helpers.d.ts",
       "import": "./dist/templates/helpers.js",
       "require": "./dist/templates/helpers.cjs"
     }
@@ -33,13 +35,13 @@
   },
   "devDependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@types/node": "^16.18.11",
-    "@vercel/node": "^2.8.5",
-    "nanoid": "^4.0.0",
-    "tsup": "^6.5.0",
-    "typescript": "^4.9.4",
-    "vite": "^3.2.5",
-    "vite-plugin-ssr": "^0.4.69",
+    "@types/node": "^16.18.21",
+    "@vercel/node": "^2.10.0",
+    "nanoid": "^4.0.2",
+    "tsup": "^6.7.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.2.1",
+    "vite-plugin-ssr": "^0.4.103",
     "vite-plugin-vercel": "workspace:*"
   },
   "license": "MIT"

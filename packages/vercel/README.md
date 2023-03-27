@@ -29,7 +29,7 @@ Then, install this package as a dev dependency and add it to your Vite config li
 ```ts
 import { defineConfig } from 'vite';
 import vercel from 'vite-plugin-vercel';
-import ssr from 'vite-plugin-ssr';
+import ssr from 'vite-plugin-ssr/plugin';
 
 export default defineConfig({
   plugins: [ssr(), vercel()],

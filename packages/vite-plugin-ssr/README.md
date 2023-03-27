@@ -52,7 +52,7 @@ If for any reason you need to customize it, some tools are available:
 
 ```ts
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { renderPage } from 'vite-plugin-ssr';
+import { renderPage } from 'vite-plugin-ssr/server';
 import {
   getDefaultEmptyResponseHandler,
   // higly recommended to use at least this one, as it handles some internals

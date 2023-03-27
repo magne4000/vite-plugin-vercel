@@ -50,7 +50,11 @@ interface MissingPageContextOverrides {
   _urlHandler: null | ((url: string) => string);
 }
 
-type PageContext = PageContextBuiltIn & MissingPageContextOverrides;
+type PageContextForRoute = Parameters<typeof route>[0];
+
+type PageContext = PageContextBuiltIn &
+  MissingPageContextOverrides &
+  PageContextForRoute;
 
 export function getRoot(config: UserConfig | ResolvedConfig): string {
   return normalizePath(config.root || process.cwd());

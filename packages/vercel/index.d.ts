@@ -4,7 +4,7 @@ export * from './dist';
 export { default } from './dist';
 
 declare module 'vite' {
-  interface UserConfig {
+  export interface UserConfig {
     vercel?: ViteVercelConfig;
   }
 }

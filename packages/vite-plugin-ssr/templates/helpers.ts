@@ -1,8 +1,7 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import type { renderPage } from 'vite-plugin-ssr/dist/cjs/node/renderPage';
 import { parse } from 'querystring';
+import type { renderPage } from 'vite-plugin-ssr';
 
-// TODO export this type from vite-plugin-ssr
 type HttpResponse = NonNullable<
   Awaited<ReturnType<typeof renderPage>>['httpResponse']
 >;
