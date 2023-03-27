@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.1.7
+
+### Patch Changes
+
+- fix issue with win32 path
+
 ## 0.1.6
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.1.5
+
+### Patch Changes
+
+- fix issue with win32 path
+
 ## 0.1.4
 
 ### Patch Changes
