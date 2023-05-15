@@ -106,6 +106,10 @@ export async function buildFn(
     }
   }
 
+  if (entry.edge) {
+    options.conditions = ['edge-light', ...(options.conditions ?? [])];
+  }
+
   await build(options);
   await writeVcConfig(resolvedConfig, entry.destination, Boolean(entry.edge));
 }

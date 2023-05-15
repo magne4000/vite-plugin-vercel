@@ -29,6 +29,7 @@ importers:
       '@types/react': ^18.2.6
       '@types/react-dom': ^18.2.4
       '@vercel/build-utils': ^6.7.2
+      '@vercel/edge-config': ^0.1.10
       '@vercel/node': ^2.14.2
       '@vitejs/plugin-react': ^3.1.0
       esno: ^0.16.3
@@ -45,6 +46,7 @@ importers:
     dependencies:
       '@brillout/libassert': 0.5.6
       '@magne4000/vite-plugin-vercel-ssr': link:../../packages/vite-plugin-ssr
+      '@vercel/edge-config': 0.1.10
       '@vitejs/plugin-react': 3.1.0_vite@4.3.5
       express: 4.18.2
       react: 18.2.0
@@ -1219,6 +1221,11 @@ packages:
   /@vercel/build-utils/6.7.2:
     resolution: {integrity: sha512-STSWs66rxX5pVKkhsYNeLx/Vlxjwe+dhy6PfXgBEJua7FXbWDjXjUyjzEyk63yUWysUflEBtLW9ckS/2V0QCZw==}
     dev: true
+
+  /@vercel/edge-config/0.1.10:
+    resolution: {integrity: sha512-QdahUjvtpnnKD/vd79Gre7OVoEwjspktCFvOI6IXUqQ45e/Sk3In/rLOySF0dg4XHDWEuy+DRIK0SIOW2/C1FQ==}
+    engines: {node: '>=14.6'}
+    dev: false
 
   /@vercel/error-utils/1.0.8:
     resolution: {integrity: sha512-s+f7jP2oH1koICbQ8e3K9hOpOeUct7rbCnF9qsNwXemq850wAh2e90tp9R6oYBM0BNpiLRRm+oG5zD2sCIm3HQ==}
