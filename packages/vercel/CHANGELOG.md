@@ -1,5 +1,15 @@
 # vite-plugin-vercel
 
+## 0.2.0
+
+### Minor Changes
+
+- upgrade dependencies
+
+### Patch Changes
+
+- support edge-light target
+
 ## 0.1.7
 
 ### Patch Changes

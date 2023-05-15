@@ -1,5 +1,15 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.2.0
+
+### Minor Changes
+
+- upgrade dependencies
+
+### Patch Changes
+
+- support edge-light target
+
 ## 0.1.5
 
 ### Patch Changes
