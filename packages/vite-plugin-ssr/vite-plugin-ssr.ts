@@ -211,10 +211,10 @@ export const prerender: ViteVercelPrerenderFn = async (
 
 function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
-    if (route.pageId === pageId && route.pageRouteFilePath) {
+    if (route.pageId === pageId) {
       if (route.routeType === 'STRING') {
         return getParametrizedRoute(route.routeString);
-      } else {
+      } else if (route.routeType === 'FUNCTION') {
         // route.routeType === 'FUNCTION'
         return () => {};
       }
@@ -226,11 +226,7 @@ function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
 
 function getRouteFsRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
-    if (
-      route.pageId === pageId &&
-      !route.pageRouteFilePath &&
-      route.routeType === 'FILESYSTEM'
-    ) {
+    if (route.pageId === pageId && route.routeType === 'FILESYSTEM') {
       return route.routeString;
     }
   }

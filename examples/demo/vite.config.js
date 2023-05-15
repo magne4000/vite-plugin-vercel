@@ -7,7 +7,14 @@ import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
 
 export default defineConfig(async () => {
   return {
-    plugins: [react(), ssr(), vercel(), vercelSsr()],
+    plugins: [
+      react(),
+      ssr({
+        prerender: true,
+      }),
+      vercel(),
+      vercelSsr(),
+    ],
     vercel: {
       expiration: 25,
       additionalEndpoints: [
