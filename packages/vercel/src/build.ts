@@ -107,7 +107,13 @@ export async function buildFn(
   }
 
   if (entry.edge) {
-    options.conditions = ['edge-light', ...(options.conditions ?? [])];
+    options.conditions = [
+      'edge-light',
+      'browser',
+      'module',
+      'import',
+      'require',
+    ];
   }
 
   await build(options);
