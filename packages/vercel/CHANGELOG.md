@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 0.2.1
+
+### Patch Changes
+
+- fix use case without vite-plugin-ssr
+
 ## 0.2.0
 
 ### Minor Changes
