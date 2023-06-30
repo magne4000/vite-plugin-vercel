@@ -17,12 +17,12 @@
     "publish:stable": "pnpm run prepublishOnly && pnpm changeset publish -r"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.26.1",
-    "@types/node": "^16.18.30",
+    "@changesets/cli": "^2.26.2",
+    "@types/node": "^16.18.37",
     "cross-env": "^7.0.3",
     "husky": "^8.0.3",
-    "lint-staged": "^13.2.2",
+    "lint-staged": "^13.2.3",
     "prettier": "^2.8.8",
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.6"
   }
 }
