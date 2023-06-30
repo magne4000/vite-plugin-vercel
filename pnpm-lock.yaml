@@ -100,7 +100,7 @@ importers:
   examples/simple:
     dependencies:
       vite-plugin-vercel:
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../../packages/vercel
     devDependencies:
       typescript:
