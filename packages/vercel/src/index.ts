@@ -11,6 +11,7 @@ export * from './types';
 
 function vercelPlugin(): Plugin {
   let resolvedConfig: ResolvedConfig;
+  let vpsFound = false;
 
   return {
     apply: 'build',
@@ -18,22 +19,19 @@ function vercelPlugin(): Plugin {
     enforce: 'post',
     configResolved(config) {
       resolvedConfig = config;
-    },
-    async buildStart() {
-      if (
-        process.env.VERCEL_ENV === 'production' &&
-        !process.env.ENABLE_VC_BUILD
-      ) {
-        throw new Error(
-          'Missing ENABLE_VC_BUILD=1 to your environment variables in your project settings',
-        );
-      }
+      vpsFound = resolvedConfig.plugins.some((p) =>
+        p.name.startsWith('vite-plugin-ssr:'),
+      );
     },
     async writeBundle() {
       if (!resolvedConfig.build?.ssr) {
         // step 1:	Clean .vercel/ouput dir
         await cleanOutputDirectory(resolvedConfig);
-        return;
+
+        // vite-plugin-ssr triggers a second build with --ssr
+        if (vpsFound) {
+          return;
+        }
       }
 
       // step 2:		Server side built by vite-plugin-ssr

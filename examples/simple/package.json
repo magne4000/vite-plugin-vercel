@@ -1,6 +1,7 @@
 {
-  "name": "my-app",
-  "version": "0.0.1",
+  "name": "vite-plugin-vercel-simple",
+  "private": true,
+  "version": null,
   "description": "",
   "type": "module",
   "scripts": {
@@ -15,6 +16,6 @@
     "vite": "^4.3.9"
   },
   "dependencies": {
-    "vite-plugin-vercel": "workspace:^"
+    "vite-plugin-vercel": "workspace:*"
   }
 }

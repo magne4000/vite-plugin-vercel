@@ -27,9 +27,9 @@ async function startServer() {
   app.use(viteDevServer.middlewares);
 
   app.get('*', async (req, res, next) => {
-    const url = req.originalUrl;
+    const urlOriginal = req.originalUrl;
     const pageContextInit = {
-      url,
+      urlOriginal,
     };
     const pageContext = await renderPage(pageContextInit);
     const { httpResponse } = pageContext;
