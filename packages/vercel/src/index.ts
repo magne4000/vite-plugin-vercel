@@ -11,7 +11,7 @@ export * from './types';
 
 function vercelPlugin(): Plugin {
   let resolvedConfig: ResolvedConfig;
-  let vpsFound = false;
+  let vikeFound = false;
 
   return {
     apply: 'build',
@@ -20,8 +20,8 @@ function vercelPlugin(): Plugin {
 
     configResolved(config) {
       resolvedConfig = config;
-      vpsFound = resolvedConfig.plugins.some((p) =>
-        p.name.startsWith('vite-plugin-ssr:'),
+      vikeFound = resolvedConfig.plugins.some((p) =>
+        p.name.match('^vite-plugin-ssr:|^vike:'),
       );
     },
     async writeBundle() {
@@ -30,7 +30,7 @@ function vercelPlugin(): Plugin {
         await cleanOutputDirectory(resolvedConfig);
 
         // vite-plugin-ssr triggers a second build with --ssr
-        if (vpsFound) {
+        if (vikeFound) {
           return;
         }
       }
