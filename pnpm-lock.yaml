@@ -64,7 +64,7 @@ importers:
         version: 0.4.140(vite@4.4.9)
       vite-plugin-vercel:
         specifier: workspace:*
-        version: file:packages/vercel(@vite-plugin-vercel/vike@0.3.1)(vite-plugin-ssr@0.4.140)(vite@4.4.9)
+        version: file:packages/vercel(@vite-plugin-vercel/vike@0.3.2)(vite-plugin-ssr@0.4.140)(vite@4.4.9)
     devDependencies:
       '@types/express':
         specifier: ^4.17.17
@@ -106,7 +106,7 @@ importers:
     dependencies:
       vite-plugin-vercel:
         specifier: workspace:*
-        version: file:packages/vercel(@vite-plugin-vercel/vike@0.3.1)(vite-plugin-ssr@0.4.140)(vite@4.4.9)
+        version: file:packages/vercel(@vite-plugin-vercel/vike@0.3.2)(vite-plugin-ssr@0.4.140)(vite@4.4.9)
     devDependencies:
       typescript:
         specifier: ^5.2.2
@@ -1719,14 +1719,6 @@ packages:
       - '@swc/wasm'
       - encoding
     dev: true
-
-  /@vercel/routing-utils@2.2.1:
-    resolution: {integrity: sha512-kzMZsvToDCDskNRZD71B9UAgstec7ujmlGH8cBEo6F/07VaFeji6GQdgd6Zwnrj+TvzQBggKoPQR64VkVY8Lzw==}
-    dependencies:
-      path-to-regexp: 6.1.0
-    optionalDependencies:
-      ajv: 6.12.6
-    dev: false
 
   /@vercel/routing-utils@3.0.0:
     resolution: {integrity: sha512-u+SoHnL+RzRQIRP+YxvigzzKXQcbgYQF9qCTIuWuoLw5h9thIYWcDJvz3KxrUzxjGZ3dWboXA29KAlT6eeaeFw==}
@@ -5714,7 +5706,7 @@ packages:
   /zod@3.22.2:
     resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
 
-  file:packages/vercel(@vite-plugin-vercel/vike@0.3.1)(vite-plugin-ssr@0.4.140)(vite@4.4.9):
+  file:packages/vercel(@vite-plugin-vercel/vike@0.3.2)(vite-plugin-ssr@0.4.140)(vite@4.4.9):
     resolution: {directory: packages/vercel, type: directory}
     id: file:packages/vercel
     name: vite-plugin-vercel
@@ -5729,9 +5721,9 @@ packages:
         optional: true
     dependencies:
       '@brillout/libassert': 0.5.8
-      '@vercel/routing-utils': 2.2.1
+      '@vercel/routing-utils': 3.0.0
       '@vite-plugin-vercel/vike': file:packages/vike-integration(vite-plugin-ssr@0.4.140)(vite@4.4.9)
-      esbuild: 0.17.19
+      esbuild: 0.19.2
       fast-glob: 3.3.1
       vite: 4.4.9(@types/node@16.18.48)
       vite-plugin-ssr: 0.4.140(vite@4.4.9)
