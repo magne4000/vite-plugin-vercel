@@ -35,13 +35,13 @@
   },
   "devDependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@types/node": "^16.18.37",
-    "@vercel/node": "^2.15.3",
+    "@types/node": "^16.18.48",
+    "@vercel/node": "^2.15.10",
     "nanoid": "^4.0.2",
     "tsup": "^6.7.0",
-    "typescript": "^5.1.6",
-    "vite": "^4.3.9",
-    "vite-plugin-ssr": "^0.4.132",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9",
+    "vite-plugin-ssr": "^0.4.140",
     "vite-plugin-vercel": "workspace:*"
   },
   "license": "MIT"

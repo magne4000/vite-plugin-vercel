@@ -31,19 +31,19 @@
     "vite": "^4.2.0"
   },
   "devDependencies": {
-    "@types/node": "^16.18.37",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
-    "@typescript-eslint/parser": "^5.60.1",
-    "eslint": "^8.43.0",
+    "@types/node": "^16.18.48",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.48.0",
     "tsup": "^6.7.0",
-    "typescript": "^5.1.6",
-    "vite": "^4.3.9"
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@vercel/routing-utils": "^2.2.1",
     "esbuild": "^0.17.19",
-    "fast-glob": "^3.3.0",
-    "zod": "^3.21.4"
+    "fast-glob": "^3.3.1",
+    "zod": "^3.22.2"
   }
 }

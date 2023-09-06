@@ -7,17 +7,17 @@ Its purpose is to help you bundle your application in `.vercel` folder as suppor
 
 ## Features
 
-- [x] [SSG/Static files support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/static-files)
-  - see [`prerender` config](/packages/vercel/src/types.ts#L33)
-- [x] [SSR/Serverless functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/serverless-functions)
+- [x] [SSG/Static files support](https://vercel.com/docs/build-output-api/v3/primitives#static-files)
+  - see [`prerender` config](/packages/vercel/src/types.ts#L37)
+- [x] [SSR/Serverless functions support](https://vercel.com/docs/build-output-api/v3/primitives#serverless-functions)
   - `.[jt]s` files under the `<root>/api` folder of your project are automatically bundled as Serverless functions under `.vercel/output/functions/api/*.func`
-  - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L54)
-- [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/prerender-functions)
-  - see [`isr` config](/packages/vercel/src/types.ts#L81). Also see implementation of [vite-plugin-ssr](/packages/vite-plugin-ssr/vite-plugin-ssr.ts) for example
-- [x] [Edge functions support](https://vercel.com/docs/build-output-api/v3#vercel-primitives/edge-functions)
-- [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3#build-output-configuration/supported-properties/images)
-- [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3#features/preview-mode)
-- [x] [Advanced config override](/packages/vercel/src/types.ts#L15)
+  - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L62)
+- [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3/primitives#prerender-functions)
+  - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vite-plugin-ssr](/packages/vite-plugin-ssr/vite-plugin-ssr.ts) for example
+- [x] [Edge functions support](https://vercel.com/docs/build-output-api/v3/primitives#edge-functions)
+- [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3/configuration#images)
+- [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3/features#preview-mode)
+- [x] [Advanced config override](/packages/vercel/src/types.ts#L19)
   - [ ] Complete config override
 
 ## Usage
