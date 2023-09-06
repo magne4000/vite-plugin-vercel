@@ -6,7 +6,7 @@
   "scripts": {
     "dev:all": "pnpm -r --filter \"./packages/*\" --parallel dev",
     "dev:demo": "pnpm -r --filter \"./examples/demo\" --parallel dev",
-    "build:all": "pnpm -r --filter \"./packages/vercel\" build && pnpm -r --filter \"./packages/vite-plugin-ssr\" build && pnpm -r --filter \"./examples/*\" build",
+    "build:all": "pnpm -r --filter \"./packages/vercel\" build && pnpm -r --filter \"./packages/vike-integration\" build && pnpm -r --filter \"./examples/*\" build",
     "build:demo": "pnpm -r build && cp -rf examples/demo/public examples/demo/.vercel .",
     "typecheck:all": "pnpm -r typecheck",
     "prepare": "husky install",

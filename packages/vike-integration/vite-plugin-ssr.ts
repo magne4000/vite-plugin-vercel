@@ -20,7 +20,7 @@ import { nanoid } from 'nanoid';
 import { getParametrizedRoute, getRoutesRegex } from './route-regex';
 import { newError } from '@brillout/libassert';
 
-const libName = 'vite-plugin-ssr:vercel';
+const libName = 'vite-plugin-vercel:vike';
 const rendererDestination = 'ssr_';
 
 export function assert(

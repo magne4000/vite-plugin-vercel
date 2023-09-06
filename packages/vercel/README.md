@@ -13,7 +13,7 @@ Its purpose is to help you bundle your application in `.vercel` folder as suppor
   - `.[jt]s` files under the `<root>/api` folder of your project are automatically bundled as Serverless functions under `.vercel/output/functions/api/*.func`
   - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L62)
 - [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3/primitives#prerender-functions)
-  - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vite-plugin-ssr](/packages/vite-plugin-ssr/vite-plugin-ssr.ts) for example
+  - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vite-plugin-ssr](/packages/vike-integration/vite-plugin-ssr.ts) for example
 - [x] [Edge functions support](https://vercel.com/docs/build-output-api/v3/primitives#edge-functions)
 - [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3/configuration#images)
 - [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3/features#preview-mode)
@@ -39,26 +39,13 @@ export default defineConfig({
 
 ## Usage with vite-plugin-ssr
 
-[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@magne4000/vite-plugin-vercel-ssr](/packages/vite-plugin-ssr/README.md) plugin.
+[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@vite-plugin-vercel/vike](/packages/vike-integration/README.md) plugin.
 
-Install `@magne4000/vite-plugin-vercel-ssr` package, and update your vite config:
+You only need to install `@vite-plugin-vercel/vike`, the config stays the same as above.
 
-```ts
-// vite.config.ts
-import { defineConfig } from 'vite';
-import ssr from 'vite-plugin-ssr/plugin';
-import vercel from 'vite-plugin-vercel';
-import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
-
-export default defineConfig(async ({ command, mode }) => {
-  return {
-    plugins: [ssr(), vercel(), vercelSsr()],
-    vercel: {
-      // optional configuration options, see below for details
-    },
-  };
-});
-```
+> [!IMPORTANT]  
+> `@vite-plugin-vercel/vike` supersedes the old `@magne4000/vite-plugin-vercel-ssr` package.
+> As such, you should remove `@magne4000/vite-plugin-vercel-ssr` from your package.json and vite config file.
 
 ## Advanced usage
 

@@ -1,4 +1,4 @@
-# @magne4000/vite-plugin-vercel-ssr
+# @vite-plugin-vercel/vike
 
 [`vite-plugin-ssr`](https://github.com/brillout/vite-plugin-ssr) integration for `vite-plugin-vercel`.
 
@@ -14,19 +14,17 @@
 
 ## Usage
 
-Install this package as a dev dependency and add it to your Vite config like this:
+Install this package as a dependency and make sure `vite-plugin-vercel` is added as a vite plugin, that's all.
 
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
 import ssr from 'vite-plugin-ssr/plugin';
 import vercel from 'vite-plugin-vercel';
-import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
 
 export default defineConfig(async ({ command, mode }) => {
   return {
-    // `vercelSsr` MUST be after `ssr` and `vercel`
-    plugins: [ssr(), vercel(), vercelSsr()],
+    plugins: [ssr(), vercel()],
   };
 });
 ```
@@ -59,7 +57,7 @@ import {
   // that overrides `request.url`
   getDefaultPageContextInit,
   getDefaultResponseHandler,
-} from '@magne4000/vite-plugin-vercel-ssr/helpers';
+} from '@vite-plugin-vercel/vike/helpers';
 
 export default async function handler(
   request: VercelRequest,

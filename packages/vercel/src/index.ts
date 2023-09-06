@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import type { Plugin, ResolvedConfig } from 'vite';
+import type { Plugin, PluginOption, ResolvedConfig } from 'vite';
 import { getOutput, getPublic } from './utils';
 import { writeConfig } from './config';
 import { buildEndpoints } from './build';
@@ -11,16 +11,17 @@ export * from './types';
 
 function vercelPlugin(): Plugin {
   let resolvedConfig: ResolvedConfig;
-  let vpsFound = false;
+  let vikeFound = false;
 
   return {
     apply: 'build',
     name: 'vite-plugin-vercel',
     enforce: 'post',
+
     configResolved(config) {
       resolvedConfig = config;
-      vpsFound = resolvedConfig.plugins.some((p) =>
-        p.name.startsWith('vite-plugin-ssr:'),
+      vikeFound = resolvedConfig.plugins.some((p) =>
+        p.name.match('^vite-plugin-ssr:|^vike:'),
       );
     },
     async writeBundle() {
@@ -29,7 +30,7 @@ function vercelPlugin(): Plugin {
         await cleanOutputDirectory(resolvedConfig);
 
         // vite-plugin-ssr triggers a second build with --ssr
-        if (vpsFound) {
+        if (vikeFound) {
           return;
         }
       }
@@ -111,8 +112,28 @@ async function getStaticHtmlFiles(src: string) {
   return htmlFiles;
 }
 
-function allPlugins(): Plugin[] {
-  return [vercelPlugin()];
+/**
+ * Auto import `@vite-plugin-vercel/vike` if it is part of dependencies.
+ * Ensures that `vite-plugin-ssr/plugin` is also present to ensure predictable behavior
+ */
+async function tryImportVpvv() {
+  try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await import('vite-plugin-ssr/plugin');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const vpvv = await import('@vite-plugin-vercel/vike');
+    return vpvv.default();
+  } catch (e) {
+    return null;
+  }
 }
 
-export { allPlugins as default };
+// `smart` param only exist to circumvent a pnpm issue in dev
+// See https://github.com/pnpm/pnpm/issues/3697#issuecomment-1708687974
+export default function allPlugins(
+  options: { smart?: boolean } = {},
+): PluginOption[] {
+  return [vercelPlugin(), options.smart !== false ? tryImportVpvv() : null];
+}

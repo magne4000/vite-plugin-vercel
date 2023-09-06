@@ -30,7 +30,7 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
-      - name: Test
+      - name: Build
         run: pnpm run build:all
       - name: Test
         run: pnpm test
