@@ -63,8 +63,8 @@ importers:
         specifier: ^0.4.140
         version: 0.4.140(vite@4.4.9)
       vite-plugin-vercel:
-        specifier: file:///home/magne/workspace/vite-plugin-vercel/packages/vercel/vite-plugin-vercel-0.2.2.tgz
-        version: file:packages/vercel/vite-plugin-vercel-0.2.2.tgz(@vite-plugin-vercel/vike@packages+vike-integration)(vite@4.4.9)
+        specifier: workspace:*
+        version: link:../../packages/vercel
     devDependencies:
       '@types/express':
         specifier: ^4.17.17
@@ -100,8 +100,8 @@ importers:
   examples/simple:
     dependencies:
       vite-plugin-vercel:
-        specifier: file:///home/magne/workspace/vite-plugin-vercel/packages/vercel/vite-plugin-vercel-0.2.2.tgz
-        version: file:packages/vercel/vite-plugin-vercel-0.2.2.tgz(@vite-plugin-vercel/vike@packages+vike-integration)(vite@4.4.9)
+        specifier: workspace:*
+        version: link:../../packages/vercel
     devDependencies:
       typescript:
         specifier: ^5.2.2
@@ -5662,24 +5662,3 @@ packages:
 
   /zod@3.22.2:
     resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
-
-  file:packages/vercel/vite-plugin-vercel-0.2.2.tgz(@vite-plugin-vercel/vike@packages+vike-integration)(vite@4.4.9):
-    resolution: {integrity: sha512-Jjhx8pHyZPzuny9j3qTYDXhOwmbR4xb18N+KBSaaEvySyeZ7czIump+/oc+ClIuhXbjVlFjRI+cll0YXyOF5lw==, tarball: file:packages/vercel/vite-plugin-vercel-0.2.2.tgz}
-    id: file:packages/vercel/vite-plugin-vercel-0.2.2.tgz
-    name: vite-plugin-vercel
-    version: 0.2.2
-    peerDependencies:
-      '@vite-plugin-vercel/vike': 0.3.0
-      vite: ^4.2.0
-    peerDependenciesMeta:
-      '@vite-plugin-vercel/vike':
-        optional: true
-    dependencies:
-      '@brillout/libassert': 0.5.8
-      '@vercel/routing-utils': 2.2.1
-      '@vite-plugin-vercel/vike': link:packages/vike-integration
-      esbuild: 0.17.19
-      fast-glob: 3.3.1
-      vite: 4.4.9(@types/node@16.18.48)
-      zod: 3.22.2
-    dev: false
