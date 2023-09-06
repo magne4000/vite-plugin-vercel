@@ -28,7 +28,13 @@
     "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "peerDependencies": {
-    "vite": "^4.2.0"
+    "vite": "^4.2.0",
+    "@vite-plugin-vercel/vike": "workspace:*"
+  },
+  "peerDependenciesMeta": {
+    "@vite-plugin-vercel/vike": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@types/node": "^16.18.48",

@@ -1,6 +1,6 @@
 {
-  "name": "@magne4000/vite-plugin-vercel-ssr",
-  "version": "0.2.2",
+  "name": "@vite-plugin-vercel/vike",
+  "version": "0.3.0",
   "type": "module",
   "files": [
     "dist",
@@ -34,15 +34,21 @@
     "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@brillout/libassert": "^0.5.8",
     "@types/node": "^16.18.48",
-    "@vercel/node": "^2.15.10",
-    "nanoid": "^4.0.2",
-    "tsup": "^6.7.0",
+    "@vercel/node": "^3.0.3",
+    "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-ssr": "^0.4.140",
     "vite-plugin-vercel": "workspace:*"
+  },
+  "dependencies": {
+    "@brillout/libassert": "^0.5.8",
+    "nanoid": "^4.0.2"
+  },
+  "peerDependencies": {
+    "vite": "^4.4.9",
+    "vite-plugin-ssr": "^0.4.140"
   },
   "license": "MIT"
 }

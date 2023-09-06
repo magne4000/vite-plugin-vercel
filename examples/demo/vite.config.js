@@ -3,7 +3,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import ssr from 'vite-plugin-ssr/plugin';
 import vercel from 'vite-plugin-vercel';
-import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
 
 export default defineConfig(async () => {
   return {
@@ -13,7 +12,6 @@ export default defineConfig(async () => {
         prerender: true,
       }),
       vercel(),
-      vercelSsr(),
     ],
     vercel: {
       expiration: 25,

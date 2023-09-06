@@ -35,12 +35,12 @@ importers:
       '@brillout/libassert':
         specifier: 0.5.6
         version: 0.5.6
-      '@magne4000/vite-plugin-vercel-ssr':
-        specifier: workspace:*
-        version: link:../../packages/vite-plugin-ssr
       '@vercel/edge-config':
         specifier: ^0.1.11
         version: 0.1.11
+      '@vite-plugin-vercel/vike':
+        specifier: workspace:*
+        version: link:../../packages/vike-integration
       '@vitejs/plugin-react':
         specifier: ^3.1.0
         version: 3.1.0(vite@4.4.9)
@@ -63,8 +63,8 @@ importers:
         specifier: ^0.4.140
         version: 0.4.140(vite@4.4.9)
       vite-plugin-vercel:
-        specifier: workspace:*
-        version: link:../../packages/vercel
+        specifier: file:///home/magne/workspace/vite-plugin-vercel/packages/vercel/vite-plugin-vercel-0.2.2.tgz
+        version: file:packages/vercel/vite-plugin-vercel-0.2.2.tgz(@vite-plugin-vercel/vike@packages+vike-integration)(vite@4.4.9)
     devDependencies:
       '@types/express':
         specifier: ^4.17.17
@@ -100,8 +100,8 @@ importers:
   examples/simple:
     dependencies:
       vite-plugin-vercel:
-        specifier: workspace:*
-        version: link:../../packages/vercel
+        specifier: file:///home/magne/workspace/vite-plugin-vercel/packages/vercel/vite-plugin-vercel-0.2.2.tgz
+        version: file:packages/vercel/vite-plugin-vercel-0.2.2.tgz(@vite-plugin-vercel/vike@packages+vike-integration)(vite@4.4.9)
     devDependencies:
       typescript:
         specifier: ^5.2.2
@@ -118,6 +118,9 @@ importers:
       '@vercel/routing-utils':
         specifier: ^2.2.1
         version: 2.2.1
+      '@vite-plugin-vercel/vike':
+        specifier: workspace:*
+        version: link:../vike-integration
       esbuild:
         specifier: ^0.17.19
         version: 0.17.19
@@ -150,23 +153,24 @@ importers:
         specifier: ^4.4.9
         version: 4.4.9(@types/node@16.18.48)
 
-  packages/vite-plugin-ssr:
-    devDependencies:
+  packages/vike-integration:
+    dependencies:
       '@brillout/libassert':
         specifier: ^0.5.8
         version: 0.5.8
+      nanoid:
+        specifier: ^4.0.2
+        version: 4.0.2
+    devDependencies:
       '@types/node':
         specifier: ^16.18.48
         version: 16.18.48
       '@vercel/node':
-        specifier: ^2.15.10
-        version: 2.15.10
-      nanoid:
-        specifier: ^4.0.2
-        version: 4.0.2
+        specifier: ^3.0.3
+        version: 3.0.3
       tsup:
-        specifier: ^6.7.0
-        version: 6.7.0(typescript@5.2.2)
+        specifier: ^7.2.0
+        version: 7.2.0(typescript@5.2.2)
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -427,6 +431,7 @@ packages:
 
   /@brillout/libassert@0.5.8:
     resolution: {integrity: sha512-u/fu+jTRUdNdbLONGq1plCfh+k2/XjSbGVTfnF3rHnSPZd+ABWp0XinR5ifrFkyGOzMbzv8IiQ44lZ4U6ZGrGA==}
+    dev: false
 
   /@brillout/picocolors@1.0.9:
     resolution: {integrity: sha512-Lt/W5JsA75hcDJ2cOAlE4TqSMl6c9K+rXGRo/cU2fApnmhbRcNdkR4UHQDAwtWfZyUKWaxdwSui+jp+74J1pZg==}
@@ -630,14 +635,31 @@ packages:
       '@jridgewell/trace-mapping': 0.3.9
     dev: true
 
+  /@edge-runtime/cookies@3.4.0:
+    resolution: {integrity: sha512-rhkTN7D8YO78lf76gdmK4FYc4Z5zQMGPABFLCWiJzeHmHgaCievF/lHEf1WO1OGZVxe1V34NYxsNTZsXwLht3Q==}
+    engines: {node: '>=16'}
+    dev: true
+
   /@edge-runtime/format@2.1.0:
     resolution: {integrity: sha512-gc2qbYEIIJRczBApBPznVI1c5vZgzrZQOsFZnAxxFiYah9qldHiu1YEitzSvXI8X8ZgvAguuIiyIbpWz17nlXA==}
     engines: {node: '>=14'}
     dev: true
 
+  /@edge-runtime/format@2.2.0:
+    resolution: {integrity: sha512-gPrS6AVw/qJJL0vcxMXv4kFXCU3ZTCD1uuJpwX15YxHV8BgU9OG5v9LrkkXcr96PBT/9epypfNJMhlWADuEziw==}
+    engines: {node: '>=16'}
+    dev: true
+
   /@edge-runtime/node-utils@2.0.3:
     resolution: {integrity: sha512-JUSbi5xu/A8+D2t9B9wfirCI1J8n8q0660FfmqZgA+n3RqxD3y7SnamL1sKRE5/AbHsKs9zcqCbK2YDklbc9Bg==}
     engines: {node: '>=14'}
+    dev: true
+
+  /@edge-runtime/node-utils@2.2.0:
+    resolution: {integrity: sha512-eRM3d/zwF+VczI9+YY9j0b5s/NQ6Cj6y6XY1Fb3HHdu8rCphH8Z41qjTYt4S315FUXo78GcDgnYv7GUvqQ0a8A==}
+    engines: {node: '>=16'}
+    dependencies:
+      '@edge-runtime/cookies': 3.4.0
     dev: true
 
   /@edge-runtime/primitives@2.1.2:
@@ -655,6 +677,11 @@ packages:
     engines: {node: '>=14'}
     dev: true
 
+  /@edge-runtime/primitives@3.1.0:
+    resolution: {integrity: sha512-yxr1QM/lC8nrU38zxePeDqVeIjwsJ83gKGTH8YJ4CoHTv3q+6xEeqRIT+/9IPX/FApWYtnxHauhNqr6CHRj5YA==}
+    engines: {node: '>=16'}
+    dev: true
+
   /@edge-runtime/vm@3.0.1:
     resolution: {integrity: sha512-69twXLIcqVx0iNlc1vFqnXgka2CZi2c/QBAmMzXBk0M6mPG+ICCBh2dd+cv1K+HW2pfLuSW+EskkFXWGeCf1Vw==}
     engines: {node: '>=14'}
@@ -667,6 +694,13 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       '@edge-runtime/primitives': 3.0.3
+    dev: true
+
+  /@edge-runtime/vm@3.1.0:
+    resolution: {integrity: sha512-Y2JZgJP+4byI17SiDeEZhvBUvJ+om7E5ll/jrS7aGRpet5qKnJSsGep6xxhMjqT/j8ulFvTMN/kdlMMy5pEKBQ==}
+    engines: {node: '>=16'}
+    dependencies:
+      '@edge-runtime/primitives': 3.1.0
     dev: true
 
   /@esbuild-kit/cjs-loader@2.4.2:
@@ -1469,6 +1503,10 @@ packages:
     resolution: {integrity: sha512-C86OPuPAvG/pSr27DPKecmptkYYsgyhOKdHTLv9jI3Pv1yvru78k+JjrAyn7N+0ev75KNV0Prv4P3p76168ePw==}
     dev: true
 
+  /@vercel/build-utils@7.1.0:
+    resolution: {integrity: sha512-NoeBoZIueYUpuQc6W+4YuN3+XgxcuuQwZdahw1bfO2pWuWK4ikoZNHfSACyA/BL2j2LqjRBxIhVOI08CnPCXcA==}
+    dev: true
+
   /@vercel/edge-config-fs@0.1.0:
     resolution: {integrity: sha512-NRIBwfcS0bUoUbRWlNGetqjvLSwgYH/BqKqDN7vK1g32p7dN96k0712COgaz6VFizAm9b0g6IG6hR6+hc0KCPg==}
     dev: false
@@ -1482,6 +1520,10 @@ packages:
 
   /@vercel/error-utils@1.0.10:
     resolution: {integrity: sha512-nsKy2sy+pjUWyKI1V/XXKspVzHMYgSalmj5+EsKWFXZbnNZicqxNtMR94J8Hs7SB4TQxh0s4KhczJtL59AVGMg==}
+    dev: true
+
+  /@vercel/error-utils@2.0.1:
+    resolution: {integrity: sha512-ZUVpRFArh5eyKpJmdfEuCaMpZKQvZgUq0pQ7PdK8m5FgRYEvF4I0TMJH3JnkbYaMMUH82aYWZr+/hFJtEBcmTQ==}
     dev: true
 
   /@vercel/node@2.15.10:
@@ -1511,6 +1553,33 @@ packages:
       - encoding
     dev: true
 
+  /@vercel/node@3.0.3:
+    resolution: {integrity: sha512-BePloH9Rh09zi9pXw0MtzVnoVDvD6Rty1Kt94KensUZf0r0YSqYXtjWJwAMvXffjF1smr9COwxglrtZ93c7+ng==}
+    dependencies:
+      '@edge-runtime/node-utils': 2.2.0
+      '@edge-runtime/primitives': 3.1.0
+      '@edge-runtime/vm': 3.1.0
+      '@types/node': 14.18.33
+      '@vercel/build-utils': 7.1.0
+      '@vercel/error-utils': 2.0.1
+      '@vercel/static-config': 3.0.0
+      async-listen: 3.0.0
+      content-type: 1.0.5
+      edge-runtime: 2.5.0
+      esbuild: 0.14.47
+      exit-hook: 2.2.1
+      node-fetch: 2.6.9
+      path-to-regexp: 6.2.1
+      ts-morph: 12.0.0
+      ts-node: 10.9.1(@types/node@14.18.33)(typescript@4.9.5)
+      typescript: 4.9.5
+      undici: 5.23.0
+    transitivePeerDependencies:
+      - '@swc/core'
+      - '@swc/wasm'
+      - encoding
+    dev: true
+
   /@vercel/routing-utils@2.2.1:
     resolution: {integrity: sha512-kzMZsvToDCDskNRZD71B9UAgstec7ujmlGH8cBEo6F/07VaFeji6GQdgd6Zwnrj+TvzQBggKoPQR64VkVY8Lzw==}
     dependencies:
@@ -1521,6 +1590,14 @@ packages:
 
   /@vercel/static-config@2.0.17:
     resolution: {integrity: sha512-2f50OTVrN07x7pH+XNW0e7cj7T+Ufg+19+a2N3/XZBjQmV+FaMlmSLiaQ4tBxp2H8lWWHzENua7ZSSQPtRZ3/A==}
+    dependencies:
+      ajv: 8.6.3
+      json-schema-to-ts: 1.6.4
+      ts-morph: 12.0.0
+    dev: true
+
+  /@vercel/static-config@3.0.0:
+    resolution: {integrity: sha512-2qtvcBJ1bGY0dYGYh3iM7yGKkk971FujLEDXzuW5wcZsPr1GSEjO/w2iSr3qve6nDDtBImsGoDEnus5FI4+fIw==}
     dependencies:
       ajv: 8.6.3
       json-schema-to-ts: 1.6.4
@@ -1741,6 +1818,11 @@ packages:
     engines: {node: '>= 14'}
     dev: true
 
+  /async-listen@3.0.1:
+    resolution: {integrity: sha512-cWMaNwUJnf37C/S5TfCkk/15MwbPRwVYALA2jtjkbHjCmAPiDXyNJy2q3p1KAZzDLHAWyarUWSujUoHR4pEgrA==}
+    engines: {node: '>= 14'}
+    dev: true
+
   /asynckit@0.4.0:
     resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
     dev: true
@@ -1827,6 +1909,23 @@ packages:
     dependencies:
       esbuild: 0.17.19
       load-tsconfig: 0.2.5
+    dev: true
+
+  /bundle-require@4.0.1(esbuild@0.18.20):
+    resolution: {integrity: sha512-9NQkRHlNdNpDBGmLpngF3EFDcwodhMUuLz9PaWYciVcQF9SE4LFjM2DB/xV1Li5JiuDMv7ZUWuC3rGbqR0MAXQ==}
+    engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
+    peerDependencies:
+      esbuild: '>=0.17'
+    dependencies:
+      esbuild: 0.18.20
+      load-tsconfig: 0.2.5
+    dev: true
+
+  /busboy@1.6.0:
+    resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
+    engines: {node: '>=10.16.0'}
+    dependencies:
+      streamsearch: 1.1.0
     dev: true
 
   /bytes@3.1.2:
@@ -2214,6 +2313,22 @@ packages:
       '@edge-runtime/format': 2.1.0
       '@edge-runtime/vm': 3.0.3
       async-listen: 3.0.0
+      mri: 1.2.0
+      picocolors: 1.0.0
+      pretty-bytes: 5.6.0
+      pretty-ms: 7.0.1
+      signal-exit: 4.0.2
+      time-span: 4.0.0
+    dev: true
+
+  /edge-runtime@2.5.0:
+    resolution: {integrity: sha512-QgDNX6R+RPwhY3+vqHpvYE4XUoB/cFG60nGBKu9pmPOJxQleeTCj2F5CHimIpNqex9h1Cy2Y3tuQ+Vq2GzmZIA==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dependencies:
+      '@edge-runtime/format': 2.2.0
+      '@edge-runtime/vm': 3.1.0
+      async-listen: 3.0.1
       mri: 1.2.0
       picocolors: 1.0.0
       pretty-bytes: 5.6.0
@@ -3822,7 +3937,7 @@ packages:
     resolution: {integrity: sha512-7ZtY5KTCNheRGfEFxnedV5zFiORN1+Y1N6zvPTnHQd8ENUvfaDBeuJDZb2bN/oXwXxu3qkTXDzy57W5vAmDTBw==}
     engines: {node: ^14 || ^16 || >=18}
     hasBin: true
-    dev: true
+    dev: false
 
   /natural-compare-lite@1.4.0:
     resolution: {integrity: sha512-Tj+HTDSJJKaZnfiuw+iaF9skdPpTo2GtEly5JHnWV/hfv2Qj/9RKsGISQtLh2ox3l5EAGw487hnBee0sIJ6v2g==}
@@ -4136,6 +4251,22 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       yaml: 1.10.2
+    dev: true
+
+  /postcss-load-config@4.0.1:
+    resolution: {integrity: sha512-vEJIc8RdiBRu3oRAI0ymerOn+7rPuMvRXslTvZUKZonDHFIczxztIyJ1urxM1x9JXEikvpWWTUUqal5j/8QgvA==}
+    engines: {node: '>= 14'}
+    peerDependencies:
+      postcss: '>=8.0.9'
+      ts-node: '>=9.0.0'
+    peerDependenciesMeta:
+      postcss:
+        optional: true
+      ts-node:
+        optional: true
+    dependencies:
+      lilconfig: 2.1.0
+      yaml: 2.3.1
     dev: true
 
   /postcss@8.4.29:
@@ -4636,6 +4767,11 @@ packages:
       mixme: 0.5.9
     dev: true
 
+  /streamsearch@1.1.0:
+    resolution: {integrity: sha512-Mcc5wHehp9aXz1ax6bZUyY5afg9u2rv5cqQI3mRrYkGC8rW2hM02jWuwjtL++LS5qinSyhj2QfLyNsuc+VsExg==}
+    engines: {node: '>=10.0.0'}
+    dev: true
+
   /string-argv@0.3.2:
     resolution: {integrity: sha512-aqD2Q0144Z+/RqG52NeHEkZauTAUWJO8c6yTftGJKO3Tja5tUgIfmIl6kExvhtxSDP7fXB6DvzkfMpCd/F3G+Q==}
     engines: {node: '>=0.6.19'}
@@ -4939,6 +5075,42 @@ packages:
       - ts-node
     dev: true
 
+  /tsup@7.2.0(typescript@5.2.2):
+    resolution: {integrity: sha512-vDHlczXbgUvY3rWvqFEbSqmC1L7woozbzngMqTtL2PGBODTtWlRwGDDawhvWzr5c1QjKe4OAKqJGfE1xeXUvtQ==}
+    engines: {node: '>=16.14'}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': ^1
+      postcss: ^8.4.12
+      typescript: '>=4.1.0'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      postcss:
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      bundle-require: 4.0.1(esbuild@0.18.20)
+      cac: 6.7.14
+      chokidar: 3.5.3
+      debug: 4.3.4
+      esbuild: 0.18.20
+      execa: 5.1.1
+      globby: 11.1.0
+      joycon: 3.1.1
+      postcss-load-config: 4.0.1
+      resolve-from: 5.0.0
+      rollup: 3.29.0
+      source-map: 0.8.0-beta.0
+      sucrase: 3.34.0
+      tree-kill: 1.2.2
+      typescript: 5.2.2
+    transitivePeerDependencies:
+      - supports-color
+      - ts-node
+    dev: true
+
   /tsutils@3.21.0(typescript@5.2.2):
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
     engines: {node: '>= 6'}
@@ -5079,6 +5251,13 @@ packages:
       has-bigints: 1.0.2
       has-symbols: 1.0.3
       which-boxed-primitive: 1.0.2
+    dev: true
+
+  /undici@5.23.0:
+    resolution: {integrity: sha512-1D7w+fvRsqlQ9GscLBwcAJinqcZGHUKjbOmXdlE/v8BvEGXjeWAax+341q44EuTcHXXnfyKNbKRq4Lg7OzhMmg==}
+    engines: {node: '>=14.0'}
+    dependencies:
+      busboy: 1.6.0
     dev: true
 
   /universalify@0.1.2:
@@ -5483,3 +5662,24 @@ packages:
 
   /zod@3.22.2:
     resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
+
+  file:packages/vercel/vite-plugin-vercel-0.2.2.tgz(@vite-plugin-vercel/vike@packages+vike-integration)(vite@4.4.9):
+    resolution: {integrity: sha512-Jjhx8pHyZPzuny9j3qTYDXhOwmbR4xb18N+KBSaaEvySyeZ7czIump+/oc+ClIuhXbjVlFjRI+cll0YXyOF5lw==, tarball: file:packages/vercel/vite-plugin-vercel-0.2.2.tgz}
+    id: file:packages/vercel/vite-plugin-vercel-0.2.2.tgz
+    name: vite-plugin-vercel
+    version: 0.2.2
+    peerDependencies:
+      '@vite-plugin-vercel/vike': 0.3.0
+      vite: ^4.2.0
+    peerDependenciesMeta:
+      '@vite-plugin-vercel/vike':
+        optional: true
+    dependencies:
+      '@brillout/libassert': 0.5.8
+      '@vercel/routing-utils': 2.2.1
+      '@vite-plugin-vercel/vike': link:packages/vike-integration
+      esbuild: 0.17.19
+      fast-glob: 3.3.1
+      vite: 4.4.9(@types/node@16.18.48)
+      zod: 3.22.2
+    dev: false

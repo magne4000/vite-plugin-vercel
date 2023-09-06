@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import type { Plugin, ResolvedConfig } from 'vite';
+import type { Plugin, PluginOption, ResolvedConfig } from 'vite';
 import { getOutput, getPublic } from './utils';
 import { writeConfig } from './config';
 import { buildEndpoints } from './build';
@@ -17,6 +17,7 @@ function vercelPlugin(): Plugin {
     apply: 'build',
     name: 'vite-plugin-vercel',
     enforce: 'post',
+
     configResolved(config) {
       resolvedConfig = config;
       vpsFound = resolvedConfig.plugins.some((p) =>
@@ -111,8 +112,18 @@ async function getStaticHtmlFiles(src: string) {
   return htmlFiles;
 }
 
-function allPlugins(): Plugin[] {
-  return [vercelPlugin()];
+/**
+ * Auto import @vite-plugin-vercel/vike if it is part of dependencies
+ */
+async function tryImportVpvv() {
+  try {
+    const vpvv = await import('@vite-plugin-vercel/vike');
+    return vpvv.default();
+  } catch (e) {
+    return null;
+  }
 }
 
-export { allPlugins as default };
+export default function allPlugins(): PluginOption[] {
+  return [vercelPlugin(), tryImportVpvv()];
+}

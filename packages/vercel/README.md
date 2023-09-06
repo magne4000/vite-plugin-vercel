@@ -13,7 +13,7 @@ Its purpose is to help you bundle your application in `.vercel` folder as suppor
   - `.[jt]s` files under the `<root>/api` folder of your project are automatically bundled as Serverless functions under `.vercel/output/functions/api/*.func`
   - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L62)
 - [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3/primitives#prerender-functions)
-  - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vite-plugin-ssr](/packages/vite-plugin-ssr/vite-plugin-ssr.ts) for example
+  - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vite-plugin-ssr](/packages/vike-integration/vite-plugin-ssr.ts) for example
 - [x] [Edge functions support](https://vercel.com/docs/build-output-api/v3/primitives#edge-functions)
 - [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3/configuration#images)
 - [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3/features#preview-mode)
@@ -39,7 +39,7 @@ export default defineConfig({
 
 ## Usage with vite-plugin-ssr
 
-[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@magne4000/vite-plugin-vercel-ssr](/packages/vite-plugin-ssr/README.md) plugin.
+[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@magne4000/vite-plugin-vercel-ssr](/packages/vike-integration/README.md) plugin.
 
 Install `@magne4000/vite-plugin-vercel-ssr` package, and update your vite config:
 
