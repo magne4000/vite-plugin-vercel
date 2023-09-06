@@ -132,6 +132,9 @@ async function tryImportVpvv() {
 
 // `smart` param only exist to circumvent a pnpm issue in dev
 // See https://github.com/pnpm/pnpm/issues/3697#issuecomment-1708687974
+// FIXME: Could be fixed by:
+//  - shared-workspace-lockfile=false in .npmrc. See https://pnpm.io/npmrc#shared-workspace-lockfile
+//  - Moving demo test in dedicated repo, with each a correct package.json
 export default function allPlugins(
   options: { smart?: boolean } = {},
 ): PluginOption[] {

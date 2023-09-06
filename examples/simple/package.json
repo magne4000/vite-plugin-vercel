@@ -17,5 +17,10 @@
   },
   "dependencies": {
     "vite-plugin-vercel": "workspace:*"
+  },
+  "dependenciesMeta": {
+    "vite-plugin-vercel": {
+      "injected": true
+    }
   }
 }

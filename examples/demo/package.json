@@ -39,5 +39,13 @@
     "vite-plugin-ssr": "^0.4.140",
     "vite-plugin-vercel": "workspace:*"
   },
+  "dependenciesMeta": {
+    "@vite-plugin-vercel/vike": {
+      "injected": true
+    },
+    "vite-plugin-vercel": {
+      "injected": true
+    }
+  },
   "version": null
 }

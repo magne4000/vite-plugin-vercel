@@ -42,12 +42,14 @@
   },
   "devDependencies": {
     "@types/node": "^16.18.48",
+    "@vite-plugin-vercel/vike": "workspace:*",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "eslint": "^8.48.0",
     "tsup": "^6.7.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9"
+    "vite": "^4.4.9",
+    "vite-plugin-ssr": "^0.4.140"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
