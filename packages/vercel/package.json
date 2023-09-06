@@ -29,10 +29,14 @@
   },
   "peerDependencies": {
     "vite": "^4.2.0",
-    "@vite-plugin-vercel/vike": "workspace:*"
+    "@vite-plugin-vercel/vike": "workspace:*",
+    "vite-plugin-ssr": "*"
   },
   "peerDependenciesMeta": {
     "@vite-plugin-vercel/vike": {
+      "optional": true
+    },
+    "vite-plugin-ssr": {
       "optional": true
     }
   },

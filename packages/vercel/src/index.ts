@@ -113,10 +113,16 @@ async function getStaticHtmlFiles(src: string) {
 }
 
 /**
- * Auto import @vite-plugin-vercel/vike if it is part of dependencies
+ * Auto import `@vite-plugin-vercel/vike` if it is part of dependencies.
+ * Ensures that `vite-plugin-ssr/plugin` is also present to ensure predictable behavior
  */
 async function tryImportVpvv() {
   try {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    await import('vite-plugin-ssr/plugin');
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const vpvv = await import('@vite-plugin-vercel/vike');
     return vpvv.default();
   } catch (e) {
@@ -124,6 +130,10 @@ async function tryImportVpvv() {
   }
 }
 
-export default function allPlugins(): PluginOption[] {
-  return [vercelPlugin(), tryImportVpvv()];
+// `smart` param only exist to circumvent a pnpm issue in dev
+// See https://github.com/pnpm/pnpm/issues/3697#issuecomment-1708687974
+export default function allPlugins(
+  options: { smart?: boolean } = {},
+): PluginOption[] {
+  return [vercelPlugin(), options.smart !== false ? tryImportVpvv() : null];
 }

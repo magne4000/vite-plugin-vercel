@@ -8,7 +8,12 @@ export const setup = _setup(path.basename(__dirname), {
   configFile: false,
   mode: 'production',
   root: process.cwd(),
-  plugins: [react(), vercel()],
+  plugins: [
+    react(),
+    vercel({
+      smart: false,
+    }),
+  ],
   vercel: {
     isr: {
       page1: {
