@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.3.2
+
+### Patch Changes
+
+- update dependencies
+
 ## 0.3.1
 
 ### Patch Changes
