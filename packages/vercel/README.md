@@ -43,6 +43,10 @@ export default defineConfig({
 
 You only need to install `@vite-plugin-vercel/vike`, the config stays the same as above.
 
+> [!IMPORTANT]  
+> `@vite-plugin-vercel/vike` supersedes the old `@magne4000/vite-plugin-vercel-ssr` package.
+> As such, you should remove `@magne4000/vite-plugin-vercel-ssr` from your package.json and vite config file.
+
 ## Advanced usage
 
 ```ts
