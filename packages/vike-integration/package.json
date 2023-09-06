@@ -15,12 +15,10 @@
   "module": "./dist/vite-plugin-ssr.js",
   "exports": {
     ".": {
-      "types": "./dist/vite-plugin-ssr.d.ts",
       "import": "./dist/vite-plugin-ssr.js",
       "require": "./dist/vite-plugin-ssr.cjs"
     },
     "./helpers": {
-      "types": "./dist/templates/helpers.d.ts",
       "import": "./dist/templates/helpers.js",
       "require": "./dist/templates/helpers.cjs"
     }
