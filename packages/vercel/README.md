@@ -39,26 +39,9 @@ export default defineConfig({
 
 ## Usage with vite-plugin-ssr
 
-[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@magne4000/vite-plugin-vercel-ssr](/packages/vike-integration/README.md) plugin.
+[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@vite-plugin-vercel/vike](/packages/vike-integration/README.md) plugin.
 
-Install `@magne4000/vite-plugin-vercel-ssr` package, and update your vite config:
-
-```ts
-// vite.config.ts
-import { defineConfig } from 'vite';
-import ssr from 'vite-plugin-ssr/plugin';
-import vercel from 'vite-plugin-vercel';
-import vercelSsr from '@magne4000/vite-plugin-vercel-ssr';
-
-export default defineConfig(async ({ command, mode }) => {
-  return {
-    plugins: [ssr(), vercel(), vercelSsr()],
-    vercel: {
-      // optional configuration options, see below for details
-    },
-  };
-});
-```
+You only need to install `@vite-plugin-vercel/vike`, the config stays the same as above.
 
 ## Advanced usage
 
