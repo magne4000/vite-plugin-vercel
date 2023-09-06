@@ -18,8 +18,8 @@ export type ViteVercelRedirect = Redirect & { enforce?: 'pre' | 'post' };
 
 export interface ViteVercelConfig {
   /**
-   * How long Functions should be allowed to run for every request in seconds.
-   * If left empty, default value for your plan will is used.
+   * How long Functions should be allowed to run for every request, in seconds.
+   * If left empty, default value for your plan will be used.
    */
   defaultMaxDuration?: number;
   /**
@@ -31,10 +31,26 @@ export interface ViteVercelConfig {
   expiration?: number;
   /**
    * Also known as Server Side Generation, or SSG.
-   * If present, must build static files in `.vercel/output/static`.
-   * Can be set to `false` to disable prerendering completely.
+   * If present, this function is responsible to create static files in `.vercel/output/static`.
+   * Defaults to `false`, which disables prerendering.
    */
   prerender?: ViteVercelPrerenderFn | false;
+  /**
+   * @see {@link https://vercel.com/docs/projects/project-configuration#rewrites}
+   */
+  rewrites?: ViteVercelRewrite[];
+  /**
+   * @see {@link https://vercel.com/docs/projects/project-configuration#redirects}
+   */
+  redirects?: ViteVercelRedirect[];
+  /**
+   * @see {@link https://vercel.com/docs/projects/project-configuration#cleanurls}
+   */
+  cleanUrls?: boolean;
+  /**
+   * @see {@link https://vercel.com/docs/projects/project-configuration#trailingslash}
+   */
+  trailingSlash?: boolean;
   /**
    * By default, all `api/*` endpoints are compiled under `.vercel/output/functions/api/*.func`.
    * If others serverless functions need to be compiled under `.vercel/output/functions`, they should be added here.
@@ -55,14 +71,10 @@ export interface ViteVercelConfig {
    * }
    * ```
    */
-  rewrites?: ViteVercelRewrite[];
-  redirects?: ViteVercelRedirect[];
-  cleanUrls?: boolean;
-  trailingSlash?: boolean;
   additionalEndpoints?: ViteVercelApiEntry[];
   /**
    * Advanced configuration to override .vercel/output/config.json
-   * @see {@link https://vercel.com/docs/build-output-api/v3#build-output-configuration}
+   * @see {@link https://vercel.com/docs/build-output-api/v3/configuration#configuration}
    * @protected
    */
   config?: Partial<Omit<VercelOutputConfig, 'version'>>;
