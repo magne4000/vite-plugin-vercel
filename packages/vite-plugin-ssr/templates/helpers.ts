@@ -27,6 +27,7 @@ export function getDefaultPageContextInit(request: VercelRequest) {
       : request.url!;
   return {
     url,
+    urlOriginal: url,
     body: request.body,
     cookies: request.cookies,
   };

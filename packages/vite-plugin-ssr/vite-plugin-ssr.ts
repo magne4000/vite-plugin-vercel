@@ -2,7 +2,7 @@ import { prerender as prerenderCli } from 'vite-plugin-ssr/prerender';
 import fs from 'fs/promises';
 import path from 'path';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
-import type { PageContextBuiltIn } from 'vite-plugin-ssr';
+import type { PageContextBuiltInServer } from 'vite-plugin-ssr/types';
 import type {
   VercelOutputIsr,
   ViteVercelApiEntry,
@@ -52,7 +52,7 @@ interface MissingPageContextOverrides {
 
 type PageContextForRoute = Parameters<typeof route>[0];
 
-type PageContext = PageContextBuiltIn &
+type PageContext = PageContextBuiltInServer &
   MissingPageContextOverrides &
   PageContextForRoute;
 
