@@ -152,10 +152,14 @@ export const prerender: ViteVercelPrerenderFn = async (
       build: {
         outDir: getOutDirRoot(resolvedConfig),
       },
-    } as any,
+    },
 
     async onPagePrerender(pageContext: PageContext) {
       const { filePath, fileContent } = pageContext._prerenderResult;
+
+      if (pageContext._pageId === '/pages/dynamic') {
+        console.log(pageContext);
+      }
 
       const isr = assertIsr(resolvedConfig, pageContext.exports);
 

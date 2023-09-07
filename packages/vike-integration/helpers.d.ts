@@ -1,2 +1,2 @@
-// Help TS's resolver until it supports `package.json#exports`
+// Help TS's resolver for node10 target
 export * from './dist/templates/helpers';

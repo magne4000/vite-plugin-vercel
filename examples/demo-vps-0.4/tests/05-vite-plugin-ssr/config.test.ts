@@ -58,9 +58,9 @@ prepareTestJsonFileContent('config.json', (context) => {
       { dest: '/ssr_/?__original_path=$1', src: '^((?!/api).*)$' },
     ]);
     expect((context.file as any).overrides).toMatchObject({
-      // '404.html': {
-      //   path: '404',
-      // },
+      '404.html': {
+        path: '404',
+      },
       'catch-all/a/b/c/index.html': {
         path: 'catch-all/a/b/c',
       },

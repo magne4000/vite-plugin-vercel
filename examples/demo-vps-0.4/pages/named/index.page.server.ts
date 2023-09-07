@@ -1,6 +1,6 @@
-import { PageContextBuiltIn } from 'vite-plugin-ssr/types';
+import { PageContextBuiltInServer } from 'vite-plugin-ssr/types';
 
-export function onBeforeRender(pageContext: PageContextBuiltIn) {
+export function onBeforeRender(pageContext: PageContextBuiltInServer) {
   return {
     pageContext: {
       pageProps: {
