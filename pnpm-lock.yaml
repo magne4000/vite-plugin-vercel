@@ -40,7 +40,7 @@ importers:
         version: 0.2.1
       '@vite-plugin-vercel/vike':
         specifier: workspace:*
-        version: file:packages/vike-integration(vite-plugin-ssr@0.4.140)(vite@4.4.9)
+        version: link:../../packages/vike-integration
       '@vitejs/plugin-react':
         specifier: ^4.0.4
         version: 4.0.4(vite@4.4.9)
@@ -64,7 +64,7 @@ importers:
         version: 0.4.140(vite@4.4.9)
       vite-plugin-vercel:
         specifier: workspace:*
-        version: file:packages/vercel(@vite-plugin-vercel/vike@0.3.2)(vite-plugin-ssr@0.4.140)(vite@4.4.9)
+        version: link:../../packages/vercel
     devDependencies:
       '@types/express':
         specifier: ^4.17.17
@@ -96,17 +96,12 @@ importers:
       zod:
         specifier: ^3.22.2
         version: 3.22.2
-    dependenciesMeta:
-      '@vite-plugin-vercel/vike':
-        injected: true
-      vite-plugin-vercel:
-        injected: true
 
   examples/simple:
     dependencies:
       vite-plugin-vercel:
         specifier: workspace:*
-        version: file:packages/vercel(@vite-plugin-vercel/vike@0.3.2)(vite-plugin-ssr@0.4.140)(vite@4.4.9)
+        version: link:../../packages/vercel
     devDependencies:
       typescript:
         specifier: ^5.2.2
@@ -114,9 +109,6 @@ importers:
       vite:
         specifier: ^4.4.9
         version: 4.4.9(@types/node@16.18.48)
-    dependenciesMeta:
-      vite-plugin-vercel:
-        injected: true
 
   packages/vercel:
     dependencies:
@@ -2026,8 +2018,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001527
-      electron-to-chromium: 1.4.508
+      caniuse-lite: 1.0.30001528
+      electron-to-chromium: 1.4.510
       node-releases: 2.0.13
       update-browserslist-db: 1.0.11(browserslist@4.21.10)
     dev: false
@@ -2086,8 +2078,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /caniuse-lite@1.0.30001527:
-    resolution: {integrity: sha512-YkJi7RwPgWtXVSgK4lG9AHH57nSzvvOp9MesgXmw4Q7n0C3H04L0foHqfxcmSAm5AcWb8dW9AYj2tR7/5GnddQ==}
+  /caniuse-lite@1.0.30001528:
+    resolution: {integrity: sha512-0Db4yyjR9QMNlsxh+kKWzQtkyflkG/snYheSzkjmvdEtEXB1+jt7A2HmSEiO6XIJPIbo92lHNGNySvE5pZcs5Q==}
     dev: false
 
   /chai@4.3.8:
@@ -2437,8 +2429,8 @@ packages:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: false
 
-  /electron-to-chromium@1.4.508:
-    resolution: {integrity: sha512-FFa8QKjQK/A5QuFr2167myhMesGrhlOBD+3cYNxO9/S4XzHEXesyTD/1/xF644gC8buFPz3ca6G1LOQD0tZrrg==}
+  /electron-to-chromium@1.4.510:
+    resolution: {integrity: sha512-xPfLIPFcN/WLXBpQ/K4UgE98oUBO5Tia6BD4rkSR0wE7ep/PwBVlgvPJQrIBpmJGVAmUzwPKuDbVt9XV6+uC2g==}
     dev: false
 
   /emoji-regex@8.0.0:
@@ -5705,41 +5697,3 @@ packages:
 
   /zod@3.22.2:
     resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
-
-  file:packages/vercel(@vite-plugin-vercel/vike@0.3.2)(vite-plugin-ssr@0.4.140)(vite@4.4.9):
-    resolution: {directory: packages/vercel, type: directory}
-    id: file:packages/vercel
-    name: vite-plugin-vercel
-    peerDependencies:
-      '@vite-plugin-vercel/vike': workspace:*
-      vite: ^4.2.0
-      vite-plugin-ssr: '*'
-    peerDependenciesMeta:
-      '@vite-plugin-vercel/vike':
-        optional: true
-      vite-plugin-ssr:
-        optional: true
-    dependencies:
-      '@brillout/libassert': 0.5.8
-      '@vercel/routing-utils': 3.0.0
-      '@vite-plugin-vercel/vike': file:packages/vike-integration(vite-plugin-ssr@0.4.140)(vite@4.4.9)
-      esbuild: 0.19.2
-      fast-glob: 3.3.1
-      vite: 4.4.9(@types/node@16.18.48)
-      vite-plugin-ssr: 0.4.140(vite@4.4.9)
-      zod: 3.22.2
-    dev: false
-
-  file:packages/vike-integration(vite-plugin-ssr@0.4.140)(vite@4.4.9):
-    resolution: {directory: packages/vike-integration, type: directory}
-    id: file:packages/vike-integration
-    name: '@vite-plugin-vercel/vike'
-    peerDependencies:
-      vite: ^4.4.9
-      vite-plugin-ssr: '*'
-    dependencies:
-      '@brillout/libassert': 0.5.8
-      nanoid: 4.0.2
-      vite: 4.4.9(@types/node@16.18.48)
-      vite-plugin-ssr: 0.4.140(vite@4.4.9)
-    dev: false
