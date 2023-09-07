@@ -15,18 +15,9 @@
   "main": "./dist/vite-plugin-ssr.js",
   "types": "./dist/vite-plugin-ssr.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/vite-plugin-ssr.js",
-      "require": "./dist/vite-plugin-ssr.cjs"
-    },
-    "./helpers": {
-      "import": "./dist/templates/helpers.js",
-      "require": "./dist/templates/helpers.cjs"
-    },
-    "./config": {
-      "import": "./dist/config.h.js",
-      "require": "./dist/config.h.cjs"
-    }
+    ".": "./dist/vite-plugin-ssr.js",
+    "./helpers": "./dist/templates/helpers.js",
+    "./config": "./dist/+config.h.js"
   },
   "scripts": {
     "build": "tsup",

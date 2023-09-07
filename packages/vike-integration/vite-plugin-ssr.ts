@@ -1,6 +1,7 @@
 import { prerender as prerenderCli } from 'vite-plugin-ssr/prerender';
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
 import type { PageContextBuiltInServer } from 'vite-plugin-ssr/types';
 import type {
@@ -22,6 +23,8 @@ import { newError } from '@brillout/libassert';
 
 const libName = 'vite-plugin-vercel:vike';
 const rendererDestination = 'ssr_';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function assert(
   condition: unknown,
@@ -156,10 +159,6 @@ export const prerender: ViteVercelPrerenderFn = async (
 
     async onPagePrerender(pageContext: PageContext) {
       const { filePath, fileContent } = pageContext._prerenderResult;
-
-      if (pageContext._pageId === '/pages/dynamic') {
-        console.log(pageContext);
-      }
 
       const isr = assertIsr(resolvedConfig, pageContext.exports);
 
