@@ -27,7 +27,6 @@
     "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-streaming": "^0.3.14",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
     "vite-plugin-ssr": "0.4.140-commit-f2ec4bd",
