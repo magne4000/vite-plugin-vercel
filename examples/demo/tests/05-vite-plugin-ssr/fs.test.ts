@@ -28,7 +28,6 @@ describe('fs', function () {
     // ISR + Static pages
     '/functions/ssr_.func/index.js',
     '/functions/ssr_.func/.vc-config.json',
-    '/static/404.html',
     '/static/index.html',
     '/static/index.pageContext.json',
     '/static/static/index.html',
