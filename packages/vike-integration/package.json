@@ -35,7 +35,7 @@
     "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "vite-plugin-ssr": "0.4.140-commit-894c039",
+    "vite-plugin-ssr": "0.4.140-commit-f2ec4bd",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {

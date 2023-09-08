@@ -353,7 +353,7 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
             const pagesWithIsr = await Promise.all(
               allPageIds.map(async (pageId) => {
                 let page: {
-                  fileExports: unknown;
+                  config: unknown;
                   filePath: string;
                 };
 
@@ -366,7 +366,7 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
                   );
 
                   page = {
-                    fileExports: _page.fileExports,
+                    config: _page.fileExports,
                     filePath: _page.filePath,
                   };
                 } else {
@@ -378,6 +378,14 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
                     pageConfig,
                     `Cannot find page config ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
                   );
+
+                  const simplePageConfig: Record<string, unknown> = {};
+
+                  for (const [k, v] of Object.entries(
+                    pageConfig.configValues,
+                  )) {
+                    simplePageConfig[k] = v.value;
+                  }
 
                   const files = await pageConfig.loadCodeFiles();
 
@@ -391,7 +399,7 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
                   );
 
                   page = {
-                    fileExports: _page.codeFileExports,
+                    config: simplePageConfig,
                     filePath: _page.codeFilePath,
                   };
                 }
@@ -399,7 +407,7 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
                 const route =
                   getRouteDynamicRoute(pageRoutes, pageId) ??
                   getRouteFsRoute(pageRoutes, pageId);
-                let isr = assertIsr(userConfig, page.fileExports);
+                let isr = assertIsr(userConfig, page.config);
 
                 // if ISR + Function routing -> warn because ISR is not unsupported in this case
                 if (typeof route === 'function' && isr) {
