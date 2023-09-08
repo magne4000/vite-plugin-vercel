@@ -19,10 +19,14 @@ function PageShell({
         <Layout>
           <Sidebar>
             <Logo />
-            <Link href="/">Welcome</Link>
-            <Link href="/markdown">Markdown</Link>
-            <Link href="/star-wars">Data Fetching</Link>
-            <Link href="/hello">Routing</Link>
+            <Link href="/">Home</Link>
+            <Link href="/dynamic">Dynamic</Link>
+            <Link href="/static">Static</Link>
+            <Link href="/isr">ISR</Link>
+            <Link href="/named/id-1">Named</Link>
+            <Link href="/catch-all/a/b/c">Catch-all</Link>
+            <Link href="/function/a">Function</Link>
+            <Link href="/edge">Edge Function endpoint</Link>
           </Sidebar>
           <Content>{children}</Content>
         </Layout>
