@@ -1,9 +1,6 @@
 import React from 'react';
 import { Link } from '../../renderer/Link';
 
-// Should warn when building because it's incompatible with route function
-export const isr = { expiration: 15 };
-
 export default function Page(props: { d: string }) {
   return (
     <>

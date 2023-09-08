@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from '../../renderer/Link';
 
-export const isr = { expiration: 15 };
-
 export default function Page(props: { d: string }) {
   return (
     <>

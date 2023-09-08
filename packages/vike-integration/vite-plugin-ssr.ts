@@ -18,7 +18,7 @@ import {
   route,
 } from 'vite-plugin-ssr/__internal';
 import { nanoid } from 'nanoid';
-import { getParametrizedRoute, getRoutesRegex } from './route-regex';
+import { getParametrizedRoute } from './route-regex';
 import { newError } from '@brillout/libassert';
 
 const libName = 'vite-plugin-vercel:vike';

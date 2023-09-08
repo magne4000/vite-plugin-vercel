@@ -1,8 +1,6 @@
 import React from 'react';
 import { Link } from '../../renderer/Link';
 
-export const isr = true;
-
 function isISR(someId: string) {
   return someId !== 'id-1' && someId !== 'id-2';
 }
