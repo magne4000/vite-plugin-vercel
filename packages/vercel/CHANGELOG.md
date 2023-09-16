@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 0.3.2
+
+### Patch Changes
+
+- Add support for vite-plugin-ssr V1 design
+- Updated dependencies
+  - @vite-plugin-vercel/vike@0.3.3
+
 ## 0.3.1
 
 ### Patch Changes

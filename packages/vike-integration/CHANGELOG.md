@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.3.3
+
+### Patch Changes
+
+- Add support for vite-plugin-ssr V1 design
+
 ## 0.3.2
 
 ### Patch Changes
