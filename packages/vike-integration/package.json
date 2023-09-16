@@ -6,24 +6,22 @@
     "dist",
     "templates",
     "*.d.ts",
-    "helpers.js"
+    "helpers.js",
+    "config.js"
   ],
   "description": "Use vite-plugin-ssr with vite-plugin-vercel",
   "author": "Joël Charles <joel.charles91@gmail.com>",
   "repository": "https://github.com/magne4000/vite-plugin-vercel",
-  "main": "./dist/vite-plugin-ssr.cjs",
-  "module": "./dist/vite-plugin-ssr.js",
+  "main": "./dist/vite-plugin-ssr.js",
+  "types": "./dist/vite-plugin-ssr.d.ts",
   "exports": {
-    ".": {
-      "import": "./dist/vite-plugin-ssr.js",
-      "require": "./dist/vite-plugin-ssr.cjs"
-    },
-    "./helpers": {
-      "import": "./dist/templates/helpers.js",
-      "require": "./dist/templates/helpers.cjs"
+    ".": "./dist/vite-plugin-ssr.js",
+    "./helpers": "./dist/templates/helpers.js",
+    "./config": {
+      "types": "./config.d.ts",
+      "default": "./dist/+config.h.js"
     }
   },
-  "types": "./dist/vite-plugin-ssr.d.ts",
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
@@ -37,7 +35,7 @@
     "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "vite-plugin-ssr": "^0.4.140",
+    "vite-plugin-ssr": "^0.4.141",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {

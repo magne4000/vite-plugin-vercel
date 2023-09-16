@@ -41,11 +41,41 @@ export default defineConfig({
 
 [vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@vite-plugin-vercel/vike](/packages/vike-integration/README.md) plugin.
 
-You only need to install `@vite-plugin-vercel/vike`, the config stays the same as above.
+You only need to install `@vite-plugin-vercel/vike`, the Vite config stays the same as above.
 
 > [!IMPORTANT]  
 > `@vite-plugin-vercel/vike` supersedes the old `@magne4000/vite-plugin-vercel-ssr` package.
 > As such, you should remove `@magne4000/vite-plugin-vercel-ssr` from your package.json and vite config file.
+
+### vite-plugin-ssr V1 design
+
+`vite-plugin-vercel` fully supports [vite-plugin-ssr V1 design](https://vite-plugin-ssr.com/migration/v1-design),
+and thus you can leverage [config files](https://vite-plugin-ssr.com/config) to customize ISR configuration:
+
+```ts
+// /pages/product/+config.h.ts
+
+import Page from './Page';
+import type { Config } from 'vite-plugin-ssr/types';
+
+// Customize ISR config for this page
+export default {
+  isr: { expiration: 15 },
+} satisfies Config;
+```
+
+You will also need to extend the [renderer config](https://vite-plugin-ssr.com/config#renderer) so that `vite-plugin-ssr` is aware of the new parameter:
+
+```ts
+// /renderer/+config.h.ts
+
+import config from '@vite-plugin-vercel/vike/config';
+import type { Config } from 'vite-plugin-ssr/types';
+
+export default {
+  extends: config,
+} satisfies Config;
+```
 
 ## Advanced usage
 

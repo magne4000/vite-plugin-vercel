@@ -2,6 +2,7 @@
 
 [`vite-plugin-ssr`](https://github.com/brillout/vite-plugin-ssr) integration for `vite-plugin-vercel`.
 
+- Versions `>=0.3.3` are compatible with vite-plugin-ssr@0.4.x and above
 - Versions `0.1.x` are compatible with vite-plugin-ssr@0.4.x
 - Versions `0.0.x` are compatible with vite-plugin-ssr@0.3.x
 
@@ -14,7 +15,9 @@
 
 ## Usage
 
-Install this package as a dependency and make sure `vite-plugin-vercel` is added as a vite plugin, that's all.
+Install `vite-plugin-vercel` and `@vite-plugin-vercel/vike` and make sure only `vite-plugin-vercel` is added as a vite plugin.
+
+`vite-plugin-vercel` will auto load `@vite-plugin-vercel/vike` when necessary.
 
 ```ts
 // vite.config.ts
@@ -31,7 +34,11 @@ export default defineConfig(async ({ command, mode }) => {
 
 ### ISR/Prerender Functions
 
-Official documentation: https://vercel.com/docs/build-output-api/v3#vercel-primitives/prerender-functions
+Official documentation: https://vercel.com/docs/build-output-api/v3/primitives#prerender-functions
+
+:warning: Pages with [route function](https://vite-plugin-ssr.com/route-function) are not compatible with ISR. A warning will be shown if this occurs.
+
+#### vite-plugin-ssr 0.4.x
 
 Take any of your `.page` file (not `.page.server`) and add the following export:
 
@@ -41,7 +48,19 @@ Take any of your `.page` file (not `.page.server`) and add the following export:
 export const isr = { expiration: 15 };
 ```
 
-:warning: Pages with [route function](https://vite-plugin-ssr.com/route-function) are not compatible with ISR. A warning will be shown if this occurs.
+#### vite-plugin-ssr V1 design
+
+Take any of your [page config file](https://vite-plugin-ssr.com/config), and add the following configuration:
+
+```ts
+import type { Config } from 'vite-plugin-ssr/types';
+
+export default {
+  // Now this page is a Prerender Function, meaning that it will be cached on Edge network for 15 seconds.
+  // Check official documentation for further details on how it works.
+  isr: { expiration: 15 },
+} satisfies Config;
+```
 
 ### Custom Serverless Function for vite-plugin-ssr
 

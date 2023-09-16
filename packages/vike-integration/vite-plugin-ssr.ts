@@ -1,6 +1,7 @@
 import { prerender as prerenderCli } from 'vite-plugin-ssr/prerender';
 import fs from 'fs/promises';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
 import type { PageContextBuiltInServer } from 'vite-plugin-ssr/types';
 import type {
@@ -17,11 +18,13 @@ import {
   route,
 } from 'vite-plugin-ssr/__internal';
 import { nanoid } from 'nanoid';
-import { getParametrizedRoute, getRoutesRegex } from './route-regex';
+import { getParametrizedRoute } from './route-regex';
 import { newError } from '@brillout/libassert';
 
 const libName = 'vite-plugin-vercel:vike';
 const rendererDestination = 'ssr_';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function assert(
   condition: unknown,
@@ -152,7 +155,7 @@ export const prerender: ViteVercelPrerenderFn = async (
       build: {
         outDir: getOutDirRoot(resolvedConfig),
       },
-    } as any,
+    },
 
     async onPagePrerender(pageContext: PageContext) {
       const { filePath, fileContent } = pageContext._prerenderResult;
@@ -309,6 +312,12 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
   } as Plugin;
 }
 
+/**
+ * vps 0.4 compat
+ * @deprecated
+ * @param pageId
+ * @param pageFilesAll
+ */
 function findPageFile(pageId: string, pageFilesAll: PageFile[]) {
   return pageFilesAll.find(
     (p) => p.pageId === pageId && p.fileType === '.page',
@@ -332,24 +341,73 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
               }
             }
 
-            const { pageFilesAll, allPageIds, pageRoutes } =
+            const { pageFilesAll, allPageIds, pageRoutes, pageConfigs } =
               await getPagesAndRoutes();
 
-            await Promise.all(pageFilesAll.map((p) => p.loadFile?.()));
+            const isLegacy = pageFilesAll.length > 0;
+
+            if (isLegacy) {
+              await Promise.all(pageFilesAll.map((p) => p.loadFile?.()));
+            }
 
             const pagesWithIsr = await Promise.all(
               allPageIds.map(async (pageId) => {
-                const page = await findPageFile(pageId, pageFilesAll);
+                let page: {
+                  config: unknown;
+                  filePath: string;
+                };
 
-                assert(
-                  page,
-                  `Cannot find page ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
-                );
+                if (isLegacy) {
+                  const _page = await findPageFile(pageId, pageFilesAll);
+
+                  assert(
+                    _page,
+                    `Cannot find page ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
+                  );
+
+                  page = {
+                    config: _page.fileExports,
+                    filePath: _page.filePath,
+                  };
+                } else {
+                  const pageConfig = pageConfigs.find(
+                    (p) => p.pageId === pageId,
+                  );
+
+                  assert(
+                    pageConfig,
+                    `Cannot find page config ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
+                  );
+
+                  const simplePageConfig: Record<string, unknown> = {};
+
+                  for (const [k, v] of Object.entries(
+                    pageConfig.configValues,
+                  )) {
+                    simplePageConfig[k] = v.value;
+                  }
+
+                  const files = await pageConfig.loadCodeFiles();
+
+                  const _page = files.find(
+                    (f) => f.configName === 'Page' && f.isPlusFile,
+                  );
+
+                  assert(
+                    _page && _page.isPlusFile,
+                    `Cannot find page ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
+                  );
+
+                  page = {
+                    config: simplePageConfig,
+                    filePath: _page.codeFilePath,
+                  };
+                }
 
                 const route =
                   getRouteDynamicRoute(pageRoutes, pageId) ??
                   getRouteFsRoute(pageRoutes, pageId);
-                let isr = assertIsr(userConfig, page.fileExports);
+                let isr = assertIsr(userConfig, page.config);
 
                 // if ISR + Function routing -> warn because ISR is not unsupported in this case
                 if (typeof route === 'function' && isr) {
