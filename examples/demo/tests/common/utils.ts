@@ -3,7 +3,7 @@ import path from 'path';
 import { build, InlineConfig } from 'vite';
 
 export function getTmpDir(displayName: string) {
-  return path.join(os.tmpdir(), displayName);
+  return path.join(os.tmpdir(), 'vpv-demo-' + displayName);
 }
 
 declare module 'vite' {

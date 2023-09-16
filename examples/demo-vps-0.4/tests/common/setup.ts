@@ -6,7 +6,7 @@ import { callBuild } from './utils';
 
 export function setup(displayName: string, inlineConfig: InlineConfig) {
   return async () => {
-    const tmpdir = path.join(os.tmpdir(), displayName);
+    const tmpdir = path.join(os.tmpdir(), 'vpv-demo-0.4-' + displayName);
 
     await fs.rm(tmpdir, {
       recursive: true,
