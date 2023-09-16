@@ -81,18 +81,24 @@ importers:
         specifier: ^4.4.9
         version: 4.4.9(@types/node@20.5.9)
       vite-plugin-ssr:
-        specifier: 0.4.140-commit-f2ec4bd
-        version: 0.4.140-commit-f2ec4bd(vite@4.4.9)
+        specifier: ^0.4.141
+        version: 0.4.141(vite@4.4.9)
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vercel
     devDependencies:
+      '@vercel/node':
+        specifier: ^3.0.3
+        version: 3.0.3
       fast-glob:
         specifier: ^3.3.1
         version: 3.3.1
       vitest:
         specifier: ^0.34.3
         version: 0.34.3
+      zod:
+        specifier: ^3.22.2
+        version: 3.22.2
 
   examples/demo-vps-0.4:
     dependencies:
@@ -124,8 +130,8 @@ importers:
         specifier: ^4.4.9
         version: 4.4.9(@types/node@16.18.48)
       vite-plugin-ssr:
-        specifier: ^0.4.140
-        version: 0.4.140(vite@4.4.9)
+        specifier: ^0.4.141
+        version: 0.4.141(vite@4.4.9)
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vercel
@@ -220,8 +226,8 @@ importers:
         specifier: ^4.4.9
         version: 4.4.9(@types/node@16.18.48)
       vite-plugin-ssr:
-        specifier: 0.4.140-commit-f2ec4bd
-        version: 0.4.140-commit-f2ec4bd(vite@4.4.9)
+        specifier: ^0.4.141
+        version: 0.4.141(vite@4.4.9)
 
   packages/vike-integration:
     dependencies:
@@ -248,8 +254,8 @@ importers:
         specifier: ^4.4.9
         version: 4.4.9(@types/node@16.18.48)
       vite-plugin-ssr:
-        specifier: 0.4.140-commit-f2ec4bd
-        version: 0.4.140-commit-f2ec4bd(vite@4.4.9)
+        specifier: ^0.4.141
+        version: 0.4.141(vite@4.4.9)
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../vercel
@@ -6488,34 +6494,8 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-ssr@0.4.140(vite@4.4.9):
-    resolution: {integrity: sha512-UcUOszxAdf2Kau4VbVeNRZwVvINtrQIuI8NzuwXXW41nq2f2ej9T/+8uRF6ICUi99Y0HwiK1kZX0+Ox7oY17gg==}
-    engines: {node: '>=16.0.0'}
-    hasBin: true
-    peerDependencies:
-      react-streaming: '>=0.3.5'
-      vite: '>=3.1.0'
-    peerDependenciesMeta:
-      react-streaming:
-        optional: true
-    dependencies:
-      '@brillout/import': 0.2.3
-      '@brillout/json-serializer': 0.5.6
-      '@brillout/picocolors': 1.0.9
-      '@brillout/require-shim': 0.1.2
-      '@brillout/vite-plugin-import-build': 0.2.18
-      acorn: 8.10.0
-      cac: 6.7.14
-      es-module-lexer: 1.3.0
-      esbuild: 0.17.19
-      fast-glob: 3.3.1
-      sirv: 2.0.3
-      source-map-support: 0.5.21
-      vite: 4.4.9(@types/node@16.18.48)
-    dev: false
-
-  /vite-plugin-ssr@0.4.140-commit-f2ec4bd(vite@4.4.9):
-    resolution: {integrity: sha512-zZC+9q+rV9kl2udF/GCUew0joPxF3AKxL5mtuv6ZXbTmmbDLN6vUTQNrpXUghr2X6HIJOcQoBtEE5M0bbUxTSw==}
+  /vite-plugin-ssr@0.4.141(vite@4.4.9):
+    resolution: {integrity: sha512-mRYP7CWauioeCFWFhzNjYK/4Gv+mtfClM4oj5NZrHS3kmd2vQ/uHENOSccFZniqRTZoMzQoufqpGTd+1uT9vEg==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     peerDependencies:

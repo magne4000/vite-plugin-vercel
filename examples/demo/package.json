@@ -5,6 +5,7 @@
     "dev": "vite",
     "build": "vite build && vite build --ssr",
     "preview": "vite build && vite preview",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm run test:01 && pnpm run test:02 && pnpm run test:03 && pnpm run test:04 && pnpm run test:05",
     "test:01": "vitest run --dir tests/01-minimal --config tests/01-minimal/vitest.config.ts",
     "test:02": "vitest run --dir tests/02-additional-endpoints --config tests/02-additional-endpoints/vitest.config.ts",
@@ -29,13 +30,15 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "vite-plugin-ssr": "0.4.140-commit-f2ec4bd",
+    "vite-plugin-ssr": "^0.4.141",
     "vite-plugin-vercel": "workspace:*"
   },
   "type": "module",
   "version": null,
   "devDependencies": {
+    "@vercel/node": "^3.0.3",
     "fast-glob": "^3.3.1",
-    "vitest": "^0.34.3"
+    "vitest": "^0.34.3",
+    "zod": "^3.22.2"
   }
 }
