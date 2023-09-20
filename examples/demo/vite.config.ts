@@ -8,7 +8,6 @@ export default {
     react(),
     ssr({
       prerender: true,
-      disableAutoFullBuild: true,
     }),
     vercel(),
   ],
