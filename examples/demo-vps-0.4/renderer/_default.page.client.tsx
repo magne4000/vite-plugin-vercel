@@ -1,6 +1,6 @@
 import React from 'react';
 import { createRoot, hydrateRoot, Root } from 'react-dom/client';
-import type { PageContextBuiltInClientWithClientRouting as PageContextBuiltInClient } from 'vite-plugin-ssr/types';
+import type { PageContextBuiltInClientWithClientRouting as PageContextBuiltInClient } from 'vike/types';
 import { PageWrapper } from './PageWrapper';
 import type { PageContext } from './types';
 

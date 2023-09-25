@@ -1,14 +1,14 @@
 import ReactDOMServer from 'react-dom/server';
 import React from 'react';
 import { PageWrapper } from './PageWrapper';
-import { escapeInject, dangerouslySkipEscape } from 'vite-plugin-ssr/server';
+import { escapeInject, dangerouslySkipEscape } from 'vike/server';
 import logoUrl from './logo.svg';
 import type { PageContext } from './types';
-import type { PageContextBuiltInServer } from 'vite-plugin-ssr/types';
+import type { PageContextBuiltInServer } from 'vike/types';
 
 export { render };
 
-// See https://vite-plugin-ssr.com/data-fetching
+// See https://vike.dev/data-fetching
 export const passToClient = ['pageProps', 'urlPathname', 'documentProps'];
 
 async function render(pageContext: PageContextBuiltInServer & PageContext) {
@@ -19,12 +19,11 @@ async function render(pageContext: PageContextBuiltInServer & PageContext) {
     </PageWrapper>,
   );
 
-  // See https://vite-plugin-ssr.com/html-head
+  // See https://vike.dev/html-head
   const { documentProps } = pageContext;
   const title = (documentProps && documentProps.title) || 'Vite SSR app';
   const desc =
-    (documentProps && documentProps.description) ||
-    'App using Vite + vite-plugin-ssr';
+    (documentProps && documentProps.description) || 'App using Vite + vike';
 
   const injected = escapeInject`<!DOCTYPE html>
     <html lang="en">

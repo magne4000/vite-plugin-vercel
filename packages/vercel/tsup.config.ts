@@ -3,7 +3,7 @@ import { defineConfig } from 'tsup';
 export default defineConfig([
   {
     entry: ['./src/index.ts'],
-    external: ['esbuild', 'vite-plugin-ssr'],
+    external: ['esbuild', 'vike'],
     format: ['esm', 'cjs'],
     platform: 'node',
     target: 'node16',

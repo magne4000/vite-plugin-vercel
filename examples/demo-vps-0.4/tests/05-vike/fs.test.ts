@@ -3,7 +3,7 @@ import glob from 'fast-glob';
 import { describe, expect, it } from 'vitest';
 
 describe('fs', function () {
-  const buildManifest = require('../../dist/client/manifest.json');
+  const buildManifest = require('../../dist/assets.json');
 
   const generatedFiles = Array.from(
     new Set(
@@ -23,8 +23,7 @@ describe('fs', function () {
     '/functions/api/post.func/.vc-config.json',
     '/functions/edge.func/index.js',
     '/functions/edge.func/.vc-config.json',
-    '/static/vite-plugin-ssr.json',
-    '/static/manifest.json',
+    '/static/vike.json',
     // ISR + Static pages
     '/functions/ssr_.func/index.js',
     '/functions/ssr_.func/.vc-config.json',

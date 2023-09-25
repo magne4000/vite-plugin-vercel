@@ -6,13 +6,13 @@ export type { PageProps };
 import type {
   PageContextBuiltInServer,
   //*
-  // When using Client Routing https://vite-plugin-ssr.com/clientRouting
+  // When using Client Routing https://vike.dev/clientRouting
   PageContextBuiltInClientWithClientRouting as PageContextBuiltInClient,
   /*/
   // When using Server Routing
   PageContextBuiltInClientWithServerRouting as PageContextBuiltInClient
   //*/
-} from 'vite-plugin-ssr/types';
+} from 'vike/types';
 
 type Page = (pageProps: PageProps) => React.ReactElement;
 type PageProps = Record<string, unknown>;

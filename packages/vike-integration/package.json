@@ -9,13 +9,13 @@
     "helpers.js",
     "config.js"
   ],
-  "description": "Use vite-plugin-ssr with vite-plugin-vercel",
+  "description": "Use vike with vite-plugin-vercel",
   "author": "Joël Charles <joel.charles91@gmail.com>",
   "repository": "https://github.com/magne4000/vite-plugin-vercel",
-  "main": "./dist/vite-plugin-ssr.js",
-  "types": "./dist/vite-plugin-ssr.d.ts",
+  "main": "./dist/vike.js",
+  "types": "./dist/vike.d.ts",
   "exports": {
-    ".": "./dist/vite-plugin-ssr.js",
+    ".": "./dist/vike.js",
     "./helpers": "./dist/templates/helpers.js",
     "./config": {
       "types": "./config.d.ts",
@@ -35,7 +35,7 @@
     "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "vite-plugin-ssr": "^0.4.141",
+    "vike": "^0.4.142",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {
@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "vite": "^4.4.9",
-    "vite-plugin-ssr": "*"
+    "vike": "*"
   },
   "license": "MIT"
 }

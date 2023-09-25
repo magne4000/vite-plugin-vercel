@@ -29,17 +29,17 @@ function vercelPlugin(): Plugin {
         // step 1:	Clean .vercel/ouput dir
         await cleanOutputDirectory(resolvedConfig);
 
-        // vite-plugin-ssr triggers a second build with --ssr
+        // vike triggers a second build with --ssr
         if (vikeFound) {
           return;
         }
       }
 
-      // step 2:		Server side built by vite-plugin-ssr
-      // step 2.1:	Execute vite-plugin-ssr prerender
+      // step 2:		Server side built by vike
+      // step 2.1:	Execute vike prerender
       const overrides = await execPrerender(resolvedConfig);
 
-      // step 3:    Wait for vite-plugin-ssr second build step with `ssr` flag
+      // step 3:    Wait for vike second build step with `ssr` flag
       // step 3.1:	Compute overrides for static HTML files
       const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
 
@@ -114,19 +114,29 @@ async function getStaticHtmlFiles(src: string) {
 
 /**
  * Auto import `@vite-plugin-vercel/vike` if it is part of dependencies.
- * Ensures that `vite-plugin-ssr/plugin` is also present to ensure predictable behavior
+ * Ensures that `vike/plugin` is also present to ensure predictable behavior
  */
 async function tryImportVpvv() {
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    await import('vite-plugin-ssr/plugin');
+    await import('vike/plugin');
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const vpvv = await import('@vite-plugin-vercel/vike');
     return vpvv.default();
   } catch (e) {
-    return null;
+    try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await import('vite-plugin-ssr/plugin');
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      const vpvv = await import('@vite-plugin-vercel/vike');
+      return vpvv.default();
+    } catch (e) {
+      return null;
+    }
   }
 }
 

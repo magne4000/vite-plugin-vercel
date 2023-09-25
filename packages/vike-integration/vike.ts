@@ -1,22 +1,22 @@
-import { prerender as prerenderCli } from 'vite-plugin-ssr/prerender';
+import { prerender as prerenderCli } from 'vike/prerender';
 import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
-import type { PageContextBuiltInServer } from 'vite-plugin-ssr/types';
+import type { PageContextBuiltInServer } from 'vike/types';
 import type {
   VercelOutputIsr,
   ViteVercelApiEntry,
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from 'vite-plugin-vercel';
-import 'vite-plugin-ssr/__internal/setup';
+import 'vike/__internal/setup';
 import {
   getPagesAndRoutes,
   PageFile,
   PageRoutes,
   route,
-} from 'vite-plugin-ssr/__internal';
+} from 'vike/__internal';
 import { nanoid } from 'nanoid';
 import { getParametrizedRoute } from './route-regex';
 import { newError } from '@brillout/libassert';
@@ -162,7 +162,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
       const isr = assertIsr(resolvedConfig, pageContext.exports);
 
-      // bypass this check https://github.com/brillout/vite-plugin-ssr/blob/dcc91ac31824ca3240c107380789209d52d0dff9/vite-plugin-ssr/shared/addComputedUrlProps.ts#L25
+      // bypass this check https://github.com/vikejs/vike/blob/dcc91ac31824ca3240c107380789209d52d0dff9/vike/shared/addComputedUrlProps.ts#L25
       delete (pageContext as any).urlPathname;
       delete (pageContext as any).urlParsed;
 
@@ -268,7 +268,7 @@ export async function getSsrEndpoint(
 
 export interface Options {
   /**
-   * A pattern that matches each incoming pathname that should be caught by vite-plugin-ssr.
+   * A pattern that matches each incoming pathname that should be caught by vike.
    * As this rule is inserted last, a simple catch-all rule excluding /api/* should be enough.
    * Defaults to `(?!/api).*`
    * @see {@link https://vercel.com/docs/project-configuration#project-configuration/rewrites}
@@ -281,7 +281,7 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
     name: libName,
     apply: 'build',
     async config(userConfig): Promise<UserConfig> {
-      // wait for vite-plugin-ssr second build step with `ssr` flag
+      // wait for vike second build step with `ssr` flag
       if (!userConfig.build?.ssr) return {};
 
       const additionalEndpoints = userConfig.vercel?.additionalEndpoints
@@ -387,20 +387,9 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
                     simplePageConfig[k] = v.value;
                   }
 
-                  const files = await pageConfig.loadCodeFiles();
-
-                  const _page = files.find(
-                    (f) => f.configName === 'Page' && f.isPlusFile,
-                  );
-
-                  assert(
-                    _page && _page.isPlusFile,
-                    `Cannot find page ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
-                  );
-
                   page = {
                     config: simplePageConfig,
-                    filePath: _page.codeFilePath,
+                    filePath: pageConfig.pageId,
                   };
                 }
 
