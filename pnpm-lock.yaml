@@ -6646,7 +6646,7 @@ packages:
       fast-glob: 3.3.1
       sirv: 2.0.3
       source-map-support: 0.5.21
-      vite: 4.4.9(@types/node@16.18.48)
+      vite: 4.4.9(@types/node@20.5.9)
 
   /vite@4.4.9(@types/node@14.18.33):
     resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}

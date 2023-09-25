@@ -1,14 +1,13 @@
 import { ResolvedConfig } from 'vite';
 import glob from 'fast-glob';
-import path from 'path';
+import path, { basename, dirname } from 'path';
 import { getOutput, getRoot, pathRelativeTo } from './utils';
 import { build, BuildOptions, type Plugin } from 'esbuild';
 import { ViteVercelApiEntry } from './types';
 import { assert } from './assert';
 import { vercelOutputVcConfigSchema } from './schemas/config/vc-config';
-import fs, { unlink, writeFile } from 'fs/promises';
+import fs, { copyFile } from 'fs/promises';
 import type { Rewrite } from '@vercel/routing-utils';
-import { exec, ExecOptions } from 'child_process';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -112,21 +111,21 @@ const wasmPlugin: Plugin = {
   },
 };
 
-const vercelOgPlugin: Plugin = {
-  name: 'vercel-og',
-  setup(build) {
-    build.onResolve({ filter: /@vercel\/og/ }, (args) => {
-      return {
-        path: args.path,
-        external: true,
-        warnings: [
-          {
-            detail: 'vercel-og',
-          },
-        ],
-      };
-    });
-  },
+const vercelOgPlugin = (ctx: { found: boolean; index: string }): Plugin => {
+  return {
+    name: 'vercel-og',
+    setup(build) {
+      build.onResolve({ filter: /@vercel\/og/ }, () => {
+        ctx.found = true;
+        return undefined;
+      });
+
+      build.onLoad({ filter: /@vercel\/og/ }, (args) => {
+        ctx.index = args.path;
+        return undefined;
+      });
+    },
+  };
 };
 
 const standardBuildOptions: BuildOptions = {
@@ -136,16 +135,7 @@ const standardBuildOptions: BuildOptions = {
   platform: 'node',
   logLevel: 'info',
   minify: false,
-  plugins: [wasmPlugin, vercelOgPlugin],
-};
-
-const run = async (cmd: string, options: ExecOptions) => {
-  const child = exec(cmd, options, (err) => {
-    if (err) console.error(err);
-  });
-  child.stderr?.pipe(process.stderr);
-  child.stdout?.pipe(process.stdout);
-  await new Promise((resolve) => child.on('close', resolve));
+  plugins: [wasmPlugin],
 };
 
 export async function buildFn(
@@ -198,40 +188,27 @@ export async function buildFn(
     ];
   }
 
-  const result = await build(options);
+  const ctx = { found: false, index: '' };
+  options.plugins!.push(vercelOgPlugin(ctx));
+
+  await build(options);
 
   // See https://github.com/magne4000/vite-plugin-vercel/issues/23
   // and https://github.com/magne4000/vite-plugin-vercel/issues/25
-  if (result.warnings.findIndex((w) => w.detail === 'vercel-og') !== -1) {
-    await writeFile(
-      path.join(
-        getOutput(resolvedConfig, 'functions'),
-        entry.destination,
-        'package.json',
-      ),
-      JSON.stringify({ dependencies: { '@vercel/og': 'latest' } }),
-      'utf-8',
-    );
-    await run('npm install --production', {
-      cwd: path.join(getOutput(resolvedConfig, 'functions'), entry.destination),
-      env: {
-        NODE_ENV: 'production',
-      },
-    });
-    await unlink(
-      path.join(
-        getOutput(resolvedConfig, 'functions'),
-        entry.destination,
-        'package.json',
-      ),
-    );
-    await unlink(
-      path.join(
-        getOutput(resolvedConfig, 'functions'),
-        entry.destination,
-        'package-lock.json',
-      ),
-    );
+  if (ctx.found && ctx.index) {
+    const dir = dirname(ctx.index);
+    const ttfFiles = await glob(`${dir}/*.ttf`);
+
+    for (const f of ttfFiles) {
+      await copyFile(
+        f,
+        path.join(
+          getOutput(resolvedConfig, 'functions'),
+          entry.destination,
+          basename(f),
+        ),
+      );
+    }
   }
 
   await writeVcConfig(resolvedConfig, entry.destination, Boolean(entry.edge));
