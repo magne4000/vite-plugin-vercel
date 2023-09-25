@@ -22,6 +22,7 @@
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@vercel/edge-config": "^0.2.1",
+    "@vercel/og": "^0.5.17",
     "@vite-plugin-vercel/vike": "workspace:*",
     "@vitejs/plugin-react-swc": "^3.3.2",
     "cross-fetch": "^4.0.0",
