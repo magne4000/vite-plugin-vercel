@@ -83,20 +83,18 @@ const wasmPlugin: Plugin = {
         return; // Ignore unresolvable paths
       }
       return {
-        path: args.path,
-        namespace: 'wasm-stub',
+        path: args.path.replace(/\.wasm\?module$/i, '.wasm'),
+        external: true,
       };
     });
 
     // Virtual modules in the "wasm-stub" namespace are filled with
     // the JavaScript code for compiling the WebAssembly binary. The
     // binary itself is imported from a second virtual module.
-    build.onLoad({ filter: /.*/, namespace: 'wasm-stub' }, async (args) => ({
-      contents: `import wasm from ${JSON.stringify(args.path)}
-        export default (imports) =>
-          WebAssembly.instantiate(wasm, imports).then(
-            result => result.instance.exports)`,
-    }));
+    // build.onLoad({ filter: /.*/, namespace: 'wasm-stub' }, async (args) => ({
+    //   contents: `import wasm from ${JSON.stringify(args.path)};
+    //     export default wasm;`,
+    // }));
 
     // Virtual modules in the "wasm-binary" namespace contain the
     // actual bytes of the WebAssembly file. This uses esbuild's
