@@ -68,7 +68,7 @@ const wasmPlugin: Plugin = {
       if (args.namespace === 'wasm-stub') {
         return {
           path: args.path.replace(/\.wasm\?module$/i, '.wasm'),
-          namespace: 'wasm-binary',
+          external: true,
         };
       }
 
@@ -83,9 +83,7 @@ const wasmPlugin: Plugin = {
         return; // Ignore unresolvable paths
       }
       return {
-        path: path.isAbsolute(args.path)
-          ? args.path
-          : path.join(args.resolveDir, args.path),
+        path: args.path,
         namespace: 'wasm-stub',
       };
     });
@@ -104,10 +102,10 @@ const wasmPlugin: Plugin = {
     // actual bytes of the WebAssembly file. This uses esbuild's
     // built-in "binary" loader instead of manually embedding the
     // binary data inside JavaScript code ourselves.
-    build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async (args) => ({
-      contents: await fs.readFile(args.path),
-      loader: 'binary',
-    }));
+    // build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async (args) => ({
+    //   contents: await fs.readFile(args.path),
+    //   loader: 'binary',
+    // }));
   },
 };
 
