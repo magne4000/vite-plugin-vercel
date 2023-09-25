@@ -1,5 +1,12 @@
 # vite-plugin-vercel
 
+## 0.3.3
+
+### Patch Changes
+
+- Adds support for @vercel/og
+  - @vite-plugin-vercel/vike@0.3.3
+
 ## 0.3.2
 
 ### Patch Changes
