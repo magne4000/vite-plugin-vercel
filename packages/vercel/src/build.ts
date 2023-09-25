@@ -197,9 +197,9 @@ export async function buildFn(
   // and https://github.com/magne4000/vite-plugin-vercel/issues/25
   if (ctx.found && ctx.index) {
     const dir = dirname(ctx.index);
-    const ttfFiles = await glob(`${dir}/*.ttf`);
+    const externalFiles = await glob(`${dir}/*.{ttf,wasm}`);
 
-    for (const f of ttfFiles) {
+    for (const f of externalFiles) {
       await copyFile(
         f,
         path.join(
