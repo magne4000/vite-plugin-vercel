@@ -60,50 +60,12 @@ export function getEntries(
 const wasmPlugin: Plugin = {
   name: 'wasm',
   setup(build) {
-    // Resolve ".wasm" files to a path with a namespace
     build.onResolve({ filter: /\.wasm/ }, (args) => {
-      // If this is the import inside the stub module, import the
-      // binary itself. Put the path in the "wasm-binary" namespace
-      // to tell our binary load callback to load the binary file.
-      if (args.namespace === 'wasm-stub') {
-        return {
-          path: args.path.replace(/\.wasm\?module$/i, '.wasm'),
-          external: true,
-        };
-      }
-
-      // Otherwise, generate the JavaScript stub module for this
-      // ".wasm" file. Put it in the "wasm-stub" namespace to tell
-      // our stub load callback to fill it with JavaScript.
-      //
-      // Resolve relative paths to absolute paths here since this
-      // resolve callback is given "resolveDir", the directory to
-      // resolve imports against.
-      if (args.resolveDir === '') {
-        return; // Ignore unresolvable paths
-      }
       return {
         path: args.path.replace(/\.wasm\?module$/i, '.wasm'),
         external: true,
       };
     });
-
-    // Virtual modules in the "wasm-stub" namespace are filled with
-    // the JavaScript code for compiling the WebAssembly binary. The
-    // binary itself is imported from a second virtual module.
-    // build.onLoad({ filter: /.*/, namespace: 'wasm-stub' }, async (args) => ({
-    //   contents: `import wasm from ${JSON.stringify(args.path)};
-    //     export default wasm;`,
-    // }));
-
-    // Virtual modules in the "wasm-binary" namespace contain the
-    // actual bytes of the WebAssembly file. This uses esbuild's
-    // built-in "binary" loader instead of manually embedding the
-    // binary data inside JavaScript code ourselves.
-    // build.onLoad({ filter: /.*/, namespace: 'wasm-binary' }, async (args) => ({
-    //   contents: await fs.readFile(args.path),
-    //   loader: 'binary',
-    // }));
   },
 };
 
@@ -130,7 +92,7 @@ const standardBuildOptions: BuildOptions = {
   format: 'cjs',
   platform: 'node',
   logLevel: 'info',
-  minify: false,
+  minify: true,
   plugins: [wasmPlugin],
 };
 
@@ -190,6 +152,7 @@ export async function buildFn(
 
   await build(options);
 
+  // Special case for @vercel/og
   // See https://github.com/magne4000/vite-plugin-vercel/issues/23
   // and https://github.com/magne4000/vite-plugin-vercel/issues/25
   if (ctx.found && ctx.index) {

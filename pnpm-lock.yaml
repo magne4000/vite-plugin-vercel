@@ -216,9 +216,6 @@ importers:
       '@vite-plugin-vercel/vike':
         specifier: workspace:*
         version: link:../vike-integration
-      esbuild-plugin-wasm:
-        specifier: ^1.1.0
-        version: 1.1.0
       eslint:
         specifier: ^8.48.0
         version: 8.48.0
@@ -3137,11 +3134,6 @@ packages:
     requiresBuild: true
     dev: true
     optional: true
-
-  /esbuild-plugin-wasm@1.1.0:
-    resolution: {integrity: sha512-0bQ6+1tUbySSnxzn5jnXHMDvYnT0cN/Wd4Syk8g/sqAIJUg7buTIi22svS3Qz6ssx895NT+TgLPb33xi1OkZig==}
-    engines: {node: '>=0.10.0'}
-    dev: true
 
   /esbuild-sunos-64@0.14.47:
     resolution: {integrity: sha512-uOeSgLUwukLioAJOiGYm3kNl+1wJjgJA8R671GYgcPgCx7QR73zfvYqXFFcIO93/nBdIbt5hd8RItqbbf3HtAQ==}

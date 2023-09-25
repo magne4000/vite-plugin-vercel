@@ -4,7 +4,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:demo": "vite build",
     "preview": "vite build && vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm run test:01 && pnpm run test:02 && pnpm run test:03 && pnpm run test:04 && pnpm run test:05",
