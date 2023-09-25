@@ -1,9 +1,9 @@
-// https://vite-plugin-ssr.com/onRenderHtml
+// https://vike.dev/onRenderHtml
 export default onRenderHtml;
 
 import ReactDOMServer from 'react-dom/server';
 import React from 'react';
-import { escapeInject } from 'vite-plugin-ssr/server';
+import { escapeInject } from 'vike/server';
 import { PageShell } from './PageShell';
 import { getPageTitle } from './getPageTitle';
 import type { PageContextServer } from './types';
@@ -31,7 +31,7 @@ async function onRenderHtml(pageContext: PageContextServer) {
 
   return {
     documentHtml,
-    // See https://vite-plugin-ssr.com/stream#initial-data-after-stream-end
+    // See https://vike.dev/stream#initial-data-after-stream-end
     pageContext: async () => {
       return {
         someAsyncProps: 42,

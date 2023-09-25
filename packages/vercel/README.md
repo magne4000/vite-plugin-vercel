@@ -13,7 +13,7 @@ Its purpose is to help you bundle your application in `.vercel` folder as suppor
   - `.[jt]s` files under the `<root>/api` folder of your project are automatically bundled as Serverless functions under `.vercel/output/functions/api/*.func`
   - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L62)
 - [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3/primitives#prerender-functions)
-  - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vite-plugin-ssr](/packages/vike-integration/vite-plugin-ssr.ts) for example
+  - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vike](/packages/vike-integration/vike.ts) for example
 - [x] [Edge functions support](https://vercel.com/docs/build-output-api/v3/primitives#edge-functions)
 - [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3/configuration#images)
 - [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3/features#preview-mode)
@@ -37,9 +37,9 @@ export default defineConfig({
 });
 ```
 
-## Usage with vite-plugin-ssr
+## Usage with vike
 
-[vite-plugin-ssr](https://vite-plugin-ssr.com/) is supported through [@vite-plugin-vercel/vike](/packages/vike-integration/README.md) plugin.
+[vike](https://vike.dev/) is supported through [@vite-plugin-vercel/vike](/packages/vike-integration/README.md) plugin.
 
 You only need to install `@vite-plugin-vercel/vike`, the Vite config stays the same as above.
 
@@ -47,16 +47,16 @@ You only need to install `@vite-plugin-vercel/vike`, the Vite config stays the s
 > `@vite-plugin-vercel/vike` supersedes the old `@magne4000/vite-plugin-vercel-ssr` package.
 > As such, you should remove `@magne4000/vite-plugin-vercel-ssr` from your package.json and vite config file.
 
-### vite-plugin-ssr V1 design
+### vike V1 design
 
-`vite-plugin-vercel` fully supports [vite-plugin-ssr V1 design](https://vite-plugin-ssr.com/migration/v1-design),
-and thus you can leverage [config files](https://vite-plugin-ssr.com/config) to customize ISR configuration:
+`vite-plugin-vercel` fully supports [vike V1 design](https://vike.dev/migration/v1-design),
+and thus you can leverage [config files](https://vike.dev/config) to customize ISR configuration:
 
 ```ts
 // /pages/product/+config.h.ts
 
 import Page from './Page';
-import type { Config } from 'vite-plugin-ssr/types';
+import type { Config } from 'vike/types';
 
 // Customize ISR config for this page
 export default {
@@ -64,13 +64,13 @@ export default {
 } satisfies Config;
 ```
 
-You will also need to extend the [renderer config](https://vite-plugin-ssr.com/config#renderer) so that `vite-plugin-ssr` is aware of the new parameter:
+You will also need to extend the [renderer config](https://vike.dev/config#renderer) so that `vike` is aware of the new parameter:
 
 ```ts
 // /renderer/+config.h.ts
 
 import config from '@vite-plugin-vercel/vike/config';
-import type { Config } from 'vite-plugin-ssr/types';
+import type { Config } from 'vike/types';
 
 export default {
   extends: config,
@@ -105,7 +105,7 @@ export default defineConfig({
      * Defaults to `false`, which disables prerendering.
      */
     prerender(resolvedConfig) {
-      // Check `/packages/vite-plugin-ssr/vite-plugin-ssr.ts` `prerender` for an example
+      // Check `/packages/vike/vike.ts` `prerender` for an example
     },
     /**
      * See https://vercel.com/docs/projects/project-configuration#rewrites
@@ -160,7 +160,7 @@ export default defineConfig({
      *
      * Can be an object or a function returning an object (or a Promise of an object).
      *
-     * Check `/packages/vite-plugin-ssr/vite-plugin-ssr.ts` `vitePluginVercelVpsIsrPlugin` for advanced usage.
+     * Check `/packages/vike/vike.ts` `vitePluginVercelVpsIsrPlugin` for advanced usage.
      */
     isr: {
       // `symlink: 'ssr_'` means that a function is available under `.vercel/output/functions/ssr_.func`

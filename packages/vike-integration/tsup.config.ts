@@ -5,18 +5,14 @@ import { existsSync } from 'node:fs';
 export default defineConfig([
   {
     clean: true,
-    entry: ['./vite-plugin-ssr.ts', './templates/helpers.ts', './+config.h.ts'],
-    external: ['esbuild', 'rollup', 'vite', 'vite-plugin-ssr'],
+    entry: ['./vike.ts', './templates/helpers.ts', './+config.h.ts'],
+    external: ['esbuild', 'rollup', 'vite', 'vike'],
     format: ['esm'],
 
     platform: 'node',
     target: 'node16',
     dts: {
-      entry: [
-        './vite-plugin-ssr.ts',
-        './templates/helpers.ts',
-        './+config.h.ts',
-      ],
+      entry: ['./vike.ts', './templates/helpers.ts', './+config.h.ts'],
     },
     async onSuccess() {
       // rollup-plugin-dts chooses to rename things its way

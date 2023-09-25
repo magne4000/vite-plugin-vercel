@@ -11,7 +11,7 @@
 
 ### Patch Changes
 
-- Add support for vite-plugin-ssr V1 design
+- Add support for vike V1 design
 - Updated dependencies
   - @vite-plugin-vercel/vike@0.3.3
 
@@ -44,7 +44,7 @@
 
 ### Patch Changes
 
-- fix use case without vite-plugin-ssr
+- fix use case without vike
 
 ## 0.2.0
 
@@ -96,7 +96,7 @@
 
 ### Patch Changes
 
-- Create a dedicated package for vite-plugin-ssr integration
+- Create a dedicated package for vike integration
 
 ## 0.1.0
 

@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { renderPage } from 'vite-plugin-ssr/server';
+import { renderPage } from 'vike/server';
 import {
   getDefaultEmptyResponseHandler,
   getDefaultPageContextInit,

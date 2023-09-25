@@ -1,4 +1,4 @@
-import { Config } from 'vite-plugin-ssr/types';
+import { Config } from 'vike/types';
 
 export default {
   // Should warn when building because it's incompatible with route function

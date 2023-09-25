@@ -29,13 +29,13 @@
   "peerDependencies": {
     "@vite-plugin-vercel/vike": "workspace:*",
     "vite": "^4.2.0",
-    "vite-plugin-ssr": "*"
+    "vike": "*"
   },
   "peerDependenciesMeta": {
     "@vite-plugin-vercel/vike": {
       "optional": true
     },
-    "vite-plugin-ssr": {
+    "vike": {
       "optional": true
     }
   },
@@ -48,7 +48,7 @@
     "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vite": "^4.4.9",
-    "vite-plugin-ssr": "^0.4.141"
+    "vike": "^0.4.142"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",

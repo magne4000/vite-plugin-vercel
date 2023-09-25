@@ -1,4 +1,4 @@
-import 'vite-plugin-ssr/types';
+import 'vike/types';
 
 // When this is imported by a projet ->
 //   import config from '@vite-plugin-vercel/vike/config'

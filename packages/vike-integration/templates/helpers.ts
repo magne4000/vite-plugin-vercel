@@ -1,6 +1,6 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import { parse } from 'querystring';
-import type { renderPage } from 'vite-plugin-ssr';
+import type { renderPage } from 'vike';
 
 type HttpResponse = NonNullable<
   Awaited<ReturnType<typeof renderPage>>['httpResponse']

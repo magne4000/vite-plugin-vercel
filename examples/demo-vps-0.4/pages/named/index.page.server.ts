@@ -1,4 +1,4 @@
-import { PageContextBuiltInServer } from 'vite-plugin-ssr/types';
+import { PageContextBuiltInServer } from 'vike/types';
 
 export function onBeforeRender(pageContext: PageContextBuiltInServer) {
   return {
