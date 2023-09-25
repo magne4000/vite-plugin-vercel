@@ -25,6 +25,11 @@ prepareTestJsonFileContent('config.json', (context) => {
         check: true,
       },
       {
+        src: '^/og(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$',
+        dest: '/og/$1',
+        check: true,
+      },
+      {
         check: true,
         src: '^/api/page$',
         dest: '/api/page',
