@@ -6,8 +6,9 @@ import { build, BuildOptions, type Plugin } from 'esbuild';
 import { ViteVercelApiEntry } from './types';
 import { assert } from './assert';
 import { vercelOutputVcConfigSchema } from './schemas/config/vc-config';
-import fs from 'fs/promises';
+import fs, { unlink, writeFile } from 'fs/promises';
 import type { Rewrite } from '@vercel/routing-utils';
+import { exec, ExecOptions } from 'child_process';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -111,15 +112,40 @@ const wasmPlugin: Plugin = {
   },
 };
 
+const vercelOgPlugin: Plugin = {
+  name: 'vercel-og',
+  setup(build) {
+    build.onResolve({ filter: /@vercel\/og/ }, (args) => {
+      return {
+        path: args.path,
+        external: true,
+        warnings: [
+          {
+            detail: 'vercel-og',
+          },
+        ],
+      };
+    });
+  },
+};
+
 const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
   format: 'esm',
   platform: 'node',
   logLevel: 'info',
-  minify: true,
-  plugins: [wasmPlugin],
-  external: ['@vercel/og'],
+  minify: false,
+  plugins: [wasmPlugin, vercelOgPlugin],
+};
+
+const run = async (cmd: string, options: ExecOptions) => {
+  const child = exec(cmd, options, (err) => {
+    if (err) console.error(err);
+  });
+  child.stderr?.pipe(process.stderr);
+  child.stdout?.pipe(process.stdout);
+  await new Promise((resolve) => child.on('close', resolve));
 };
 
 export async function buildFn(
@@ -172,7 +198,42 @@ export async function buildFn(
     ];
   }
 
-  await build(options);
+  const result = await build(options);
+
+  // See https://github.com/magne4000/vite-plugin-vercel/issues/23
+  // and https://github.com/magne4000/vite-plugin-vercel/issues/25
+  if (result.warnings.findIndex((w) => w.detail === 'vercel-og') !== -1) {
+    await writeFile(
+      path.join(
+        getOutput(resolvedConfig, 'functions'),
+        entry.destination,
+        'package.json',
+      ),
+      JSON.stringify({ dependencies: { '@vercel/og': 'latest' } }),
+      'utf-8',
+    );
+    await run('npm install --production', {
+      cwd: path.join(getOutput(resolvedConfig, 'functions'), entry.destination),
+      env: {
+        NODE_ENV: 'production',
+      },
+    });
+    await unlink(
+      path.join(
+        getOutput(resolvedConfig, 'functions'),
+        entry.destination,
+        'package.json',
+      ),
+    );
+    await unlink(
+      path.join(
+        getOutput(resolvedConfig, 'functions'),
+        entry.destination,
+        'package-lock.json',
+      ),
+    );
+  }
+
   await writeVcConfig(resolvedConfig, entry.destination, Boolean(entry.edge));
 }
 
