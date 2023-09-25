@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 1.0.0
+
+### Patch Changes
+
+- Rename vite-plugin-vercel to Vike
+- Updated dependencies
+  - @vite-plugin-vercel/vike@0.4.0
+
 ## 0.3.3
 
 ### Patch Changes

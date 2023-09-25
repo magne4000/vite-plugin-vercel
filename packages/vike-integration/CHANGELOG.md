@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.4.0
+
+### Minor Changes
+
+- Rename vite-plugin-vercel to Vike
+
 ## 0.3.3
 
 ### Patch Changes
