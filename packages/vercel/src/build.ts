@@ -119,6 +119,7 @@ const standardBuildOptions: BuildOptions = {
   logLevel: 'info',
   minify: true,
   plugins: [wasmPlugin],
+  external: ['@vercel/og'],
 };
 
 export async function buildFn(
