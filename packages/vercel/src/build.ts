@@ -182,6 +182,7 @@ export async function buildFn(
       'import',
       'require',
     ];
+    options.format = 'esm';
   }
 
   const ctx = { found: false, index: '' };
