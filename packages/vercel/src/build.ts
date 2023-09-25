@@ -1,12 +1,12 @@
 import { ResolvedConfig } from 'vite';
 import glob from 'fast-glob';
-import path from 'path';
+import path, { basename, dirname } from 'path';
 import { getOutput, getRoot, pathRelativeTo } from './utils';
-import { build, BuildOptions } from 'esbuild';
+import { build, BuildOptions, type Plugin } from 'esbuild';
 import { ViteVercelApiEntry } from './types';
 import { assert } from './assert';
 import { vercelOutputVcConfigSchema } from './schemas/config/vc-config';
-import fs from 'fs/promises';
+import fs, { copyFile } from 'fs/promises';
 import type { Rewrite } from '@vercel/routing-utils';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
@@ -57,6 +57,35 @@ export function getEntries(
   }, getAdditionalEndpoints(resolvedConfig));
 }
 
+const wasmPlugin: Plugin = {
+  name: 'wasm',
+  setup(build) {
+    build.onResolve({ filter: /\.wasm/ }, (args) => {
+      return {
+        path: args.path.replace(/\.wasm\?module$/i, '.wasm'),
+        external: true,
+      };
+    });
+  },
+};
+
+const vercelOgPlugin = (ctx: { found: boolean; index: string }): Plugin => {
+  return {
+    name: 'vercel-og',
+    setup(build) {
+      build.onResolve({ filter: /@vercel\/og/ }, () => {
+        ctx.found = true;
+        return undefined;
+      });
+
+      build.onLoad({ filter: /@vercel\/og/ }, (args) => {
+        ctx.index = args.path;
+        return undefined;
+      });
+    },
+  };
+};
+
 const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
@@ -64,6 +93,7 @@ const standardBuildOptions: BuildOptions = {
   platform: 'node',
   logLevel: 'info',
   minify: true,
+  plugins: [wasmPlugin],
 };
 
 export async function buildFn(
@@ -114,9 +144,33 @@ export async function buildFn(
       'import',
       'require',
     ];
+    options.format = 'esm';
   }
 
+  const ctx = { found: false, index: '' };
+  options.plugins!.push(vercelOgPlugin(ctx));
+
   await build(options);
+
+  // Special case for @vercel/og
+  // See https://github.com/magne4000/vite-plugin-vercel/issues/23
+  // and https://github.com/magne4000/vite-plugin-vercel/issues/25
+  if (ctx.found && ctx.index) {
+    const dir = dirname(ctx.index);
+    const externalFiles = await glob(`${dir}/*.{ttf,wasm}`);
+
+    for (const f of externalFiles) {
+      await copyFile(
+        f,
+        path.join(
+          getOutput(resolvedConfig, 'functions'),
+          entry.destination,
+          basename(f),
+        ),
+      );
+    }
+  }
+
   await writeVcConfig(resolvedConfig, entry.destination, Boolean(entry.edge));
 }
 

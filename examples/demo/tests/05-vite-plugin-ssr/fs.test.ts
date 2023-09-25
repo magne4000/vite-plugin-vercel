@@ -23,6 +23,11 @@ describe('fs', function () {
     '/functions/api/post.func/.vc-config.json',
     '/functions/edge.func/index.js',
     '/functions/edge.func/.vc-config.json',
+    '/functions/og.func/index.js',
+    '/functions/og.func/.vc-config.json',
+    new RegExp('/functions/og.func/.*.ttf'),
+    '/functions/og.func/resvg.wasm',
+    '/functions/og.func/yoga.wasm',
     '/static/vite-plugin-ssr.json',
     '/static/manifest.json',
     // ISR + Static pages
