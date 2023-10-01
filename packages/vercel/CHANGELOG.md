@@ -1,5 +1,12 @@
 # vite-plugin-vercel
 
+## 0.3.5
+
+### Patch Changes
+
+- fix: ensure output folder is created
+  - @vite-plugin-vercel/vike@0.4.0
+
 ## 0.3.4
 
 ### Patch Changes
