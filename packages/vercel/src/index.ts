@@ -29,18 +29,17 @@ function vercelPlugin(): Plugin {
         // step 1:	Clean .vercel/ouput dir
         await cleanOutputDirectory(resolvedConfig);
 
-        // vike triggers a second build with --ssr
+        // special case: Vike triggers a second build with --ssr
+        // TODO: find a way to fix that in a more generic way
         if (vikeFound) {
           return;
         }
       }
 
-      // step 2:		Server side built by vike
-      // step 2.1:	Execute vike prerender
+      // step 2:	Execute prerender
       const overrides = await execPrerender(resolvedConfig);
 
-      // step 3:    Wait for vike second build step with `ssr` flag
-      // step 3.1:	Compute overrides for static HTML files
+      // step 3:	Compute overrides for static HTML files
       const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
 
       // step 4:	Compile serverless functions to ".vercel/output/functions"
