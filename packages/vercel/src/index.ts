@@ -63,6 +63,8 @@ async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
     recursive: true,
     force: true,
   });
+
+  await fs.mkdir(getOutput(resolvedConfig), { recursive: true });
 }
 
 async function computeStaticHtmlOverrides(
