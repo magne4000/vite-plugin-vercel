@@ -92,6 +92,10 @@ const standardBuildOptions: BuildOptions = {
   format: 'cjs',
   platform: 'node',
   logLevel: 'info',
+  logOverride: {
+    'ignored-bare-import': 'verbose',
+    'require-resolve-not-external': 'verbose'
+  },
   minify: true,
   plugins: [wasmPlugin],
 };
