@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 0.3.6
+
+### Patch Changes
+
+- chore: remove esbuild verbose warnings
+- Updated dependencies
+  - @vite-plugin-vercel/vike@0.4.1
+
 ## 0.3.5
 
 ### Patch Changes

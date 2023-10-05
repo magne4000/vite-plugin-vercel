@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 0.4.1
+
+### Patch Changes
+
+- chore: remove esbuild verbose warnings
+- Updated dependencies
+  - vite-plugin-vercel@0.3.6
+
 ## 0.4.0
 
 ### Minor Changes
