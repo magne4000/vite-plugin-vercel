@@ -30,12 +30,12 @@
     "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@types/node": "^16.18.48",
-    "@vercel/node": "^3.0.3",
+    "@types/node": "^16.18.58",
+    "@vercel/node": "^3.0.7",
     "tsup": "^7.2.0",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9",
-    "vike": "^0.4.142",
+    "vike": "^0.4.143",
+    "vite": "^4.4.11",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {
@@ -43,9 +43,9 @@
     "nanoid": "^4.0.2"
   },
   "peerDependencies": {
+    "vike": "*",
     "vite": "^4.4.9",
-    "vite-plugin-vercel": "*",
-    "vike": "*"
+    "vite-plugin-vercel": "*"
   },
   "license": "MIT"
 }

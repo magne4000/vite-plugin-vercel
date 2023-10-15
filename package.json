@@ -19,7 +19,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
-    "@types/node": "^16.18.48",
+    "@types/node": "^16.18.58",
     "cross-env": "^7.0.3",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
