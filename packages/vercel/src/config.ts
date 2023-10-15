@@ -8,6 +8,7 @@ import {
 import fs from 'fs/promises';
 import {
   getTransformedRoutes,
+  Header,
   normalizeRoutes,
   Rewrite,
 } from '@vercel/routing-utils';
@@ -25,6 +26,7 @@ export function getConfig(
   resolvedConfig: ResolvedConfig,
   rewrites?: ViteVercelRewrite[],
   overrides?: VercelOutputConfig['overrides'],
+  headers?: Header[],
 ): VercelOutputConfig {
   const _rewrites: ViteVercelRewrite[] = [
     // User provided config always comes first
@@ -39,6 +41,7 @@ export function getConfig(
     redirects: resolvedConfig.vercel?.redirects
       ? reorderEnforce(resolvedConfig.vercel?.redirects)
       : undefined,
+    headers,
   });
 
   if (error) {
@@ -83,11 +86,12 @@ export async function writeConfig(
   resolvedConfig: ResolvedConfig,
   rewrites?: Rewrite[],
   overrides?: VercelOutputConfig['overrides'],
+  headers?: Header[],
 ): Promise<void> {
   await fs.writeFile(
     getConfigDestination(resolvedConfig),
     JSON.stringify(
-      getConfig(resolvedConfig, rewrites, overrides),
+      getConfig(resolvedConfig, rewrites, overrides, headers),
       undefined,
       2,
     ),

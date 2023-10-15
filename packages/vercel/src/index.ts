@@ -43,16 +43,21 @@ function vercelPlugin(): Plugin {
       const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
 
       // step 4:	Compile serverless functions to ".vercel/output/functions"
-      const rewrites = await buildEndpoints(resolvedConfig);
+      const { rewrites, isr, headers } = await buildEndpoints(resolvedConfig);
 
       // step 5:	Generate prerender config files
-      rewrites.push(...(await buildPrerenderConfigs(resolvedConfig)));
+      rewrites.push(...(await buildPrerenderConfigs(resolvedConfig, isr)));
 
       // step 6:	Generate config file
-      await writeConfig(resolvedConfig, rewrites, {
-        ...userOverrides,
-        ...overrides,
-      });
+      await writeConfig(
+        resolvedConfig,
+        rewrites,
+        {
+          ...userOverrides,
+          ...overrides,
+        },
+        headers,
+      );
     },
   };
 }

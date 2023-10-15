@@ -80,8 +80,13 @@ export function getPrerenderSymlinkInfo(
 
 export async function buildPrerenderConfigs(
   resolvedConfig: ResolvedConfig,
+  extractedIsr: Record<string, VercelOutputIsr>,
 ): Promise<NonNullable<Rewrite[]>> {
-  const isr = await getIsrConfig(resolvedConfig);
+  const isr = Object.assign(
+    {},
+    extractedIsr,
+    await getIsrConfig(resolvedConfig),
+  );
 
   const entries = Object.entries(isr);
   const rewrites: Rewrite[] = [];

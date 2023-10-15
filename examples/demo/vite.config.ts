@@ -17,13 +17,11 @@ export default {
       {
         source: 'endpoints/edge.ts',
         destination: `edge`,
-        edge: true,
         addRoute: true,
       },
       {
         source: 'endpoints/og.tsx',
         destination: `og`,
-        edge: true,
         addRoute: true,
       },
     ],
