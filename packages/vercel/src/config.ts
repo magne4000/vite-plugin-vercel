@@ -6,7 +6,11 @@ import {
   vercelOutputConfigSchema,
 } from './schemas/config/config';
 import fs from 'fs/promises';
-import { getTransformedRoutes, Rewrite } from '@vercel/routing-utils';
+import {
+  getTransformedRoutes,
+  normalizeRoutes,
+  Rewrite,
+} from '@vercel/routing-utils';
 import { ViteVercelRewrite } from './types';
 
 function reorderEnforce<T extends { enforce?: 'pre' | 'post' }>(arr: T[]) {
@@ -51,13 +55,19 @@ export function getConfig(
     );
   }
 
+  const cleanRoutes = normalizeRoutes([
+    ...(routes ?? []),
+    ...(resolvedConfig.vercel?.config?.routes ?? []),
+  ]);
+
+  if (cleanRoutes.error) {
+    throw cleanRoutes.error;
+  }
+
   return vercelOutputConfigSchema.parse({
     version: 3,
     ...resolvedConfig.vercel?.config,
-    routes: [
-      ...(routes ?? []),
-      ...(resolvedConfig.vercel?.config?.routes ?? []),
-    ],
+    routes: cleanRoutes.routes,
     overrides: {
       ...resolvedConfig.vercel?.config?.overrides,
       ...overrides,
