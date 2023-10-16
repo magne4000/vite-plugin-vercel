@@ -10,7 +10,13 @@ prepareTestJsonFileContent(
     testSchema(context, vercelOutputConfigSchema);
 
     it('should have defaults routes only', function () {
+      console.log(context.file);
       expect(context.file).toHaveProperty('routes', [
+        {
+          src: '^/api/page$',
+          headers: { 'X-VitePluginVercel-Test': 'test' },
+          continue: true,
+        },
         {
           headers: { Location: '/$1' },
           src: '^/(?:(.+)/)?index(?:\\.html)?/?$',
@@ -20,11 +26,6 @@ prepareTestJsonFileContent(
           headers: { Location: '/$1' },
           src: '^/(.*)\\.html/?$',
           status: 308,
-        },
-        {
-          src: '^/api/page$',
-          headers: { 'X-VitePluginVercel-Test': 'test' },
-          continue: true,
         },
         { handle: 'filesystem' },
         {

@@ -52,11 +52,15 @@ export function getConfig(
 
   if (
     resolvedConfig.vercel?.config?.routes &&
-    resolvedConfig.vercel.config.routes.length > 0
+    resolvedConfig.vercel.config.routes.length > 0 &&
+    !resolvedConfig.vercel.config.routes.every(
+      (r) => 'continue' in r && r.continue,
+    )
   ) {
     console.warn(
-      'It is discouraged to use `vercel.config.routes` to override routes. ' +
-        'Prefer using `vercel.rewrites`, `vercel.redirects` and `vercel.appendRoutesToPhase`.',
+      'Did you forget to add `"continue": true` to your routes? See https://vercel.com/docs/build-output-api/v3/configuration#source-route\n' +
+        'If not, it is discouraged to use `vercel.config.routes` to override routes. ' +
+        'Prefer using `vercel.rewrites` and `vercel.redirects`.',
     );
   }
 
@@ -73,7 +77,7 @@ export function getConfig(
     userRoutes = norm.routes ?? [];
   }
 
-  if (resolvedConfig.vercel?.config?.routes) {
+  if (routes) {
     const norm = normalizeRoutes(routes);
 
     if (norm.error) {
