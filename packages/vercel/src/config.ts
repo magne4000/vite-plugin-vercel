@@ -9,8 +9,10 @@ import fs from 'fs/promises';
 import {
   getTransformedRoutes,
   Header,
+  mergeRoutes,
   normalizeRoutes,
   Rewrite,
+  Route,
 } from '@vercel/routing-utils';
 import { ViteVercelRewrite } from './types';
 
@@ -54,23 +56,48 @@ export function getConfig(
   ) {
     console.warn(
       'It is discouraged to use `vercel.config.routes` to override routes. ' +
-        'Prefer using `vercel.rewrites` and `vercel.redirects`.',
+        'Prefer using `vercel.rewrites`, `vercel.redirects` and `vercel.appendRoutesToPhase`.',
     );
   }
 
-  const cleanRoutes = normalizeRoutes([
-    ...(routes ?? []),
-    ...(resolvedConfig.vercel?.config?.routes ?? []),
-  ]);
+  let userRoutes: Route[] = [];
+  let buildRoutes: Route[] = [];
 
-  if (cleanRoutes.error) {
-    throw cleanRoutes.error;
+  if (resolvedConfig.vercel?.config?.routes) {
+    const norm = normalizeRoutes(resolvedConfig.vercel.config.routes);
+
+    if (norm.error) {
+      throw norm.error;
+    }
+
+    userRoutes = norm.routes ?? [];
   }
+
+  if (resolvedConfig.vercel?.config?.routes) {
+    const norm = normalizeRoutes(routes);
+
+    if (norm.error) {
+      throw norm.error;
+    }
+
+    buildRoutes = norm.routes ?? [];
+  }
+
+  const cleanRoutes = mergeRoutes({
+    userRoutes,
+    builds: [
+      {
+        use: '@vercel/node',
+        entrypoint: 'index.js',
+        routes: buildRoutes,
+      },
+    ],
+  });
 
   return vercelOutputConfigSchema.parse({
     version: 3,
     ...resolvedConfig.vercel?.config,
-    routes: cleanRoutes.routes,
+    routes: cleanRoutes,
     overrides: {
       ...resolvedConfig.vercel?.config?.overrides,
       ...overrides,
