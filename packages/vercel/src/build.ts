@@ -227,7 +227,11 @@ function getSourceAndDestination(destination: string) {
 
 async function removeDefaultExport(filepath: string) {
   const mod = await loadFile(filepath);
-  delete mod.exports.default;
+  try {
+    delete mod.exports.default;
+  } catch (_) {
+    // ignore
+  }
 
   return generateCode(mod).code;
 }

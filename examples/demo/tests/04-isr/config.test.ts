@@ -21,6 +21,11 @@ prepareTestJsonFileContent(
           src: '^/(.*)\\.html/?$',
           status: 308,
         },
+        {
+          src: '^/api/page$',
+          headers: { 'X-VitePluginVercel-Test': 'test' },
+          continue: true,
+        },
         { handle: 'filesystem' },
         {
           src: '^/edge(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$',
