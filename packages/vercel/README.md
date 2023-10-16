@@ -44,8 +44,8 @@ export default defineConfig({
 
 ### Configure endpoints
 
-Endpoints under `/api`, `/_api` or configured through `additionalEndpoints` config can be configured
-by exporting configuration from the endpoint:
+Endpoints under `/api`, `/_api` or added through `additionalEndpoints` can be configured
+by exporting values from the endpoint file:
 
 ```ts
 // file: _api/endpoint.ts
