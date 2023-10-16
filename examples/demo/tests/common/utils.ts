@@ -36,7 +36,6 @@ export async function callBuild(dirname: string, config: InlineConfig) {
         {
           source: 'endpoints/edge.ts',
           destination: `edge`,
-          edge: true,
           addRoute: true,
         },
         ...(config.vercel?.additionalEndpoints ?? []),

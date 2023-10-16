@@ -22,7 +22,7 @@ Its purpose is to help you bundle your application in `.vercel` folder as suppor
 
 ## Simple usage
 
-Then, install this package as a dev dependency and add it to your Vite config:
+Install this package as a dev dependency and add it to your Vite config:
 
 ```ts
 // vite.config.ts
@@ -32,10 +32,46 @@ import vercel from 'vite-plugin-vercel';
 export default defineConfig({
   plugins: [vercel()],
   vercel: {
-    // optional configuration options, see below for details
+    // optional configuration options, see "Advanced usage" below for details
   },
 });
 ```
+
+> [!NOTE]
+> Files under `/api` or `/_api` directory will automatically be added under `/api/*` route
+> Prefer using `/_api` directory, as `@vercel/build` is currently force building `/api` files,
+> with no way to disable it, thus avoiding double compilation and unexpected behaviour.
+
+### Configure endpoints
+
+Endpoints under `/api`, `/_api` or added through `additionalEndpoints` can be configured
+by exporting values from the endpoint file:
+
+```ts
+// file: _api/endpoint.ts
+
+// Should run on edge runtime
+export const edge = true;
+
+// Always add those header to this endpoint
+export const headers = {
+  'Some-Header': 'some value',
+};
+
+// Enable Incremental Static Regeneration for this endpoint
+export const isr = {
+  expiration: 30,
+};
+
+export default async function handler() {
+  return new Response('Edge Function: OK', {
+    status: 200,
+  });
+}
+```
+
+> [!NOTE]
+> Please create an issue if you need other per-endpoints configurations
 
 ## Usage with vike
 
@@ -126,7 +162,7 @@ export default defineConfig({
      */
     trailingSlash: true,
     /**
-     * By default, all `api/*` endpoints are compiled under `.vercel/output/functions/api/*.func`.
+     * By default, all `api/*` and `_api/*` endpoints are compiled under `.vercel/output/functions/api/*.func`.
      * If others serverless functions need to be compiled under `.vercel/output/functions`, they should be added here.
      * For instance, a framework can leverage this to have a generic ssr endpoint
      * without requiring the user to write any code.

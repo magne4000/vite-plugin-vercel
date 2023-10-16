@@ -1,8 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export const headers = {
-  'X-VitePluginVercel-Test': 'test',
-};
+export const isr = { expiration: 10 };
 
 export default async function handler(
   request: VercelRequest,

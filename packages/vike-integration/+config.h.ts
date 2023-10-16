@@ -5,5 +5,12 @@ export default {
     isr: {
       env: 'server-only',
     },
+    // TODO
+    // edge: {
+    //   env: 'server-only',
+    // },
+    // headers: {
+    //   env: 'server-only',
+    // },
   },
 } satisfies Config;

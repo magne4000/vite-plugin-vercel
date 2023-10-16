@@ -145,4 +145,12 @@ export interface ViteVercelApiEntry {
    * Set to `true` to mark this function as an Edge Function
    */
   edge?: boolean;
+  /**
+   * Additional headers
+   */
+  headers?: Record<string, string>;
+  /**
+   * ISR config
+   */
+  isr?: VercelOutputIsr;
 }

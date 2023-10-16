@@ -3,11 +3,14 @@ import glob from 'fast-glob';
 import path, { basename, dirname } from 'path';
 import { getOutput, getRoot, pathRelativeTo } from './utils';
 import { build, BuildOptions, type Plugin } from 'esbuild';
-import { ViteVercelApiEntry } from './types';
+import { VercelOutputIsr, ViteVercelApiEntry } from './types';
 import { assert } from './assert';
 import { vercelOutputVcConfigSchema } from './schemas/config/vc-config';
 import fs, { copyFile } from 'fs/promises';
-import type { Rewrite } from '@vercel/routing-utils';
+import type { Header, Rewrite } from '@vercel/routing-utils';
+import _eval from 'eval';
+import { vercelEndpointExports } from './schemas/exports';
+import { generateCode, loadFile } from 'magicast';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -94,7 +97,7 @@ const standardBuildOptions: BuildOptions = {
   logLevel: 'info',
   logOverride: {
     'ignored-bare-import': 'verbose',
-    'require-resolve-not-external': 'verbose'
+    'require-resolve-not-external': 'verbose',
   },
   minify: true,
   plugins: [wasmPlugin],
@@ -104,7 +107,7 @@ export async function buildFn(
   resolvedConfig: ResolvedConfig,
   entry: ViteVercelApiEntry,
   buildOptions?: BuildOptions,
-): Promise<void> {
+) {
   assert(
     entry.destination.length > 0,
     `Endpoint ${
@@ -154,7 +157,7 @@ export async function buildFn(
   const ctx = { found: false, index: '' };
   options.plugins!.push(vercelOgPlugin(ctx));
 
-  await build(options);
+  const output = await build(options);
 
   // Special case for @vercel/og
   // See https://github.com/magne4000/vite-plugin-vercel/issues/23
@@ -176,6 +179,8 @@ export async function buildFn(
   }
 
   await writeVcConfig(resolvedConfig, entry.destination, Boolean(entry.edge));
+
+  return output;
 }
 
 export async function writeVcConfig(
@@ -220,20 +225,125 @@ function getSourceAndDestination(destination: string) {
   return path.posix.resolve('/', destination, ':match*');
 }
 
-export async function buildEndpoints(
-  resolvedConfig: ResolvedConfig,
-): Promise<NonNullable<Rewrite[]>> {
+async function removeDefaultExport(filepath: string) {
+  const mod = await loadFile(filepath);
+  try {
+    delete mod.exports.default;
+  } catch (_) {
+    // ignore
+  }
+
+  return generateCode(mod).code;
+}
+
+async function extractExports(filepath: string) {
+  // default export is removed so that generated bundle contains only
+  // named exports related code
+  const contents = await removeDefaultExport(filepath);
+
+  const buildOptions = {
+    ...standardBuildOptions,
+    minify: false,
+    write: false,
+    legalComments: 'none',
+  } satisfies BuildOptions;
+
+  buildOptions.stdin = {
+    sourcefile: filepath,
+    contents,
+    loader: filepath.endsWith('.ts')
+      ? 'ts'
+      : filepath.endsWith('.tsx')
+      ? 'tsx'
+      : filepath.endsWith('.js')
+      ? 'js'
+      : filepath.endsWith('.jsx')
+      ? 'jsx'
+      : 'default',
+    resolveDir: dirname(filepath),
+  };
+
+  try {
+    const output = await build(buildOptions);
+    const bundle = new TextDecoder().decode(output.outputFiles[0]?.contents);
+
+    return vercelEndpointExports.parse(_eval(bundle, filepath, {}, true));
+  } catch (e) {
+    console.warn(`Warning: failed to read exports of '${filepath}'`, e);
+  }
+}
+
+export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
+  rewrites: Rewrite[];
+  isr: Record<string, VercelOutputIsr>;
+  headers: Header[];
+}> {
   const entries = getEntries(resolvedConfig);
 
   for (const entry of entries) {
+    if (typeof entry.source === 'string') {
+      const exports = await extractExports(entry.source);
+
+      if (exports) {
+        if (entry.headers || exports.headers) {
+          entry.headers = {
+            ...exports.headers,
+            ...entry.headers,
+          };
+        }
+
+        if (entry.edge !== undefined && exports.edge !== undefined) {
+          throw new Error(
+            `edge configuration should be defined either in the endpoint itself or through Vite config, not both ('${entry.source}')`,
+          );
+        }
+
+        if (exports.edge !== undefined) {
+          entry.edge = exports.edge;
+        }
+
+        if (entry.isr !== undefined && exports.isr !== undefined) {
+          throw new Error(
+            `isr configuration should be defined either in the endpoint itself or through Vite config, not both ('${entry.source}')`,
+          );
+        }
+
+        if (exports.isr) {
+          entry.isr = exports.isr;
+        }
+      }
+    }
+
     await buildFn(resolvedConfig, entry);
   }
 
-  return entries
-    .filter((e) => e.addRoute !== false)
-    .map((e) => e.destination.replace(/\.func$/, ''))
-    .map((destination) => ({
-      source: getSourceAndDestination(destination),
-      destination: getSourceAndDestination(destination),
-    }));
+  const isrEntries = entries
+    .filter((e) => e.isr)
+    .map(
+      (e) =>
+        [
+          e.destination.replace(/\.func$/, ''),
+          { expiration: e.isr!.expiration },
+        ] as const,
+    );
+
+  return {
+    rewrites: entries
+      .filter((e) => e.addRoute !== false)
+      .map((e) => e.destination.replace(/\.func$/, ''))
+      .map((destination) => ({
+        source: getSourceAndDestination(destination),
+        destination: getSourceAndDestination(destination),
+      })),
+    isr: Object.fromEntries(isrEntries),
+    headers: entries
+      .filter((e) => e.headers)
+      .map((e) => ({
+        source: '/' + e.destination.replace(/\.func$/, ''),
+        headers: Object.entries(e.headers!).map(([key, value]) => ({
+          key,
+          value,
+        })),
+      })),
+  };
 }

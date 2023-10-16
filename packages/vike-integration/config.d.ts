@@ -7,6 +7,9 @@ declare global {
   namespace Vike {
     export interface Config {
       isr?: boolean | { expiration: number };
+      // TODO
+      // edge?: boolean;
+      // headers?: Record<string, string>;
     }
   }
 }

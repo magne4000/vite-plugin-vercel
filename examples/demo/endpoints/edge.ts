@@ -1,5 +1,7 @@
 import { get } from '@vercel/edge-config';
 
+export const edge = true;
+
 export default async function handler() {
   await get('someKey');
 

@@ -9,6 +9,11 @@ prepareTestJsonFileContent('config.json', (context) => {
   it('should have defaults routes only', function () {
     const expected = [
       {
+        src: '^/api/page$',
+        headers: { 'X-VitePluginVercel-Test': 'test' },
+        continue: true,
+      },
+      {
         headers: { Location: '/$1' },
         src: '^/(?:(.+)/)?index(?:\\.html)?/?$',
         status: 308,

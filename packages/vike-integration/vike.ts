@@ -329,6 +329,80 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
     name: 'vite-plugin-vercel:vps-isr',
     apply: 'build',
     async config(userConfig): Promise<UserConfig> {
+      async function getPagesWithConfigs() {
+        const { pageFilesAll, allPageIds, pageRoutes, pageConfigs } =
+          await getPagesAndRoutes();
+
+        const isLegacy = pageFilesAll.length > 0;
+
+        if (isLegacy) {
+          await Promise.all(pageFilesAll.map((p) => p.loadFile?.()));
+        }
+
+        return await Promise.all(
+          allPageIds.map(async (pageId) => {
+            let page: {
+              config: unknown;
+              filePath: string;
+            };
+
+            if (isLegacy) {
+              const _page = await findPageFile(pageId, pageFilesAll);
+
+              assert(
+                _page,
+                `Cannot find page ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
+              );
+
+              page = {
+                config: _page.fileExports,
+                filePath: _page.filePath,
+              };
+            } else {
+              const pageConfig = pageConfigs.find((p) => p.pageId === pageId);
+
+              assert(
+                pageConfig,
+                `Cannot find page config ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
+              );
+
+              const simplePageConfig: Record<string, unknown> = {};
+
+              for (const [k, v] of Object.entries(pageConfig.configValues)) {
+                simplePageConfig[k] = v.value;
+              }
+
+              page = {
+                config: simplePageConfig,
+                filePath: pageConfig.pageId,
+              };
+            }
+
+            const route =
+              getRouteDynamicRoute(pageRoutes, pageId) ??
+              getRouteFsRoute(pageRoutes, pageId);
+            let isr = assertIsr(userConfig, page.config);
+
+            // if ISR + Function routing -> warn because ISR is not unsupported in this case
+            if (typeof route === 'function' && isr) {
+              console.warn(
+                `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` export or use a route string if possible.`,
+              );
+              isr = null;
+            }
+
+            return {
+              _pageId: pageId,
+              // used for debug purpose
+              filePath: page.filePath,
+              isr,
+              route:
+                typeof route === 'string' ? getParametrizedRoute(route) : null,
+            };
+          }),
+        );
+      }
+
       return {
         vercel: {
           isr: async () => {
@@ -341,85 +415,9 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
               }
             }
 
-            const { pageFilesAll, allPageIds, pageRoutes, pageConfigs } =
-              await getPagesAndRoutes();
+            const pagesWithConfigs = await getPagesWithConfigs();
 
-            const isLegacy = pageFilesAll.length > 0;
-
-            if (isLegacy) {
-              await Promise.all(pageFilesAll.map((p) => p.loadFile?.()));
-            }
-
-            const pagesWithIsr = await Promise.all(
-              allPageIds.map(async (pageId) => {
-                let page: {
-                  config: unknown;
-                  filePath: string;
-                };
-
-                if (isLegacy) {
-                  const _page = await findPageFile(pageId, pageFilesAll);
-
-                  assert(
-                    _page,
-                    `Cannot find page ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
-                  );
-
-                  page = {
-                    config: _page.fileExports,
-                    filePath: _page.filePath,
-                  };
-                } else {
-                  const pageConfig = pageConfigs.find(
-                    (p) => p.pageId === pageId,
-                  );
-
-                  assert(
-                    pageConfig,
-                    `Cannot find page config ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
-                  );
-
-                  const simplePageConfig: Record<string, unknown> = {};
-
-                  for (const [k, v] of Object.entries(
-                    pageConfig.configValues,
-                  )) {
-                    simplePageConfig[k] = v.value;
-                  }
-
-                  page = {
-                    config: simplePageConfig,
-                    filePath: pageConfig.pageId,
-                  };
-                }
-
-                const route =
-                  getRouteDynamicRoute(pageRoutes, pageId) ??
-                  getRouteFsRoute(pageRoutes, pageId);
-                let isr = assertIsr(userConfig, page.config);
-
-                // if ISR + Function routing -> warn because ISR is not unsupported in this case
-                if (typeof route === 'function' && isr) {
-                  console.warn(
-                    `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` export or use a route string if possible.`,
-                  );
-                  isr = null;
-                }
-
-                return {
-                  _pageId: pageId,
-                  // used for debug purpose
-                  filePath: page.filePath,
-                  isr,
-                  route:
-                    typeof route === 'string'
-                      ? getParametrizedRoute(route)
-                      : null,
-                };
-              }),
-            );
-
-            return pagesWithIsr
+            return pagesWithConfigs
               .filter((p) => typeof p.isr === 'number')
               .reduce((acc, cur) => {
                 const path =
@@ -462,13 +460,6 @@ async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
     getOutDir(resolvedConfig, 'client'),
     getOutput(resolvedConfig, 'static'),
   );
-}
-
-function setProductionEnvVar() {
-  // The statement `process.env['NODE_ENV'] = 'production'` chokes webpack v4 (which Cloudflare Workers uses)
-  const proc = process;
-  const { env } = proc;
-  env['NODE_ENV'] = 'production';
 }
 
 export default function allPlugins(options: Options = {}): Plugin[] {

@@ -8,8 +8,11 @@ import {
 import fs from 'fs/promises';
 import {
   getTransformedRoutes,
+  Header,
+  mergeRoutes,
   normalizeRoutes,
   Rewrite,
+  Route,
 } from '@vercel/routing-utils';
 import { ViteVercelRewrite } from './types';
 
@@ -25,6 +28,7 @@ export function getConfig(
   resolvedConfig: ResolvedConfig,
   rewrites?: ViteVercelRewrite[],
   overrides?: VercelOutputConfig['overrides'],
+  headers?: Header[],
 ): VercelOutputConfig {
   const _rewrites: ViteVercelRewrite[] = [
     // User provided config always comes first
@@ -39,6 +43,7 @@ export function getConfig(
     redirects: resolvedConfig.vercel?.redirects
       ? reorderEnforce(resolvedConfig.vercel?.redirects)
       : undefined,
+    headers,
   });
 
   if (error) {
@@ -47,27 +52,56 @@ export function getConfig(
 
   if (
     resolvedConfig.vercel?.config?.routes &&
-    resolvedConfig.vercel.config.routes.length > 0
+    resolvedConfig.vercel.config.routes.length > 0 &&
+    !resolvedConfig.vercel.config.routes.every(
+      (r) => 'continue' in r && r.continue,
+    )
   ) {
     console.warn(
-      'It is discouraged to use `vercel.config.routes` to override routes. ' +
+      'Did you forget to add `"continue": true` to your routes? See https://vercel.com/docs/build-output-api/v3/configuration#source-route\n' +
+        'If not, it is discouraged to use `vercel.config.routes` to override routes. ' +
         'Prefer using `vercel.rewrites` and `vercel.redirects`.',
     );
   }
 
-  const cleanRoutes = normalizeRoutes([
-    ...(routes ?? []),
-    ...(resolvedConfig.vercel?.config?.routes ?? []),
-  ]);
+  let userRoutes: Route[] = [];
+  let buildRoutes: Route[] = [];
 
-  if (cleanRoutes.error) {
-    throw cleanRoutes.error;
+  if (resolvedConfig.vercel?.config?.routes) {
+    const norm = normalizeRoutes(resolvedConfig.vercel.config.routes);
+
+    if (norm.error) {
+      throw norm.error;
+    }
+
+    userRoutes = norm.routes ?? [];
   }
+
+  if (routes) {
+    const norm = normalizeRoutes(routes);
+
+    if (norm.error) {
+      throw norm.error;
+    }
+
+    buildRoutes = norm.routes ?? [];
+  }
+
+  const cleanRoutes = mergeRoutes({
+    userRoutes,
+    builds: [
+      {
+        use: '@vercel/node',
+        entrypoint: 'index.js',
+        routes: buildRoutes,
+      },
+    ],
+  });
 
   return vercelOutputConfigSchema.parse({
     version: 3,
     ...resolvedConfig.vercel?.config,
-    routes: cleanRoutes.routes,
+    routes: cleanRoutes,
     overrides: {
       ...resolvedConfig.vercel?.config?.overrides,
       ...overrides,
@@ -83,11 +117,12 @@ export async function writeConfig(
   resolvedConfig: ResolvedConfig,
   rewrites?: Rewrite[],
   overrides?: VercelOutputConfig['overrides'],
+  headers?: Header[],
 ): Promise<void> {
   await fs.writeFile(
     getConfigDestination(resolvedConfig),
     JSON.stringify(
-      getConfig(resolvedConfig, rewrites, overrides),
+      getConfig(resolvedConfig, rewrites, overrides, headers),
       undefined,
       2,
     ),
