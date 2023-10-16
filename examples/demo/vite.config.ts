@@ -25,6 +25,31 @@ export default {
         addRoute: true,
       },
     ],
+    config: {
+      routes: [
+        {
+          src: '/((?!assets/).*)',
+          headers: {
+            'X-VitePluginVercel-Test-2': 'test',
+          },
+          continue: true,
+        },
+        {
+          src: '/(.*)',
+          has: [
+            {
+              type: 'header',
+              key: 'Content-type',
+              value: 'text/html; charset=utf-8',
+            },
+          ],
+          headers: {
+            'X-VitePluginVercel-Test-3': 'html',
+          },
+          continue: true,
+        },
+      ],
+    },
   },
   // We manually add a list of dependencies to be pre-bundled, in order to avoid a page reload at dev start which breaks vike's CI
   // (The 'react/jsx-runtime' entry is not needed in Vite 3 anymore.)
