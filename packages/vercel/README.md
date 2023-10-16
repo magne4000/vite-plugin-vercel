@@ -1,6 +1,6 @@
 # vite-plugin-vercel
 
-Vercel adapter for [`vite`](https://vitejs.dev/).
+Vercel adapter for [Vite](https://vitejs.dev/).
 
 Its purpose is to help you bundle your application in `.vercel` folder as supported by
 [Vercel API v3](https://vercel.com/docs/build-output-api/v3).
