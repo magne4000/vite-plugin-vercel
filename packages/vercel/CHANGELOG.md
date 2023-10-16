@@ -1,5 +1,15 @@
 # vite-plugin-vercel
 
+## 1.0.0
+
+### Minor Changes
+
+- Ability to exports configs directly from endpoints
+
+### Patch Changes
+
+- @vite-plugin-vercel/vike@1.0.0
+
 ## 0.3.7
 
 ### Patch Changes
