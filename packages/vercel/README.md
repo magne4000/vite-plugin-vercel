@@ -2,23 +2,22 @@
 
 Vercel adapter for [Vite](https://vitejs.dev/).
 
-Its purpose is to help you bundle your application in `.vercel` folder as supported by
-[Vercel API v3](https://vercel.com/docs/build-output-api/v3).
+Bundle your Vite application as supported by [Vercel API v3](https://vercel.com/docs/build-output-api/v3).
 
 ## Features
 
-- [x] [SSG/Static files support](https://vercel.com/docs/build-output-api/v3/primitives#static-files)
+- [x] [SSG/Static files](https://vercel.com/docs/build-output-api/v3/primitives#static-files)
   - see [`prerender` config](/packages/vercel/src/types.ts#L37)
-- [x] [SSR/Serverless functions support](https://vercel.com/docs/build-output-api/v3/primitives#serverless-functions)
+- [x] [SSR/Serverless functions](https://vercel.com/docs/build-output-api/v3/primitives#serverless-functions)
   - `.[jt]s` files under the `<root>/api` folder of your project are automatically bundled as Serverless functions under `.vercel/output/functions/api/*.func`
   - see [`additionalEndpoints` config](/packages/vercel/src/types.ts#L62)
-- [x] [ISR/Prerender functions support](https://vercel.com/docs/build-output-api/v3/primitives#prerender-functions)
+- [x] [ISR/Prerender functions](https://vercel.com/docs/build-output-api/v3/primitives#prerender-functions)
   - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vike](/packages/vike-integration/vike.ts) for example
-- [x] [Edge functions support](https://vercel.com/docs/build-output-api/v3/primitives#edge-functions)
-- [ ] [Images optimization support](https://vercel.com/docs/build-output-api/v3/configuration#images)
-- [ ] [Preview mode support](https://vercel.com/docs/build-output-api/v3/features#preview-mode)
-- [x] [Advanced config override](/packages/vercel/src/types.ts#L19)
-  - [ ] Complete config override
+- [x] [Edge functions](https://vercel.com/docs/build-output-api/v3/primitives#edge-functions)
+- [ ] [Edge middleware](https://vercel.com/docs/functions/edge-middleware/middleware-api)
+- [ ] [Images optimization](https://vercel.com/docs/build-output-api/v3/configuration#images)
+- [ ] [Preview mode](https://vercel.com/docs/build-output-api/v3/features#preview-mode)
+- [x] [Advanced config](/packages/vercel/src/types.ts#L19)
 
 ## Simple usage
 
