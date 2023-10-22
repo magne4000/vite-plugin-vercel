@@ -14,7 +14,7 @@ Bundle your Vite application as supported by [Vercel Output API (v3)](https://ve
 - [x] [ISR/Prerender functions](https://vercel.com/docs/build-output-api/v3/primitives#prerender-functions)
   - see [`isr` config](/packages/vercel/src/types.ts#L89). Also see implementation of [vike](/packages/vike-integration/vike.ts) for example
 - [x] [Edge functions](https://vercel.com/docs/build-output-api/v3/primitives#edge-functions)
-- [ ] [Edge middleware](https://vercel.com/docs/functions/edge-middleware/middleware-api)
+- [x] [Edge middleware](https://vercel.com/docs/functions/edge-middleware/middleware-api)
 - [ ] [Images optimization](https://vercel.com/docs/build-output-api/v3/configuration#images)
 - [ ] [Preview mode](https://vercel.com/docs/build-output-api/v3/features#preview-mode)
 - [x] [Advanced config](/packages/vercel/src/types.ts#L19)
@@ -71,6 +71,10 @@ export default async function handler() {
 
 > [!NOTE]
 > Please create an issue if you need other per-endpoints configurations
+
+### Edge middleware
+
+You can use [Edge middleware as describe in the official documentation](https://vercel.com/docs/functions/edge-middleware/middleware-api) (i.e. with a `middleware.ts` file at the root of your project).
 
 ## Usage with vike
 
