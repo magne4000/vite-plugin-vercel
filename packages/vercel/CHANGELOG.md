@@ -1,5 +1,15 @@
 # vite-plugin-vercel
 
+## 2.0.0
+
+### Minor Changes
+
+- Respect configured node version
+
+### Patch Changes
+
+- @vite-plugin-vercel/vike@2.0.0
+
 ## 1.0.0
 
 ### Minor Changes
