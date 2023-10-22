@@ -11,6 +11,7 @@ import type { Header, Rewrite } from '@vercel/routing-utils';
 import _eval from 'eval';
 import { vercelEndpointExports } from './schemas/exports';
 import { generateCode, loadFile } from 'magicast';
+import { getNodeVersion } from '@vercel/build-utils';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -188,6 +189,8 @@ export async function writeVcConfig(
   destination: string,
   edge: boolean,
 ): Promise<void> {
+  const nodeVersion = await getNodeVersion(destination);
+
   const vcConfig = path.join(
     getOutput(resolvedConfig, 'functions'),
     destination,
@@ -204,7 +207,7 @@ export async function writeVcConfig(
               entrypoint: 'index.js',
             }
           : {
-              runtime: 'nodejs16.x',
+              runtime: nodeVersion.runtime,
               handler: 'index.js',
               maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
               launcherType: 'Nodejs',

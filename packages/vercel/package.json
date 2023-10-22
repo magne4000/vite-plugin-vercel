@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
+    "@vercel/build-utils": "^7.2.2",
     "@vercel/routing-utils": "^3.0.0",
     "esbuild": "^0.19.4",
     "eval": "^0.1.8",
