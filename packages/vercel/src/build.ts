@@ -189,13 +189,13 @@ export async function writeVcConfig(
   destination: string,
   edge: boolean,
 ): Promise<void> {
-  const nodeVersion = await getNodeVersion(destination);
-
   const vcConfig = path.join(
     getOutput(resolvedConfig, 'functions'),
     destination,
     '.vc-config.json',
   );
+
+  const nodeVersion = await getNodeVersion(getOutput(resolvedConfig));
 
   await fs.writeFile(
     vcConfig,
