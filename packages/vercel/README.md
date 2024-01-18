@@ -86,10 +86,7 @@ You only need to install `@vite-plugin-vercel/vike`, the Vite config stays the s
 > `@vite-plugin-vercel/vike` supersedes the old `@magne4000/vite-plugin-vercel-ssr` package.
 > As such, you should remove `@magne4000/vite-plugin-vercel-ssr` from your package.json and vite config file.
 
-### vike V1 design
-
-`vite-plugin-vercel` fully supports [vike V1 design](https://vike.dev/migration/v1-design),
-and thus you can leverage [config files](https://vike.dev/config) to customize ISR configuration:
+You can then leverage [config files](https://vike.dev/config) to customize ISR configuration:
 
 ```ts
 // /pages/product/+config.h.ts
