@@ -22,14 +22,14 @@
     "@types/react-dom": "^18.2.18",
     "@vercel/build-utils": "^7.5.0",
     "@vercel/node": "^3.0.16",
-    "esno": "^0.17.0",
+    "esno": "^4.0.0",
     "fast-glob": "^3.3.2",
-    "vitest": "^0.34.6",
+    "vitest": "^1.2.1",
     "zod": "^3.22.4"
   },
   "dependencies": {
     "@brillout/libassert": "0.5.6",
-    "@vercel/edge-config": "^0.3.0",
+    "@vercel/edge-config": "^0.4.1",
     "@vite-plugin-vercel/vike": "workspace:*",
     "@vitejs/plugin-react": "^4.2.1",
     "express": "^4.18.2",
@@ -37,7 +37,7 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.3.3",
     "vike": "^0.4.157",
-    "vite": "^4.5.1",
+    "vite": "^5.0.11",
     "vite-plugin-vercel": "workspace:*"
   },
   "version": null

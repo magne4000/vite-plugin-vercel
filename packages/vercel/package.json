@@ -45,10 +45,10 @@
     "@typescript-eslint/parser": "^6.19.0",
     "@vite-plugin-vercel/vike": "workspace:*",
     "eslint": "^8.56.0",
-    "tsup": "^7.2.0",
+    "tsup": "^8.0.1",
     "typescript": "^5.3.3",
     "vike": "^0.4.157",
-    "vite": "^4.5.1"
+    "vite": "^5.0.11"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
