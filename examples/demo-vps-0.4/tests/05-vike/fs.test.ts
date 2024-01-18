@@ -23,7 +23,6 @@ describe('fs', function () {
     '/functions/api/post.func/.vc-config.json',
     '/functions/edge.func/index.js',
     '/functions/edge.func/.vc-config.json',
-    '/static/vike.json',
     // ISR + Static pages
     '/functions/ssr_.func/index.js',
     '/functions/ssr_.func/.vc-config.json',

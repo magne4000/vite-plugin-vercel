@@ -20,7 +20,7 @@ prepareTestJsonFilesContent(
       expect(context.file).toStrictEqual({
         handler: 'index.js',
         launcherType: 'Nodejs',
-        runtime: 'nodejs18.x',
+        runtime: 'nodejs20.x',
         shouldAddHelpers: true,
       });
     });
