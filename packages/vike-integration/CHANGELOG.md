@@ -1,5 +1,18 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 3.0.0
+
+### Major Changes
+
+- ec8dcba: - Target node20.x
+  - Upgrade all dependencies to their latest versions
+  - Drops support for vike non-v1 design (still works with v2)
+
+### Patch Changes
+
+- Updated dependencies [ec8dcba]
+  - vite-plugin-vercel@3.0.0
+
 ## 2.0.0
 
 ### Patch Changes

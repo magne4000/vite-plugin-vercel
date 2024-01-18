@@ -4,6 +4,14 @@
 
 ### Patch Changes
 
+- Updated dependencies [ec8dcba]
+  - @vite-plugin-vercel/vike@3.0.0
+  - vite-plugin-vercel@3.0.0
+
+## null
+
+### Patch Changes
+
 - Updated dependencies
   - vite-plugin-vercel@2.0.1
   - @vite-plugin-vercel/vike@2.0.0
