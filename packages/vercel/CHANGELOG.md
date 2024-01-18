@@ -1,5 +1,12 @@
 # vite-plugin-vercel
 
+## 2.0.1
+
+### Patch Changes
+
+- fix: warn instead of crash in case parsing fails
+  - @vite-plugin-vercel/vike@2.0.0
+
 ## 2.0.0
 
 ### Minor Changes
