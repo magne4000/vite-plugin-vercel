@@ -240,33 +240,33 @@ async function removeDefaultExport(filepath: string) {
 }
 
 async function extractExports(filepath: string) {
-  // default export is removed so that generated bundle contains only
-  // named exports related code
-  const contents = await removeDefaultExport(filepath);
-
-  const buildOptions = {
-    ...standardBuildOptions,
-    minify: false,
-    write: false,
-    legalComments: 'none',
-  } satisfies BuildOptions;
-
-  buildOptions.stdin = {
-    sourcefile: filepath,
-    contents,
-    loader: filepath.endsWith('.ts')
-      ? 'ts'
-      : filepath.endsWith('.tsx')
-      ? 'tsx'
-      : filepath.endsWith('.js')
-      ? 'js'
-      : filepath.endsWith('.jsx')
-      ? 'jsx'
-      : 'default',
-    resolveDir: dirname(filepath),
-  };
-
   try {
+    // default export is removed so that generated bundle contains only
+    // named exports related code
+    const contents = await removeDefaultExport(filepath);
+
+    const buildOptions = {
+      ...standardBuildOptions,
+      minify: false,
+      write: false,
+      legalComments: 'none',
+    } satisfies BuildOptions;
+
+    buildOptions.stdin = {
+      sourcefile: filepath,
+      contents,
+      loader: filepath.endsWith('.ts')
+        ? 'ts'
+        : filepath.endsWith('.tsx')
+        ? 'tsx'
+        : filepath.endsWith('.js')
+        ? 'js'
+        : filepath.endsWith('.jsx')
+        ? 'jsx'
+        : 'default',
+      resolveDir: dirname(filepath),
+    };
+
     const output = await build(buildOptions);
     const bundle = new TextDecoder().decode(output.outputFiles[0]?.contents);
 
