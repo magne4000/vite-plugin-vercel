@@ -28,7 +28,6 @@ describe('fs', function () {
     new RegExp('/functions/og.func/.*.ttf'),
     '/functions/og.func/resvg.wasm',
     '/functions/og.func/yoga.wasm',
-    '/static/vike.json',
     // ISR + Static pages
     '/functions/ssr_.func/index.js',
     '/functions/ssr_.func/.vc-config.json',

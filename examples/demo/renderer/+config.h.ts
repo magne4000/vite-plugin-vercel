@@ -10,11 +10,11 @@ export default {
   meta: {
     // Create new config 'title'
     title: {
-      env: 'server-and-client',
+      env: { server: true, client: true },
     },
     // Create new config 'onBeforeRenderIsomorph'
     onBeforeRenderIsomorph: {
-      env: 'config-only',
+      env: { config: true },
       effect({ configDefinedAt, configValue }) {
         if (typeof configValue !== 'boolean') {
           throw new Error(`${configDefinedAt} should be a boolean`);
@@ -25,7 +25,7 @@ export default {
               onBeforeRender: {
                 // We override VPS's default behavior of always loading/executing onBeforeRender() on the server-side.
                 // If we set onBeforeRenderIsomorph to true, then onBeforeRender() is loaded/executed in the browser as well, allowing us to fetch data direcly from the browser upon client-side navigation (without involving our Node.js/Edge server at all).
-                env: 'server-and-client',
+                env: { server: true, client: true },
               },
             },
           };

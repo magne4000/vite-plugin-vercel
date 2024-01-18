@@ -144,6 +144,23 @@ function assertIsr(
   ).expiration;
 }
 
+function getRouteMatch(myroute: Awaited<ReturnType<typeof route>>): any {
+  let routeMatch: any = null;
+
+  if ('_routeMatch' in myroute.pageContextAddendum) {
+    // Since 0.4.157
+    routeMatch = myroute.pageContextAddendum._routeMatch;
+  } else if ('_routeMatches' in myroute.pageContextAddendum) {
+    // Before 0.4.145
+    routeMatch = (myroute.pageContextAddendum._routeMatches as any[])?.[0];
+  } else if ('_debugRouteMatches' in myroute.pageContextAddendum) {
+    // Between 0.4.145 and 0.4.157 (still in place but prefer using _routeMatch)
+    routeMatch = myroute.pageContextAddendum._debugRouteMatches?.[0];
+  }
+
+  return routeMatch;
+}
+
 export const prerender: ViteVercelPrerenderFn = async (
   resolvedConfig: ResolvedConfig,
 ): Promise<ViteVercelPrerenderRoute> => {
@@ -170,7 +187,7 @@ export const prerender: ViteVercelPrerenderFn = async (
 
       if (!pageContext.is404) {
         assert(foundRoute, `Page with id ${pageContext._pageId} not found`);
-        const routeMatch = foundRoute.pageContextAddendum._routeMatches?.[0];
+        const routeMatch = getRouteMatch(foundRoute);
 
         // if ISR + Filesystem routing -> ISR prevails
         if (
@@ -253,12 +270,12 @@ export async function getSsrEndpoint(
       loader: sourcefile.endsWith('.ts')
         ? 'ts'
         : sourcefile.endsWith('.tsx')
-        ? 'tsx'
-        : sourcefile.endsWith('.js')
-        ? 'js'
-        : sourcefile.endsWith('.jsx')
-        ? 'jsx'
-        : 'default',
+          ? 'tsx'
+          : sourcefile.endsWith('.js')
+            ? 'js'
+            : sourcefile.endsWith('.jsx')
+              ? 'jsx'
+              : 'default',
       resolveDir,
     },
     destination: rendererDestination,

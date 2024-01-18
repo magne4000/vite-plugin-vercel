@@ -3,14 +3,14 @@ import type { Config } from 'vike/types';
 export default {
   meta: {
     isr: {
-      env: 'server-only',
+      env: { server: true },
     },
     // TODO
     // edge: {
-    //   env: 'server-only',
+    //   env: { server: true },
     // },
     // headers: {
-    //   env: 'server-only',
+    //   env: { server: true },
     // },
   },
 } satisfies Config;
