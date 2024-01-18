@@ -29,7 +29,7 @@
   "peerDependencies": {
     "@vite-plugin-vercel/vike": "workspace:*",
     "vike": "*",
-    "vite": "^4.2.0"
+    "vite": "^4.4 || ^5.0.2"
   },
   "peerDependenciesMeta": {
     "@vite-plugin-vercel/vike": {
