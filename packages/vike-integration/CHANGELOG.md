@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 3.0.1
+
+### Patch Changes
+
+- 8e7cad4: Add vite@5 in peerDependencies
+- Updated dependencies [8e7cad4]
+  - vite-plugin-vercel@3.0.1
+
 ## 3.0.0
 
 ### Major Changes
