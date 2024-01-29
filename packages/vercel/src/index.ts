@@ -6,6 +6,7 @@ import { buildEndpoints } from './build';
 import { buildPrerenderConfigs, execPrerender } from './prerender';
 import path from 'path';
 import type { ViteVercelPrerenderRoute } from './types';
+import { copyDir } from './helpers';
 
 export * from './types';
 
@@ -23,6 +24,14 @@ function vercelPlugin(): Plugin {
       vikeFound = resolvedConfig.plugins.some((p) =>
         p.name.match('^vite-plugin-ssr:|^vike:'),
       );
+
+      if (
+        typeof resolvedConfig.vercel?.distContainsOnlyStatic === 'undefined'
+      ) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (resolvedConfig as any).vercel ??= {};
+        resolvedConfig.vercel!.distContainsOnlyStatic = !vikeFound;
+      }
     },
     async writeBundle() {
       if (!resolvedConfig.build?.ssr) {
@@ -58,6 +67,9 @@ function vercelPlugin(): Plugin {
         },
         headers,
       );
+
+      // step 7: Copy dist folder to static
+      await copyDistToStatic(resolvedConfig);
     },
   };
 }
@@ -69,6 +81,15 @@ async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
   });
 
   await fs.mkdir(getOutput(resolvedConfig), { recursive: true });
+}
+
+async function copyDistToStatic(resolvedConfig: ResolvedConfig) {
+  if (resolvedConfig.vercel?.distContainsOnlyStatic) {
+    await copyDir(
+      resolvedConfig.build.outDir,
+      getOutput(resolvedConfig, 'static'),
+    );
+  }
 }
 
 async function computeStaticHtmlOverrides(
@@ -111,8 +132,8 @@ async function getStaticHtmlFiles(src: string) {
     entry.isDirectory()
       ? htmlFiles.push(...(await getStaticHtmlFiles(srcPath)))
       : srcPath.endsWith('.html')
-      ? htmlFiles.push(srcPath)
-      : undefined;
+        ? htmlFiles.push(srcPath)
+        : undefined;
   }
 
   return htmlFiles;

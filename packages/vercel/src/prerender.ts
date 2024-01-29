@@ -8,6 +8,7 @@ import {
 import fs from 'fs/promises';
 import type { VercelOutputIsr, ViteVercelPrerenderRoute } from './types';
 import type { Rewrite } from '@vercel/routing-utils';
+import { copyDir } from './helpers';
 
 export function execPrerender(
   resolvedConfig: ResolvedConfig,
@@ -115,20 +116,6 @@ export async function buildPrerenderConfigs(
   }
 
   return rewrites;
-}
-
-async function copyDir(src: string, dest: string) {
-  await fs.mkdir(dest, { recursive: true });
-  const entries = await fs.readdir(src, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-
-    entry.isDirectory()
-      ? await copyDir(srcPath, destPath)
-      : await fs.copyFile(srcPath, destPath);
-  }
 }
 
 async function getIsrConfig(

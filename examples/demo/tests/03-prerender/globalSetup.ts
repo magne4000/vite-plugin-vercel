@@ -22,6 +22,7 @@ export const setup = _setup(path.basename(__dirname), {
         },
       };
     },
+    distContainsOnlyStatic: false,
   },
 });
 
