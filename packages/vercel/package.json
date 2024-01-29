@@ -40,21 +40,21 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^16.18.71",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0",
+    "@types/node": "^16.18.76",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
     "@vite-plugin-vercel/vike": "workspace:*",
     "eslint": "^8.56.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3",
-    "vike": "^0.4.157",
-    "vite": "^5.0.11"
+    "vike": "^0.4.160",
+    "vite": "^5.0.12"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@vercel/build-utils": "^7.5.0",
+    "@vercel/build-utils": "^7.5.1",
     "@vercel/routing-utils": "^3.1.0",
-    "esbuild": "^0.19.11",
+    "esbuild": "^0.19.12",
     "eval": "^0.1.8",
     "fast-glob": "^3.3.2",
     "magicast": "^0.3.3",
