@@ -1,5 +1,12 @@
 # vite-plugin-vercel
 
+## 3.0.2
+
+### Patch Changes
+
+- Add support for static vite builds
+  - @vite-plugin-vercel/vike@3.0.1
+
 ## 3.0.1
 
 ### Patch Changes
