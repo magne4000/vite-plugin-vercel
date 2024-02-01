@@ -228,6 +228,14 @@ function getSourceAndDestination(destination: string) {
   return path.posix.resolve('/', destination, ':match*');
 }
 
+const RE_BRACKETS = /^\[([^/]+)\]$/gm;
+function replaceBrackets(source: string) {
+  return source
+    .split('/')
+    .map((segment) => segment.replace(RE_BRACKETS, ':$1'))
+    .join('/');
+}
+
 async function removeDefaultExport(filepath: string) {
   const mod = await loadFile(filepath);
   try {
@@ -258,12 +266,12 @@ async function extractExports(filepath: string) {
       loader: filepath.endsWith('.ts')
         ? 'ts'
         : filepath.endsWith('.tsx')
-        ? 'tsx'
-        : filepath.endsWith('.js')
-        ? 'js'
-        : filepath.endsWith('.jsx')
-        ? 'jsx'
-        : 'default',
+          ? 'tsx'
+          : filepath.endsWith('.js')
+            ? 'js'
+            : filepath.endsWith('.jsx')
+              ? 'jsx'
+              : 'default',
       resolveDir: dirname(filepath),
     };
 
@@ -335,7 +343,7 @@ export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
       .filter((e) => e.addRoute !== false)
       .map((e) => e.destination.replace(/\.func$/, ''))
       .map((destination) => ({
-        source: getSourceAndDestination(destination),
+        source: replaceBrackets(getSourceAndDestination(destination)),
         destination: getSourceAndDestination(destination),
       })),
     isr: Object.fromEntries(isrEntries),
