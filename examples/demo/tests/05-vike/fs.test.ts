@@ -17,6 +17,8 @@ describe('fs', function () {
 
   const expected = [
     '/config.json',
+    '/functions/api/name/[name].func/.vc-config.json',
+    '/functions/api/name/[name].func/index.js',
     '/functions/api/page.func/index.js',
     '/functions/api/page.func/.vc-config.json',
     '/functions/api/post.func/index.js',
