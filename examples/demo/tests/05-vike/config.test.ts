@@ -46,6 +46,11 @@ prepareTestJsonFileContent('config.json', (context) => {
       },
       {
         check: true,
+        src: '^/api/name(?:/([^/]+?))$',
+        dest: '/api/name/[name]?name=$1',
+      },
+      {
+        check: true,
         src: '^(/catch-all/.+?(?:/index\\.pageContext\\.json)?)$',
         dest: expect.stringMatching(
           '/pages/catch-all-([^/]+?)/\\?__original_path=\\$1',

@@ -53,6 +53,11 @@ prepareTestJsonFileContent(
           src: '^/api/post$',
           dest: '/api/post',
         },
+        {
+          check: true,
+          src: '^/api/name(?:/([^/]+?))$',
+          dest: '/api/name/[name]?name=$1',
+        },
       ]);
       expect(context.file).toHaveProperty('overrides', {});
       expect(Object.keys(context.file as any).sort()).toEqual(
