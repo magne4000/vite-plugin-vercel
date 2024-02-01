@@ -1,5 +1,15 @@
 # vite-plugin-vercel
 
+## 4.0.0
+
+### Minor Changes
+
+- Handle API endpoints with brackets
+
+### Patch Changes
+
+- @vite-plugin-vercel/vike@4.0.0
+
 ## 3.0.2
 
 ### Patch Changes
