@@ -48,6 +48,7 @@ export async function writePrerenderConfig(
     JSON.stringify(
       vercelOutputPrerenderConfigSchema.parse({
         group: group++,
+        passQuery: true,
         ...isr,
       }),
       undefined,
