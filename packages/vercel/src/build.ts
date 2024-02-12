@@ -334,7 +334,7 @@ export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
       (e) =>
         [
           e.destination.replace(/\.func$/, ''),
-          { expiration: e.isr!.expiration },
+          { expiration: e.isr!.expiration, passQuery: true },
         ] as const,
     );
 

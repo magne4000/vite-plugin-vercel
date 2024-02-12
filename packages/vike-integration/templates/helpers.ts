@@ -25,14 +25,6 @@ export function getDefaultPageContextInit(request: VercelRequest) {
       : matches && typeof matches!['1'] === 'string'
         ? matches['1']
         : request.url!;
-
-  console.log('getDefaultPageContextInit', {
-    __original_path: query.__original_path,
-    matches: matches,
-    'x-now-route-matches': request.headers['x-now-route-matches'],
-    url: request.url,
-  });
-
   return {
     url,
     urlOriginal: url,
