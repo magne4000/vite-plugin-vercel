@@ -4,6 +4,19 @@ Vercel adapter for [Vite](https://vitejs.dev/).
 
 Bundle your Vite application as supported by [Vercel Output API (v3)](https://vercel.com/docs/build-output-api/v3).
 
+## Install
+```bash
+npm i -D vite-plugin-vercel
+```
+```bash
+yarn add -D vite-plugin-vercel
+```
+```bash
+pnpm add -D vite-plugin-vercel
+```
+```bash
+bun add -D vite-plugin-vercel
+```
 ## Features
 
 - [x] [SSG/Static files](https://vercel.com/docs/build-output-api/v3/primitives#static-files)
