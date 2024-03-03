@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 4.0.1
+
+### Patch Changes
+
+- Fix cleanup order
+- Updated dependencies
+  - @vite-plugin-vercel/vike@4.0.1
+
 ## 4.0.0
 
 ### Minor Changes

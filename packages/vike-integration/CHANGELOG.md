@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 4.0.1
+
+### Patch Changes
+
+- Fix **VITE_ASSETS_MAP** error
+- Updated dependencies
+  - vite-plugin-vercel@4.0.1
+
 ## 4.0.0
 
 ### Patch Changes
