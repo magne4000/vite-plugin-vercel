@@ -33,43 +33,47 @@ function vercelPlugin(): Plugin {
         resolvedConfig.vercel!.distContainsOnlyStatic = !vikeFound;
       }
     },
-    async writeBundle() {
-      if (!resolvedConfig.build?.ssr) {
-        // step 1:	Clean .vercel/ouput dir
-        await cleanOutputDirectory(resolvedConfig);
+    writeBundle: {
+      order: 'post',
+      sequential: true,
+      async handler() {
+        if (!resolvedConfig.build?.ssr) {
+          // step 1:	Clean .vercel/ouput dir
+          await cleanOutputDirectory(resolvedConfig);
 
-        // special case: Vike triggers a second build with --ssr
-        // TODO: find a way to fix that in a more generic way
-        if (vikeFound) {
-          return;
+          // special case: Vike triggers a second build with --ssr
+          // TODO: find a way to fix that in a more generic way
+          if (vikeFound) {
+            return;
+          }
         }
-      }
 
-      // step 2:	Execute prerender
-      const overrides = await execPrerender(resolvedConfig);
+        // step 2:	Execute prerender
+        const overrides = await execPrerender(resolvedConfig);
 
-      // step 3:	Compute overrides for static HTML files
-      const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
+        // step 3:	Compute overrides for static HTML files
+        const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
 
-      // step 4:	Compile serverless functions to ".vercel/output/functions"
-      const { rewrites, isr, headers } = await buildEndpoints(resolvedConfig);
+        // step 4:	Compile serverless functions to ".vercel/output/functions"
+        const { rewrites, isr, headers } = await buildEndpoints(resolvedConfig);
 
-      // step 5:	Generate prerender config files
-      rewrites.push(...(await buildPrerenderConfigs(resolvedConfig, isr)));
+        // step 5:	Generate prerender config files
+        rewrites.push(...(await buildPrerenderConfigs(resolvedConfig, isr)));
 
-      // step 6:	Generate config file
-      await writeConfig(
-        resolvedConfig,
-        rewrites,
-        {
-          ...userOverrides,
-          ...overrides,
-        },
-        headers,
-      );
+        // step 6:	Generate config file
+        await writeConfig(
+          resolvedConfig,
+          rewrites,
+          {
+            ...userOverrides,
+            ...overrides,
+          },
+          headers,
+        );
 
-      // step 7: Copy dist folder to static
-      await copyDistToStatic(resolvedConfig);
+        // step 7: Copy dist folder to static
+        await copyDistToStatic(resolvedConfig);
+      },
     },
   };
 }
