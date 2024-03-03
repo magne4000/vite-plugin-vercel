@@ -10,6 +10,30 @@ import { copyDir } from './helpers';
 
 export * from './types';
 
+function vercelPluginCleanup(): Plugin {
+  let resolvedConfig: ResolvedConfig;
+
+  return {
+    apply: 'build',
+    name: 'vite-plugin-vercel:cleanup',
+    enforce: 'pre',
+
+    configResolved(config) {
+      resolvedConfig = config;
+    },
+    writeBundle: {
+      order: 'pre',
+      sequential: true,
+      async handler() {
+        if (!resolvedConfig.build?.ssr) {
+          // step 1:	Clean .vercel/ouput dir
+          await cleanOutputDirectory(resolvedConfig);
+        }
+      },
+    },
+  };
+}
+
 function vercelPlugin(): Plugin {
   let resolvedConfig: ResolvedConfig;
   let vikeFound = false;
@@ -38,9 +62,6 @@ function vercelPlugin(): Plugin {
       sequential: true,
       async handler() {
         if (!resolvedConfig.build?.ssr) {
-          // step 1:	Clean .vercel/ouput dir
-          await cleanOutputDirectory(resolvedConfig);
-
           // special case: Vike triggers a second build with --ssr
           // TODO: find a way to fix that in a more generic way
           if (vikeFound) {
@@ -179,5 +200,9 @@ async function tryImportVpvv() {
 export default function allPlugins(
   options: { smart?: boolean } = {},
 ): PluginOption[] {
-  return [vercelPlugin(), options.smart !== false ? tryImportVpvv() : null];
+  return [
+    vercelPluginCleanup(),
+    vercelPlugin(),
+    options.smart !== false ? tryImportVpvv() : null,
+  ];
 }
