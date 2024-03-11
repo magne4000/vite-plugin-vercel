@@ -31,16 +31,16 @@
   },
   "devDependencies": {
     "@types/node": "^16.18.76",
-    "@vercel/node": "^3.0.17",
-    "tsup": "^8.0.1",
-    "typescript": "^5.3.3",
-    "vike": "^0.4.160",
-    "vite": "^5.0.12",
+    "@vercel/node": "^3.0.22",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.2",
+    "vike": "^0.4.165",
+    "vite": "^5.1.6",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "nanoid": "^5.0.4"
+    "nanoid": "^5.0.6"
   },
   "peerDependencies": {
     "vike": "*",
