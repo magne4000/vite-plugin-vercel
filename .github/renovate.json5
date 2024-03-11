@@ -11,4 +11,5 @@
     '@types/node',
     'pnpm',
   ],
+  postUpdateOptions: ['pnpmDedupe'],
 }
