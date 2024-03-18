@@ -216,7 +216,7 @@ export async function writeVcConfig(
         edge
           ? {
               runtime: 'edge',
-              entrypoint: 'index.js',
+              entrypoint: 'index.mjs',
             }
           : {
               runtime: nodeVersion.runtime,
