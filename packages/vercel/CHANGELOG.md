@@ -1,5 +1,15 @@
 # vite-plugin-vercel
 
+## 5.0.0
+
+### Major Changes
+
+- Always target ESM by default
+
+### Patch Changes
+
+- @vite-plugin-vercel/vike@5.0.0
+
 ## 4.0.2
 
 ### Patch Changes
