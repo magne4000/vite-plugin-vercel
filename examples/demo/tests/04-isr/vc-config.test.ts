@@ -15,7 +15,7 @@ prepareTestJsonFilesContent(
 
     it('should have only necessary properties', function () {
       expect(context.file).toStrictEqual({
-        handler: 'index.js',
+        handler: 'index.mjs',
         launcherType: 'Nodejs',
         runtime: 'nodejs20.x',
         shouldAddHelpers: true,
