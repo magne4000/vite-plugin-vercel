@@ -119,7 +119,7 @@ export async function buildFn(
   const outfile = path.join(
     getOutput(resolvedConfig, 'functions'),
     entry.destination,
-    'index.mjs',
+    entry.edge ? 'index.mjs' : 'index.js',
   );
 
   const options = Object.assign({}, standardBuildOptions, { outfile });
@@ -215,7 +215,7 @@ export async function writeVcConfig(
         edge
           ? {
               runtime: 'edge',
-              entrypoint: 'index.mjs',
+              entrypoint: 'index.js',
             }
           : {
               runtime: nodeVersion.runtime,
