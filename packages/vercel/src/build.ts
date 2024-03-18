@@ -93,14 +93,14 @@ const vercelOgPlugin = (ctx: { found: boolean; index: string }): Plugin => {
 const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
-  format: 'cjs',
+  format: 'esm',
   platform: 'node',
   logLevel: 'info',
   logOverride: {
     'ignored-bare-import': 'verbose',
     'require-resolve-not-external': 'verbose',
   },
-  minify: true,
+  minify: false,
   plugins: [wasmPlugin],
 };
 
@@ -255,6 +255,7 @@ async function extractExports(filepath: string) {
 
     const buildOptions = {
       ...standardBuildOptions,
+      format: 'cjs',
       minify: false,
       write: false,
       legalComments: 'none',
