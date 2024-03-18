@@ -153,6 +153,17 @@ export async function buildFn(
       'require',
     ];
     options.format = 'esm';
+  } else {
+    options.banner = {
+      js: `import { createRequire } from 'node:module';
+import path from 'node:path';
+import url from 'node:url';
+
+const require = createRequire(import.meta.url);
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+`,
+    };
   }
 
   const ctx = { found: false, index: '' };
