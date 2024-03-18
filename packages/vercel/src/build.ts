@@ -158,7 +158,7 @@ export async function buildFn(
     ];
     options.plugins?.push(edgeWasmPlugin);
     options.format = 'esm';
-  } else if (options.target === 'esm') {
+  } else if (options.format === 'esm') {
     options.banner = {
       js: `import { createRequire } from 'node:module';
 import path from 'node:path';
