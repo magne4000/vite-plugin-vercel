@@ -101,6 +101,9 @@ const standardBuildOptions: BuildOptions = {
     'require-resolve-not-external': 'verbose',
   },
   minify: false,
+  outExtension: {
+    '.js': '.mjs',
+  },
   plugins: [wasmPlugin],
 };
 
