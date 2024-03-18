@@ -100,7 +100,7 @@ const standardBuildOptions: BuildOptions = {
     'ignored-bare-import': 'verbose',
     'require-resolve-not-external': 'verbose',
   },
-  minify: true,
+  minify: false,
   plugins: [wasmPlugin],
 };
 
