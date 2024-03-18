@@ -113,6 +113,8 @@ const esmBuildOptions: BuildOptions = {
   outExtension: {
     '.js': '.mjs',
   },
+  mainFields: ['module', 'main'],
+  conditions: ['module'],
   format: 'esm',
 };
 
