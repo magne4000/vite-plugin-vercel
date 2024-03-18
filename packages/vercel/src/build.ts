@@ -61,8 +61,8 @@ export function getEntries(
   }, getAdditionalEndpoints(resolvedConfig));
 }
 
-const wasmPlugin: Plugin = {
-  name: 'wasm',
+const edgeWasmPlugin: Plugin = {
+  name: 'edge-wasm-vercel',
   setup(build) {
     build.onResolve({ filter: /\.wasm/ }, (args) => {
       return {
@@ -93,7 +93,7 @@ const vercelOgPlugin = (ctx: { found: boolean; index: string }): Plugin => {
 const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
-  format: 'cjs',
+  format: 'esm',
   platform: 'node',
   logLevel: 'info',
   logOverride: {
@@ -101,7 +101,7 @@ const standardBuildOptions: BuildOptions = {
     'require-resolve-not-external': 'verbose',
   },
   minify: true,
-  plugins: [wasmPlugin],
+  plugins: [],
 };
 
 export async function buildFn(
@@ -116,17 +116,21 @@ export async function buildFn(
     } does not have build destination`,
   );
 
-  const outfile = path.join(
-    getOutput(resolvedConfig, 'functions'),
-    entry.destination,
-    'index.js',
-  );
-
-  const options = Object.assign({}, standardBuildOptions, { outfile });
+  const options = Object.assign({}, standardBuildOptions);
 
   if (buildOptions) {
     Object.assign(options, buildOptions);
   }
+
+  const filename =
+    entry.edge || options.format === 'cjs' ? 'index.js' : 'index.mjs';
+  const outfile = path.join(
+    getOutput(resolvedConfig, 'functions'),
+    entry.destination,
+    filename,
+  );
+
+  Object.assign(options, { outfile });
 
   if (!options.stdin) {
     if (typeof entry.source === 'string') {
@@ -152,7 +156,18 @@ export async function buildFn(
       'import',
       'require',
     ];
+    options.plugins?.push(edgeWasmPlugin);
     options.format = 'esm';
+  } else if (options.target === 'esm') {
+    options.banner = {
+      js: `import { createRequire } from 'node:module';
+import path from 'node:path';
+import url from 'node:url';
+const require = createRequire(import.meta.url);
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+`,
+    };
   }
 
   const ctx = { found: false, index: '' };
@@ -179,7 +194,12 @@ export async function buildFn(
     }
   }
 
-  await writeVcConfig(resolvedConfig, entry.destination, Boolean(entry.edge));
+  await writeVcConfig(
+    resolvedConfig,
+    entry.destination,
+    Boolean(entry.edge),
+    filename,
+  );
 
   return output;
 }
@@ -188,6 +208,7 @@ export async function writeVcConfig(
   resolvedConfig: ResolvedConfig,
   destination: string,
   edge: boolean,
+  filename: string,
 ): Promise<void> {
   const vcConfig = path.join(
     getOutput(resolvedConfig, 'functions'),
@@ -204,11 +225,11 @@ export async function writeVcConfig(
         edge
           ? {
               runtime: 'edge',
-              entrypoint: 'index.js',
+              entrypoint: filename,
             }
           : {
               runtime: nodeVersion.runtime,
-              handler: 'index.js',
+              handler: filename,
               maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
               launcherType: 'Nodejs',
               shouldAddHelpers: true,
@@ -255,6 +276,7 @@ async function extractExports(filepath: string) {
 
     const buildOptions = {
       ...standardBuildOptions,
+      format: 'cjs',
       minify: false,
       write: false,
       legalComments: 'none',
