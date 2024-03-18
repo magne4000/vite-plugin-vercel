@@ -93,7 +93,7 @@ const vercelOgPlugin = (ctx: { found: boolean; index: string }): Plugin => {
 const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
-  format: 'cjs',
+  format: 'esm',
   platform: 'node',
   logLevel: 'info',
   logOverride: {
