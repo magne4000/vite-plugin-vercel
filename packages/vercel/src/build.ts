@@ -12,6 +12,8 @@ import _eval from 'eval';
 import { vercelEndpointExports } from './schemas/exports';
 import { generateCode, loadFile } from 'magicast';
 import { getNodeVersion } from '@vercel/build-utils';
+import { nodeFileTrace } from '@vercel/nft';
+import { workspaceRootSync } from 'workspace-root';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -61,8 +63,8 @@ export function getEntries(
   }, getAdditionalEndpoints(resolvedConfig));
 }
 
-const wasmPlugin: Plugin = {
-  name: 'wasm',
+const edgeWasmPlugin: Plugin = {
+  name: 'edge-wasm-vercel',
   setup(build) {
     build.onResolve({ filter: /\.wasm/ }, (args) => {
       return {
@@ -93,15 +95,15 @@ const vercelOgPlugin = (ctx: { found: boolean; index: string }): Plugin => {
 const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
-  format: 'cjs',
+  format: 'esm',
   platform: 'node',
   logLevel: 'info',
   logOverride: {
     'ignored-bare-import': 'verbose',
     'require-resolve-not-external': 'verbose',
   },
-  minify: true,
-  plugins: [wasmPlugin],
+  minify: false,
+  plugins: [],
 };
 
 export async function buildFn(
@@ -116,17 +118,21 @@ export async function buildFn(
     } does not have build destination`,
   );
 
-  const outfile = path.join(
-    getOutput(resolvedConfig, 'functions'),
-    entry.destination,
-    'index.js',
-  );
-
-  const options = Object.assign({}, standardBuildOptions, { outfile });
+  const options = Object.assign({}, standardBuildOptions);
 
   if (buildOptions) {
     Object.assign(options, buildOptions);
   }
+
+  const filename =
+    entry.edge || options.format === 'cjs' ? 'index.js' : 'index.mjs';
+  const outfile = path.join(
+    getOutput(resolvedConfig, 'functions'),
+    entry.destination,
+    filename,
+  );
+
+  Object.assign(options, { outfile });
 
   if (!options.stdin) {
     if (typeof entry.source === 'string') {
@@ -152,7 +158,18 @@ export async function buildFn(
       'import',
       'require',
     ];
+    options.plugins?.push(edgeWasmPlugin);
     options.format = 'esm';
+  } else if (options.format === 'esm') {
+    options.banner = {
+      js: `import { createRequire } from 'node:module';
+import path from 'node:path';
+import url from 'node:url';
+const require = createRequire(import.meta.url);
+const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+`,
+    };
   }
 
   const ctx = { found: false, index: '' };
@@ -160,26 +177,62 @@ export async function buildFn(
 
   const output = await build(options);
 
-  // Special case for @vercel/og
-  // See https://github.com/magne4000/vite-plugin-vercel/issues/23
-  // and https://github.com/magne4000/vite-plugin-vercel/issues/25
-  if (ctx.found && ctx.index) {
-    const dir = dirname(ctx.index);
-    const externalFiles = await glob(`${dir}/*.{ttf,wasm}`);
+  // guess some assets dependencies
+  if (typeof entry.source == 'string') {
+    const base = workspaceRootSync(resolvedConfig.root) || resolvedConfig.root;
+    const { fileList, reasons } = await nodeFileTrace([entry.source], {
+      base,
+      processCwd: resolvedConfig.root,
+      mixedModules: true,
+      ignore: [
+        '**/node_modules/react{,-dom,-dom-server-turbopack}/**/*.development.js',
+        '**/*.d.ts',
+        '**/*.map',
+        '**/node_modules/webpack5/**/*',
+      ],
+      async readFile(filepath) {
+        if (filepath.endsWith('.ts') || filepath.endsWith('.tsx')) {
+          const result = await build({
+            ...standardBuildOptions,
+            entryPoints: [entry.source as string],
+            bundle: false,
+            write: false,
+          });
 
-    for (const f of externalFiles) {
-      await copyFile(
-        f,
-        path.join(
-          getOutput(resolvedConfig, 'functions'),
-          entry.destination,
-          basename(f),
-        ),
-      );
+          return result.outputFiles[0].text;
+        }
+
+        return fs.readFile(filepath, 'utf-8');
+      },
+    });
+
+    for (const file of fileList) {
+      if (
+        reasons.has(file) &&
+        reasons.get(file)!.type.includes('asset') &&
+        !file.endsWith('.js') &&
+        !file.endsWith('.cjs') &&
+        !file.endsWith('.mjs') &&
+        !file.endsWith('package.json')
+      ) {
+        await copyFile(
+          path.join(base, file),
+          path.join(
+            getOutput(resolvedConfig, 'functions'),
+            entry.destination,
+            basename(file),
+          ),
+        );
+      }
     }
   }
 
-  await writeVcConfig(resolvedConfig, entry.destination, Boolean(entry.edge));
+  await writeVcConfig(
+    resolvedConfig,
+    entry.destination,
+    Boolean(entry.edge),
+    filename,
+  );
 
   return output;
 }
@@ -188,6 +241,7 @@ export async function writeVcConfig(
   resolvedConfig: ResolvedConfig,
   destination: string,
   edge: boolean,
+  filename: string,
 ): Promise<void> {
   const vcConfig = path.join(
     getOutput(resolvedConfig, 'functions'),
@@ -204,11 +258,11 @@ export async function writeVcConfig(
         edge
           ? {
               runtime: 'edge',
-              entrypoint: 'index.js',
+              entrypoint: filename,
             }
           : {
               runtime: nodeVersion.runtime,
-              handler: 'index.js',
+              handler: filename,
               maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
               launcherType: 'Nodejs',
               shouldAddHelpers: true,
@@ -255,6 +309,7 @@ async function extractExports(filepath: string) {
 
     const buildOptions = {
       ...standardBuildOptions,
+      format: 'cjs',
       minify: false,
       write: false,
       legalComments: 'none',

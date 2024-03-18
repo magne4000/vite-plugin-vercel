@@ -20,8 +20,13 @@ export default {
         addRoute: true,
       },
       {
-        source: 'endpoints/og.tsx',
-        destination: `og`,
+        source: 'endpoints/og-node.tsx',
+        destination: `og-node`,
+        addRoute: true,
+      },
+      {
+        source: 'endpoints/og-edge.tsx',
+        destination: `og-edge`,
         addRoute: true,
       },
     ],

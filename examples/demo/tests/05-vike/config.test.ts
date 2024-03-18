@@ -30,8 +30,13 @@ prepareTestJsonFileContent('config.json', (context) => {
         check: true,
       },
       {
-        src: '^/og(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$',
-        dest: '/og/$1',
+        src: '^/og-node(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$',
+        dest: '/og-node/$1',
+        check: true,
+      },
+      {
+        src: '^/og-edge(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$',
+        dest: '/og-edge/$1',
         check: true,
       },
       {
