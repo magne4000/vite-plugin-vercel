@@ -101,7 +101,7 @@ const standardBuildOptions: BuildOptions = {
     'require-resolve-not-external': 'verbose',
   },
   minify: false,
-  plugins: [wasmPlugin],
+  plugins: [],
 };
 
 export async function buildFn(
@@ -152,6 +152,7 @@ export async function buildFn(
       'import',
       'require',
     ];
+    options.plugins?.push(wasmPlugin);
     options.format = 'esm';
   } else {
     options.banner = {

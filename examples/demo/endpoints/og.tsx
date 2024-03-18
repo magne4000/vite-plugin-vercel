@@ -2,6 +2,8 @@ import React from 'react';
 import { ImageResponse } from '@vercel/og';
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { Readable } from 'node:stream';
+import type { ReadableStream } from 'node:stream/web';
 
 // export const edge = true;
 
@@ -9,7 +11,7 @@ export default async function handler(
   request: VercelRequest,
   response: VercelResponse,
 ) {
-  return new ImageResponse(
+  const resp = new ImageResponse(
     (
       <div
         style={{
@@ -32,4 +34,6 @@ export default async function handler(
       height: 630,
     },
   );
+
+  Readable.fromWeb(resp.body as ReadableStream<any>).pipe(response);
 }
