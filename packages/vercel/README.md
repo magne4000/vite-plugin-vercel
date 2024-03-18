@@ -5,18 +5,23 @@ Vercel adapter for [Vite](https://vitejs.dev/).
 Bundle your Vite application as supported by [Vercel Output API (v3)](https://vercel.com/docs/build-output-api/v3).
 
 ## Install
+
 ```bash
 npm i -D vite-plugin-vercel
 ```
+
 ```bash
 yarn add -D vite-plugin-vercel
 ```
+
 ```bash
 pnpm add -D vite-plugin-vercel
 ```
+
 ```bash
 bun add -D vite-plugin-vercel
 ```
+
 ## Features
 
 - [x] [SSG/Static files](https://vercel.com/docs/build-output-api/v3/primitives#static-files)
@@ -102,7 +107,7 @@ You only need to install `@vite-plugin-vercel/vike`, the Vite config stays the s
 You can then leverage [config files](https://vike.dev/config) to customize ISR configuration:
 
 ```ts
-// /pages/product/+config.h.ts
+// /pages/product/+config.ts
 
 import Page from './Page';
 import type { Config } from 'vike/types';
@@ -116,7 +121,7 @@ export default {
 You will also need to extend the [renderer config](https://vike.dev/config#renderer) so that `vike` is aware of the new parameter:
 
 ```ts
-// /renderer/+config.h.ts
+// /renderer/+config.ts
 
 import config from '@vite-plugin-vercel/vike/config';
 import type { Config } from 'vike/types';
