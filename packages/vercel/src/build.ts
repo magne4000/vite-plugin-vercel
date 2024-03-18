@@ -12,6 +12,8 @@ import _eval from 'eval';
 import { vercelEndpointExports } from './schemas/exports';
 import { generateCode, loadFile } from 'magicast';
 import { getNodeVersion } from '@vercel/build-utils';
+import { nodeFileTrace } from '@vercel/nft';
+import { workspaceRootSync } from 'workspace-root';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -175,22 +177,53 @@ const __dirname = path.dirname(__filename);
 
   const output = await build(options);
 
-  // Special case for @vercel/og
-  // See https://github.com/magne4000/vite-plugin-vercel/issues/23
-  // and https://github.com/magne4000/vite-plugin-vercel/issues/25
-  if (ctx.found && ctx.index) {
-    const dir = dirname(ctx.index);
-    const externalFiles = await glob(`${dir}/*.{ttf,wasm}`);
+  // guess some assets dependencies
+  if (typeof entry.source == 'string') {
+    const base = workspaceRootSync(resolvedConfig.root) || resolvedConfig.root;
+    const { fileList, reasons } = await nodeFileTrace([entry.source], {
+      base,
+      processCwd: resolvedConfig.root,
+      mixedModules: true,
+      ignore: [
+        '**/node_modules/react{,-dom,-dom-server-turbopack}/**/*.development.js',
+        '**/*.d.ts',
+        '**/*.map',
+        '**/node_modules/webpack5/**/*',
+      ],
+      async readFile(filepath) {
+        if (filepath.endsWith('.ts') || filepath.endsWith('.tsx')) {
+          const result = await build({
+            ...standardBuildOptions,
+            entryPoints: [entry.source as string],
+            bundle: false,
+            write: false,
+          });
 
-    for (const f of externalFiles) {
-      await copyFile(
-        f,
-        path.join(
-          getOutput(resolvedConfig, 'functions'),
-          entry.destination,
-          basename(f),
-        ),
-      );
+          return result.outputFiles[0].text;
+        }
+
+        return fs.readFile(filepath, 'utf-8');
+      },
+    });
+
+    for (const file of fileList) {
+      if (
+        reasons.has(file) &&
+        reasons.get(file)!.type.includes('asset') &&
+        !file.endsWith('.js') &&
+        !file.endsWith('.cjs') &&
+        !file.endsWith('.mjs') &&
+        !file.endsWith('package.json')
+      ) {
+        await copyFile(
+          path.join(base, file),
+          path.join(
+            getOutput(resolvedConfig, 'functions'),
+            entry.destination,
+            basename(file),
+          ),
+        );
+      }
     }
   }
 
