@@ -93,7 +93,6 @@ const vercelOgPlugin = (ctx: { found: boolean; index: string }): Plugin => {
 const standardBuildOptions: BuildOptions = {
   bundle: true,
   target: 'es2020',
-  format: 'esm',
   platform: 'node',
   logLevel: 'info',
   logOverride: {
@@ -101,10 +100,20 @@ const standardBuildOptions: BuildOptions = {
     'require-resolve-not-external': 'verbose',
   },
   minify: false,
+  plugins: [wasmPlugin],
+};
+
+const cjsBuildOptions: BuildOptions = {
+  ...standardBuildOptions,
+  format: 'cjs',
+};
+
+const esmBuildOptions: BuildOptions = {
+  ...standardBuildOptions,
   outExtension: {
     '.js': '.mjs',
   },
-  plugins: [wasmPlugin],
+  format: 'esm',
 };
 
 export async function buildFn(
@@ -122,10 +131,10 @@ export async function buildFn(
   const outfile = path.join(
     getOutput(resolvedConfig, 'functions'),
     entry.destination,
-    'index.js',
+    'index.mjs',
   );
 
-  const options = Object.assign({}, standardBuildOptions, { outfile });
+  const options = Object.assign({}, esmBuildOptions, { outfile });
 
   if (buildOptions) {
     Object.assign(options, buildOptions);
@@ -211,7 +220,7 @@ export async function writeVcConfig(
             }
           : {
               runtime: nodeVersion.runtime,
-              handler: 'index.js',
+              handler: 'index.mjs',
               maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
               launcherType: 'Nodejs',
               shouldAddHelpers: true,
@@ -257,7 +266,7 @@ async function extractExports(filepath: string) {
     const contents = await removeDefaultExport(filepath);
 
     const buildOptions = {
-      ...standardBuildOptions,
+      ...cjsBuildOptions,
       minify: false,
       write: false,
       legalComments: 'none',
