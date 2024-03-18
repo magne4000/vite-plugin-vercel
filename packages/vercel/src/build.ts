@@ -119,7 +119,7 @@ export async function buildFn(
   const outfile = path.join(
     getOutput(resolvedConfig, 'functions'),
     entry.destination,
-    entry.edge ? 'index.mjs' : 'index.js',
+    entry.edge ? 'index.js' : 'index.mjs',
   );
 
   const options = Object.assign({}, standardBuildOptions, { outfile });
