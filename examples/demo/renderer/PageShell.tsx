@@ -27,7 +27,8 @@ function PageShell({
             <Link href="/catch-all/a/b/c">Catch-all</Link>
             <Link href="/function/a">Function</Link>
             <Link href="/edge">Edge Function endpoint</Link>
-            <Link href="/og">Edge OG endpoint</Link>
+            <Link href="/og-edge">Edge OG endpoint</Link>
+            <Link href="/og-node">Node OG endpoint</Link>
           </Sidebar>
           <Content>{children}</Content>
         </Layout>
