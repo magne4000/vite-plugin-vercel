@@ -1,5 +1,12 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 5.0.1
+
+### Patch Changes
+
+- Migrate to last recommendations
+  - vite-plugin-vercel@5.0.1
+
 ## 5.0.0
 
 ### Patch Changes
