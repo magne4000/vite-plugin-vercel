@@ -3,7 +3,7 @@ import { ImageResponse } from '@vercel/og';
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-export const edge = true;
+// export const edge = true;
 
 export default async function handler(
   request: VercelRequest,
