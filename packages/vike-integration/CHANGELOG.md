@@ -1,5 +1,12 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 5.0.2
+
+### Patch Changes
+
+- Update minimum peer dependency
+  - vite-plugin-vercel@5.0.2
+
 ## 5.0.1
 
 ### Patch Changes
