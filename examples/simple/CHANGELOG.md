@@ -4,6 +4,13 @@
 
 ### Patch Changes
 
+- Updated dependencies
+  - vite-plugin-vercel@5.0.3
+
+## null
+
+### Patch Changes
+
 - vite-plugin-vercel@5.0.2
 
 ## null
