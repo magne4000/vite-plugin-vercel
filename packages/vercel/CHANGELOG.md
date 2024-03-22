@@ -1,5 +1,12 @@
 # vite-plugin-vercel
 
+## 5.0.3
+
+### Patch Changes
+
+- Avoid potential url and path module conflict
+  - @vite-plugin-vercel/vike@5.0.2
+
 ## 5.0.2
 
 ### Patch Changes
