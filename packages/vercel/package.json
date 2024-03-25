@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
+    "@manypkg/find-root": "^2.2.1",
     "@vercel/build-utils": "^7.9.1",
     "@vercel/nft": "^0.26.4",
     "@vercel/routing-utils": "^3.1.0",
@@ -59,7 +60,6 @@
     "eval": "^0.1.8",
     "fast-glob": "^3.3.2",
     "magicast": "^0.3.3",
-    "workspace-root": "^3.2.0",
     "zod": "^3.22.4"
   }
 }

@@ -13,7 +13,7 @@ import { vercelEndpointExports } from './schemas/exports';
 import { generateCode, loadFile } from 'magicast';
 import { getNodeVersion } from '@vercel/build-utils';
 import { nodeFileTrace } from '@vercel/nft';
-import { workspaceRootSync } from 'workspace-root';
+import { findRoot } from '@manypkg/find-root';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -179,7 +179,13 @@ const __dirname = VPV_dirname(__filename);
 
   // guess some assets dependencies
   if (typeof entry.source == 'string') {
-    const base = workspaceRootSync(resolvedConfig.root) || resolvedConfig.root;
+    let base = resolvedConfig.root;
+    try {
+      const dir = await findRoot(resolvedConfig.root);
+      base = dir.rootDir;
+    } catch (e) {
+      // ignore error
+    }
     const { fileList, reasons } = await nodeFileTrace([entry.source], {
       base,
       processCwd: resolvedConfig.root,
