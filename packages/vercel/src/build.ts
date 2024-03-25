@@ -13,7 +13,7 @@ import { vercelEndpointExports } from './schemas/exports';
 import { generateCode, loadFile } from 'magicast';
 import { getNodeVersion } from '@vercel/build-utils';
 import { nodeFileTrace } from '@vercel/nft';
-import { workspaceRootSync } from 'workspace-root';
+import { findRoot } from '@manypkg/find-root';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -162,12 +162,12 @@ export async function buildFn(
     options.format = 'esm';
   } else if (options.format === 'esm') {
     options.banner = {
-      js: `import { createRequire } from 'node:module';
-import path from 'node:path';
-import url from 'node:url';
-const require = createRequire(import.meta.url);
-const __filename = url.fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+      js: `import { createRequire as VPV_createRequire } from "node:module";
+import { fileURLToPath as VPV_fileURLToPath } from "node:url";
+import { dirname as VPV_dirname } from "node:path";
+const require = VPV_createRequire(import.meta.url);
+const __filename = VPV_fileURLToPath(import.meta.url);
+const __dirname = VPV_dirname(__filename);
 `,
     };
   }
@@ -179,7 +179,13 @@ const __dirname = path.dirname(__filename);
 
   // guess some assets dependencies
   if (typeof entry.source == 'string') {
-    const base = workspaceRootSync(resolvedConfig.root) || resolvedConfig.root;
+    let base = resolvedConfig.root;
+    try {
+      const dir = await findRoot(resolvedConfig.root);
+      base = dir.rootDir;
+    } catch (e) {
+      // ignore error
+    }
     const { fileList, reasons } = await nodeFileTrace([entry.source], {
       base,
       processCwd: resolvedConfig.root,
