@@ -41,14 +41,14 @@
   },
   "devDependencies": {
     "@types/node": "^16.18.76",
-    "@typescript-eslint/eslint-plugin": "^7.2.0",
-    "@typescript-eslint/parser": "^7.2.0",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
     "@vite-plugin-vercel/vike": "workspace:*",
     "eslint": "^8.57.0",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.2",
-    "vike": "^0.4.165",
-    "vite": "^5.1.6"
+    "typescript": "^5.4.3",
+    "vike": "^0.4.167",
+    "vite": "^5.2.6"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
