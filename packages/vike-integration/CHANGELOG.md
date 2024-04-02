@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 5.0.3
+
+### Patch Changes
+
+- Fix warning when trying to read exports
+- Updated dependencies
+  - vite-plugin-vercel@5.0.5
+
 ## 5.0.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 5.0.5
+
+### Patch Changes
+
+- Fix warning when trying to read exports
+- Updated dependencies
+  - @vite-plugin-vercel/vike@5.0.3
+
 ## 5.0.4
 
 ### Patch Changes
