@@ -13,9 +13,9 @@
     "prepare": "husky install",
     "precommit": "lint-staged",
     "test": "pnpm run build:all && pnpm run -r test",
-    "prepublishOnly": "pnpm run test && pnpm changeset version",
-    "publish:beta": "pnpm run prepublishOnly && pnpm changeset publish -r --tag beta",
-    "publish:stable": "pnpm run prepublishOnly && pnpm changeset publish -r"
+    "prepublishOnly": "pnpm run test && changeset version",
+    "publish:beta": "changeset pre enter beta && pnpm run prepublishOnly && changeset publish -r --tag beta && changeset pre exit",
+    "publish:stable": "pnpm run prepublishOnly && changeset publish -r"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.1",
