@@ -31,11 +31,11 @@
   },
   "devDependencies": {
     "@types/node": "^16.18.76",
-    "@vercel/node": "^3.0.24",
+    "@vercel/node": "^3.0.25",
     "tsup": "^8.0.2",
     "typescript": "^5.4.3",
-    "vike": "^0.4.167",
-    "vite": "^5.2.6",
+    "vike": "^0.4.168",
+    "vite": "^5.2.7",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {
@@ -43,7 +43,7 @@
     "nanoid": "^5.0.6"
   },
   "peerDependencies": {
-    "vike": "^0.4.167",
+    "vike": "^0.4.168",
     "vite": "^4.4 || ^5.0.2",
     "vite-plugin-vercel": "*"
   },
