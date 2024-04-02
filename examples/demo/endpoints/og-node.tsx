@@ -6,9 +6,14 @@ import { Readable } from 'node:stream';
 import type { ReadableStream } from 'node:stream/web';
 
 import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const fontUrl = new URL('./Roboto-Regular.ttf', import.meta.url).href;
-const font = readFileSync(fontUrl);
+console.log({
+  importMetaUrl: import.meta.url,
+  __dirname: __dirname,
+});
+
+const font = readFileSync(join(__dirname, './Roboto-Regular.ttf'));
 
 export default async function handler(
   request: VercelRequest,
