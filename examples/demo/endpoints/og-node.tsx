@@ -5,6 +5,11 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { Readable } from 'node:stream';
 import type { ReadableStream } from 'node:stream/web';
 
+import { readFileSync } from 'node:fs';
+
+const fontUrl = new URL('./Roboto-Regular.ttf', import.meta.url).href;
+const font = readFileSync(fontUrl);
+
 export default async function handler(
   request: VercelRequest,
   response: VercelResponse,
@@ -13,6 +18,7 @@ export default async function handler(
     (
       <div
         style={{
+          fontFamily: 'Roboto',
           fontSize: 40,
           color: 'black',
           background: 'white',
@@ -30,6 +36,15 @@ export default async function handler(
     {
       width: 1200,
       height: 630,
+      fonts: [
+        {
+          name: 'Roboto',
+          // Use `fs` (Node.js only) or `fetch` to read the font as Buffer/ArrayBuffer and provide `data` here.
+          data: font,
+          weight: 400,
+          style: 'normal',
+        },
+      ],
     },
   );
 
