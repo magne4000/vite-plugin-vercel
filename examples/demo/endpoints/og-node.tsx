@@ -8,11 +8,6 @@ import type { ReadableStream } from 'node:stream/web';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-console.log({
-  importMetaUrl: import.meta.url,
-  __dirname: __dirname,
-});
-
 const font = readFileSync(join(__dirname, './Roboto-Regular.ttf'));
 
 export default async function handler(

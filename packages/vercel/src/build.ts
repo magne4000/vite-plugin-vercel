@@ -336,6 +336,12 @@ async function extractExports(filepath: string) {
       resolveDir: dirname(filepath),
     };
 
+    buildOptions.banner = {
+      js: `const __filename = ${JSON.stringify(filepath)};
+const __dirname = ${JSON.stringify(dirname(filepath))};
+`,
+    };
+
     const output = await build(buildOptions);
     const bundle = new TextDecoder().decode(output.outputFiles[0]?.contents);
 
