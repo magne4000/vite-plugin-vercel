@@ -33,7 +33,7 @@
     "@types/node": "^16.18.76",
     "@vercel/node": "^3.0.26",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.4",
+    "typescript": "^5.4.5",
     "vike": "^0.4.168",
     "vite": "^5.2.8",
     "vite-plugin-vercel": "workspace:*"
