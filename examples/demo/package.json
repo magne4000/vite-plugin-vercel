@@ -17,10 +17,6 @@
     "@mdx-js/mdx": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
     "@mdx-js/rollup": "^3.0.1",
-    "@types/node": "^20.11.10",
-    "@types/node-fetch": "^2.6.11",
-    "@types/react": "^18.2.74",
-    "@types/react-dom": "^18.2.23",
     "@vercel/edge-config": "^1.1.0",
     "@vercel/og": "^0.6.2",
     "@vite-plugin-vercel/vike": "workspace:*",
@@ -29,17 +25,21 @@
     "node-fetch": "^3.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.3.3",
+    "typescript": "^5.4.5",
     "vike": "^0.4.160",
-    "vite": "^5.0.12",
+    "vite": "^5.2.9",
     "vite-plugin-vercel": "workspace:*"
   },
   "type": "module",
   "version": null,
   "devDependencies": {
-    "@vercel/node": "^3.0.17",
+    "@types/node": "^18.19.31",
+    "@types/node-fetch": "^2.6.11",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
+    "@vercel/node": "^3.0.26",
     "fast-glob": "^3.3.2",
-    "vitest": "^1.4.0",
+    "vitest": "^1.5.0",
     "zod": "^3.22.4"
   }
 }
