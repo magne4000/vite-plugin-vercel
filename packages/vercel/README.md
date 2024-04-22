@@ -75,6 +75,9 @@ export const headers = {
   'Some-Header': 'some value',
 };
 
+// Stream the response
+export const streaming = true;
+
 // Enable Incremental Static Regeneration for this endpoint
 export const isr = {
   expiration: 30,
@@ -148,6 +151,10 @@ export default defineConfig({
      * If left empty, default value for your plan will be used.
      */
     defaultMaxDuration: 30,
+    /**
+     * Enable streaming responses by default for all Serverless Functions
+     */
+    defaultSupportsResponseStreaming: true,
     /**
      * Default expiration time (in seconds) for prerender functions.
      * Defaults to 86400 seconds (24h).

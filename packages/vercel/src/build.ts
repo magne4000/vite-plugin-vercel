@@ -273,7 +273,7 @@ export async function writeVcConfig(
               maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
               launcherType: 'Nodejs',
               shouldAddHelpers: true,
-              defaultSupportsResponseStreaming:
+              supportsResponseStreaming:
                 options.streaming ??
                 resolvedConfig.vercel?.defaultSupportsResponseStreaming,
             },
