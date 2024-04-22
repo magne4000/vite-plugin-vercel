@@ -22,6 +22,7 @@ prepareTestJsonFilesContent(
         launcherType: 'Nodejs',
         runtime: 'nodejs20.x',
         shouldAddHelpers: true,
+        supportsResponseStreaming: true,
       });
     });
   },
