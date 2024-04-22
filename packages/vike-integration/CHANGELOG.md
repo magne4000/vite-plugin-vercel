@@ -1,5 +1,16 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 6.0.0
+
+### Minor Changes
+
+- add support for supportsResponseStreaming
+
+### Patch Changes
+
+- Updated dependencies
+  - vite-plugin-vercel@6.0.0
+
 ## 5.0.3
 
 ### Patch Changes

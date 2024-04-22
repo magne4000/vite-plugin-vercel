@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 6.0.0
+
+### Patch Changes
+
+- add support for supportsResponseStreaming
+- Updated dependencies
+  - @vite-plugin-vercel/vike@6.0.0
+
 ## 5.0.5
 
 ### Patch Changes
