@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
-import type { PageContextBuiltInServer } from 'vike/types';
+import type { PageContextServer } from 'vike/types';
 import type {
   VercelOutputIsr,
   ViteVercelApiEntry,
@@ -55,7 +55,7 @@ interface MissingPageContextOverrides {
 
 type PageContextForRoute = Parameters<typeof route>[0];
 
-type PageContext = PageContextBuiltInServer &
+type PageContext = PageContextServer &
   MissingPageContextOverrides &
   PageContextForRoute;
 
@@ -293,7 +293,7 @@ export interface Options {
   source?: string;
 }
 
-export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
+export function vikeVercelPlugin(options: Options = {}): Plugin {
   return {
     name: libName,
     apply: 'build',
@@ -316,6 +316,7 @@ export function vitePluginSsrVercelPlugin(options: Options = {}): Plugin {
         vercel: {
           prerender: userConfig.vercel?.prerender ?? prerender,
           additionalEndpoints,
+          defaultSupportsResponseStreaming: true,
           rewrites: [
             {
               source: options.source ? `(${options.source})` : '((?!/api).*)',
@@ -341,9 +342,9 @@ function findPageFile(pageId: string, pageFilesAll: PageFile[]) {
   );
 }
 
-export function vitePluginVercelVpsIsrPlugin(): Plugin {
+export function vitePluginVercelVikeIsrPlugin(): Plugin {
   return {
-    name: 'vite-plugin-vercel:vps-isr',
+    name: 'vite-plugin-vercel:vike-isr',
     apply: 'build',
     async config(userConfig): Promise<UserConfig> {
       async function getPagesWithConfigs() {
@@ -455,12 +456,12 @@ export function vitePluginVercelVpsIsrPlugin(): Plugin {
   } as Plugin;
 }
 
-export function vitePluginVercelVpsCopyStaticAssetsPlugins(): Plugin {
+export function vitePluginVercelVikeCopyStaticAssetsPlugins(): Plugin {
   let resolvedConfig: ResolvedConfig;
 
   return {
     apply: 'build',
-    name: 'vite-plugin-vercel:vps-copy-static-assets',
+    name: 'vite-plugin-vercel:vike-copy-static-assets',
     enforce: 'post',
     configResolved(config) {
       resolvedConfig = config;
@@ -481,8 +482,8 @@ async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
 
 export default function allPlugins(options: Options = {}): Plugin[] {
   return [
-    vitePluginVercelVpsIsrPlugin(),
-    vitePluginSsrVercelPlugin(options),
-    vitePluginVercelVpsCopyStaticAssetsPlugins(),
+    vitePluginVercelVikeIsrPlugin(),
+    vikeVercelPlugin(options),
+    vitePluginVercelVikeCopyStaticAssetsPlugins(),
   ];
 }

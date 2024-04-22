@@ -52,6 +52,11 @@ export interface ViteVercelConfig {
    */
   trailingSlash?: boolean;
   /**
+   * When true, the Serverless Function will stream the response to the client.
+   * @see {@link https://vercel.com/docs/build-output-api/v3/primitives#serverless-function-configuration}
+   */
+  defaultSupportsResponseStreaming?: boolean;
+  /**
    * By default, all `api/*` endpoints are compiled under `.vercel/output/functions/api/*.func`.
    * If others serverless functions need to be compiled under `.vercel/output/functions`, they should be added here.
    * For instance, a framework can leverage this to have a generic ssr endpoint
@@ -160,4 +165,8 @@ export interface ViteVercelApiEntry {
    * ISR config
    */
   isr?: VercelOutputIsr;
+  /**
+   * When true, the Serverless Function will stream the response to the client
+   */
+  streaming?: boolean;
 }
