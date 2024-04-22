@@ -265,6 +265,7 @@ export async function writeVcConfig(
           ? {
               runtime: 'edge',
               entrypoint: filename,
+              supportsResponseStreaming: true,
             }
           : {
               runtime: nodeVersion.runtime,
@@ -272,6 +273,7 @@ export async function writeVcConfig(
               maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
               launcherType: 'Nodejs',
               shouldAddHelpers: true,
+              supportsResponseStreaming: true,
             },
       ),
       undefined,
