@@ -47,19 +47,19 @@
     "eslint": "^8.57.0",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
-    "vike": "^0.4.168",
-    "vite": "^5.2.9"
+    "vike": "^0.4.171",
+    "vite": "^5.2.10"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.1",
-    "@vercel/build-utils": "^7.11.0",
+    "@vercel/build-utils": "^7.12.0",
     "@vercel/nft": "^0.26.4",
     "@vercel/routing-utils": "^3.1.0",
     "esbuild": "^0.20.2",
     "eval": "^0.1.8",
     "fast-glob": "^3.3.2",
     "magicast": "^0.3.4",
-    "zod": "^3.22.4"
+    "zod": "^3.23.0"
   }
 }
