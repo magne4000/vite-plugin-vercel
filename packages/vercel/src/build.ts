@@ -233,12 +233,10 @@ const __dirname = VPV_dirname(__filename);
     }
   }
 
-  await writeVcConfig(
-    resolvedConfig,
-    entry.destination,
-    Boolean(entry.edge),
-    filename,
-  );
+  await writeVcConfig(resolvedConfig, entry.destination, filename, {
+    edge: Boolean(entry.edge),
+    streaming: entry.streaming,
+  });
 
   return output;
 }
@@ -246,8 +244,11 @@ const __dirname = VPV_dirname(__filename);
 export async function writeVcConfig(
   resolvedConfig: ResolvedConfig,
   destination: string,
-  edge: boolean,
   filename: string,
+  options: {
+    edge: boolean;
+    streaming?: boolean;
+  },
 ): Promise<void> {
   const vcConfig = path.join(
     getOutput(resolvedConfig, 'functions'),
@@ -261,11 +262,10 @@ export async function writeVcConfig(
     vcConfig,
     JSON.stringify(
       vercelOutputVcConfigSchema.parse(
-        edge
+        options.edge
           ? {
               runtime: 'edge',
               entrypoint: filename,
-              supportsResponseStreaming: true,
             }
           : {
               runtime: nodeVersion.runtime,
@@ -273,7 +273,9 @@ export async function writeVcConfig(
               maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
               launcherType: 'Nodejs',
               shouldAddHelpers: true,
-              supportsResponseStreaming: true,
+              defaultSupportsResponseStreaming:
+                options.streaming ??
+                resolvedConfig.vercel?.defaultSupportsResponseStreaming,
             },
       ),
       undefined,
@@ -390,6 +392,10 @@ export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
 
         if (exports.isr) {
           entry.isr = exports.isr;
+        }
+
+        if (typeof exports.streaming === 'boolean') {
+          entry.streaming = exports.streaming;
         }
       }
     }
