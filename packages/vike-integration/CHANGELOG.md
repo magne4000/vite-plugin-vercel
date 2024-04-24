@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 6.0.1
+
+### Patch Changes
+
+- Update target to es2022
+- Updated dependencies
+  - vite-plugin-vercel@6.0.1
+
 ## 6.0.0
 
 ### Minor Changes
