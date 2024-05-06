@@ -41,14 +41,14 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.31",
-    "@typescript-eslint/eslint-plugin": "^7.7.1",
-    "@typescript-eslint/parser": "^7.7.1",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
     "@vite-plugin-vercel/vike": "workspace:*",
     "eslint": "^8.57.0",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
     "vike": "^0.4.171",
-    "vite": "^5.2.10"
+    "vite": "^5.2.11"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
@@ -60,6 +60,6 @@
     "eval": "^0.1.8",
     "fast-glob": "^3.3.2",
     "magicast": "^0.3.4",
-    "zod": "^3.23.4"
+    "zod": "^3.23.6"
   }
 }
