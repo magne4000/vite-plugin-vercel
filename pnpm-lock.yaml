@@ -131,8 +131,8 @@ importers:
         specifier: ^2.2.1
         version: 2.2.1
       '@vercel/build-utils':
-        specifier: ^7.12.0
-        version: 7.12.0
+        specifier: ^8.0.0
+        version: 8.0.0
       '@vercel/nft':
         specifier: ^0.26.4
         version: 0.26.4
@@ -1053,6 +1053,9 @@ packages:
 
   '@vercel/build-utils@7.12.0':
     resolution: {integrity: sha512-h6fO2LqEWtceK2RxoxGp7QhZZnIa4rK2x3kTJlAYc5ARZPhsn0KB7Wf+YhFCInIqaDq7S0S92YWABkHIJDKjBw==}
+
+  '@vercel/build-utils@8.0.0':
+    resolution: {integrity: sha512-6vOiAVFA/Uu4+uV3f751rcXgfKVHrgBQFKXwvPTczl1q0djvCHsQDngl1ccu1NSyWSzdem3YhhDkLOUMHLN3xA==}
 
   '@vercel/edge-config-fs@0.1.0':
     resolution: {integrity: sha512-NRIBwfcS0bUoUbRWlNGetqjvLSwgYH/BqKqDN7vK1g32p7dN96k0712COgaz6VFizAm9b0g6IG6hR6+hc0KCPg==}
@@ -4531,6 +4534,8 @@ snapshots:
   '@ungap/structured-clone@1.2.0': {}
 
   '@vercel/build-utils@7.12.0': {}
+
+  '@vercel/build-utils@8.0.0': {}
 
   '@vercel/edge-config-fs@0.1.0': {}
 
