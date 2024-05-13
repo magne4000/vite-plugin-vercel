@@ -53,13 +53,13 @@
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.1",
-    "@vercel/build-utils": "^8.0.0",
-    "@vercel/nft": "^0.26.4",
+    "@vercel/build-utils": "^8.1.0",
+    "@vercel/nft": "^0.27.0",
     "@vercel/routing-utils": "^3.1.0",
-    "esbuild": "^0.20.2",
+    "esbuild": "^0.21.2",
     "eval": "^0.1.8",
     "fast-glob": "^3.3.2",
     "magicast": "^0.3.4",
-    "zod": "^3.23.6"
+    "zod": "^3.23.8"
   }
 }
