@@ -109,7 +109,6 @@ const standardBuildOptions: BuildOptions = {
 export async function buildFn(
   resolvedConfig: ResolvedConfig,
   entry: ViteVercelApiEntry,
-  buildOptions?: BuildOptions,
 ) {
   assert(
     entry.destination.length > 0,
@@ -120,8 +119,8 @@ export async function buildFn(
 
   const options = Object.assign({}, standardBuildOptions);
 
-  if (buildOptions) {
-    Object.assign(options, buildOptions);
+  if (entry.buildOptions) {
+    Object.assign(options, entry.buildOptions);
   }
 
   const filename =
