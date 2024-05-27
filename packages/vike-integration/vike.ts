@@ -179,10 +179,6 @@ export const prerender: ViteVercelPrerenderFn = async (
 
       const isr = assertIsr(resolvedConfig, pageContext.exports);
 
-      // bypass this check https://github.com/vikejs/vike/blob/dcc91ac31824ca3240c107380789209d52d0dff9/vike/shared/addComputedUrlProps.ts#L25
-      delete (pageContext as any).urlPathname;
-      delete (pageContext as any).urlParsed;
-
       const foundRoute = await route(pageContext);
 
       if (!pageContext.is404) {
