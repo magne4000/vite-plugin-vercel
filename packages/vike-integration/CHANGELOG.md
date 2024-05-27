@@ -1,5 +1,15 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 7.0.0
+
+### Minor Changes
+
+- Support for vike@0.4.172
+
+### Patch Changes
+
+- vite-plugin-vercel@7.0.0
+
 ## 6.0.1
 
 ### Patch Changes
