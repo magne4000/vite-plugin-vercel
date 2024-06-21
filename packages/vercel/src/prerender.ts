@@ -48,6 +48,7 @@ export async function writePrerenderConfig(
     JSON.stringify(
       vercelOutputPrerenderConfigSchema.parse({
         group: group++,
+        passQuery: true,
         ...isr,
       }),
       undefined,
@@ -110,7 +111,7 @@ export async function buildPrerenderConfigs(
     if (route) {
       rewrites.push({
         source: `(${route})`,
-        destination: `${destination}/?__original_path=$1`,
+        destination: `${destination}`,
       });
     }
   }

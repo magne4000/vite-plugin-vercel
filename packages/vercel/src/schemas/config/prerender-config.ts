@@ -12,6 +12,7 @@ export const vercelOutputPrerenderConfigSchema = z
     bypassToken: z.string().optional(),
     fallback: z.string().optional(),
     allowQuery: z.array(z.string()).optional(),
+    passQuery: z.boolean().optional(),
   })
   .strict();
 
