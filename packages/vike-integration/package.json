@@ -33,8 +33,8 @@
     "@types/node": "^18.19.31",
     "@vercel/node": "^3.1.7",
     "tsup": "^8.1.0",
-    "typescript": "^5.4.5",
-    "vike": "^0.4.176",
+    "typescript": "^5.5.2",
+    "vike": "^0.4.177",
     "vite": "^5.3.1",
     "vite-plugin-vercel": "workspace:*"
   },
@@ -43,7 +43,7 @@
     "nanoid": "^5.0.7"
   },
   "peerDependencies": {
-    "vike": "^0.4.176",
+    "vike": "^0.4.177",
     "vite": "^4.4 || ^5.0.2",
     "vite-plugin-vercel": "*"
   },
