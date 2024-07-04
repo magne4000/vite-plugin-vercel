@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vercel-workspace-root",
-  "packageManager": "pnpm@9.1.2",
+  "packageManager": "pnpm@9.4.0",
   "private": "true",
   "type": "module",
   "scripts": {
