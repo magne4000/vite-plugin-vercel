@@ -1,5 +1,12 @@
 # vite-plugin-vercel
 
+## 7.0.2
+
+### Patch Changes
+
+- Explicitely export types
+  - @vite-plugin-vercel/vike@7.0.1
+
 ## 7.0.1
 
 ### Patch Changes

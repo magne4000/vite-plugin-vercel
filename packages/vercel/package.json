@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vercel",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "type": "module",
   "files": [
     "dist",
@@ -12,6 +12,9 @@
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./types": {
+      "types": "./index.d.ts"
     }
   },
   "types": "./index.d.ts",
