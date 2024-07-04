@@ -115,6 +115,12 @@ importers:
       '@types/node':
         specifier: ^18.19.31
         version: 18.19.31
+      '@types/react':
+        specifier: ^18.2.79
+        version: 18.2.79
+      '@types/react-dom':
+        specifier: ^18.2.25
+        version: 18.2.25
       '@universal-middleware/express':
         specifier: ^0.0.2
         version: 0.0.2

@@ -168,7 +168,8 @@ async function getStaticHtmlFiles(src: string) {
  * Auto import `@vite-plugin-vercel/vike` if it is part of dependencies.
  * Ensures that `vike/plugin` is also present to ensure predictable behavior
  */
-async function tryImportVpvv() {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function tryImportVpvv(options: any) {
   try {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -176,7 +177,7 @@ async function tryImportVpvv() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const vpvv = await import('@vite-plugin-vercel/vike');
-    return vpvv.default();
+    return vpvv.default(options);
   } catch (e) {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -185,7 +186,7 @@ async function tryImportVpvv() {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const vpvv = await import('@vite-plugin-vercel/vike');
-      return vpvv.default();
+      return vpvv.default(options);
     } catch (e) {
       return null;
     }
@@ -197,12 +198,12 @@ async function tryImportVpvv() {
 // FIXME: Could be fixed by:
 //  - shared-workspace-lockfile=false in .npmrc. See https://pnpm.io/npmrc#shared-workspace-lockfile
 //  - Moving demo test in dedicated repo, with each a correct package.json
-export default function allPlugins(
-  options: { smart?: boolean } = {},
-): PluginOption[] {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function allPlugins(options: any = {}): PluginOption[] {
+  const { smart, ...rest } = options;
   return [
     vercelPluginCleanup(),
     vercelPlugin(),
-    options.smart !== false ? tryImportVpvv() : null,
+    smart !== false ? tryImportVpvv(rest) : null,
   ];
 }
