@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 7.0.1
+
+### Patch Changes
+
+- Better support for servers like express
+- Updated dependencies
+  - vite-plugin-vercel@7.0.1
+
 ## 7.0.0
 
 ### Minor Changes

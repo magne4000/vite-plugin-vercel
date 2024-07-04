@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 7.0.1
+
+### Patch Changes
+
+- Better support for servers like express
+- Updated dependencies
+  - @vite-plugin-vercel/vike@7.0.1
+
 ## 7.0.0
 
 ### Patch Changes
