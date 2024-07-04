@@ -17,6 +17,7 @@
     "@universal-middleware/express": "^0.0.2",
     "@vercel/node": "^3.0.26",
     "@vitejs/plugin-react-swc": "^3.6.0",
+    "@vite-plugin-vercel/vike": "workspace:*",
     "express": "^4.19.2",
     "react": "^18.2.0",
     "tsx": "^4.16.2",

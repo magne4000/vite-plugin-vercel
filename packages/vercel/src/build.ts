@@ -1,6 +1,6 @@
 import { ResolvedConfig } from 'vite';
 import glob from 'fast-glob';
-import path, { basename, dirname } from 'path';
+import path, { basename } from 'path';
 import { getOutput, getRoot, pathRelativeTo } from './utils';
 import { build, BuildOptions, type Plugin } from 'esbuild';
 import { VercelOutputIsr, ViteVercelApiEntry } from './types';
@@ -8,9 +8,8 @@ import { assert } from './assert';
 import { vercelOutputVcConfigSchema } from './schemas/config/vc-config';
 import fs, { copyFile } from 'fs/promises';
 import type { Header, Rewrite } from '@vercel/routing-utils';
-import _eval from 'eval';
 import { vercelEndpointExports } from './schemas/exports';
-import { generateCode, loadFile } from 'magicast';
+import { generateCode, loadFile, type ASTNode } from 'magicast';
 import { getNodeVersion } from '@vercel/build-utils';
 import { nodeFileTrace } from '@vercel/nft';
 import { findRoot } from '@manypkg/find-root';
@@ -104,6 +103,10 @@ const standardBuildOptions: BuildOptions = {
   },
   minify: false,
   plugins: [],
+  define: {
+    'process.env.NODE_ENV': '"production"',
+    'import.meta.env.NODE_ENV': '"production"',
+  },
 };
 
 export async function buildFn(
@@ -300,56 +303,35 @@ function replaceBrackets(source: string) {
     .join('/');
 }
 
-async function removeDefaultExport(filepath: string) {
-  const mod = await loadFile(filepath);
-  try {
-    delete mod.exports.default;
-  } catch (_) {
-    // ignore
-  }
+function isPrimitive(test: unknown) {
+  return test !== Object(test);
+}
 
-  return generateCode(mod).code;
+export function _eval(code: unknown): boolean {
+  const func = new Function(`{ return function(){ return ${code} } };`);
+  return func.call(null).call(null);
+}
+
+function evalExport(exp: unknown) {
+  if (!exp) return;
+
+  const code = isPrimitive(exp) ? exp : generateCode(exp as ASTNode).code;
+
+  return _eval(code);
 }
 
 async function extractExports(filepath: string) {
   try {
-    // default export is removed so that generated bundle contains only
-    // named exports related code
-    const contents = await removeDefaultExport(filepath);
+    const mod = await loadFile(filepath);
 
-    const buildOptions = {
-      ...standardBuildOptions,
-      format: 'cjs',
-      minify: false,
-      write: false,
-      legalComments: 'none',
-    } satisfies BuildOptions;
-
-    buildOptions.stdin = {
-      sourcefile: filepath,
-      contents,
-      loader: filepath.endsWith('.ts')
-        ? 'ts'
-        : filepath.endsWith('.tsx')
-          ? 'tsx'
-          : filepath.endsWith('.js')
-            ? 'js'
-            : filepath.endsWith('.jsx')
-              ? 'jsx'
-              : 'default',
-      resolveDir: dirname(filepath),
+    const subject = {
+      edge: evalExport(mod.exports.edge),
+      headers: evalExport(mod.exports.headers),
+      streaming: evalExport(mod.exports.streaming),
+      isr: evalExport(mod.exports.isr),
     };
 
-    buildOptions.banner = {
-      js: `const __filename = ${JSON.stringify(filepath)};
-const __dirname = ${JSON.stringify(dirname(filepath))};
-`,
-    };
-
-    const output = await build(buildOptions);
-    const bundle = new TextDecoder().decode(output.outputFiles[0]?.contents);
-
-    return vercelEndpointExports.parse(_eval(bundle, filepath, {}, true));
+    return vercelEndpointExports.parse(subject);
   } catch (e) {
     console.warn(`Warning: failed to read exports of '${filepath}'`, e);
   }

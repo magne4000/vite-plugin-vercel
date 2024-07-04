@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react-swc';
 
 import vike from 'vike/plugin';
 import vercel from 'vite-plugin-vercel';
+import vercelVike from '@vite-plugin-vercel/vike';
 
 export default defineConfig({
   plugins: [
@@ -13,5 +14,15 @@ export default defineConfig({
       // You should not use this parameter outside this repository
       smart: false,
     }),
+    vercelVike({ source: '/.*' }),
   ],
+  vercel: {
+    additionalEndpoints: [
+      {
+        source: 'express-entry.ts',
+        destination: 'ssr_',
+        addRoute: false,
+      },
+    ],
+  },
 });
