@@ -1,5 +1,16 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 8.0.0
+
+### Minor Changes
+
+- Target node@18 by default
+
+### Patch Changes
+
+- Updated dependencies
+  - vite-plugin-vercel@8.0.0
+
 ## 7.0.1
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # vite-plugin-vercel
 
+## 8.0.0
+
+### Minor Changes
+
+- Target node@18 by default
+
+### Patch Changes
+
+- Updated dependencies
+  - @vite-plugin-vercel/vike@8.0.0
+
 ## 7.0.2
 
 ### Patch Changes
