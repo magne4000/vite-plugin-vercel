@@ -10,7 +10,7 @@ export default defineConfig([
     format: ['esm'],
 
     platform: 'node',
-    target: 'node16',
+    target: 'node18',
     dts: {
       entry: ['./vike.ts', './templates/helpers.ts', './+config.ts'],
     },

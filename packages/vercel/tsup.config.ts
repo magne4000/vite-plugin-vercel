@@ -6,7 +6,7 @@ export default defineConfig([
     external: ['esbuild', 'vike'],
     format: ['esm', 'cjs'],
     platform: 'node',
-    target: 'node16',
+    target: 'node18',
     dts: {
       entry: './src/index.ts',
     },
