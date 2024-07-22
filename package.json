@@ -21,7 +21,7 @@
     "@changesets/cli": "^2.27.7",
     "@types/node": "^18.19.31",
     "cross-env": "^7.0.3",
-    "husky": "^9.0.11",
+    "husky": "^9.1.1",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.3",
     "typescript": "^5.5.3"
