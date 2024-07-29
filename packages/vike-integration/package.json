@@ -32,10 +32,10 @@
   "devDependencies": {
     "@types/node": "^18.19.31",
     "@vercel/node": "^3.2.7",
-    "tsup": "^8.2.1",
-    "typescript": "^5.5.3",
+    "tsup": "^8.2.3",
+    "typescript": "^5.5.4",
     "vike": "^0.4.181",
-    "vite": "^5.3.4",
+    "vite": "^5.3.5",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {
