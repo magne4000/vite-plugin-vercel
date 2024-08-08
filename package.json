@@ -10,7 +10,7 @@
     "build:all": "pnpm -r --filter \"./packages/vercel\" build && pnpm -r --filter \"./packages/vike-integration\" build && pnpm -r --filter \"./examples/*\" build",
     "build:demo": "pnpm run build:all && cp -rf examples/demo/public examples/demo/.vercel .",
     "typecheck:all": "pnpm -r typecheck",
-    "prepare": "husky install",
+    "prepare": "husky",
     "precommit": "lint-staged",
     "test": "pnpm run build:all && pnpm run -r test",
     "prepublishOnly": "pnpm run test && changeset version",
