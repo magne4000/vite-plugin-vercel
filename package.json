@@ -10,7 +10,7 @@
     "build:all": "pnpm -r --filter \"./packages/vercel\" build && pnpm -r --filter \"./packages/vike-integration\" build && pnpm -r --filter \"./examples/*\" build",
     "build:demo": "pnpm run build:all && cp -rf examples/demo/public examples/demo/.vercel .",
     "typecheck:all": "pnpm -r typecheck",
-    "prepare": "husky install",
+    "prepare": "husky",
     "precommit": "lint-staged",
     "test": "pnpm run build:all && pnpm run -r test",
     "prepublishOnly": "pnpm run test && changeset version",
@@ -21,8 +21,8 @@
     "@changesets/cli": "^2.27.7",
     "@types/node": "^18.19.31",
     "cross-env": "^7.0.3",
-    "husky": "^9.1.3",
-    "lint-staged": "^15.2.7",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.8",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4"
   }
