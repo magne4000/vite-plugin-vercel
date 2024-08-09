@@ -47,7 +47,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "@vite-plugin-vercel/vike": "workspace:*",
-    "eslint": "^8.57.0",
+    "eslint": "^9.9.0",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
     "vike": "^0.4.183",
