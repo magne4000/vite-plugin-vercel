@@ -1,5 +1,6 @@
 import { ResolvedConfig } from 'vite';
 import glob from 'fast-glob';
+import { builtinModules } from 'module'
 import path, { basename } from 'path';
 import { getOutput, getRoot, pathRelativeTo } from './utils';
 import { build, BuildOptions, type Plugin } from 'esbuild';
@@ -154,8 +155,11 @@ export async function buildFn(
   }
 
   if (entry.edge) {
+    delete options.platform;
+    options.external = [...builtinModules, ...builtinModules.map((m) => `node:${m}`)]
     options.conditions = [
       'edge-light',
+      'worker',
       'browser',
       'module',
       'import',
