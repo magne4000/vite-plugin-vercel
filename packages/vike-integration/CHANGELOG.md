@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 8.0.1
+
+### Patch Changes
+
+- avoid double build of additionnal endpoint
+- Updated dependencies
+  - vite-plugin-vercel@8.0.1
+
 ## 8.0.0
 
 ### Minor Changes
