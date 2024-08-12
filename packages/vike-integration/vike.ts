@@ -300,7 +300,7 @@ export function vikeVercelPlugin(options: Options = {}): Plugin {
       const additionalEndpoints = userConfig.vercel?.additionalEndpoints
         ?.flatMap((e) => e.destination)
         .some((d) => d === rendererDestination)
-        ? userConfig.vercel?.additionalEndpoints
+        ? [] // vite deep merges config
         : [await getSsrEndpoint(userConfig)];
 
       return {
