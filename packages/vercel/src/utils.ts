@@ -1,5 +1,6 @@
 import { normalizePath, ResolvedConfig, UserConfig } from 'vite';
 import path from 'path';
+import { createRequire } from 'module';
 
 export function getRoot(config: UserConfig | ResolvedConfig): string {
   return normalizePath(config.root || process.cwd());
@@ -30,3 +31,18 @@ export function pathRelativeTo(
     path.relative(normalizePath(path.join(root, rel)), filePath),
   );
 }
+
+function getOwnPackagePath() {
+  const require_ = createRequire(import.meta.url);
+  // vercel/dist/index.cjs
+  const resolved = require_.resolve('vite-plugin-vercel');
+  return path.resolve(
+    resolved,
+    // vercel/dist
+    '..',
+    // vercel
+    '..',
+  );
+}
+
+export const packagePath = getOwnPackagePath();

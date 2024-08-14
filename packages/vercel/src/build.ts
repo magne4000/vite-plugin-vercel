@@ -1,6 +1,6 @@
 import { ResolvedConfig } from 'vite';
 import glob from 'fast-glob';
-import { builtinModules } from 'module'
+import { builtinModules } from 'module';
 import path, { basename } from 'path';
 import { getOutput, getRoot, pathRelativeTo } from './utils';
 import { build, BuildOptions, type Plugin } from 'esbuild';
@@ -14,6 +14,7 @@ import { generateCode, loadFile, type ASTNode } from 'magicast';
 import { getNodeVersion } from '@vercel/build-utils';
 import { nodeFileTrace } from '@vercel/nft';
 import { findRoot } from '@manypkg/find-root';
+import { unenvPlugin } from './esbuild/unenvPlugin';
 
 export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
@@ -92,29 +93,29 @@ const vercelOgPlugin = (ctx: { found: boolean; index: string }): Plugin => {
   };
 };
 
-const standardBuildOptions: BuildOptions = {
-  bundle: true,
-  target: 'es2022',
-  format: 'esm',
-  platform: 'node',
-  logLevel: 'info',
-  logOverride: {
-    'ignored-bare-import': 'verbose',
-    'require-resolve-not-external': 'verbose',
-  },
-  minify: false,
-  plugins: [],
-  define: {
-    'process.env.NODE_ENV': '"production"',
-    'import.meta.env.NODE_ENV': '"production"',
-  },
-};
-
 export async function buildFn(
   resolvedConfig: ResolvedConfig,
   entry: ViteVercelApiEntry,
   buildOptions?: BuildOptions,
 ) {
+  const standardBuildOptions: BuildOptions = {
+    bundle: true,
+    target: 'es2022',
+    format: 'esm',
+    platform: 'node',
+    logLevel: 'info',
+    logOverride: {
+      'ignored-bare-import': 'verbose',
+      'require-resolve-not-external': 'verbose',
+    },
+    minify: false,
+    plugins: [],
+    define: {
+      'process.env.NODE_ENV': '"production"',
+      'import.meta.env.NODE_ENV': '"production"',
+    },
+  };
+
   assert(
     entry.destination.length > 0,
     `Endpoint ${
@@ -156,7 +157,10 @@ export async function buildFn(
 
   if (entry.edge) {
     delete options.platform;
-    options.external = [...builtinModules, ...builtinModules.map((m) => `node:${m}`)]
+    options.external = [
+      ...builtinModules,
+      ...builtinModules.map((m) => `node:${m}`),
+    ];
     options.conditions = [
       'edge-light',
       'worker',
@@ -165,7 +169,7 @@ export async function buildFn(
       'import',
       'require',
     ];
-    options.plugins?.push(edgeWasmPlugin);
+    options.plugins?.push(edgeWasmPlugin, unenvPlugin());
     options.format = 'esm';
   } else if (options.format === 'esm') {
     options.banner = {
