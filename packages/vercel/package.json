@@ -63,6 +63,7 @@
     "fast-glob": "^3.3.2",
     "magicast": "^0.3.4",
     "zod": "^3.23.8",
-    "unenv-nightly": "2.0.0-1721914978.1a79944"
+    "unenv-nightly": "2.0.0-1721914978.1a79944",
+    "resolve-from": "^5.0.0"
   }
 }

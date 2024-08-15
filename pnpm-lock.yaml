@@ -197,6 +197,9 @@ importers:
       magicast:
         specifier: ^0.3.4
         version: 0.3.4
+      resolve-from:
+        specifier: ^5.0.0
+        version: 5.0.0
       unenv-nightly:
         specifier: 2.0.0-1721914978.1a79944
         version: 2.0.0-1721914978.1a79944

@@ -1,9 +1,10 @@
-// credits
+// credits:
 // https://github.com/cloudflare/workers-sdk/blob/e24939c53475228e12a3c5228aa652c6473a889f/packages/wrangler/src/deployment-bundle/esbuild-plugins/hybrid-nodejs-compat.ts
 
 import type { Plugin, PluginBuild } from 'esbuild';
 import { builtinModules, createRequire } from 'node:module';
 import path from 'node:path';
+import resolveFrom from 'resolve-from';
 import { env, nodeless, vercel } from 'unenv-nightly';
 import { packagePath } from '../utils';
 
@@ -11,6 +12,7 @@ const require_ = createRequire(import.meta.url);
 
 const NODE_REQUIRE_NAMESPACE = 'node-require';
 const UNENV_GLOBALS_RE = /_virtual_unenv_inject-([^.]+)\.js$/;
+
 const UNENV_REGEX = /\bunenv\b/g;
 const NODEJS_MODULES_RE = new RegExp(`^(node:)?(${builtinModules.join('|')})$`);
 
@@ -37,6 +39,7 @@ export function unenvPlugin(): Plugin {
     env(nodeless, vercel),
   );
 
+  // already included in polyfill
   delete inject.global;
   delete inject.process;
   delete inject.Buffer;
@@ -56,15 +59,10 @@ export function unenvPlugin(): Plugin {
 function handlePolyfills(build: PluginBuild, polyfill: string[]): void {
   if (polyfill.length === 0) return;
 
-  const polyfillModules = polyfill.map((id) => ({
-    path: require_.resolve(id),
-    name: path.basename(id, path.extname(id)),
-  }));
-
   build.initialOptions.inject = [
     ...(build.initialOptions.inject ?? []),
-    ...polyfillModules.map(({ path: modulePath }) =>
-      path.resolve(packagePath, modulePath),
+    ...polyfill.map((id) =>
+      resolveFrom(packagePath, id).replace(/\.cjs$/, '.mjs'),
     ),
   ];
 }
@@ -96,30 +94,32 @@ function handleAliasedNodeJSPackages(
   alias: Record<string, string>,
   external: string[],
 ): void {
-  const aliasEntries = Object.entries(alias)
-    .map(([key, value]) => {
-      try {
-        const resolved = require_.resolve(value).replace(/\.cjs$/, '.mjs');
-        return [key, resolved];
-      } catch (e) {
-        console.warn(`Failed to resolve alias for ${key}: ${value}`);
-        return null;
-      }
-    })
-    .filter((entry): entry is [string, string] => entry !== null);
+  // esbuild expects alias paths to be absolute
+  const aliasAbsolute = Object.fromEntries(
+    Object.entries(alias)
+      .map(([key, value]) => {
+        let resolvedAliasPath;
+        try {
+          resolvedAliasPath = require_.resolve(value);
+        } catch (e) {
+          // this is an alias for package that is not installed in the current app => ignore
+          resolvedAliasPath = '';
+        }
 
+        return [key, resolvedAliasPath.replace(/\.cjs$/, '.mjs')];
+      })
+      .filter((entry) => entry[1] !== ''),
+  );
   const UNENV_ALIAS_RE = new RegExp(
-    `^(${aliasEntries.map(([key]) => key).join('|')})$`,
+    `^(${Object.keys(aliasAbsolute).join('|')})$`,
   );
 
   build.onResolve({ filter: UNENV_ALIAS_RE }, (args) => {
-    const aliasPath = aliasEntries.find(([key]) => key === args.path)?.[1];
-    return aliasPath
-      ? {
-          path: aliasPath,
-          external: external.includes(alias[args.path]),
-        }
-      : undefined;
+    // Resolve the alias to its absolute path and potentially mark it as external
+    return {
+      path: aliasAbsolute[args.path],
+      external: external.includes(alias[args.path]),
+    };
   });
 }
 
@@ -137,9 +137,13 @@ function handleNodeJSGlobals(
     ),
   ];
 
-  build.onResolve({ filter: UNENV_GLOBALS_RE }, ({ path: filePath }) => ({
-    path: filePath,
-  }));
+  build.onResolve({ filter: UNENV_GLOBALS_RE }, ({ path: filePath }) => {
+    console.log({ filePath });
+
+    return {
+      path: filePath,
+    };
+  });
 
   build.onLoad({ filter: UNENV_GLOBALS_RE }, ({ path: filePath }) => {
     const match = filePath.match(UNENV_GLOBALS_RE);
@@ -149,6 +153,8 @@ function handleNodeJSGlobals(
 
     const globalName = decodeFromLowerCase(match[1]);
     const globalMapping = inject[globalName];
+
+    console.log({ globalMapping, filePath });
 
     if (typeof globalMapping === 'string') {
       return handleStringGlobalMapping(globalName, globalMapping);
@@ -160,18 +166,22 @@ function handleNodeJSGlobals(
   });
 }
 
-function handleStringGlobalMapping(
-  globalName: string,
-  globalMapping: string,
-): { contents: string } {
+function handleStringGlobalMapping(globalName: string, globalMapping: string) {
+  // workaround for wrongly published unenv
   const possiblePaths = [globalMapping, `${globalMapping}/index`];
-  const found = possiblePaths.find((path) => {
+  // the absolute path of the file
+  let found = '';
+  for (const p of possiblePaths) {
     try {
-      return !!require_.resolve(path);
+      // mjs to support tree-shaking
+      found ||= resolveFrom(packagePath, p).replace(/\.cjs$/, '.mjs');
+      if (found) {
+        break;
+      }
     } catch (error) {
-      return false;
+      // ignore
     }
-  });
+  }
 
   if (!found) {
     throw new Error(`Could not resolve global mapping for ${globalName}`);
