@@ -137,13 +137,9 @@ function handleNodeJSGlobals(
     ),
   ];
 
-  build.onResolve({ filter: UNENV_GLOBALS_RE }, ({ path: filePath }) => {
-    console.log({ filePath });
-
-    return {
-      path: filePath,
-    };
-  });
+  build.onResolve({ filter: UNENV_GLOBALS_RE }, ({ path: filePath }) => ({
+    path: filePath,
+  }));
 
   build.onLoad({ filter: UNENV_GLOBALS_RE }, ({ path: filePath }) => {
     const match = filePath.match(UNENV_GLOBALS_RE);
@@ -153,8 +149,6 @@ function handleNodeJSGlobals(
 
     const globalName = decodeFromLowerCase(match[1]);
     const globalMapping = inject[globalName];
-
-    console.log({ globalMapping, filePath });
 
     if (typeof globalMapping === 'string') {
       return handleStringGlobalMapping(globalName, globalMapping);
