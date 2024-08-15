@@ -1,55 +1,93 @@
-// taken from https://github.com/cloudflare/workers-sdk/blob/e24939c53475228e12a3c5228aa652c6473a889f/packages/wrangler/src/deployment-bundle/esbuild-plugins/hybrid-nodejs-compat.ts
+// credits
+// https://github.com/cloudflare/workers-sdk/blob/e24939c53475228e12a3c5228aa652c6473a889f/packages/wrangler/src/deployment-bundle/esbuild-plugins/hybrid-nodejs-compat.ts
 
 import type { Plugin, PluginBuild } from 'esbuild';
-import { builtinModules } from 'node:module';
-import nodePath from 'node:path';
-import { env, nodeless, vercel } from 'unenv';
+import { builtinModules, createRequire } from 'node:module';
+import path from 'node:path';
+import { env, nodeless, vercel } from 'unenv-nightly';
 import { packagePath } from '../utils';
 
-const REQUIRED_NODE_BUILT_IN_NAMESPACE = 'node-built-in-modules';
+const require_ = createRequire(import.meta.url);
 
-export const unenvPlugin: () => Plugin = () => {
-  const { alias, inject, external } = env(nodeless, vercel);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { Buffer, ...rest } = inject;
+const NODE_REQUIRE_NAMESPACE = 'node-require';
+const UNENV_GLOBALS_RE = /_virtual_unenv_inject-([^.]+)\.js$/;
+const UNENV_REGEX = /\bunenv\b/g;
+const NODEJS_MODULES_RE = new RegExp(`^(node:)?(${builtinModules.join('|')})$`);
+
+function replaceUnenv<T>(value: T): T {
+  if (typeof value === 'string') {
+    return value.replace(UNENV_REGEX, 'unenv-nightly') as T;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(replaceUnenv) as T;
+  }
+
+  if (typeof value === 'object' && value !== null) {
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [k, replaceUnenv(v)]),
+    ) as T;
+  }
+
+  return value;
+}
+
+export function unenvPlugin(): Plugin {
+  const { alias, inject, external, polyfill } = replaceUnenv(
+    env(nodeless, vercel),
+  );
+
+  delete inject.global;
+  delete inject.process;
+  delete inject.Buffer;
+  delete inject.performance;
+
   return {
     name: 'unenv',
-    setup(build) {
+    setup(build: PluginBuild) {
+      handlePolyfills(build, polyfill);
       handleRequireCallsToNodeJSBuiltins(build);
       handleAliasedNodeJSPackages(build, alias, external);
-      handleNodeJSGlobals(build, rest);
+      handleNodeJSGlobals(build, inject);
     },
   };
-};
+}
 
-/**
- * We must convert `require()` calls for Node.js to a virtual ES Module that can be imported avoiding the require calls.
- * We do this by creating a special virtual ES module that re-exports the library in an onLoad handler.
- * The onLoad handler is triggered by matching the "namespace" added to the resolve.
- */
-function handleRequireCallsToNodeJSBuiltins(build: PluginBuild) {
-  const NODEJS_MODULES_RE = new RegExp(
-    `^(node:)?(${builtinModules.join('|')})$`,
-  );
+function handlePolyfills(build: PluginBuild, polyfill: string[]): void {
+  if (polyfill.length === 0) return;
+
+  const polyfillModules = polyfill.map((id) => ({
+    path: require_.resolve(id),
+    name: path.basename(id, path.extname(id)),
+  }));
+
+  build.initialOptions.inject = [
+    ...(build.initialOptions.inject ?? []),
+    ...polyfillModules.map(({ path: modulePath }) =>
+      path.resolve(packagePath, modulePath),
+    ),
+  ];
+}
+
+function handleRequireCallsToNodeJSBuiltins(build: PluginBuild): void {
   build.onResolve({ filter: NODEJS_MODULES_RE }, (args) => {
     if (args.kind === 'require-call') {
       return {
         path: args.path,
-        namespace: REQUIRED_NODE_BUILT_IN_NAMESPACE,
+        namespace: NODE_REQUIRE_NAMESPACE,
       };
     }
   });
+
   build.onLoad(
-    { filter: /.*/, namespace: REQUIRED_NODE_BUILT_IN_NAMESPACE },
-    ({ path }) => {
-      return {
-        contents: [
-          `import libDefault from '${path}';`,
-          'export default libDefault;',
-        ].join('\n'),
-        loader: 'js',
-      };
-    },
+    { filter: /.*/, namespace: NODE_REQUIRE_NAMESPACE },
+    ({ path: modulePath }) => ({
+      contents: `
+        import libDefault from '${modulePath}';
+        export default libDefault;
+      `,
+      loader: 'js',
+    }),
   );
 }
 
@@ -57,167 +95,117 @@ function handleAliasedNodeJSPackages(
   build: PluginBuild,
   alias: Record<string, string>,
   external: string[],
-) {
-  // esbuild expects alias paths to be absolute
-  const aliasAbsolute = Object.fromEntries(
-    Object.entries(alias)
-      .map(([key, value]) => {
-        let resolvedAliasPath;
-        try {
-          resolvedAliasPath = require.resolve(value);
-        } catch (e) {
-          // this is an alias for package that is not installed in the current app => ignore
-          resolvedAliasPath = '';
-        }
+): void {
+  const aliasEntries = Object.entries(alias)
+    .map(([key, value]) => {
+      try {
+        const resolved = require_.resolve(value).replace(/\.cjs$/, '.mjs');
+        return [key, resolved];
+      } catch (e) {
+        console.warn(`Failed to resolve alias for ${key}: ${value}`);
+        return null;
+      }
+    })
+    .filter((entry): entry is [string, string] => entry !== null);
 
-        return [key, resolvedAliasPath.replace(/\.cjs$/, '.mjs')];
-      })
-      .filter((entry) => entry[1] !== ''),
-  );
   const UNENV_ALIAS_RE = new RegExp(
-    `^(${Object.keys(aliasAbsolute).join('|')})$`,
+    `^(${aliasEntries.map(([key]) => key).join('|')})$`,
   );
 
   build.onResolve({ filter: UNENV_ALIAS_RE }, (args) => {
-    // Resolve the alias to its absolute path and potentially mark it as external
-    return {
-      path: aliasAbsolute[args.path],
-      external: external.includes(alias[args.path]),
-    };
+    const aliasPath = aliasEntries.find(([key]) => key === args.path)?.[1];
+    return aliasPath
+      ? {
+          path: aliasPath,
+          external: external.includes(alias[args.path]),
+        }
+      : undefined;
   });
 }
 
-/**
- * Inject node globals defined in unenv's `inject` config via virtual modules
- */
 function handleNodeJSGlobals(
   build: PluginBuild,
   inject: Record<string, string | string[]>,
-) {
-  const UNENV_GLOBALS_RE = /_virtual_unenv_global_polyfill-([^.]+)\.js$/;
-
+): void {
   build.initialOptions.inject = [
     ...(build.initialOptions.inject ?? []),
-    //convert unenv's inject keys to absolute specifiers of custom virtual modules that will be provided via a custom onLoad
     ...Object.keys(inject).map((globalName) =>
-      nodePath.resolve(
+      path.resolve(
         packagePath,
-        `_virtual_unenv_global_polyfill-${encodeToLowerCase(globalName)}.js`,
+        `_virtual_unenv_inject-${encodeToLowerCase(globalName)}.js`,
       ),
     ),
   ];
 
-  build.onResolve({ filter: UNENV_GLOBALS_RE }, ({ path }) => ({ path }));
+  build.onResolve({ filter: UNENV_GLOBALS_RE }, ({ path: filePath }) => ({
+    path: filePath,
+  }));
 
-  build.onLoad({ filter: UNENV_GLOBALS_RE }, ({ path }) => {
-    // eslint-disable-next-line  @typescript-eslint/no-non-null-assertion
-    const globalName = decodeFromLowerCase(path.match(UNENV_GLOBALS_RE)![1]);
+  build.onLoad({ filter: UNENV_GLOBALS_RE }, ({ path: filePath }) => {
+    const match = filePath.match(UNENV_GLOBALS_RE);
+    if (!match) {
+      throw new Error(`Invalid global polyfill path: ${filePath}`);
+    }
+
+    const globalName = decodeFromLowerCase(match[1]);
     const globalMapping = inject[globalName];
 
     if (typeof globalMapping === 'string') {
-      const globalPolyfillSpecifier = globalMapping;
-      return {
-        contents: `
-          import globalVar from "${globalPolyfillSpecifier}";
-
-          ${
-            /*
-            // ESBuild's inject doesn't actually touch globalThis, so let's do it ourselves
-            // by creating an exportable so that we can preserve the globalThis assignment if
-            // the ${globalName} was found in the app, or tree-shake it, if it wasn't
-            // see https://esbuild.github.io/api/#inject
-            */ ''
-          }
-          const exportable =
-            ${
-              /*
-              // mark this as a PURE call so it can be ignored and tree-shaken by ESBuild,
-              // when we don't detect 'process', 'global.process', or 'globalThis.process'
-              // in the app code
-              // see https://esbuild.github.io/api/#tree-shaking-and-side-effects
-              */ ''
-            }
-            /* @__PURE__ */ (() => {
-              return globalThis.${globalName} = globalVar;
-            })();
-
-          export {
-            exportable as '${globalName}',
-            exportable as 'globalThis.${globalName}',
-          }
-        `,
-      };
+      return handleStringGlobalMapping(globalName, globalMapping);
+    } else if (Array.isArray(globalMapping)) {
+      return handleArrayGlobalMapping(globalName, globalMapping);
+    } else {
+      throw new Error(`Invalid global mapping for ${globalName}`);
     }
-    const [moduleName, exportName] = inject[globalName];
-
-    return {
-      contents: `
-        import { ${exportName} } from "${moduleName}";
-
-        ${
-          /*
-          // ESBuild's inject doesn't actually touch globalThis, so let's do it ourselves
-          // by creating an exportable so that we can preserve the globalThis assignment if
-          // the ${globalName} was found in the app, or tree-shake it, if it wasn't
-          // see https://esbuild.github.io/api/#inject
-          */ ''
-        }
-        const exportable =
-          ${
-            /*
-            // mark this as a PURE call so it can be ignored and tree-shaken by ESBuild,
-            // when we don't detect 'process', 'global.process', or 'globalThis.process'
-            // in the app code
-            // see https://esbuild.github.io/api/#tree-shaking-and-side-effects
-            */ ''
-          }
-          /* @__PURE__ */ (() => {
-            return globalThis.${globalName} = ${exportName};
-          })();
-
-        export {
-          exportable as '${globalName}',
-          exportable as 'global.${globalName}',
-          exportable as 'globalThis.${globalName}'
-        }
-      `,
-    };
   });
 }
 
-/**
- * Encodes a case sensitive string to lowercase string by prefixing all uppercase letters
- * with $ and turning them into lowercase letters.
- *
- * This function exists because ESBuild requires that all resolved paths are case insensitive.
- * Without this transformation, ESBuild will clobber /foo/bar.js with /foo/Bar.js
- *
- * This is important to support `inject` config for `performance` and `Performance` introduced
- * in https://github.com/unjs/unenv/pull/257
- */
-export function encodeToLowerCase(str: string): string {
-  return str
-    .replaceAll(/\$/g, () => '$$')
-    .replaceAll(/[A-Z]/g, (letter) => `$${letter.toLowerCase()}`);
+function handleStringGlobalMapping(
+  globalName: string,
+  globalMapping: string,
+): { contents: string } {
+  const possiblePaths = [globalMapping, `${globalMapping}/index`];
+  const found = possiblePaths.find((path) => {
+    try {
+      return !!require_.resolve(path);
+    } catch (error) {
+      return false;
+    }
+  });
+
+  if (!found) {
+    throw new Error(`Could not resolve global mapping for ${globalName}`);
+  }
+
+  return {
+    contents: `
+      import globalVar from "${found}";
+      const exportable = /* @__PURE__ */ (() => globalThis.${globalName} = globalVar)();
+      export { exportable as '${globalName}', exportable as 'globalThis.${globalName}' };
+    `,
+  };
 }
 
-/**
- * Decodes a string lowercased using `encodeToLowerCase` to the original strings
- */
+function handleArrayGlobalMapping(
+  globalName: string,
+  globalMapping: string[],
+): { contents: string } {
+  const [moduleName, exportName] = globalMapping;
+  return {
+    contents: `
+      import { ${exportName} } from "${moduleName}";
+      const exportable = /* @__PURE__ */ (() => globalThis.${globalName} = ${exportName})();
+      export { exportable as '${globalName}', exportable as 'global.${globalName}', exportable as 'globalThis.${globalName}' };
+    `,
+  };
+}
+
+export function encodeToLowerCase(str: string): string {
+  return str
+    .replace(/\$/g, '$$')
+    .replace(/[A-Z]/g, (letter) => `$${letter.toLowerCase()}`);
+}
+
 export function decodeFromLowerCase(str: string): string {
-  let out = '';
-  let i = 0;
-  while (i < str.length - 1) {
-    if (str[i] === '$') {
-      i++;
-      out += str[i].toUpperCase();
-    } else {
-      out += str[i];
-    }
-    i++;
-  }
-  if (i < str.length) {
-    out += str[i];
-  }
-  return out;
+  return str.replace(/\$(.)/g, (_, letter) => letter.toUpperCase());
 }
