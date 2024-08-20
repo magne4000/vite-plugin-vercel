@@ -26,7 +26,6 @@ export function getDefaultPageContextInit(request: Request) {
   );
 
   return {
-    url,
     urlOriginal: url,
     body: request.body,
     cookies,
