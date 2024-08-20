@@ -49,12 +49,10 @@ export function getDefaultEmptyResponseHandler(): Response {
  * Send `httpResponse` through `response`
  */
 export function getDefaultResponseHandler(httpResponse: HttpResponse): Response {
-  const { statusCode, body, contentType } = httpResponse;
+  const { statusCode, body, headers } = httpResponse;
 
   return new Response(body, {
     status: statusCode,
-    headers: {
-      "content-type": contentType,
-    },
+    headers,
   });
 }

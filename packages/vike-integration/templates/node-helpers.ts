@@ -37,9 +37,11 @@ export function getDefaultEmptyResponseHandler(response: VercelResponse) {
  * @param httpResponse
  */
 export function getDefaultResponseHandler(response: VercelResponse, httpResponse: HttpResponse) {
-  const { statusCode, body, contentType } = httpResponse;
+  const { statusCode, body, headers } = httpResponse;
 
   response.statusCode = statusCode;
-  response.setHeader("content-type", contentType);
+  for (const [name, value] of headers) {
+    response.setHeader(name, value);
+  }
   return response.end(body);
 }
