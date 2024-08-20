@@ -1,3 +1,4 @@
+// @ts-ignore
 import { newError } from "@brillout/libassert";
 
 const libName = "vite-plugin-vercel";

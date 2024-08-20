@@ -13,19 +13,19 @@
   "author": "",
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/node": "^18.19.31",
-    "@types/react": "^18.2.79",
-    "@types/react-dom": "^18.2.25",
-    "@universal-middleware/express": "^0.0.2",
+    "@types/node": "^18.19.45",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@universal-middleware/express": "^0.2.1",
     "@vercel/node": "^3.0.26",
-    "@vitejs/plugin-react-swc": "^3.6.0",
+    "@vitejs/plugin-react-swc": "^3.7.0",
     "express": "^4.19.2",
-    "react": "^18.2.0",
-    "tsx": "^4.16.2",
+    "react": "^18.3.1",
+    "tsx": "^4.17.0",
     "typescript": "^5.4.5",
-    "vike": "^0.4.178",
-    "vike-react": "^0.4.16",
-    "vite": "^5.2.9"
+    "vike": "^0.4.188",
+    "vike-react": "^0.5.3",
+    "vite": "^5.4.1"
   },
   "dependencies": {
     "vite-plugin-vercel": "workspace:*"

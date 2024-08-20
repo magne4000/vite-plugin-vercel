@@ -1,10 +1,9 @@
-import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-
 import vike from "vike/plugin";
+import type { UserConfig } from "vite";
 import vercel from "vite-plugin-vercel";
 
-export default defineConfig({
+export default {
   plugins: [
     react(),
     vike(),
@@ -25,4 +24,4 @@ export default defineConfig({
       },
     ],
   },
-});
+} as UserConfig;

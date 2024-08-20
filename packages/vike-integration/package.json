@@ -30,12 +30,12 @@
     "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@types/node": "^18.19.31",
+    "@types/node": "^18.19.45",
     "@vercel/node": "^3.2.8",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
-    "vike": "^0.4.183",
-    "vite": "^5.4.0",
+    "vike": "^0.4.188",
+    "vite": "^5.4.1",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {

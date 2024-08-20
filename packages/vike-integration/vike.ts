@@ -11,10 +11,18 @@ import type {
   ViteVercelPrerenderRoute,
 } from "vite-plugin-vercel";
 import "vike/__internal/setup";
+// @ts-ignore
 import { newError } from "@brillout/libassert";
 import { nanoid } from "nanoid";
 import { type PageFile, type PageRoutes, getPagesAndRoutes, route } from "vike/__internal";
+import type { ViteVercelConfig } from "vite-plugin-vercel";
 import { getParametrizedRoute } from "./route-regex";
+
+declare module "vite" {
+  export interface UserConfig {
+    vercel?: ViteVercelConfig;
+  }
+}
 
 const libName = "vite-plugin-vercel:vike";
 const rendererDestination = "ssr_";
