@@ -26,8 +26,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "prepack": "rm -rf dist && pnpm build",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
     "@vite-plugin-vercel/vike": "workspace:*",
@@ -44,10 +43,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.31",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
     "@vite-plugin-vercel/vike": "workspace:*",
-    "eslint": "^8.57.0",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
     "vike": "^0.4.183",
