@@ -7,6 +7,7 @@ import { type Plugin, type ResolvedConfig, type UserConfig, normalizePath } from
 import type {
   VercelOutputIsr,
   ViteVercelApiEntry,
+  ViteVercelConfig,
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from "vite-plugin-vercel";
@@ -15,7 +16,6 @@ import "vike/__internal/setup";
 import { newError } from "@brillout/libassert";
 import { nanoid } from "nanoid";
 import { type PageFile, type PageRoutes, getPagesAndRoutes, route } from "vike/__internal";
-import type { ViteVercelConfig } from "vite-plugin-vercel";
 import { getParametrizedRoute } from "./route-regex";
 
 declare module "vite" {
@@ -98,6 +98,16 @@ async function copyDir(src: string, dest: string) {
       await fs.copyFile(srcPath, destPath);
     }
   }
+}
+
+function assertEdge(exports: unknown): boolean | null {
+  if (exports === null || typeof exports !== "object") return null;
+  if (!("edge" in exports)) return null;
+  const edge = (exports as { edge: unknown }).edge;
+
+  assert(typeof edge === "boolean", " `{ edge }` must be a boolean");
+
+  return edge;
 }
 
 function assertIsr(resolvedConfig: UserConfig | ResolvedConfig, exports: unknown): number | null {
@@ -231,7 +241,7 @@ function getRouteFsRoute(pageRoutes: PageRoutes, pageId: string) {
   return null;
 }
 
-export async function getSsrEndpoint(userConfig: UserConfig, source?: string): Promise<ViteVercelApiEntry> {
+export async function getSsrEndpoint(source?: string) {
   const sourcefile = source ?? path.join(__dirname, "..", "templates", "ssr_.template.ts");
   const contents = await fs.readFile(sourcefile, "utf-8");
   const resolveDir = path.dirname(sourcefile);
@@ -253,7 +263,7 @@ export async function getSsrEndpoint(userConfig: UserConfig, source?: string): P
     },
     destination: rendererDestination,
     addRoute: false,
-  };
+  } satisfies ViteVercelApiEntry;
 }
 
 export interface Options {
@@ -278,7 +288,7 @@ export function vikeVercelPlugin(options: Options = {}): Plugin {
         ?.flatMap((e) => e.destination)
         .some((d) => d === rendererDestination)
         ? [] // vite deep merges config
-        : [await getSsrEndpoint(userConfig)];
+        : [await getSsrEndpoint()];
 
       return {
         vitePluginSsr: {
@@ -313,9 +323,9 @@ function findPageFile(pageId: string, pageFilesAll: PageFile[]) {
   return pageFilesAll.find((p) => p.pageId === pageId && p.fileType === ".page");
 }
 
-export function vitePluginVercelVikeIsrPlugin(): Plugin {
+export function vitePluginVercelVikeConfigPlugin(): Plugin {
   return {
-    name: "vite-plugin-vercel:vike-isr",
+    name: "vite-plugin-vercel:vike-config",
     apply: "build",
     async config(userConfig): Promise<UserConfig> {
       async function getPagesWithConfigs() {
@@ -368,6 +378,7 @@ export function vitePluginVercelVikeIsrPlugin(): Plugin {
 
             const route = getRouteDynamicRoute(pageRoutes, pageId) ?? getRouteFsRoute(pageRoutes, pageId);
             let isr = assertIsr(userConfig, page.config);
+            const edge = assertEdge(page.config);
 
             // if ISR + Function routing -> warn because ISR is not unsupported in this case
             if (typeof route === "function" && isr) {
@@ -382,14 +393,33 @@ export function vitePluginVercelVikeIsrPlugin(): Plugin {
               // used for debug purpose
               filePath: page.filePath,
               isr,
+              edge,
               route: typeof route === "string" ? getParametrizedRoute(route) : null,
             };
           }),
         );
       }
 
+      // FIXME, needs to be executed later, like isr
+      const pagesWithConfigs = await getPagesWithConfigs();
+      const edgeSource = (await getSsrEndpoint()).source;
+
       return {
         vercel: {
+          additionalEndpoints: pagesWithConfigs
+            .filter((page) => {
+              return typeof page.edge === "boolean";
+            })
+            .map((page) => {
+              const destination = `${page._pageId.replace(/\/index$/g, "")}-edge-${nanoid()}`;
+              return {
+                source: edgeSource,
+                destination,
+                addRoute: true,
+                // biome-ignore lint/style/noNonNullAssertion: filtered
+                edge: page.edge!,
+              };
+            }),
           isr: async () => {
             let userIsr: Record<string, VercelOutputIsr> = {};
             if (userConfig.vercel?.isr) {
@@ -400,14 +430,12 @@ export function vitePluginVercelVikeIsrPlugin(): Plugin {
               }
             }
 
-            const pagesWithConfigs = await getPagesWithConfigs();
-
             return pagesWithConfigs
               .filter((p) => typeof p.isr === "number")
               .reduce((acc, cur) => {
                 const path = `${cur._pageId.replace(/\/index$/g, "")}-${nanoid()}`;
                 acc[path] = {
-                  // biome-ignore lint/style/noNonNullAssertion: <explanation>
+                  // biome-ignore lint/style/noNonNullAssertion: filtered
                   expiration: cur.isr!,
                   symlink: rendererDestination,
                   route: cur.route ? `${cur.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
@@ -443,5 +471,5 @@ async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
 }
 
 export default function allPlugins(options: Options = {}): Plugin[] {
-  return [vitePluginVercelVikeIsrPlugin(), vikeVercelPlugin(options), vitePluginVercelVikeCopyStaticAssetsPlugins()];
+  return [vitePluginVercelVikeConfigPlugin(), vikeVercelPlugin(options), vitePluginVercelVikeCopyStaticAssetsPlugins()];
 }

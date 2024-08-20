@@ -1,9 +1,9 @@
-import type { ResolvedConfig } from "vite";
+import type { Redirect, Rewrite } from "@vercel/routing-utils";
 import type { BuildOptions, StdinOptions } from "esbuild";
+import type { ResolvedConfig } from "vite";
 import type { VercelOutputConfig } from "./schemas/config/config";
-import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
 import type { VercelOutputPrerenderConfig } from "./schemas/config/prerender-config";
-import type { Rewrite, Redirect } from "@vercel/routing-utils";
+import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
 
 export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderConfig };
 
@@ -111,7 +111,7 @@ export interface ViteVercelConfig {
    * By default, Vite generates static files under `dist` folder.
    * But usually, when used through a Framework, such as Vike,
    * this folder can contain anything, requiring custom integration.
-   * Set this to false is you create a plugin for a Framework.
+   * Set this to false if you create a plugin for a Framework.
    */
   distContainsOnlyStatic?: boolean;
 }

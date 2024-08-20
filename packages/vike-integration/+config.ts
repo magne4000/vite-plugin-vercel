@@ -6,10 +6,10 @@ export default {
     isr: {
       env: { server: true },
     },
+    edge: {
+      env: { server: true },
+    },
     // TODO
-    // edge: {
-    //   env: { server: true },
-    // },
     // headers: {
     //   env: { server: true },
     // },
