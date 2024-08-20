@@ -47,7 +47,7 @@
     "@vite-plugin-vercel/vike": "workspace:*",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
-    "vike": "^0.4.188",
+    "vike": "^0.4.190",
     "vite": "^5.4.1"
   },
   "dependencies": {
