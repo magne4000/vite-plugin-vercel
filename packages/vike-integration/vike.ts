@@ -100,6 +100,24 @@ async function copyDir(src: string, dest: string) {
   }
 }
 
+function assertHeaders(exports: unknown): Record<string, string> | null {
+  if (exports === null || typeof exports !== "object") return null;
+  if (!("headers" in exports)) return null;
+  const headers = (exports as { headers: unknown }).headers;
+
+  if (headers === null || headers === undefined) {
+    return null;
+  }
+
+  assert(typeof headers === "object", " `{ headers }` must be an object");
+
+  for (const value of Object.values(headers)) {
+    assert(typeof value === "string", " `{ headers }` must only contains string values");
+  }
+
+  return headers as Record<string, string>;
+}
+
 function assertEdge(exports: unknown): boolean | null {
   if (exports === null || typeof exports !== "object") return null;
   if (!("edge" in exports)) return null;
@@ -379,7 +397,15 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
     name: "vite-plugin-vercel:vike-config",
     apply: "build",
     async config(userConfig): Promise<UserConfig> {
+      let memoizedP: ReturnType<typeof _getPagesWithConfigs> | undefined = undefined;
+
       async function getPagesWithConfigs() {
+        if (memoizedP) return memoizedP;
+        memoizedP = _getPagesWithConfigs();
+        return memoizedP;
+      }
+
+      async function _getPagesWithConfigs() {
         const { pageFilesAll, allPageIds, pageRoutes, pageConfigs } = await getPagesAndRoutes();
 
         const isLegacy = pageFilesAll.length > 0;
@@ -388,7 +414,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
           await Promise.all(pageFilesAll.map((p) => p.loadFile?.()));
         }
 
-        return await Promise.all(
+        return Promise.all(
           allPageIds.map(async (pageId) => {
             let page: {
               config: unknown;
@@ -431,6 +457,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
             const rawIsr = extractIsr(page.config);
             let isr = assertIsr(userConfig, page.config);
             const edge = assertEdge(page.config);
+            const headers = assertHeaders(page.config);
 
             // if ISR + Function routing -> warn because ISR is not unsupported in this case
             if (typeof route === "function" && isr) {
@@ -452,6 +479,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
               filePath: page.filePath,
               isr,
               edge,
+              headers,
               route: typeof route === "string" ? getParametrizedRoute(route) : null,
             };
           }),
@@ -462,6 +490,35 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
 
       return {
         vercel: {
+          async headers() {
+            const pagesWithConfigs = await getPagesWithConfigs();
+
+            return pagesWithConfigs
+              .filter((page) => {
+                if (!page.route) {
+                  console.warn(
+                    `Page ${page._pageId}: headers is not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
+                  );
+                }
+                return page.headers !== null && page.headers !== undefined && page.route;
+              })
+              .flatMap((page) => {
+                const headers = Object.entries(page.headers ?? {}).map(([key, value]) => ({
+                  key,
+                  value,
+                }));
+                return [
+                  {
+                    source: `${page.route}`,
+                    headers,
+                  },
+                  {
+                    source: `${page.route}/index\\.pageContext\\.json`,
+                    headers,
+                  },
+                ];
+              });
+          },
           additionalEndpoints: [
             async () => {
               const pagesWithConfigs = await getPagesWithConfigs();
@@ -473,7 +530,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
                 .map((page) => {
                   if (!page.route) {
                     console.warn(
-                      `Page ${page._pageId}: edge is not supported when using route function. Remove \`{ edge }\` export or use a route string if possible.`,
+                      `Page ${page._pageId}: edge is not supported when using route function. Remove \`{ edge }\` config or use a route string if possible.`,
                     );
                   }
                   const destination = `${page._pageId.replace(/\/index$/g, "")}-edge-${nanoid()}`;
