@@ -9,9 +9,8 @@ export default {
     edge: {
       env: { server: true },
     },
-    // TODO
-    // headers: {
-    //   env: { server: true },
-    // },
+    headers: {
+      env: { server: true },
+    },
   },
 } satisfies Config;

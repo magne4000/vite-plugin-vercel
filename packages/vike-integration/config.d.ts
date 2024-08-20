@@ -8,8 +8,7 @@ declare global {
     export interface Config {
       isr?: boolean | { expiration: number };
       edge?: boolean;
-      // TODO
-      // headers?: Record<string, string>;
+      headers?: Record<string, string>;
     }
   }
 }

@@ -9,6 +9,13 @@ prepareTestJsonFileContent("config.json", (context) => {
   it("should have defaults routes only", () => {
     const expected = [
       {
+        src: expect.stringMatching("\\^//pages/vike-edge-edge-([^/]+?)\\$"),
+        headers: {
+          "X-VitePluginVercel-Test": "test",
+        },
+        continue: true,
+      },
+      {
         src: "^/api/page$",
         headers: { "X-VitePluginVercel-Test": "test" },
         continue: true,

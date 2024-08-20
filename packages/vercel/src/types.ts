@@ -1,4 +1,4 @@
-import type { Redirect, Rewrite } from "@vercel/routing-utils";
+import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
 import type { BuildOptions, StdinOptions } from "esbuild";
 import type { ResolvedConfig } from "vite";
 import type { VercelOutputConfig } from "./schemas/config/config";
@@ -37,6 +37,11 @@ export interface ViteVercelConfig {
    * @see {@link https://vercel.com/docs/projects/project-configuration#rewrites}
    */
   rewrites?: ViteVercelRewrite[];
+  /**
+   * @see {@link https://vercel.com/docs/projects/project-configuration#headers}
+   * @beta
+   */
+  headers?: Header[] | (() => Awaitable<Header[]>);
   /**
    * @see {@link https://vercel.com/docs/projects/project-configuration#redirects}
    */
@@ -161,7 +166,7 @@ export interface ViteVercelApiEntry {
   /**
    * Additional headers
    */
-  headers?: Record<string, string>;
+  headers?: Record<string, string> | null;
   /**
    * ISR config
    */
