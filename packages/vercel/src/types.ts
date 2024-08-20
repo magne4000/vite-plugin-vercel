@@ -145,10 +145,15 @@ export interface ViteVercelApiEntry {
    */
   buildOptions?: BuildOptions;
   /**
-   * Automatically add a route for the function (mimics defaults Vercel behavior)
-   * Set to `false` to disable
+   * @deprecated use `route` instead
    */
   addRoute?: boolean;
+  /**
+   * If `true`, guesses route for the function, and adds it to config.json (mimics defaults Vercel behavior).
+   * If a string is provided, it will be equivalent to a `rewrites` rule.
+   * Set to `false` to disable
+   */
+  route?: string | boolean;
   /**
    * Set to `true` to mark this function as an Edge Function
    */

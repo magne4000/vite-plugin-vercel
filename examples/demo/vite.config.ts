@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react-swc";
 import ssr from "vike/plugin";
-import vercel from "vite-plugin-vercel";
 import type { UserConfig } from "vite";
+import vercel from "vite-plugin-vercel";
 
 export default {
   plugins: [
@@ -17,17 +17,17 @@ export default {
       {
         source: "endpoints/edge.ts",
         destination: "edge",
-        addRoute: true,
+        route: true,
       },
       {
         source: "endpoints/og-node.tsx",
         destination: "og-node",
-        addRoute: true,
+        route: true,
       },
       {
         source: "endpoints/og-edge.tsx",
         destination: "og-edge",
-        addRoute: true,
+        route: true,
       },
     ],
   },

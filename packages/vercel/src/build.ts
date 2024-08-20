@@ -34,7 +34,7 @@ export async function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
 
   return userEndpoints.map((e) => ({
     ...e,
-    addRoute: e.addRoute ?? true,
+    route: e.route ?? true,
     // path.resolve removes the trailing slash if any
     destination: `${path.posix.resolve("/", e.destination)}.func`,
   }));
@@ -67,7 +67,7 @@ export async function getEntries(resolvedConfig: ResolvedConfig): Promise<ViteVe
       entryPoints.push({
         source: filePath,
         destination: `api/${path.posix.join(parsed.dir, parsed.name)}.func`,
-        addRoute: true,
+        route: true,
       });
 
       return entryPoints;
@@ -374,12 +374,31 @@ export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
 
   return {
     rewrites: entries
-      .filter((e) => e.addRoute !== false)
-      .map((e) => e.destination.replace(/\.func$/, ""))
-      .map((destination) => ({
-        source: replaceBrackets(getSourceAndDestination(destination)),
-        destination: getSourceAndDestination(destination),
-      })),
+      .filter((e) => {
+        if (e.addRoute === undefined && e.route !== undefined) {
+          return e.route !== false;
+        }
+        if (e.addRoute !== undefined && e.route === undefined) {
+          return e.addRoute !== false;
+        }
+        if (e.addRoute !== undefined && e.route !== undefined) {
+          throw new Error("Cannot use both `route` and `addRoute` in `additionalEndpoints`");
+        }
+        return true;
+      })
+      .map((e) => {
+        const destination = e.destination.replace(/\.func$/, "");
+        if (typeof e.route === "string") {
+          return {
+            source: `(${e.route})`,
+            destination: `${destination}/?__original_path=$1`,
+          };
+        }
+        return {
+          source: replaceBrackets(getSourceAndDestination(destination)),
+          destination: getSourceAndDestination(destination),
+        };
+      }),
     isr: Object.fromEntries(isrEntries) as Record<string, VercelOutputIsr>,
     headers: entries
       .filter((e) => e.headers)

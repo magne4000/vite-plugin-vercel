@@ -262,7 +262,7 @@ export async function getSsrEndpoint(source?: string) {
       resolveDir,
     },
     destination: rendererDestination,
-    addRoute: false,
+    route: false,
   } satisfies ViteVercelApiEntry;
 }
 
@@ -433,16 +433,20 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
 
               return pagesWithConfigs
                 .filter((page) => {
-                  return typeof page.edge === "boolean";
+                  return page.edge === true;
                 })
                 .map((page) => {
+                  if (!page.route) {
+                    console.warn(
+                      `Page ${page._pageId}: edge is not supported when using route function. Remove \`{ edge }\` export or use a route string if possible.`,
+                    );
+                  }
                   const destination = `${page._pageId.replace(/\/index$/g, "")}-edge-${nanoid()}`;
                   return {
                     source: edgeSource,
                     destination,
-                    addRoute: true,
-                    // biome-ignore lint/style/noNonNullAssertion: filtered
-                    edge: page.edge!,
+                    route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
+                    edge: true,
                   };
                 });
             },
