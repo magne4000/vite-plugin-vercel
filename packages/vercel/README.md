@@ -97,17 +97,13 @@ export default async function handler() {
 
 You can use [Edge middleware as describe in the official documentation](https://vercel.com/docs/functions/edge-middleware/middleware-api) (i.e. with a `middleware.ts` file at the root of your project).
 
-## Usage with vike
+## Usage with Vike
 
-[vike](https://vike.dev/) is supported through [@vite-plugin-vercel/vike](/packages/vike-integration/README.md) plugin.
+[Vike](https://vike.dev/) is supported through [@vite-plugin-vercel/vike](/packages/vike-integration/README.md) plugin.
 
 You only need to install `@vite-plugin-vercel/vike`, the Vite config stays the same as above.
 
-> [!IMPORTANT]  
-> `@vite-plugin-vercel/vike` supersedes the old `@magne4000/vite-plugin-vercel-ssr` package.
-> As such, you should remove `@magne4000/vite-plugin-vercel-ssr` from your package.json and vite config file.
-
-You can then leverage [config files](https://vike.dev/config) to customize ISR configuration:
+You can then leverage [config files](https://vike.dev/config) to customize your endpoints:
 
 ```ts
 // /pages/product/+config.ts
@@ -115,9 +111,15 @@ You can then leverage [config files](https://vike.dev/config) to customize ISR c
 import Page from './Page';
 import type { Config } from 'vike/types';
 
-// Customize ISR config for this page
 export default {
+  // Customize ISR config for this page
   isr: { expiration: 15 },
+  // Target Edge instead of Serverless
+  edge: true,
+  // append headers to all responses
+  headers: {
+    'X-Header': 'value'
+  }
 } satisfies Config;
 ```
 
@@ -172,6 +174,20 @@ export default defineConfig({
      * See https://vercel.com/docs/projects/project-configuration#rewrites
      */
     rewrites: [{ source: '/about', destination: '/about-our-company.html' }],
+    /**
+     * @see {@link https://vercel.com/docs/projects/project-configuration#headers}
+     */
+    headers: [
+      {
+        "source": "/service-worker.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ],
     /**
      * See https://vercel.com/docs/projects/project-configuration#redirects
      */
