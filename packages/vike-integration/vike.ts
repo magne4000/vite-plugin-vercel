@@ -1,35 +1,35 @@
-import { prerender as prerenderCli } from 'vike/prerender';
-import fs from 'fs/promises';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { normalizePath, Plugin, ResolvedConfig, UserConfig } from 'vite';
-import type { PageContextServer } from 'vike/types';
+import fs from "node:fs/promises";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { prerender as prerenderCli } from "vike/prerender";
+import type { PageContextServer } from "vike/types";
+import { type Plugin, type ResolvedConfig, type UserConfig, normalizePath } from "vite";
 import type {
   VercelOutputIsr,
   ViteVercelApiEntry,
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
-} from 'vite-plugin-vercel';
-import 'vike/__internal/setup';
-import {
-  getPagesAndRoutes,
-  PageFile,
-  PageRoutes,
-  route,
-} from 'vike/__internal';
-import { nanoid } from 'nanoid';
-import { getParametrizedRoute } from './route-regex';
-import { newError } from '@brillout/libassert';
+} from "vite-plugin-vercel";
+import "vike/__internal/setup";
+// @ts-ignore
+import { newError } from "@brillout/libassert";
+import { nanoid } from "nanoid";
+import { type PageFile, type PageRoutes, getPagesAndRoutes, route } from "vike/__internal";
+import type { ViteVercelConfig } from "vite-plugin-vercel";
+import { getParametrizedRoute } from "./route-regex";
 
-const libName = 'vite-plugin-vercel:vike';
-const rendererDestination = 'ssr_';
+declare module "vite" {
+  export interface UserConfig {
+    vercel?: ViteVercelConfig;
+  }
+}
+
+const libName = "vite-plugin-vercel:vike";
+const rendererDestination = "ssr_";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export function assert(
-  condition: unknown,
-  errorMessage: string,
-): asserts condition {
+export function assert(condition: unknown, errorMessage: string): asserts condition {
   if (condition) {
     return;
   }
@@ -55,9 +55,7 @@ interface MissingPageContextOverrides {
 
 type PageContextForRoute = Parameters<typeof route>[0];
 
-type PageContext = PageContextServer &
-  MissingPageContextOverrides &
-  PageContextForRoute;
+type PageContext = PageContextServer & MissingPageContextOverrides & PageContextForRoute;
 
 export function getRoot(config: UserConfig | ResolvedConfig): string {
   return normalizePath(config.root || process.cwd());
@@ -66,26 +64,21 @@ export function getRoot(config: UserConfig | ResolvedConfig): string {
 function getOutDirRoot(config: ResolvedConfig) {
   const outDir = config.build.outDir;
 
-  return outDir.endsWith('/server') || outDir.endsWith('/client')
-    ? path.normalize(path.join(outDir, '..'))
-    : outDir;
+  return outDir.endsWith("/server") || outDir.endsWith("/client") ? path.normalize(path.join(outDir, "..")) : outDir;
 }
 
 export function getOutput(
   config: ResolvedConfig,
-  suffix?: 'functions' | `functions/${string}.func` | 'static',
+  suffix?: "functions" | `functions/${string}.func` | "static",
 ): string {
   return path.join(
-    config.vercel?.outDir ? '' : getRoot(config),
-    config.vercel?.outDir ?? '.vercel/output',
-    suffix ?? '',
+    config.vercel?.outDir ? "" : getRoot(config),
+    config.vercel?.outDir ?? ".vercel/output",
+    suffix ?? "",
   );
 }
 
-export function getOutDir(
-  config: ResolvedConfig,
-  force?: 'client' | 'server',
-): string {
+export function getOutDir(config: ResolvedConfig, force?: "client" | "server"): string {
   const p = path.join(config.root, normalizePath(config.build.outDir));
   if (!force) return p;
   return path.join(path.dirname(p), force);
@@ -107,31 +100,27 @@ async function copyDir(src: string, dest: string) {
   }
 }
 
-function assertIsr(
-  resolvedConfig: UserConfig | ResolvedConfig,
-  exports: unknown,
-): number | null {
-  if (exports === null || typeof exports !== 'object') return null;
-  if (!('isr' in exports)) return null;
+function assertIsr(resolvedConfig: UserConfig | ResolvedConfig, exports: unknown): number | null {
+  if (exports === null || typeof exports !== "object") return null;
+  if (!("isr" in exports)) return null;
   const isr = (exports as { isr: unknown }).isr;
 
   assert(
-    typeof isr === 'boolean' ||
-      (typeof isr === 'object' &&
-        typeof (isr as Record<string, unknown>).expiration === 'number' &&
+    typeof isr === "boolean" ||
+      (typeof isr === "object" &&
+        typeof (isr as Record<string, unknown>).expiration === "number" &&
         (
           isr as {
             expiration: number;
           }
         ).expiration > 0),
-    ` \`{ expiration }\` must be a positive number`,
+    " `{ expiration }` must be a positive number",
   );
 
   if (isr === true) {
     assert(
-      typeof resolvedConfig.vercel?.expiration === 'number' &&
-        resolvedConfig.vercel?.expiration > 0,
-      '`export const isr = true;` requires a default positive value for `expiration` in vite config',
+      typeof resolvedConfig.vercel?.expiration === "number" && resolvedConfig.vercel?.expiration > 0,
+      "`export const isr = true;` requires a default positive value for `expiration` in vite config",
     );
 
     return resolvedConfig.vercel?.expiration;
@@ -144,16 +133,16 @@ function assertIsr(
   ).expiration;
 }
 
-function getRouteMatch(myroute: Awaited<ReturnType<typeof route>>): any {
-  let routeMatch: any = null;
+function getRouteMatch(myroute: Awaited<ReturnType<typeof route>>): unknown {
+  let routeMatch: unknown = null;
 
-  if ('_routeMatch' in myroute.pageContextAddendum) {
+  if ("_routeMatch" in myroute.pageContextAddendum) {
     // Since 0.4.157
     routeMatch = myroute.pageContextAddendum._routeMatch;
-  } else if ('_routeMatches' in myroute.pageContextAddendum) {
+  } else if ("_routeMatches" in myroute.pageContextAddendum) {
     // Before 0.4.145
-    routeMatch = (myroute.pageContextAddendum._routeMatches as any[])?.[0];
-  } else if ('_debugRouteMatches' in myroute.pageContextAddendum) {
+    routeMatch = (myroute.pageContextAddendum._routeMatches as unknown[])?.[0];
+  } else if ("_debugRouteMatches" in myroute.pageContextAddendum) {
     // Between 0.4.145 and 0.4.157 (still in place but prefer using _routeMatch)
     routeMatch = myroute.pageContextAddendum._debugRouteMatches?.[0];
   }
@@ -187,33 +176,24 @@ export const prerender: ViteVercelPrerenderFn = async (
 
         // if ISR + Filesystem routing -> ISR prevails
         if (
-          typeof isr === 'number' &&
+          typeof isr === "number" &&
           routeMatch &&
-          typeof routeMatch !== 'string' &&
-          routeMatch.routeType === 'FILESYSTEM'
+          typeof routeMatch !== "string" &&
+          (routeMatch as { routeType: string }).routeType === "FILESYSTEM"
         ) {
           return;
         }
       }
 
-      const relPath = path.relative(
-        getOutDir(resolvedConfig, 'client'),
-        filePath,
-      );
-      const newFilePath = path.join(
-        getOutput(resolvedConfig, 'static'),
-        relPath,
-      );
+      const relPath = path.relative(getOutDir(resolvedConfig, "client"), filePath);
+      const newFilePath = path.join(getOutput(resolvedConfig, "static"), relPath);
 
       const parsed = path.parse(relPath);
-      const pathJoined =
-        parsed.name === 'index'
-          ? parsed.dir
-          : path.join(parsed.dir, parsed.name);
+      const pathJoined = parsed.name === "index" ? parsed.dir : path.join(parsed.dir, parsed.name);
 
-      if (relPath.endsWith('.html')) {
+      if (relPath.endsWith(".html")) {
         routes[relPath] = {
-          path: pathJoined === 'index' ? '' : pathJoined,
+          path: pathJoined === "index" ? "" : pathJoined,
         };
       }
 
@@ -228,9 +208,10 @@ export const prerender: ViteVercelPrerenderFn = async (
 function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
     if (route.pageId === pageId) {
-      if (route.routeType === 'STRING') {
+      if (route.routeType === "STRING") {
         return getParametrizedRoute(route.routeString);
-      } else if (route.routeType === 'FUNCTION') {
+      }
+      if (route.routeType === "FUNCTION") {
         // route.routeType === 'FUNCTION'
         return () => {};
       }
@@ -242,7 +223,7 @@ function getRouteDynamicRoute(pageRoutes: PageRoutes, pageId: string) {
 
 function getRouteFsRoute(pageRoutes: PageRoutes, pageId: string) {
   for (const route of pageRoutes) {
-    if (route.pageId === pageId && route.routeType === 'FILESYSTEM') {
+    if (route.pageId === pageId && route.routeType === "FILESYSTEM") {
       return route.routeString;
     }
   }
@@ -250,28 +231,24 @@ function getRouteFsRoute(pageRoutes: PageRoutes, pageId: string) {
   return null;
 }
 
-export async function getSsrEndpoint(
-  userConfig: UserConfig,
-  source?: string,
-): Promise<ViteVercelApiEntry> {
-  const sourcefile =
-    source ?? path.join(__dirname, '..', 'templates', 'ssr_.template.ts');
-  const contents = await fs.readFile(sourcefile, 'utf-8');
+export async function getSsrEndpoint(userConfig: UserConfig, source?: string): Promise<ViteVercelApiEntry> {
+  const sourcefile = source ?? path.join(__dirname, "..", "templates", "ssr_.template.ts");
+  const contents = await fs.readFile(sourcefile, "utf-8");
   const resolveDir = path.dirname(sourcefile);
 
   return {
     source: {
       contents: contents,
       sourcefile,
-      loader: sourcefile.endsWith('.ts')
-        ? 'ts'
-        : sourcefile.endsWith('.tsx')
-          ? 'tsx'
-          : sourcefile.endsWith('.js')
-            ? 'js'
-            : sourcefile.endsWith('.jsx')
-              ? 'jsx'
-              : 'default',
+      loader: sourcefile.endsWith(".ts")
+        ? "ts"
+        : sourcefile.endsWith(".tsx")
+          ? "tsx"
+          : sourcefile.endsWith(".js")
+            ? "js"
+            : sourcefile.endsWith(".jsx")
+              ? "jsx"
+              : "default",
       resolveDir,
     },
     destination: rendererDestination,
@@ -292,7 +269,7 @@ export interface Options {
 export function vikeVercelPlugin(options: Options = {}): Plugin {
   return {
     name: libName,
-    apply: 'build',
+    apply: "build",
     async config(userConfig): Promise<UserConfig> {
       // wait for vike second build step with `ssr` flag
       if (!userConfig.build?.ssr) return {};
@@ -315,13 +292,13 @@ export function vikeVercelPlugin(options: Options = {}): Plugin {
           defaultSupportsResponseStreaming: true,
           rewrites: [
             {
-              source: options.source ? `(${options.source})` : '((?!/api).*)',
+              source: options.source ? `(${options.source})` : "((?!/api).*)",
               destination: `/${rendererDestination}/?__original_path=$1`,
-              enforce: 'post',
+              enforce: "post",
             },
           ],
         },
-      } as any;
+      } as UserConfig;
     },
   } as Plugin;
 }
@@ -333,19 +310,16 @@ export function vikeVercelPlugin(options: Options = {}): Plugin {
  * @param pageFilesAll
  */
 function findPageFile(pageId: string, pageFilesAll: PageFile[]) {
-  return pageFilesAll.find(
-    (p) => p.pageId === pageId && p.fileType === '.page',
-  );
+  return pageFilesAll.find((p) => p.pageId === pageId && p.fileType === ".page");
 }
 
 export function vitePluginVercelVikeIsrPlugin(): Plugin {
   return {
-    name: 'vite-plugin-vercel:vike-isr',
-    apply: 'build',
+    name: "vite-plugin-vercel:vike-isr",
+    apply: "build",
     async config(userConfig): Promise<UserConfig> {
       async function getPagesWithConfigs() {
-        const { pageFilesAll, allPageIds, pageRoutes, pageConfigs } =
-          await getPagesAndRoutes();
+        const { pageFilesAll, allPageIds, pageRoutes, pageConfigs } = await getPagesAndRoutes();
 
         const isLegacy = pageFilesAll.length > 0;
 
@@ -392,13 +366,11 @@ export function vitePluginVercelVikeIsrPlugin(): Plugin {
               };
             }
 
-            const route =
-              getRouteDynamicRoute(pageRoutes, pageId) ??
-              getRouteFsRoute(pageRoutes, pageId);
+            const route = getRouteDynamicRoute(pageRoutes, pageId) ?? getRouteFsRoute(pageRoutes, pageId);
             let isr = assertIsr(userConfig, page.config);
 
             // if ISR + Function routing -> warn because ISR is not unsupported in this case
-            if (typeof route === 'function' && isr) {
+            if (typeof route === "function" && isr) {
               console.warn(
                 `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` export or use a route string if possible.`,
               );
@@ -410,8 +382,7 @@ export function vitePluginVercelVikeIsrPlugin(): Plugin {
               // used for debug purpose
               filePath: page.filePath,
               isr,
-              route:
-                typeof route === 'string' ? getParametrizedRoute(route) : null,
+              route: typeof route === "string" ? getParametrizedRoute(route) : null,
             };
           }),
         );
@@ -422,7 +393,7 @@ export function vitePluginVercelVikeIsrPlugin(): Plugin {
           isr: async () => {
             let userIsr: Record<string, VercelOutputIsr> = {};
             if (userConfig.vercel?.isr) {
-              if (typeof userConfig.vercel.isr === 'function') {
+              if (typeof userConfig.vercel.isr === "function") {
                 userIsr = await userConfig.vercel.isr();
               } else {
                 userIsr = userConfig.vercel.isr;
@@ -432,16 +403,14 @@ export function vitePluginVercelVikeIsrPlugin(): Plugin {
             const pagesWithConfigs = await getPagesWithConfigs();
 
             return pagesWithConfigs
-              .filter((p) => typeof p.isr === 'number')
+              .filter((p) => typeof p.isr === "number")
               .reduce((acc, cur) => {
-                const path =
-                  cur._pageId.replace(/\/index$/g, '') + '-' + nanoid();
+                const path = `${cur._pageId.replace(/\/index$/g, "")}-${nanoid()}`;
                 acc[path] = {
+                  // biome-ignore lint/style/noNonNullAssertion: <explanation>
                   expiration: cur.isr!,
                   symlink: rendererDestination,
-                  route: cur.route
-                    ? cur.route + '(?:\\/index\\.pageContext\\.json)?'
-                    : undefined,
+                  route: cur.route ? `${cur.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
                 };
                 return acc;
               }, userIsr);
@@ -456,9 +425,9 @@ export function vitePluginVercelVikeCopyStaticAssetsPlugins(): Plugin {
   let resolvedConfig: ResolvedConfig;
 
   return {
-    apply: 'build',
-    name: 'vite-plugin-vercel:vike-copy-static-assets',
-    enforce: 'post',
+    apply: "build",
+    name: "vite-plugin-vercel:vike-copy-static-assets",
+    enforce: "post",
     configResolved(config) {
       resolvedConfig = config;
     },
@@ -470,16 +439,9 @@ export function vitePluginVercelVikeCopyStaticAssetsPlugins(): Plugin {
 }
 
 async function copyDistClientToOutputStatic(resolvedConfig: ResolvedConfig) {
-  await copyDir(
-    getOutDir(resolvedConfig, 'client'),
-    getOutput(resolvedConfig, 'static'),
-  );
+  await copyDir(getOutDir(resolvedConfig, "client"), getOutput(resolvedConfig, "static"));
 }
 
 export default function allPlugins(options: Options = {}): Plugin[] {
-  return [
-    vitePluginVercelVikeIsrPlugin(),
-    vikeVercelPlugin(options),
-    vitePluginVercelVikeCopyStaticAssetsPlugins(),
-  ];
+  return [vitePluginVercelVikeIsrPlugin(), vikeVercelPlugin(options), vitePluginVercelVikeCopyStaticAssetsPlugins()];
 }

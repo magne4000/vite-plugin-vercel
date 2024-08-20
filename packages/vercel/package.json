@@ -11,7 +11,8 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.cjs",
+      "types": "./index.d.ts"
     },
     "./types": {
       "types": "./index.d.ts"
@@ -26,8 +27,7 @@
     "build": "tsup",
     "dev": "tsup --watch",
     "prepack": "rm -rf dist && pnpm build",
-    "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
     "@vite-plugin-vercel/vike": "workspace:*",
@@ -43,23 +43,20 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^18.19.31",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
+    "@types/node": "^18.19.45",
     "@vite-plugin-vercel/vike": "workspace:*",
-    "eslint": "^8.57.0",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
-    "vike": "^0.4.183",
-    "vite": "^5.4.0"
+    "vike": "^0.4.188",
+    "vite": "^5.4.1"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@manypkg/find-root": "^2.2.2",
+    "@manypkg/find-root": "^2.2.3",
     "@vercel/build-utils": "^8.3.6",
     "@vercel/nft": "^0.27.3",
     "@vercel/routing-utils": "^3.1.0",
-    "esbuild": "^0.23.0",
+    "esbuild": "^0.23.1",
     "fast-glob": "^3.3.2",
     "magicast": "^0.3.4",
     "zod": "^3.23.8"

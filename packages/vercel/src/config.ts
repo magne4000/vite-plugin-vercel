@@ -1,33 +1,30 @@
-import { ResolvedConfig } from 'vite';
-import path from 'path';
-import { getOutput } from './utils';
-import {
-  VercelOutputConfig,
-  vercelOutputConfigSchema,
-} from './schemas/config/config';
-import fs from 'fs/promises';
+import type { ResolvedConfig } from "vite";
+import path from "node:path";
+import { getOutput } from "./utils";
+import { type VercelOutputConfig, vercelOutputConfigSchema } from "./schemas/config/config";
+import fs from "node:fs/promises";
 import {
   getTransformedRoutes,
-  Header,
+  type Header,
   mergeRoutes,
   normalizeRoutes,
-  Rewrite,
-  Route,
-} from '@vercel/routing-utils';
-import { ViteVercelRewrite } from './types';
+  type Rewrite,
+  type Route,
+} from "@vercel/routing-utils";
+import type { ViteVercelRewrite } from "./types";
 
-function reorderEnforce<T extends { enforce?: 'pre' | 'post' }>(arr: T[]) {
+function reorderEnforce<T extends { enforce?: "pre" | "post" }>(arr: T[]) {
   return [
-    ...arr.filter((r) => r.enforce === 'pre'),
+    ...arr.filter((r) => r.enforce === "pre"),
     ...arr.filter((r) => !r.enforce),
-    ...arr.filter((r) => r.enforce === 'post'),
+    ...arr.filter((r) => r.enforce === "post"),
   ];
 }
 
 export function getConfig(
   resolvedConfig: ResolvedConfig,
   rewrites?: ViteVercelRewrite[],
-  overrides?: VercelOutputConfig['overrides'],
+  overrides?: VercelOutputConfig["overrides"],
   headers?: Header[],
 ): VercelOutputConfig {
   const _rewrites: ViteVercelRewrite[] = [
@@ -40,9 +37,7 @@ export function getConfig(
     cleanUrls: resolvedConfig.vercel?.cleanUrls ?? true,
     trailingSlash: resolvedConfig.vercel?.trailingSlash,
     rewrites: reorderEnforce(_rewrites),
-    redirects: resolvedConfig.vercel?.redirects
-      ? reorderEnforce(resolvedConfig.vercel?.redirects)
-      : undefined,
+    redirects: resolvedConfig.vercel?.redirects ? reorderEnforce(resolvedConfig.vercel?.redirects) : undefined,
     headers,
   });
 
@@ -53,14 +48,12 @@ export function getConfig(
   if (
     resolvedConfig.vercel?.config?.routes &&
     resolvedConfig.vercel.config.routes.length > 0 &&
-    !resolvedConfig.vercel.config.routes.every(
-      (r) => 'continue' in r && r.continue,
-    )
+    !resolvedConfig.vercel.config.routes.every((r) => "continue" in r && r.continue)
   ) {
     console.warn(
       'Did you forget to add `"continue": true` to your routes? See https://vercel.com/docs/build-output-api/v3/configuration#source-route\n' +
-        'If not, it is discouraged to use `vercel.config.routes` to override routes. ' +
-        'Prefer using `vercel.rewrites` and `vercel.redirects`.',
+        "If not, it is discouraged to use `vercel.config.routes` to override routes. " +
+        "Prefer using `vercel.rewrites` and `vercel.redirects`.",
     );
   }
 
@@ -91,8 +84,8 @@ export function getConfig(
     userRoutes,
     builds: [
       {
-        use: '@vercel/node',
-        entrypoint: 'index.js',
+        use: "@vercel/node",
+        entrypoint: "index.js",
         routes: buildRoutes,
       },
     ],
@@ -110,22 +103,18 @@ export function getConfig(
 }
 
 export function getConfigDestination(resolvedConfig: ResolvedConfig) {
-  return path.join(getOutput(resolvedConfig), 'config.json');
+  return path.join(getOutput(resolvedConfig), "config.json");
 }
 
 export async function writeConfig(
   resolvedConfig: ResolvedConfig,
   rewrites?: Rewrite[],
-  overrides?: VercelOutputConfig['overrides'],
+  overrides?: VercelOutputConfig["overrides"],
   headers?: Header[],
 ): Promise<void> {
   await fs.writeFile(
     getConfigDestination(resolvedConfig),
-    JSON.stringify(
-      getConfig(resolvedConfig, rewrites, overrides, headers),
-      undefined,
-      2,
-    ),
-    'utf-8',
+    JSON.stringify(getConfig(resolvedConfig, rewrites, overrides, headers), undefined, 2),
+    "utf-8",
   );
 }

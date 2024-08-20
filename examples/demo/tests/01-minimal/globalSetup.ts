@@ -1,12 +1,12 @@
-import path from 'path';
-import { setup as _setup } from '../common/setup';
-import { teardown as _teardown } from '../common/teardown';
-import react from '@vitejs/plugin-react-swc';
-import vercel from 'vite-plugin-vercel';
+import path from "node:path";
+import { setup as _setup } from "../common/setup";
+import { teardown as _teardown } from "../common/teardown";
+import react from "@vitejs/plugin-react-swc";
+import vercel from "vite-plugin-vercel";
 
 export const setup = _setup(path.basename(__dirname), {
   configFile: false,
-  mode: 'production',
+  mode: "production",
   root: process.cwd(),
   plugins: [
     react(),

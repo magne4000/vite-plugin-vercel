@@ -1,8 +1,8 @@
-import React from 'react';
-import { Link } from '../../renderer/Link';
+import React from "react";
+import { Link } from "../../renderer/Link";
 
 function isISR(someId: string) {
-  return someId !== 'id-1' && someId !== 'id-2';
+  return someId !== "id-1" && someId !== "id-2";
 }
 
 export default function Page(props: { d: string; someId: string }) {
@@ -45,7 +45,7 @@ export default function Page(props: { d: string; someId: string }) {
             </li>
           </ul>
         </li>
-        <li>{isISR(props.someId) ? 'ISR' : 'Static'}</li>
+        <li>{isISR(props.someId) ? "ISR" : "Static"}</li>
         <li>{props.d}</li>
       </ul>
     </>

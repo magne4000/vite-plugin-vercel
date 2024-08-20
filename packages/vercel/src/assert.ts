@@ -1,11 +1,9 @@
-import { newError } from '@brillout/libassert';
+// @ts-ignore
+import { newError } from "@brillout/libassert";
 
-const libName = 'vite-plugin-vercel';
+const libName = "vite-plugin-vercel";
 
-export function assert(
-  condition: unknown,
-  errorMessage: string,
-): asserts condition {
+export function assert(condition: unknown, errorMessage: string): asserts condition {
   if (condition) {
     return;
   }

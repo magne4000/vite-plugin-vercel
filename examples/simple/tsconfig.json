@@ -10,7 +10,7 @@
     "sourceMap": true,
     "module": "ESNext",
     "noEmit": true,
-    "moduleResolution": "node",
+    "moduleResolution": "Bundler",
     "target": "ES2022",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "types": ["vite/client"]

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from '../../renderer/Link';
+import React from "react";
+import { Link } from "../../renderer/Link";
 
 export default function Page(props: { d: string }) {
   return (

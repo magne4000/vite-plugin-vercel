@@ -1,12 +1,12 @@
 // https://vike.dev/onRenderHtml
 export default onRenderHtml;
 
-import ReactDOMServer from 'react-dom/server';
-import React from 'react';
-import { escapeInject } from 'vike/server';
-import { PageShell } from './PageShell';
-import { getPageTitle } from './getPageTitle';
-import type { PageContextServer } from './types';
+import ReactDOMServer from "react-dom/server";
+import React from "react";
+import { escapeInject } from "vike/server";
+import { PageShell } from "./PageShell";
+import { getPageTitle } from "./getPageTitle";
+import type { PageContextServer } from "./types";
 
 async function onRenderHtml(pageContext: PageContextServer) {
   const { Page, pageProps } = pageContext;

@@ -1,12 +1,13 @@
-import path from 'path';
-import { setup as _setup } from '../common/setup';
-import { teardown as _teardown } from '../common/teardown';
-import react from '@vitejs/plugin-react-swc';
-import vercel from 'vite-plugin-vercel';
+/// <reference types="vite-plugin-vercel/types" />
+import path from "node:path";
+import react from "@vitejs/plugin-react-swc";
+import vercel from "vite-plugin-vercel";
+import { setup as _setup } from "../common/setup";
+import { teardown as _teardown } from "../common/teardown";
 
 export const setup = _setup(path.basename(__dirname), {
   configFile: false,
-  mode: 'production',
+  mode: "production",
   root: process.cwd(),
   plugins: [
     react(),
@@ -17,16 +18,16 @@ export const setup = _setup(path.basename(__dirname), {
   vercel: {
     additionalEndpoints: [
       {
-        source: './tests/common/index2.ts',
-        destination: 'index2',
+        source: "./tests/common/index2.ts",
+        destination: "index2",
       },
       {
         source: {
           contents: 'console.log("hi");',
-          sourcefile: 'hi.ts',
-          loader: 'ts',
+          sourcefile: "hi.ts",
+          loader: "ts",
         },
-        destination: 'index3',
+        destination: "index3",
       },
     ],
   },

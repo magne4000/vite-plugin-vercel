@@ -1,28 +1,28 @@
-import fs from 'fs/promises';
-import type { Plugin, PluginOption, ResolvedConfig } from 'vite';
-import { getOutput, getPublic } from './utils';
-import { writeConfig } from './config';
-import { buildEndpoints } from './build';
-import { buildPrerenderConfigs, execPrerender } from './prerender';
-import path from 'path';
-import type { ViteVercelPrerenderRoute } from './types';
-import { copyDir } from './helpers';
+import fs from "node:fs/promises";
+import path from "node:path";
+import type { Plugin, PluginOption, ResolvedConfig } from "vite";
+import { buildEndpoints } from "./build";
+import { writeConfig } from "./config";
+import { copyDir } from "./helpers";
+import { buildPrerenderConfigs, execPrerender } from "./prerender";
+import type { ViteVercelPrerenderRoute } from "./types";
+import { getOutput, getPublic } from "./utils";
 
-export * from './types';
+export * from "./types";
 
 function vercelPluginCleanup(): Plugin {
   let resolvedConfig: ResolvedConfig;
 
   return {
-    apply: 'build',
-    name: 'vite-plugin-vercel:cleanup',
-    enforce: 'pre',
+    apply: "build",
+    name: "vite-plugin-vercel:cleanup",
+    enforce: "pre",
 
     configResolved(config) {
       resolvedConfig = config;
     },
     writeBundle: {
-      order: 'pre',
+      order: "pre",
       sequential: true,
       async handler() {
         if (!resolvedConfig.build?.ssr) {
@@ -34,31 +34,28 @@ function vercelPluginCleanup(): Plugin {
   };
 }
 
+type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+
 function vercelPlugin(): Plugin {
-  let resolvedConfig: ResolvedConfig;
+  let resolvedConfig: Writeable<ResolvedConfig>;
   let vikeFound = false;
 
   return {
-    apply: 'build',
-    name: 'vite-plugin-vercel',
-    enforce: 'post',
+    apply: "build",
+    name: "vite-plugin-vercel",
+    enforce: "post",
 
     configResolved(config) {
       resolvedConfig = config;
-      vikeFound = resolvedConfig.plugins.some((p) =>
-        p.name.match('^vite-plugin-ssr:|^vike:'),
-      );
+      vikeFound = resolvedConfig.plugins.some((p) => p.name.match("^vite-plugin-ssr:|^vike:"));
 
-      if (
-        typeof resolvedConfig.vercel?.distContainsOnlyStatic === 'undefined'
-      ) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        (resolvedConfig as any).vercel ??= {};
-        resolvedConfig.vercel!.distContainsOnlyStatic = !vikeFound;
+      if (typeof resolvedConfig.vercel?.distContainsOnlyStatic === "undefined") {
+        resolvedConfig.vercel ??= {};
+        resolvedConfig.vercel.distContainsOnlyStatic = !vikeFound;
       }
     },
     writeBundle: {
-      order: 'post',
+      order: "post",
       sequential: true,
       async handler() {
         if (!resolvedConfig.build?.ssr) {
@@ -110,35 +107,33 @@ async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
 
 async function copyDistToStatic(resolvedConfig: ResolvedConfig) {
   if (resolvedConfig.vercel?.distContainsOnlyStatic) {
-    await copyDir(
-      resolvedConfig.build.outDir,
-      getOutput(resolvedConfig, 'static'),
-    );
+    await copyDir(resolvedConfig.build.outDir, getOutput(resolvedConfig, "static"));
   }
 }
 
 async function computeStaticHtmlOverrides(
   resolvedConfig: ResolvedConfig,
 ): Promise<NonNullable<ViteVercelPrerenderRoute>> {
-  const staticAbsolutePath = getOutput(resolvedConfig, 'static');
+  const staticAbsolutePath = getOutput(resolvedConfig, "static");
   const files = await getStaticHtmlFiles(staticAbsolutePath);
 
   // public files copied by vite by default https://vitejs.dev/guide/assets.html#the-public-directory
   const publicDir = getPublic(resolvedConfig);
   const publicFiles = await getStaticHtmlFiles(publicDir);
-  files.push(
-    ...publicFiles.map((f) => f.replace(publicDir, staticAbsolutePath)),
-  );
+  files.push(...publicFiles.map((f) => f.replace(publicDir, staticAbsolutePath)));
 
-  return files.reduce((acc, curr) => {
-    const relPath = path.relative(staticAbsolutePath, curr);
-    const parsed = path.parse(relPath);
-    const pathJoined = path.join(parsed.dir, parsed.name);
-    acc[relPath] = {
-      path: pathJoined,
-    };
-    return acc;
-  }, {} as NonNullable<ViteVercelPrerenderRoute>);
+  return files.reduce(
+    (acc, curr) => {
+      const relPath = path.relative(staticAbsolutePath, curr);
+      const parsed = path.parse(relPath);
+      const pathJoined = path.join(parsed.dir, parsed.name);
+      acc[relPath] = {
+        path: pathJoined,
+      };
+      return acc;
+    },
+    {} as NonNullable<ViteVercelPrerenderRoute>,
+  );
 }
 
 async function getStaticHtmlFiles(src: string) {
@@ -156,7 +151,7 @@ async function getStaticHtmlFiles(src: string) {
 
     entry.isDirectory()
       ? htmlFiles.push(...(await getStaticHtmlFiles(srcPath)))
-      : srcPath.endsWith('.html')
+      : srcPath.endsWith(".html")
         ? htmlFiles.push(srcPath)
         : undefined;
   }
@@ -168,24 +163,21 @@ async function getStaticHtmlFiles(src: string) {
  * Auto import `@vite-plugin-vercel/vike` if it is part of dependencies.
  * Ensures that `vike/plugin` is also present to ensure predictable behavior
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 async function tryImportVpvv(options: any) {
   try {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    await import('vike/plugin');
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    await import("vike/plugin");
     // @ts-ignore
-    const vpvv = await import('@vite-plugin-vercel/vike');
+    const vpvv = await import("@vite-plugin-vercel/vike");
     return vpvv.default(options);
   } catch (e) {
     try {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      await import('vite-plugin-ssr/plugin');
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      await import("vite-plugin-ssr/plugin");
       // @ts-ignore
-      const vpvv = await import('@vite-plugin-vercel/vike');
+      const vpvv = await import("@vite-plugin-vercel/vike");
       return vpvv.default(options);
     } catch (e) {
       return null;
@@ -198,12 +190,8 @@ async function tryImportVpvv(options: any) {
 // FIXME: Could be fixed by:
 //  - shared-workspace-lockfile=false in .npmrc. See https://pnpm.io/npmrc#shared-workspace-lockfile
 //  - Moving demo test in dedicated repo, with each a correct package.json
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export default function allPlugins(options: any = {}): PluginOption[] {
   const { smart, ...rest } = options;
-  return [
-    vercelPluginCleanup(),
-    vercelPlugin(),
-    smart !== false ? tryImportVpvv(rest) : null,
-  ];
+  return [vercelPluginCleanup(), vercelPlugin(), smart !== false ? tryImportVpvv(rest) : null];
 }

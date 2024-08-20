@@ -1,4 +1,4 @@
-import { Config } from 'vike/types';
+import type { Config } from "vike/types";
 
 export default {
   isr: { expiration: 15 },

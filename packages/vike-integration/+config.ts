@@ -1,7 +1,7 @@
-import type { Config } from 'vike/types';
+import type { Config } from "vike/types";
 
 export default {
-  name: '@vite-plugin-vercel/vike',
+  name: "@vite-plugin-vercel/vike",
   meta: {
     isr: {
       env: { server: true },

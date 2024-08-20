@@ -1,18 +1,14 @@
-import type { ResolvedConfig } from 'vite';
-import type { BuildOptions, StdinOptions } from 'esbuild';
-import type { VercelOutputConfig } from './schemas/config/config';
-import type { VercelOutputVcConfig } from './schemas/config/vc-config';
-import type { VercelOutputPrerenderConfig } from './schemas/config/prerender-config';
-import type { Rewrite, Redirect } from '@vercel/routing-utils';
+import type { ResolvedConfig } from "vite";
+import type { BuildOptions, StdinOptions } from "esbuild";
+import type { VercelOutputConfig } from "./schemas/config/config";
+import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
+import type { VercelOutputPrerenderConfig } from "./schemas/config/prerender-config";
+import type { Rewrite, Redirect } from "@vercel/routing-utils";
 
-export type {
-  VercelOutputConfig,
-  VercelOutputVcConfig,
-  VercelOutputPrerenderConfig,
-};
+export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderConfig };
 
-export type ViteVercelRewrite = Rewrite & { enforce?: 'pre' | 'post' };
-export type ViteVercelRedirect = Redirect & { enforce?: 'pre' | 'post' };
+export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
+export type ViteVercelRedirect = Redirect & { enforce?: "pre" | "post" };
 
 // Vite config for Vercel
 
@@ -82,7 +78,7 @@ export interface ViteVercelConfig {
    * @see {@link https://vercel.com/docs/build-output-api/v3/configuration#configuration}
    * @protected
    */
-  config?: Partial<Omit<VercelOutputConfig, 'version'>>;
+  config?: Partial<Omit<VercelOutputConfig, "version">>;
   /**
    * ISR and SSG pages are mutually exclusive. If a page is found in both, ISR prevails.
    * Keys are path relative to .vercel/output/functions directory, either without extension,
@@ -105,9 +101,7 @@ export interface ViteVercelConfig {
    */
   isr?:
     | Record<string, VercelOutputIsr>
-    | (() =>
-        | Promise<Record<string, VercelOutputIsr>>
-        | Record<string, VercelOutputIsr>);
+    | (() => Promise<Record<string, VercelOutputIsr>> | Record<string, VercelOutputIsr>);
   /**
    * Defaults to `.vercel/output`. Mostly useful for testing purpose
    * @protected
@@ -130,7 +124,7 @@ export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
 /**
  * Keys are path relative to .vercel/output/static directory
  */
-export type ViteVercelPrerenderRoute = VercelOutputConfig['overrides'];
+export type ViteVercelPrerenderRoute = VercelOutputConfig["overrides"];
 export type ViteVercelPrerenderFn = (
   resolvedConfig: ResolvedConfig,
 ) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;

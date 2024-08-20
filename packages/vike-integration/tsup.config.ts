@@ -1,18 +1,18 @@
-import { defineConfig } from 'tsup';
-import { rename } from 'node:fs/promises';
-import { existsSync } from 'node:fs';
+import { defineConfig } from "tsup";
+import { rename } from "node:fs/promises";
+import { existsSync } from "node:fs";
 
 export default defineConfig([
   {
     clean: true,
-    entry: ['./vike.ts', './templates/helpers.ts', './+config.ts'],
-    external: ['esbuild', 'rollup', 'vite', 'vike'],
-    format: ['esm'],
+    entry: ["./vike.ts", "./templates/helpers.ts", "./+config.ts"],
+    external: ["esbuild", "rollup", "vite", "vike"],
+    format: ["esm"],
 
-    platform: 'node',
-    target: 'node18',
+    platform: "node",
+    target: "node18",
     dts: {
-      entry: ['./vike.ts', './templates/helpers.ts', './+config.ts'],
+      entry: ["./vike.ts", "./templates/helpers.ts", "./+config.ts"],
     },
     async onSuccess() {
       // rollup-plugin-dts chooses to rename things its way
@@ -23,7 +23,7 @@ export default defineConfig([
 
       // timeout after 5 seconds
       while (start + 5000 > Date.now()) {
-        if (existsSync('./dist/_config.d.ts')) {
+        if (existsSync("./dist/_config.d.ts")) {
           break;
         }
         await new Promise((resolve) => {
@@ -31,7 +31,7 @@ export default defineConfig([
         });
       }
 
-      await rename('./dist/_config.d.ts', './dist/+config.d.ts');
+      await rename("./dist/_config.d.ts", "./dist/+config.d.ts");
     },
   },
 ]);

@@ -1,1 +1,1 @@
-export default from './dist/+config.h';
+export * from "./dist/+config.js";

@@ -1,10 +1,8 @@
-import { VercelRequest, VercelResponse } from '@vercel/node';
-import { parse } from 'querystring';
-import type { renderPage } from 'vike';
+import { parse } from "node:querystring";
+import type { VercelRequest, VercelResponse } from "@vercel/node";
+import type { renderPage } from "vike";
 
-type HttpResponse = NonNullable<
-  Awaited<ReturnType<typeof renderPage>>['httpResponse']
->;
+type HttpResponse = NonNullable<Awaited<ReturnType<typeof renderPage>>["httpResponse"]>;
 
 /**
  * Extract useful pageContext from request to give to renderPage(...).
@@ -16,15 +14,13 @@ export function getDefaultPageContextInit(request: VercelRequest) {
   const query: Record<string, string | string[]> = request.query ?? {};
   const matches =
     // FIXME x-now-route-matches is not definitive https://github.com/orgs/vercel/discussions/577#discussioncomment-2769478
-    typeof request.headers['x-now-route-matches'] === 'string'
-      ? parse(request.headers['x-now-route-matches'])
-      : null;
+    typeof request.headers["x-now-route-matches"] === "string" ? parse(request.headers["x-now-route-matches"]) : null;
   const url: string =
-    typeof query.__original_path === 'string'
+    typeof query.__original_path === "string"
       ? query.__original_path
-      : matches && typeof matches!['1'] === 'string'
-      ? matches['1']
-      : request.url!;
+      : matches && typeof matches?.["1"] === "string"
+        ? matches["1"]
+        : request.url ?? "";
   return {
     url,
     urlOriginal: url,
@@ -39,8 +35,8 @@ export function getDefaultPageContextInit(request: VercelRequest) {
  */
 export function getDefaultEmptyResponseHandler(response: VercelResponse) {
   response.statusCode = 200;
-  response.setHeader('content-type', 'text/html; charset=UTF-8');
-  return response.end('');
+  response.setHeader("content-type", "text/html; charset=UTF-8");
+  return response.end("");
 }
 
 /**
@@ -48,13 +44,10 @@ export function getDefaultEmptyResponseHandler(response: VercelResponse) {
  * @param response
  * @param httpResponse
  */
-export function getDefaultResponseHandler(
-  response: VercelResponse,
-  httpResponse: HttpResponse,
-) {
+export function getDefaultResponseHandler(response: VercelResponse, httpResponse: HttpResponse) {
   const { statusCode, body, contentType } = httpResponse;
 
   response.statusCode = statusCode;
-  response.setHeader('content-type', contentType);
+  response.setHeader("content-type", contentType);
   return response.end(body);
 }

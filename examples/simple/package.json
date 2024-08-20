@@ -11,10 +11,10 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@types/node": "^18.19.31",
+    "@types/node": "^18.19.45",
     "@vercel/node": "^3.0.26",
     "typescript": "^5.4.5",
-    "vite": "^5.2.9"
+    "vite": "^5.4.1"
   },
   "dependencies": {
     "vite-plugin-vercel": "workspace:*"

@@ -1,4 +1,4 @@
-import 'vike/types';
+import "vike/types";
 
 // When this is imported by a projet ->
 //   import config from '@vite-plugin-vercel/vike/config'
@@ -15,4 +15,4 @@ declare global {
 }
 
 // Help TS's resolver for node10 target
-export * from './dist/+config.h';
+export * from "./dist/+config.h";

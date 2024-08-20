@@ -1,14 +1,14 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from "tsup";
 
 export default defineConfig([
   {
-    entry: ['./src/index.ts'],
-    external: ['esbuild', 'vike'],
-    format: ['esm', 'cjs'],
-    platform: 'node',
-    target: 'node18',
+    entry: ["./src/index.ts"],
+    external: ["esbuild", "vike"],
+    format: ["esm", "cjs"],
+    platform: "node",
+    target: "node18",
     dts: {
-      entry: './src/index.ts',
+      entry: "./src/index.ts",
     },
   },
 ]);
