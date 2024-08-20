@@ -241,6 +241,27 @@ function getRouteFsRoute(pageRoutes: PageRoutes, pageId: string) {
   return null;
 }
 
+export async function getSsrEdgeEndpoint(): Promise<ViteVercelApiEntry["source"]> {
+  const sourcefile = path.join(__dirname, "..", "templates", "ssr_edge_.template.ts");
+  const contents = await fs.readFile(sourcefile, "utf-8");
+  const resolveDir = path.dirname(sourcefile);
+
+  return {
+    contents: contents,
+    sourcefile,
+    loader: sourcefile.endsWith(".ts")
+      ? "ts"
+      : sourcefile.endsWith(".tsx")
+        ? "tsx"
+        : sourcefile.endsWith(".js")
+          ? "js"
+          : sourcefile.endsWith(".jsx")
+            ? "jsx"
+            : "default",
+    resolveDir,
+  };
+}
+
 export async function getSsrEndpoint(source?: string) {
   const sourcefile = source ?? path.join(__dirname, "..", "templates", "ssr_.template.ts");
   const contents = await fs.readFile(sourcefile, "utf-8");
@@ -423,7 +444,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
         );
       }
 
-      const edgeSource = (await getSsrEndpoint()).source;
+      const edgeSource = await getSsrEdgeEndpoint();
 
       return {
         vercel: {

@@ -1,18 +1,18 @@
-import { defineConfig } from "tsup";
-import { rename } from "node:fs/promises";
 import { existsSync } from "node:fs";
+import { rename } from "node:fs/promises";
+import { defineConfig } from "tsup";
 
 export default defineConfig([
   {
     clean: true,
-    entry: ["./vike.ts", "./templates/helpers.ts", "./+config.ts"],
+    entry: ["./vike.ts", "./templates/node-helpers.ts", "./templates/edge-helpers.ts", "./+config.ts"],
     external: ["esbuild", "rollup", "vite", "vike"],
     format: ["esm"],
 
     platform: "node",
     target: "node18",
     dts: {
-      entry: ["./vike.ts", "./templates/helpers.ts", "./+config.ts"],
+      entry: ["./vike.ts", "./templates/node-helpers.ts", "./templates/edge-helpers.ts", "./+config.ts"],
     },
     async onSuccess() {
       // rollup-plugin-dts chooses to rename things its way

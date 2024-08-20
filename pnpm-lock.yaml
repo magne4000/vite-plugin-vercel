@@ -232,6 +232,9 @@ importers:
       '@types/qs':
         specifier: ^6.9.15
         version: 6.9.15
+      '@vercel/edge':
+        specifier: ^1.1.2
+        version: 1.1.2
       '@vercel/node':
         specifier: ^3.2.8
         version: 3.2.8(@swc/core@1.7.14)
@@ -1100,6 +1103,9 @@ packages:
     peerDependenciesMeta:
       '@opentelemetry/api':
         optional: true
+
+  '@vercel/edge@1.1.2':
+    resolution: {integrity: sha512-wt5SnhsMahWX8U9ZZhFUQoiXhMn/CUxA5xeMdZX1cwyOL1ZbDR3rNI8HRT9RSU73nDxeF6jlnqJyp/0Jy0VM2A==}
 
   '@vercel/error-utils@2.0.2':
     resolution: {integrity: sha512-Sj0LFafGpYr6pfCqrQ82X6ukRl5qpmVrHM/191kNYFqkkB9YkjlMAj6QcEsvCG259x4QZ7Tya++0AB85NDPbKQ==}
@@ -3991,6 +3997,8 @@ snapshots:
   '@vercel/edge-config@1.2.1':
     dependencies:
       '@vercel/edge-config-fs': 0.1.0
+
+  '@vercel/edge@1.1.2': {}
 
   '@vercel/error-utils@2.0.2': {}
 

@@ -1,6 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { renderPage } from "vike/server";
-import { getDefaultEmptyResponseHandler, getDefaultPageContextInit, getDefaultResponseHandler } from "./helpers";
+import { getDefaultEmptyResponseHandler, getDefaultPageContextInit, getDefaultResponseHandler } from "./node-helpers";
 
 export default async function handler(request: VercelRequest, response: VercelResponse) {
   console.debug("query", request.query);

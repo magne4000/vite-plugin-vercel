@@ -16,7 +16,8 @@
   "types": "./dist/vike.d.ts",
   "exports": {
     ".": "./dist/vike.js",
-    "./helpers": "./dist/templates/helpers.js",
+    "./helpers/node": "./dist/templates/node-helpers.js",
+    "./helpers/edge": "./dist/templates/edge-helpers.js",
     "./config": {
       "types": "./config.d.ts",
       "default": "./dist/+config.js"
@@ -32,6 +33,7 @@
   "devDependencies": {
     "@types/node": "^18.19.45",
     "@types/qs": "^6.9.15",
+    "@vercel/edge": "^1.1.2",
     "@vercel/node": "^3.2.8",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
