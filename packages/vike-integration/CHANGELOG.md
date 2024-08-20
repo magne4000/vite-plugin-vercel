@@ -1,5 +1,16 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 9.0.0
+
+### Minor Changes
+
+- feat(vike): support edge config in +config.ts file
+
+### Patch Changes
+
+- Updated dependencies
+  - vite-plugin-vercel@9.0.0
+
 ## 8.0.1
 
 ### Patch Changes
