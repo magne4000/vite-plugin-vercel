@@ -320,12 +320,24 @@ async function extractExports(filepath: string) {
   }
 }
 
+async function extractHeaders(resolvedConfig: ResolvedConfig) {
+  let headers: Header[] = [];
+  if (typeof resolvedConfig.vercel?.headers === "function") {
+    headers = await resolvedConfig.vercel.headers();
+  } else if (Array.isArray(resolvedConfig.vercel?.headers)) {
+    headers = resolvedConfig.vercel.headers;
+  }
+
+  return headers;
+}
+
 export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
   rewrites: Rewrite[];
   isr: Record<string, VercelOutputIsr>;
   headers: Header[];
 }> {
   const entries = await getEntries(resolvedConfig);
+  const headers = await extractHeaders(resolvedConfig);
 
   for (const entry of entries) {
     if (typeof entry.source === "string") {
@@ -407,14 +419,17 @@ export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
         };
       }),
     isr: Object.fromEntries(isrEntries) as Record<string, VercelOutputIsr>,
-    headers: entries
-      .filter((e) => e.headers)
-      .map((e) => ({
-        source: `/${e.destination.replace(/\.func$/, "")}`,
-        headers: Object.entries(e.headers ?? {}).map(([key, value]) => ({
-          key,
-          value,
+    headers: [
+      ...entries
+        .filter((e) => e.headers)
+        .map((e) => ({
+          source: `/${e.destination.replace(/\.func$/, "")}`,
+          headers: Object.entries(e.headers ?? {}).map(([key, value]) => ({
+            key,
+            value,
+          })),
         })),
-      })),
+      ...headers,
+    ],
   };
 }

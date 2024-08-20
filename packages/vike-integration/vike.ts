@@ -500,19 +500,23 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
                     `Page ${page._pageId}: headers is not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
                   );
                 }
-                return page.headers !== null && page.headers !== undefined && !page.edge && page.route;
+                return page.headers !== null && page.headers !== undefined && page.route;
               })
-              .map((page) => {
-                return {
-                  source: `${
-                    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-                    page.route!
-                  }(?:\\/index\\.pageContext\\.json)?`,
-                  headers: Object.entries(page.headers ?? {}).map(([key, value]) => ({
-                    key,
-                    value,
-                  })),
-                };
+              .flatMap((page) => {
+                const headers = Object.entries(page.headers ?? {}).map(([key, value]) => ({
+                  key,
+                  value,
+                }));
+                return [
+                  {
+                    source: `${page.route}`,
+                    headers,
+                  },
+                  {
+                    source: `${page.route}/index\\.pageContext\\.json`,
+                    headers,
+                  },
+                ];
               });
           },
           additionalEndpoints: [
@@ -534,7 +538,6 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
                     source: edgeSource,
                     destination,
                     route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
-                    headers: page.headers,
                     edge: true,
                   };
                 });
