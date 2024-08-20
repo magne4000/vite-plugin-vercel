@@ -284,11 +284,34 @@ export function vikeVercelPlugin(options: Options = {}): Plugin {
       // wait for vike second build step with `ssr` flag
       if (!userConfig.build?.ssr) return {};
 
-      const additionalEndpoints = userConfig.vercel?.additionalEndpoints
-        ?.flatMap((e) => e.destination)
-        .some((d) => d === rendererDestination)
-        ? [] // vite deep merges config
-        : [await getSsrEndpoint()];
+      const getSsrEndpointIfNotPresent = async (endpoints: ViteVercelApiEntry[]): Promise<ViteVercelApiEntry[]> => {
+        return endpoints.flatMap((e) => e.destination).some((d) => d === rendererDestination)
+          ? // vite deep merges config
+            []
+          : [await getSsrEndpoint()];
+      };
+
+      const additionalEndpoints: Required<UserConfig>["vercel"]["additionalEndpoints"] = [
+        async () => {
+          const userEndpoints: ViteVercelApiEntry[] = [];
+          if (Array.isArray(userConfig.vercel?.additionalEndpoints)) {
+            for (const endpoint of userConfig.vercel.additionalEndpoints) {
+              if (typeof endpoint === "function") {
+                const res = await endpoint();
+                if (Array.isArray(res)) {
+                  userEndpoints.push(...res);
+                } else {
+                  userEndpoints.push(res);
+                }
+              } else {
+                userEndpoints.push(endpoint);
+              }
+            }
+          }
+
+          return getSsrEndpointIfNotPresent(userEndpoints);
+        },
+      ];
 
       return {
         vitePluginSsr: {
@@ -400,26 +423,30 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
         );
       }
 
-      // FIXME, needs to be executed later, like isr
-      const pagesWithConfigs = await getPagesWithConfigs();
       const edgeSource = (await getSsrEndpoint()).source;
 
       return {
         vercel: {
-          additionalEndpoints: pagesWithConfigs
-            .filter((page) => {
-              return typeof page.edge === "boolean";
-            })
-            .map((page) => {
-              const destination = `${page._pageId.replace(/\/index$/g, "")}-edge-${nanoid()}`;
-              return {
-                source: edgeSource,
-                destination,
-                addRoute: true,
-                // biome-ignore lint/style/noNonNullAssertion: filtered
-                edge: page.edge!,
-              };
-            }),
+          additionalEndpoints: [
+            async () => {
+              const pagesWithConfigs = await getPagesWithConfigs();
+
+              return pagesWithConfigs
+                .filter((page) => {
+                  return typeof page.edge === "boolean";
+                })
+                .map((page) => {
+                  const destination = `${page._pageId.replace(/\/index$/g, "")}-edge-${nanoid()}`;
+                  return {
+                    source: edgeSource,
+                    destination,
+                    addRoute: true,
+                    // biome-ignore lint/style/noNonNullAssertion: filtered
+                    edge: page.edge!,
+                  };
+                });
+            },
+          ],
           isr: async () => {
             let userIsr: Record<string, VercelOutputIsr> = {};
             if (userConfig.vercel?.isr) {
@@ -429,6 +456,8 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
                 userIsr = userConfig.vercel.isr;
               }
             }
+
+            const pagesWithConfigs = await getPagesWithConfigs();
 
             return pagesWithConfigs
               .filter((p) => typeof p.isr === "number")

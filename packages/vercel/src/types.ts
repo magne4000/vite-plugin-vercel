@@ -10,6 +10,8 @@ export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderCon
 export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
 export type ViteVercelRedirect = Redirect & { enforce?: "pre" | "post" };
 
+export type Awaitable<T> = T | Promise<T>;
+
 // Vite config for Vercel
 
 export interface ViteVercelConfig {
@@ -72,7 +74,11 @@ export interface ViteVercelConfig {
    * }
    * ```
    */
-  additionalEndpoints?: ViteVercelApiEntry[];
+  additionalEndpoints?: (
+    | ViteVercelApiEntry
+    | (() => Awaitable<ViteVercelApiEntry>)
+    | (() => Awaitable<ViteVercelApiEntry[]>)
+  )[];
   /**
    * Advanced configuration to override .vercel/output/config.json
    * @see {@link https://vercel.com/docs/build-output-api/v3/configuration#configuration}
@@ -99,9 +105,7 @@ export interface ViteVercelConfig {
    *
    * @protected
    */
-  isr?:
-    | Record<string, VercelOutputIsr>
-    | (() => Promise<Record<string, VercelOutputIsr>> | Record<string, VercelOutputIsr>);
+  isr?: Record<string, VercelOutputIsr> | (() => Awaitable<Record<string, VercelOutputIsr>>);
   /**
    * Defaults to `.vercel/output`. Mostly useful for testing purpose
    * @protected
@@ -125,9 +129,7 @@ export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
  * Keys are path relative to .vercel/output/static directory
  */
 export type ViteVercelPrerenderRoute = VercelOutputConfig["overrides"];
-export type ViteVercelPrerenderFn = (
-  resolvedConfig: ResolvedConfig,
-) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;
+export type ViteVercelPrerenderFn = (resolvedConfig: ResolvedConfig) => Awaitable<ViteVercelPrerenderRoute>;
 
 export interface ViteVercelApiEntry {
   /**

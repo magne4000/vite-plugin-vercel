@@ -15,8 +15,24 @@ import { vercelEndpointExports } from "./schemas/exports";
 import type { VercelOutputIsr, ViteVercelApiEntry } from "./types";
 import { getOutput, getRoot, pathRelativeTo } from "./utils";
 
-export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
-  return (resolvedConfig.vercel?.additionalEndpoints ?? []).map((e) => ({
+export async function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
+  const userEndpoints: ViteVercelApiEntry[] = [];
+  if (Array.isArray(resolvedConfig.vercel?.additionalEndpoints)) {
+    for (const endpoint of resolvedConfig.vercel.additionalEndpoints) {
+      if (typeof endpoint === "function") {
+        const res = await endpoint();
+        if (Array.isArray(res)) {
+          userEndpoints.push(...res);
+        } else {
+          userEndpoints.push(res);
+        }
+      } else {
+        userEndpoints.push(endpoint);
+      }
+    }
+  }
+
+  return userEndpoints.map((e) => ({
     ...e,
     addRoute: e.addRoute ?? true,
     // path.resolve removes the trailing slash if any
@@ -24,7 +40,7 @@ export function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
   }));
 }
 
-export function getEntries(resolvedConfig: ResolvedConfig): ViteVercelApiEntry[] {
+export async function getEntries(resolvedConfig: ResolvedConfig): Promise<ViteVercelApiEntry[]> {
   const apiEntries = glob
     .sync(`${getRoot(resolvedConfig)}/api/**/*.*([a-zA-Z0-9])`)
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
@@ -43,18 +59,21 @@ export function getEntries(resolvedConfig: ResolvedConfig): ViteVercelApiEntry[]
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith("_"));
 
-  return [...apiEntries, ...otherApiEntries].reduce((entryPoints, filePath) => {
-    const outFilePath = pathRelativeTo(filePath, resolvedConfig, filePath.includes("/_api/") ? "_api" : "api");
-    const parsed = path.posix.parse(outFilePath);
+  return [...apiEntries, ...otherApiEntries].reduce(
+    (entryPoints, filePath) => {
+      const outFilePath = pathRelativeTo(filePath, resolvedConfig, filePath.includes("/_api/") ? "_api" : "api");
+      const parsed = path.posix.parse(outFilePath);
 
-    entryPoints.push({
-      source: filePath,
-      destination: `api/${path.posix.join(parsed.dir, parsed.name)}.func`,
-      addRoute: true,
-    });
+      entryPoints.push({
+        source: filePath,
+        destination: `api/${path.posix.join(parsed.dir, parsed.name)}.func`,
+        addRoute: true,
+      });
 
-    return entryPoints;
-  }, getAdditionalEndpoints(resolvedConfig));
+      return entryPoints;
+    },
+    await getAdditionalEndpoints(resolvedConfig),
+  );
 }
 
 const edgeWasmPlugin: Plugin = {
@@ -306,7 +325,7 @@ export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
   isr: Record<string, VercelOutputIsr>;
   headers: Header[];
 }> {
-  const entries = getEntries(resolvedConfig);
+  const entries = await getEntries(resolvedConfig);
 
   for (const entry of entries) {
     if (typeof entry.source === "string") {
