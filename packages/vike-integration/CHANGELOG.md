@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 9.0.1
+
+### Patch Changes
+
+- feat: Vike now support headers in +config.ts
+
 ## 9.0.0
 
 ### Minor Changes

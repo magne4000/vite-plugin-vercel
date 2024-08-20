@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 9.0.1
+
+### Patch Changes
+
+- feat: Vike now support headers in +config.ts
+- Updated dependencies
+  - @vite-plugin-vercel/vike@9.0.1
+
 ## 9.0.0
 
 ### Minor Changes
