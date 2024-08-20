@@ -15,7 +15,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [18.x, 20.x, 22.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
@@ -32,5 +32,7 @@ jobs:
         run: pnpm run build:all
       - name: Typecheck
         run: pnpm run typecheck:all
+      - name: Lint
+        run: pnpm lint
       - name: Test
         run: pnpm test

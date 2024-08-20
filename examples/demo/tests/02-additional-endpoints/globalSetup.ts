@@ -1,8 +1,9 @@
+/// <reference types="vite-plugin-vercel/types" />
 import path from "node:path";
-import { setup as _setup } from "../common/setup";
-import { teardown as _teardown } from "../common/teardown";
 import react from "@vitejs/plugin-react-swc";
 import vercel from "vite-plugin-vercel";
+import { setup as _setup } from "../common/setup";
+import { teardown as _teardown } from "../common/teardown";
 
 export const setup = _setup(path.basename(__dirname), {
   configFile: false,
