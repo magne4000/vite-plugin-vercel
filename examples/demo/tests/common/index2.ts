@@ -1,2 +1,2 @@
 // SSR entrypoint
-console.log('hello');
+console.log("hello");

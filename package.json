@@ -18,6 +18,7 @@
     "publish:stable": "pnpm run prepublishOnly && changeset publish -r"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.7",
     "@types/node": "^18.19.31",
     "cross-env": "^7.0.3",

@@ -1,12 +1,12 @@
-import os from 'os';
-import path from 'path';
-import { build, InlineConfig } from 'vite';
+import os from "node:os";
+import path from "node:path";
+import { build, type InlineConfig } from "vite";
 
 export function getTmpDir(displayName: string) {
-  return path.join(os.tmpdir(), 'vpv-demo-' + displayName);
+  return path.join(os.tmpdir(), `vpv-demo-${displayName}`);
 }
 
-declare module 'vite' {
+declare module "vite" {
   interface BuildOptions {
     vitePluginSsr?: {
       prerender?:
@@ -34,8 +34,8 @@ export async function callBuild(dirname: string, config: InlineConfig) {
       ...config.vercel,
       additionalEndpoints: [
         {
-          source: 'endpoints/edge.ts',
-          destination: `edge`,
+          source: "endpoints/edge.ts",
+          destination: "edge",
           addRoute: true,
         },
         ...(config.vercel?.additionalEndpoints ?? []),
@@ -47,10 +47,10 @@ export async function callBuild(dirname: string, config: InlineConfig) {
       ...config.build,
       rollupOptions: {
         input: {
-          'index.html': 'tests/common/index.html',
+          "index.html": "tests/common/index.html",
         },
       },
     },
-    logLevel: 'info',
+    logLevel: "info",
   });
 }

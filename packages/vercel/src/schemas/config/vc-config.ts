@@ -3,11 +3,11 @@
  * @see {@link https://vercel.com/docs/build-output-api/v3/primitives#serverless-function-configuration}
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 export const vercelOutputEdgeVcConfigSchema = z
   .object({
-    runtime: z.literal('edge'),
+    runtime: z.literal("edge"),
     entrypoint: z.string(),
     envVarsInUse: z.array(z.string()).optional(),
   })
@@ -26,15 +26,14 @@ export const vercelOutputServerlessVcConfigSchema = z
   })
   .strict();
 
-export const vercelOutputServerlessNodeVcConfigSchema =
-  vercelOutputServerlessVcConfigSchema
-    .extend({
-      launcherType: z.literal('Nodejs'),
-      shouldAddHelpers: z.boolean().optional(),
-      shouldAddSourcemapSupport: z.boolean().optional(),
-      awsLambdaHandler: z.string().optional(),
-    })
-    .strict();
+export const vercelOutputServerlessNodeVcConfigSchema = vercelOutputServerlessVcConfigSchema
+  .extend({
+    launcherType: z.literal("Nodejs"),
+    shouldAddHelpers: z.boolean().optional(),
+    shouldAddSourcemapSupport: z.boolean().optional(),
+    awsLambdaHandler: z.string().optional(),
+  })
+  .strict();
 
 export const vercelOutputVcConfigSchema = z.union([
   vercelOutputEdgeVcConfigSchema,

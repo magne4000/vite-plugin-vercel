@@ -15,5 +15,15 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git"
-  }
+  },
+  "overrides": [
+    {
+      "include": ["**/*.test.ts"],
+      "linter": {
+        "rules": {
+          "suspicious": { "noExplicitAny": "off" }
+        }
+      }
+    }
+  ]
 }

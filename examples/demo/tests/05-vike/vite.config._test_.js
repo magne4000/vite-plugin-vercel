@@ -1,9 +1,9 @@
-import react from '@vitejs/plugin-react';
-import ssr from 'vike/plugin';
-import vercel from 'vite-plugin-vercel';
+import react from "@vitejs/plugin-react";
+import ssr from "vike/plugin";
+import vercel from "vite-plugin-vercel";
 
 export default {
-  mode: 'production',
+  mode: "production",
   root: process.cwd(),
   plugins: [
     react(),
@@ -18,8 +18,8 @@ export default {
     rewrites: [],
     additionalEndpoints: [
       {
-        source: 'endpoints/edge.ts',
-        destination: `edge`,
+        source: "endpoints/edge.ts",
+        destination: "edge",
         edge: true,
         addRoute: true,
       },

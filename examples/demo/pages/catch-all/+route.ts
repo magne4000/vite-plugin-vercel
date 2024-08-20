@@ -1,1 +1,1 @@
-export default '/catch-all/*';
+export default "/catch-all/*";

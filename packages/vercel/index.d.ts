@@ -1,9 +1,9 @@
-import { ViteVercelConfig } from './dist';
+import type { ViteVercelConfig } from "./dist";
 
-export * from './dist';
-export { default } from './dist';
+export * from "./dist";
+export { default } from "./dist";
 
-declare module 'vite' {
+declare module "vite" {
   export interface UserConfig {
     vercel?: ViteVercelConfig;
   }

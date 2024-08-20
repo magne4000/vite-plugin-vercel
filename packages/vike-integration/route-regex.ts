@@ -1,36 +1,35 @@
 export function escapeStringRegexp(str: string) {
-  return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
+  return str.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 }
 
 function getSegmentRegex(segment: string): string {
-  if (segment.startsWith('@')) {
-    return '/[^/]+';
-  } else if (segment === '*') {
-    return '/.+?';
+  if (segment.startsWith("@")) {
+    return "/[^/]+";
   }
-  return `/` + segment;
+  if (segment === "*") {
+    return "/.+?";
+  }
+  return `/${segment}`;
 }
 
 export function getParametrizedRoute(route: string): string {
-  const segments = (route.replace(/\/$/, '') || '/').slice(1).split('/');
-  return segments.map(getSegmentRegex).join('');
+  const segments = (route.replace(/\/$/, "") || "/").slice(1).split("/");
+  return segments.map(getSegmentRegex).join("");
 }
 
 export function getRoutesRegex(normalizedRoutes: string[]): string {
   const results = normalizedRoutes.map(getParametrizedRoute);
-  return `^(${results.join('|')})(?:/)?$`;
+  return `^(${results.join("|")})(?:/)?$`;
 }
 
-export function getComplementaryRoutesRegex(
-  normalizedRoutes: string[],
-): string {
+export function getComplementaryRoutesRegex(normalizedRoutes: string[]): string {
   const results = normalizedRoutes.map(getParametrizedRoute);
-  return results.map((r) => `(?!${r})`).join('');
+  return results.map((r) => `(?!${r})`).join("");
 }
 
 export function getVercelPattern(route: string): string {
-  if (route.endsWith('/*')) {
-    return route.replace(/\/\*/g, '/:any*');
+  if (route.endsWith("/*")) {
+    return route.replace(/\/\*/g, "/:any*");
   }
   return route;
 }

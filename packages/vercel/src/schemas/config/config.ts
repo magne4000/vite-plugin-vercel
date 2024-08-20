@@ -3,34 +3,34 @@
  * @see {@link https://vercel.com/docs/build-output-api/v3#build-output-configuration}
  */
 
-import { z } from 'zod';
+import { z } from "zod";
 
 const HasOrMissing = z
   .array(
     z.union([
       z
         .object({
-          type: z.literal('host'),
+          type: z.literal("host"),
           value: z.string(),
         })
         .strict(),
       z
         .object({
-          type: z.literal('header'),
+          type: z.literal("header"),
           key: z.string(),
           value: z.string().optional(),
         })
         .strict(),
       z
         .object({
-          type: z.literal('cookie'),
+          type: z.literal("cookie"),
           key: z.string(),
           value: z.string().optional(),
         })
         .strict(),
       z
         .object({
-          type: z.literal('query'),
+          type: z.literal("query"),
           key: z.string(),
           value: z.string().optional(),
         })
@@ -69,12 +69,12 @@ export const vercelOutputConfigSchema = z
           z
             .object({
               handle: z.union([
-                z.literal('rewrite'),
-                z.literal('filesystem'),
-                z.literal('resource'),
-                z.literal('miss'),
-                z.literal('hit'),
-                z.literal('error'),
+                z.literal("rewrite"),
+                z.literal("filesystem"),
+                z.literal("resource"),
+                z.literal("miss"),
+                z.literal("hit"),
+                z.literal("error"),
               ]),
               src: z.string().optional(),
               dest: z.string().optional(),
@@ -86,14 +86,11 @@ export const vercelOutputConfigSchema = z
       .optional(),
     images: z
       .object({
-        sizes: z.tuple([
-          z.number().int().positive(),
-          z.number().int().positive(),
-        ]),
+        sizes: z.tuple([z.number().int().positive(), z.number().int().positive()]),
         domains: z.array(z.string()).nonempty().optional(),
         minimumCacheTTL: z.number().int().positive().optional(),
         formats: z
-          .union([z.literal('image/avif'), z.literal('image/webp')])
+          .union([z.literal("image/avif"), z.literal("image/webp")])
           .array()
           .nonempty()
           .optional(),

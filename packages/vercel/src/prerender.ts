@@ -1,14 +1,11 @@
-import type { ResolvedConfig } from 'vite';
-import path from 'path';
-import { getOutput } from './utils';
-import {
-  VercelOutputPrerenderConfig,
-  vercelOutputPrerenderConfigSchema,
-} from './schemas/config/prerender-config';
-import fs from 'fs/promises';
-import type { VercelOutputIsr, ViteVercelPrerenderRoute } from './types';
-import type { Rewrite } from '@vercel/routing-utils';
-import { copyDir } from './helpers';
+import type { ResolvedConfig } from "vite";
+import path from "node:path";
+import { getOutput } from "./utils";
+import { type VercelOutputPrerenderConfig, vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
+import fs from "node:fs/promises";
+import type { VercelOutputIsr, ViteVercelPrerenderRoute } from "./types";
+import type { Rewrite } from "@vercel/routing-utils";
+import { copyDir } from "./helpers";
 
 export function execPrerender(
   resolvedConfig: ResolvedConfig,
@@ -32,16 +29,9 @@ export async function writePrerenderConfig(
 ): Promise<void> {
   const parsed = path.parse(destination);
 
-  const outfile = path.join(
-    getOutput(resolvedConfig, 'functions'),
-    parsed.dir,
-    parsed.name + '.prerender-config.json',
-  );
+  const outfile = path.join(getOutput(resolvedConfig, "functions"), parsed.dir, `${parsed.name}.prerender-config.json`);
 
-  await fs.mkdir(
-    path.join(getOutput(resolvedConfig, 'functions'), parsed.dir),
-    { recursive: true },
-  );
+  await fs.mkdir(path.join(getOutput(resolvedConfig, "functions"), parsed.dir), { recursive: true });
 
   await fs.writeFile(
     outfile,
@@ -53,29 +43,17 @@ export async function writePrerenderConfig(
       undefined,
       2,
     ),
-    'utf-8',
+    "utf-8",
   );
 }
 
-export function getPrerenderSymlinkInfo(
-  resolvedConfig: ResolvedConfig,
-  destination: string,
-  target: string,
-) {
+export function getPrerenderSymlinkInfo(resolvedConfig: ResolvedConfig, destination: string, target: string) {
   const parsed = path.parse(destination);
   const targetParsed = path.parse(target);
 
   return {
-    target: path.join(
-      getOutput(resolvedConfig, 'functions'),
-      targetParsed.dir,
-      targetParsed.name + '.func',
-    ),
-    link: path.join(
-      getOutput(resolvedConfig, 'functions'),
-      parsed.dir,
-      parsed.name + '.func',
-    ),
+    target: path.join(getOutput(resolvedConfig, "functions"), targetParsed.dir, `${targetParsed.name}.func`),
+    link: path.join(getOutput(resolvedConfig, "functions"), parsed.dir, `${parsed.name}.func`),
   };
 }
 
@@ -83,11 +61,7 @@ export async function buildPrerenderConfigs(
   resolvedConfig: ResolvedConfig,
   extractedIsr: Record<string, VercelOutputIsr>,
 ): Promise<NonNullable<Rewrite[]>> {
-  const isr = Object.assign(
-    {},
-    extractedIsr,
-    await getIsrConfig(resolvedConfig),
-  );
+  const isr = Object.assign({}, extractedIsr, await getIsrConfig(resolvedConfig));
 
   const entries = Object.entries(isr);
   const rewrites: Rewrite[] = [];
@@ -95,11 +69,7 @@ export async function buildPrerenderConfigs(
   for (const [destination, { symlink, route, ...isr }] of entries) {
     await writePrerenderConfig(resolvedConfig, destination, isr);
     if (symlink) {
-      const info = getPrerenderSymlinkInfo(
-        resolvedConfig,
-        destination,
-        symlink,
-      );
+      const info = getPrerenderSymlinkInfo(resolvedConfig, destination, symlink);
       // FIXME symlinks are currently broken https://github.com/orgs/vercel/discussions/577#discussioncomment-2767120
       // await fs.symlink(
       //   path.relative(path.dirname(info.link), info.target),
@@ -118,11 +88,9 @@ export async function buildPrerenderConfigs(
   return rewrites;
 }
 
-async function getIsrConfig(
-  resolvedConfig: ResolvedConfig,
-): Promise<Record<string, VercelOutputIsr>> {
+async function getIsrConfig(resolvedConfig: ResolvedConfig): Promise<Record<string, VercelOutputIsr>> {
   const isr = resolvedConfig.vercel?.isr ?? {};
-  if (typeof isr === 'function') {
+  if (typeof isr === "function") {
     return await isr();
   }
   return isr;

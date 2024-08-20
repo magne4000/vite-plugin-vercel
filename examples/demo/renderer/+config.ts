@@ -1,9 +1,9 @@
-import type { Config } from 'vike/types';
-import config from '@vite-plugin-vercel/vike/config';
+import type { Config } from "vike/types";
+import config from "@vite-plugin-vercel/vike/config";
 
 // https://vike.dev/config
 export default {
-  passToClient: ['pageProps', 'title', 'someAsyncProps'],
+  passToClient: ["pageProps", "title", "someAsyncProps"],
   clientRouting: true,
   hydrationCanBeAborted: true,
   // https://vike.dev/meta
@@ -16,7 +16,7 @@ export default {
     onBeforeRenderIsomorph: {
       env: { config: true },
       effect({ configDefinedAt, configValue }) {
-        if (typeof configValue !== 'boolean') {
+        if (typeof configValue !== "boolean") {
           throw new Error(`${configDefinedAt} should be a boolean`);
         }
         if (configValue) {

@@ -1,12 +1,12 @@
 // https://vike.dev/onRenderClient
 export default onRenderClient;
 
-import './css/index.css';
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { PageShell } from './PageShell';
-import { getPageTitle } from './getPageTitle';
-import type { PageContextClient } from './types';
+import "./css/index.css";
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { PageShell } from "./PageShell";
+import { getPageTitle } from "./getPageTitle";
+import type { PageContextClient } from "./types";
 
 let root: ReactDOM.Root;
 async function onRenderClient(pageContext: PageContextClient) {
@@ -16,7 +16,8 @@ async function onRenderClient(pageContext: PageContextClient) {
       <Page {...pageProps} />
     </PageShell>
   );
-  const container = document.getElementById('page-view')!;
+  // biome-ignore lint/style/noNonNullAssertion: <explanation>
+  const container = document.getElementById("page-view")!;
   if (pageContext.isHydration) {
     root = ReactDOM.hydrateRoot(container, page);
   } else {

@@ -1,1 +1,1 @@
-export default '/named/@someId';
+export default "/named/@someId";
