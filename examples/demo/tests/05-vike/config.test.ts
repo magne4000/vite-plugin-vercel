@@ -1,4 +1,4 @@
-import { beforeAll, describe, expect, it } from "vitest";
+import { expect, it } from "vitest";
 import { vercelOutputConfigSchema } from "../../../../packages/vercel/src/schemas/config/config";
 import { testSchema } from "../common/helpers";
 import { prepareTestJsonFileContent } from "./utils";
@@ -37,6 +37,11 @@ prepareTestJsonFileContent("config.json", (context) => {
       {
         src: "^/og-edge(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$",
         dest: "/og-edge/$1",
+        check: true,
+      },
+      {
+        src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
+        dest: expect.stringMatching("/pages/vike-edge-edge-([^/]+?)/\\?__original_path=\\$1"),
         check: true,
       },
       {

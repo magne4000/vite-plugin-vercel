@@ -1,6 +1,6 @@
-import { parse } from "node:querystring";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import type { renderPage } from "vike";
+import { getOriginalUrl } from "./utils";
 
 type HttpResponse = NonNullable<Awaited<ReturnType<typeof renderPage>>["httpResponse"]>;
 
@@ -12,15 +12,7 @@ type HttpResponse = NonNullable<Awaited<ReturnType<typeof renderPage>>["httpResp
  */
 export function getDefaultPageContextInit(request: VercelRequest) {
   const query: Record<string, string | string[]> = request.query ?? {};
-  const matches =
-    // FIXME x-now-route-matches is not definitive https://github.com/orgs/vercel/discussions/577#discussioncomment-2769478
-    typeof request.headers["x-now-route-matches"] === "string" ? parse(request.headers["x-now-route-matches"]) : null;
-  const url: string =
-    typeof query.__original_path === "string"
-      ? query.__original_path
-      : matches && typeof matches?.["1"] === "string"
-        ? matches["1"]
-        : request.url ?? "";
+  const url = getOriginalUrl(request.headers["x-now-route-matches"], query.__original_path, request.url);
   return {
     url,
     urlOriginal: url,
@@ -45,9 +37,11 @@ export function getDefaultEmptyResponseHandler(response: VercelResponse) {
  * @param httpResponse
  */
 export function getDefaultResponseHandler(response: VercelResponse, httpResponse: HttpResponse) {
-  const { statusCode, body, contentType } = httpResponse;
+  const { statusCode, body, headers } = httpResponse;
 
   response.statusCode = statusCode;
-  response.setHeader("content-type", contentType);
+  for (const [name, value] of headers) {
+    response.setHeader(name, value);
+  }
   return response.end(body);
 }

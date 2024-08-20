@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import { build, type InlineConfig } from "vite";
+import { type InlineConfig, build } from "vite";
 
 export function getTmpDir(displayName: string) {
   return path.join(os.tmpdir(), `vpv-demo-${displayName}`);
@@ -36,7 +36,7 @@ export async function callBuild(dirname: string, config: InlineConfig) {
         {
           source: "endpoints/edge.ts",
           destination: "edge",
-          addRoute: true,
+          route: true,
         },
         ...(config.vercel?.additionalEndpoints ?? []),
       ],

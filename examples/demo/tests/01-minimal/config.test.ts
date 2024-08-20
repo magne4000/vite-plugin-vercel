@@ -1,13 +1,12 @@
 import path from "node:path";
-import { vercelOutputConfigSchema } from "../../../../packages/vercel/src/schemas/config/config";
 import { expect, it } from "vitest";
+import { vercelOutputConfigSchema } from "../../../../packages/vercel/src/schemas/config/config";
 import { prepareTestJsonFileContent, testSchema } from "../common/helpers";
 
 prepareTestJsonFileContent(path.basename(__dirname), "config.json", (context) => {
   testSchema(context, vercelOutputConfigSchema);
 
   it("should have defaults routes only", () => {
-    console.log(context.file);
     expect(context.file).toHaveProperty("routes", [
       {
         src: "^/api/page$",

@@ -21,7 +21,7 @@ export default {
         source: "endpoints/edge.ts",
         destination: "edge",
         edge: true,
-        addRoute: true,
+        route: true,
       },
     ],
     expiration: 25,

@@ -1,14 +1,16 @@
-import type { ResolvedConfig } from "vite";
+import type { Redirect, Rewrite } from "@vercel/routing-utils";
 import type { BuildOptions, StdinOptions } from "esbuild";
+import type { ResolvedConfig } from "vite";
 import type { VercelOutputConfig } from "./schemas/config/config";
-import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
 import type { VercelOutputPrerenderConfig } from "./schemas/config/prerender-config";
-import type { Rewrite, Redirect } from "@vercel/routing-utils";
+import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
 
 export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderConfig };
 
 export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
 export type ViteVercelRedirect = Redirect & { enforce?: "pre" | "post" };
+
+export type Awaitable<T> = T | Promise<T>;
 
 // Vite config for Vercel
 
@@ -72,7 +74,11 @@ export interface ViteVercelConfig {
    * }
    * ```
    */
-  additionalEndpoints?: ViteVercelApiEntry[];
+  additionalEndpoints?: (
+    | ViteVercelApiEntry
+    | (() => Awaitable<ViteVercelApiEntry>)
+    | (() => Awaitable<ViteVercelApiEntry[]>)
+  )[];
   /**
    * Advanced configuration to override .vercel/output/config.json
    * @see {@link https://vercel.com/docs/build-output-api/v3/configuration#configuration}
@@ -99,9 +105,7 @@ export interface ViteVercelConfig {
    *
    * @protected
    */
-  isr?:
-    | Record<string, VercelOutputIsr>
-    | (() => Promise<Record<string, VercelOutputIsr>> | Record<string, VercelOutputIsr>);
+  isr?: Record<string, VercelOutputIsr> | (() => Awaitable<Record<string, VercelOutputIsr>>);
   /**
    * Defaults to `.vercel/output`. Mostly useful for testing purpose
    * @protected
@@ -111,7 +115,7 @@ export interface ViteVercelConfig {
    * By default, Vite generates static files under `dist` folder.
    * But usually, when used through a Framework, such as Vike,
    * this folder can contain anything, requiring custom integration.
-   * Set this to false is you create a plugin for a Framework.
+   * Set this to false if you create a plugin for a Framework.
    */
   distContainsOnlyStatic?: boolean;
 }
@@ -125,9 +129,7 @@ export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
  * Keys are path relative to .vercel/output/static directory
  */
 export type ViteVercelPrerenderRoute = VercelOutputConfig["overrides"];
-export type ViteVercelPrerenderFn = (
-  resolvedConfig: ResolvedConfig,
-) => ViteVercelPrerenderRoute | Promise<ViteVercelPrerenderRoute>;
+export type ViteVercelPrerenderFn = (resolvedConfig: ResolvedConfig) => Awaitable<ViteVercelPrerenderRoute>;
 
 export interface ViteVercelApiEntry {
   /**
@@ -143,10 +145,15 @@ export interface ViteVercelApiEntry {
    */
   buildOptions?: BuildOptions;
   /**
-   * Automatically add a route for the function (mimics defaults Vercel behavior)
-   * Set to `false` to disable
+   * @deprecated use `route` instead
    */
   addRoute?: boolean;
+  /**
+   * If `true`, guesses route for the function, and adds it to config.json (mimics defaults Vercel behavior).
+   * If a string is provided, it will be equivalent to a `rewrites` rule.
+   * Set to `false` to disable
+   */
+  route?: string | boolean;
   /**
    * Set to `true` to mark this function as an Edge Function
    */
