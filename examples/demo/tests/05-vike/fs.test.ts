@@ -63,6 +63,9 @@ describe("fs", () => {
     /\/functions\/pages\/named-([^\/]+?)\.prerender-config\.json/,
     /\/functions\/pages\/named-([^\/]+?)\.func\/index\.mjs/,
     /\/functions\/pages\/named-([^\/]+?)\.func\/\.vc-config\.json/,
+    // vike-edge
+    /\/functions\/pages\/vike-edge-edge-([^\/]+?)\.func\/index\.js/,
+    /\/functions\/pages\/vike-edge-edge-([^\/]+?)\.func\/\.vc-config\.json/,
     ...generatedFiles.map((f) => `/static/${f}`),
   ];
 
