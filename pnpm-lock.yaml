@@ -222,10 +222,16 @@ importers:
       nanoid:
         specifier: ^5.0.7
         version: 5.0.7
+      qs:
+        specifier: ^6.13.0
+        version: 6.13.0
     devDependencies:
       '@types/node':
         specifier: ^18.19.45
         version: 18.19.45
+      '@types/qs':
+        specifier: ^6.9.15
+        version: 6.9.15
       '@vercel/node':
         specifier: ^3.2.8
         version: 3.2.8(@swc/core@1.7.14)
@@ -2595,6 +2601,10 @@ packages:
 
   qs@6.11.0:
     resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
+    engines: {node: '>=0.6'}
+
+  qs@6.13.0:
+    resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
     engines: {node: '>=0.6'}
 
   queue-microtask@1.2.3:
@@ -5693,6 +5703,10 @@ snapshots:
   punycode@2.3.1: {}
 
   qs@6.11.0:
+    dependencies:
+      side-channel: 1.0.6
+
+  qs@6.13.0:
     dependencies:
       side-channel: 1.0.6
 

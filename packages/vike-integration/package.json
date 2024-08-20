@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.45",
+    "@types/qs": "^6.9.15",
     "@vercel/node": "^3.2.8",
     "tsup": "^8.2.4",
     "typescript": "^5.5.4",
@@ -40,7 +41,8 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "nanoid": "^5.0.7"
+    "nanoid": "^5.0.7",
+    "qs": "^6.13.0"
   },
   "peerDependencies": {
     "vike": "^0.4.183",

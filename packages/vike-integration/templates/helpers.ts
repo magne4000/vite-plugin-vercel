@@ -1,5 +1,5 @@
-import { parse } from "node:querystring";
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { parse } from "qs";
 import type { renderPage } from "vike";
 
 type HttpResponse = NonNullable<Awaited<ReturnType<typeof renderPage>>["httpResponse"]>;
