@@ -355,6 +355,13 @@ export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
           );
         }
 
+        if (
+          (entry.isr !== undefined || exports.isr !== undefined) &&
+          (entry.edge !== undefined || exports.edge !== undefined)
+        ) {
+          throw new Error(`isr cannot be enabled for edge functions ('${entry.source}')`);
+        }
+
         if (exports.isr) {
           entry.isr = exports.isr;
         }

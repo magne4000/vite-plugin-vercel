@@ -110,7 +110,7 @@ function assertEdge(exports: unknown): boolean | null {
   return edge;
 }
 
-function assertIsr(resolvedConfig: UserConfig | ResolvedConfig, exports: unknown): number | null {
+function extractIsr(exports: unknown) {
   if (exports === null || typeof exports !== "object") return null;
   if (!("isr" in exports)) return null;
   const isr = (exports as { isr: unknown }).isr;
@@ -126,6 +126,13 @@ function assertIsr(resolvedConfig: UserConfig | ResolvedConfig, exports: unknown
         ).expiration > 0),
     " `{ expiration }` must be a positive number",
   );
+
+  return isr;
+}
+
+function assertIsr(resolvedConfig: UserConfig | ResolvedConfig, exports: unknown): number | null {
+  const isr = extractIsr(exports);
+  if (isr === null || isr === undefined) return null;
 
   if (isr === true) {
     assert(
@@ -421,15 +428,22 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
             }
 
             const route = getRouteDynamicRoute(pageRoutes, pageId) ?? getRouteFsRoute(pageRoutes, pageId);
+            const rawIsr = extractIsr(page.config);
             let isr = assertIsr(userConfig, page.config);
             const edge = assertEdge(page.config);
 
             // if ISR + Function routing -> warn because ISR is not unsupported in this case
             if (typeof route === "function" && isr) {
               console.warn(
-                `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` export or use a route string if possible.`,
+                `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
               );
               isr = null;
+            }
+
+            if (edge && rawIsr !== null && typeof rawIsr === "object") {
+              throw new Error(
+                `Page ${pageId}: ISR cannot be enabled for edge functions. Remove \`{ isr }\` config or set \`{ edge: false }\`.`,
+              );
             }
 
             return {
