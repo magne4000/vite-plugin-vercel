@@ -19,7 +19,7 @@
   },
   "pnpm": {
     "overrides": {
-      "vike": "0.4.191-commit-e99a55e"
+      "vike": "0.4.191-commit-f6d8845"
     }
   },
   "devDependencies": {

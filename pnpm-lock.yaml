@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  vike: 0.4.191-commit-e99a55e
+  vike: 0.4.191-commit-f6d8845
 
 importers:
 
@@ -66,8 +66,8 @@ importers:
         specifier: ^5.4.5
         version: 5.5.4
       vike:
-        specifier: 0.4.191-commit-e99a55e
-        version: 0.4.191-commit-e99a55e(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
+        specifier: 0.4.191-commit-f6d8845
+        version: 0.4.191-commit-f6d8845(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
       vite:
         specifier: ^5.4.1
         version: 5.4.2(@types/node@18.19.45)
@@ -140,11 +140,11 @@ importers:
         specifier: ^5.4.5
         version: 5.5.4
       vike:
-        specifier: 0.4.191-commit-e99a55e
-        version: 0.4.191-commit-e99a55e(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
+        specifier: 0.4.191-commit-f6d8845
+        version: 0.4.191-commit-f6d8845(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
       vike-react:
         specifier: ^0.5.3
-        version: 0.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.191-commit-e99a55e(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.2(@types/node@18.19.45)))
+        version: 0.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.191-commit-f6d8845(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.2(@types/node@18.19.45)))
       vite:
         specifier: ^5.4.1
         version: 5.4.2(@types/node@18.19.45)
@@ -211,8 +211,8 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
       vike:
-        specifier: 0.4.191-commit-e99a55e
-        version: 0.4.191-commit-e99a55e(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
+        specifier: 0.4.191-commit-f6d8845
+        version: 0.4.191-commit-f6d8845(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
       vite:
         specifier: ^5.4.2
         version: 5.4.2(@types/node@18.19.45)
@@ -248,8 +248,8 @@ importers:
         specifier: ^5.5.4
         version: 5.5.4
       vike:
-        specifier: 0.4.191-commit-e99a55e
-        version: 0.4.191-commit-e99a55e(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
+        specifier: 0.4.191-commit-f6d8845
+        version: 0.4.191-commit-f6d8845(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
       vite:
         specifier: ^5.4.2
         version: 5.4.2(@types/node@18.19.45)
@@ -3067,10 +3067,10 @@ packages:
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
-      vike: 0.4.191-commit-e99a55e
+      vike: 0.4.191-commit-f6d8845
 
-  vike@0.4.191-commit-e99a55e:
-    resolution: {integrity: sha512-QsxgFvClt+l1+xDsZaRyL85ZumpZZ9ptFBKO3q53LJeenC/W8rII9051UW4Lp0ZQmn1nJkbL2C80D/lx0d8Xzw==}
+  vike@0.4.191-commit-f6d8845:
+    resolution: {integrity: sha512-Y2h5U6PN31yqyF+GS+v9s0uuEmb/blC4Ikro8qYpU2H3ChkUBlwl4+75WRNKX//n+wPXX6YjhiEiaMYUvtTqgQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -6228,14 +6228,14 @@ snapshots:
       unist-util-stringify-position: 4.0.0
       vfile-message: 4.0.2
 
-  vike-react@0.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.191-commit-e99a55e(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.2(@types/node@18.19.45))):
+  vike-react@0.5.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.191-commit-f6d8845(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.2(@types/node@18.19.45))):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-streaming: 0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.191-commit-e99a55e(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
+      vike: 0.4.191-commit-f6d8845(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45))
 
-  vike@0.4.191-commit-e99a55e(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45)):
+  vike@0.4.191-commit-f6d8845(react-streaming@0.3.43)(vite@5.4.2(@types/node@18.19.45)):
     dependencies:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.13
