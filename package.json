@@ -17,6 +17,11 @@
     "publish:beta": "changeset pre enter beta && pnpm run prepublishOnly && changeset publish -r --tag beta && changeset pre exit",
     "publish:stable": "pnpm run prepublishOnly && changeset publish -r"
   },
+  "pnpm": {
+    "overrides": {
+      "vike": "link:../code/vike/vike/"
+    }
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
     "@changesets/cli": "^2.27.7",
