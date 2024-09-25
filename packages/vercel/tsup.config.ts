@@ -9,6 +9,9 @@ export default defineConfig([
     target: "node18",
     dts: {
       entry: "./src/index.ts",
+      compilerOptions: {
+        paths: {}
+      }
     },
   },
 ]);
