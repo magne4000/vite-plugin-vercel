@@ -43,6 +43,9 @@ interface MissingPageContextOverrides {
     filePath: string;
     fileContent: string;
   };
+  /**
+   * @deprecated
+   */
   _pageId: string;
   _baseUrl: string;
   is404?: boolean;
@@ -206,7 +209,7 @@ export const prerender: ViteVercelPrerenderFn = async (
       const foundRoute = await route(pageContext);
 
       if (!pageContext.is404) {
-        assert(foundRoute, `Page with id ${pageContext._pageId} not found`);
+        assert(foundRoute, `Page with id ${pageContext.pageId ?? pageContext._pageId} not found`);
         const routeMatch = getRouteMatch(foundRoute);
 
         // if ISR + Filesystem routing -> ISR prevails
@@ -474,7 +477,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
             }
 
             return {
-              _pageId: pageId,
+              pageId,
               // used for debug purpose
               filePath: page.filePath,
               isr,
@@ -497,7 +500,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
               .filter((page) => {
                 if (!page.route) {
                   console.warn(
-                    `Page ${page._pageId}: headers is not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
+                    `Page ${page.pageId}: headers is not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
                   );
                 }
                 return page.headers !== null && page.headers !== undefined && page.route;
@@ -530,10 +533,10 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
                 .map((page) => {
                   if (!page.route) {
                     console.warn(
-                      `Page ${page._pageId}: edge is not supported when using route function. Remove \`{ edge }\` config or use a route string if possible.`,
+                      `Page ${page.pageId}: edge is not supported when using route function. Remove \`{ edge }\` config or use a route string if possible.`,
                     );
                   }
-                  const destination = `${page._pageId.replace(/\/index$/g, "")}-edge-${nanoid()}`;
+                  const destination = `${page.pageId.replace(/\/index$/g, "")}-edge-${nanoid()}`;
                   return {
                     source: edgeSource,
                     destination,
@@ -558,7 +561,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
             return pagesWithConfigs
               .filter((p) => typeof p.isr === "number")
               .reduce((acc, cur) => {
-                const path = `${cur._pageId.replace(/\/index$/g, "")}-${nanoid()}`;
+                const path = `${cur.pageId.replace(/\/index$/g, "")}-${nanoid()}`;
                 acc[path] = {
                   // biome-ignore lint/style/noNonNullAssertion: filtered
                   expiration: cur.isr!,
