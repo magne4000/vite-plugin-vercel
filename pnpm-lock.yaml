@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
+
 importers:
 
   .:
@@ -2603,11 +2606,8 @@ packages:
   path-to-regexp@0.1.10:
     resolution: {integrity: sha512-7lf7qcQidTku0Gu3YDPc8DJ1q7OOucfa/BSsIwjuh56VU7katFvuM8hULfkwB3Fns/rsVF7PwPKVw1sl5KQS9w==}
 
-  path-to-regexp@6.1.0:
-    resolution: {integrity: sha512-h9DqehX3zZZDCEm+xbfU0ZmwCGFCAAraPJWMXJ4+v32NjZJilVg3k1TcKsRgIb8IQ/izZSaydDc1OhJCZvs2Dw==}
-
-  path-to-regexp@6.2.1:
-    resolution: {integrity: sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==}
+  path-to-regexp@6.3.0:
+    resolution: {integrity: sha512-Yhpw4T9C6hPpgPeA28us07OJeqZ5EzQTkbfwuhsUg0c237RomFoETJgmp2sa3F/41gfLE6G5cqcYwznmeEeOlQ==}
 
   path-type@4.0.0:
     resolution: {integrity: sha512-gDKb8aZMDeD/tZWs9P6+q0J9Mwkdl6xMV8TjnGP3qJVJ06bdMgkbBlLU8IdfOsIsFz2BW1rNVT3XuNEl8zPAvw==}
@@ -4177,7 +4177,7 @@ snapshots:
       esbuild: 0.14.47
       etag: 1.8.1
       node-fetch: 2.6.9
-      path-to-regexp: 6.2.1
+      path-to-regexp: 6.3.0
       ts-morph: 12.0.0
       ts-node: 10.9.1(@swc/core@1.7.28)(@types/node@16.18.11)(typescript@4.9.5)
       typescript: 4.9.5
@@ -4196,7 +4196,7 @@ snapshots:
 
   '@vercel/routing-utils@3.1.0':
     dependencies:
-      path-to-regexp: 6.1.0
+      path-to-regexp: 6.3.0
     optionalDependencies:
       ajv: 6.12.6
 
@@ -5747,9 +5747,7 @@ snapshots:
 
   path-to-regexp@0.1.10: {}
 
-  path-to-regexp@6.1.0: {}
-
-  path-to-regexp@6.2.1: {}
+  path-to-regexp@6.3.0: {}
 
   path-type@4.0.0: {}
 
