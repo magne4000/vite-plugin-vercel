@@ -1,5 +1,12 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 9.0.2
+
+### Patch Changes
+
+- Upgrade dependencies
+- fix CVE-2024-45296. See https://github.com/advisories/GHSA-9wv6-86v2-598j
+
 ## 9.0.1
 
 ### Patch Changes
