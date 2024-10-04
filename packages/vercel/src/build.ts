@@ -384,7 +384,7 @@ export async function buildEndpoints(resolvedConfig: ResolvedConfig): Promise<{
       }
     }
 
-    await buildFn(resolvedConfig, entry);
+    await buildFn(resolvedConfig, entry, entry.buildOptions);
   }
 
   const isrEntries = entries
