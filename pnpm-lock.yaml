@@ -12,11 +12,11 @@ importers:
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^1.9.2
-        version: 1.9.2
+        specifier: ^1.9.3
+        version: 1.9.3
       '@changesets/cli':
-        specifier: ^2.27.8
-        version: 2.27.8
+        specifier: ^2.27.9
+        version: 2.27.9
       '@types/node':
         specifier: ^18.19.51
         version: 18.19.51
@@ -67,7 +67,7 @@ importers:
         version: 5.6.2
       vike:
         specifier: ^0.4.197
-        version: 0.4.197(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
+        version: 0.4.198(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
       vite:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@18.19.51)
@@ -89,7 +89,7 @@ importers:
         version: 18.3.0
       '@vercel/node':
         specifier: ^3.2.16
-        version: 3.2.17(@swc/core@1.7.28)
+        version: 3.2.18(@swc/core@1.7.28)
       fast-glob:
         specifier: ^3.3.2
         version: 3.3.2
@@ -123,7 +123,7 @@ importers:
         version: 0.2.6
       '@vercel/node':
         specifier: ^3.2.16
-        version: 3.2.17(@swc/core@1.7.28)
+        version: 3.2.18(@swc/core@1.7.28)
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.0
         version: 3.7.0(vite@5.4.8(@types/node@18.19.51))
@@ -141,10 +141,10 @@ importers:
         version: 5.6.2
       vike:
         specifier: ^0.4.197
-        version: 0.4.197(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
+        version: 0.4.198(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
       vike-react:
         specifier: ^0.5.7
-        version: 0.5.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.197(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.8(@types/node@18.19.51)))
+        version: 0.5.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.198(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.8(@types/node@18.19.51)))
       vite:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@18.19.51)
@@ -160,7 +160,7 @@ importers:
         version: 18.19.51
       '@vercel/node':
         specifier: ^3.2.16
-        version: 3.2.17(@swc/core@1.7.28)
+        version: 3.2.18(@swc/core@1.7.28)
       typescript:
         specifier: ^5.6.2
         version: 5.6.2
@@ -177,8 +177,8 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       '@vercel/build-utils':
-        specifier: ^8.4.5
-        version: 8.4.5
+        specifier: ^8.4.6
+        version: 8.4.6
       '@vercel/nft':
         specifier: ^0.27.4
         version: 0.27.4
@@ -211,8 +211,8 @@ importers:
         specifier: ^5.6.2
         version: 5.6.2
       vike:
-        specifier: ^0.4.197
-        version: 0.4.197(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
+        specifier: ^0.4.198
+        version: 0.4.198(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
       vite:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@18.19.51)
@@ -239,8 +239,8 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2
       '@vercel/node':
-        specifier: ^3.2.17
-        version: 3.2.17(@swc/core@1.7.28)
+        specifier: ^3.2.18
+        version: 3.2.18(@swc/core@1.7.28)
       tsup:
         specifier: ^8.3.0
         version: 8.3.0(@swc/core@1.7.28)(postcss@8.4.47)(tsx@4.19.1)(typescript@5.6.2)
@@ -248,8 +248,8 @@ importers:
         specifier: ^5.6.2
         version: 5.6.2
       vike:
-        specifier: ^0.4.197
-        version: 0.4.197(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
+        specifier: ^0.4.198
+        version: 0.4.198(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
       vite:
         specifier: ^5.4.8
         version: 5.4.8(@types/node@18.19.51)
@@ -280,55 +280,55 @@ packages:
     resolution: {integrity: sha512-/l42B1qxpG6RdfYf343Uw1vmDjeNhneUXtzhojE7pDgfpEypmRhI6j1kr17XCVv4Cgl9HdAiQY2x0GwKm7rWCw==}
     engines: {node: '>=6.9.0'}
 
-  '@biomejs/biome@1.9.2':
-    resolution: {integrity: sha512-4j2Gfwft8Jqp1X0qLYvK4TEy4xhTo4o6rlvJPsjPeEame8gsmbGQfOPBkw7ur+7/Z/f0HZmCZKqbMvR7vTXQYQ==}
+  '@biomejs/biome@1.9.3':
+    resolution: {integrity: sha512-POjAPz0APAmX33WOQFGQrwLvlu7WLV4CFJMlB12b6ZSg+2q6fYu9kZwLCOA+x83zXfcPd1RpuWOKJW0GbBwLIQ==}
     engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@1.9.2':
-    resolution: {integrity: sha512-rbs9uJHFmhqB3Td0Ro+1wmeZOHhAPTL3WHr8NtaVczUmDhXkRDWScaxicG9+vhSLj1iLrW47itiK6xiIJy6vaA==}
+  '@biomejs/cli-darwin-arm64@1.9.3':
+    resolution: {integrity: sha512-QZzD2XrjJDUyIZK+aR2i5DDxCJfdwiYbUKu9GzkCUJpL78uSelAHAPy7m0GuPMVtF/Uo+OKv97W3P9nuWZangQ==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [darwin]
 
-  '@biomejs/cli-darwin-x64@1.9.2':
-    resolution: {integrity: sha512-BlfULKijNaMigQ9GH9fqJVt+3JTDOSiZeWOQtG/1S1sa8Lp046JHG3wRJVOvekTPL9q/CNFW1NVG8J0JN+L1OA==}
+  '@biomejs/cli-darwin-x64@1.9.3':
+    resolution: {integrity: sha512-vSCoIBJE0BN3SWDFuAY/tRavpUtNoqiceJ5PrU3xDfsLcm/U6N93JSM0M9OAiC/X7mPPfejtr6Yc9vSgWlEgVw==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [darwin]
 
-  '@biomejs/cli-linux-arm64-musl@1.9.2':
-    resolution: {integrity: sha512-ZATvbUWhNxegSALUnCKWqetTZqrK72r2RsFD19OK5jXDj/7o1hzI1KzDNG78LloZxftrwr3uI9SqCLh06shSZw==}
+  '@biomejs/cli-linux-arm64-musl@1.9.3':
+    resolution: {integrity: sha512-VBzyhaqqqwP3bAkkBrhVq50i3Uj9+RWuj+pYmXrMDgjS5+SKYGE56BwNw4l8hR3SmYbLSbEo15GcV043CDSk+Q==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-arm64@1.9.2':
-    resolution: {integrity: sha512-T8TJuSxuBDeQCQzxZu2o3OU4eyLumTofhCxxFd3+aH2AEWVMnH7Z/c3QP1lHI5RRMBP9xIJeMORqDQ5j+gVZzw==}
+  '@biomejs/cli-linux-arm64@1.9.3':
+    resolution: {integrity: sha512-vJkAimD2+sVviNTbaWOGqEBy31cW0ZB52KtpVIbkuma7PlfII3tsLhFa+cwbRAcRBkobBBhqZ06hXoZAN8NODQ==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64-musl@1.9.2':
-    resolution: {integrity: sha512-CjPM6jT1miV5pry9C7qv8YJk0FIZvZd86QRD3atvDgfgeh9WQU0k2Aoo0xUcPdTnoz0WNwRtDicHxwik63MmSg==}
+  '@biomejs/cli-linux-x64-musl@1.9.3':
+    resolution: {integrity: sha512-TJmnOG2+NOGM72mlczEsNki9UT+XAsMFAOo8J0me/N47EJ/vkLXxf481evfHLlxMejTY6IN8SdRSiPVLv6AHlA==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64@1.9.2':
-    resolution: {integrity: sha512-T0cPk3C3Jr2pVlsuQVTBqk2qPjTm8cYcTD9p/wmR9MeVqui1C/xTVfOIwd3miRODFMrJaVQ8MYSXnVIhV9jTjg==}
+  '@biomejs/cli-linux-x64@1.9.3':
+    resolution: {integrity: sha512-x220V4c+romd26Mu1ptU+EudMXVS4xmzKxPVb9mgnfYlN4Yx9vD5NZraSx/onJnd3Gh/y8iPUdU5CDZJKg9COA==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-win32-arm64@1.9.2':
-    resolution: {integrity: sha512-2x7gSty75bNIeD23ZRPXyox6Z/V0M71ObeJtvQBhi1fgrvPdtkEuw7/0wEHg6buNCubzOFuN9WYJm6FKoUHfhg==}
+  '@biomejs/cli-win32-arm64@1.9.3':
+    resolution: {integrity: sha512-lg/yZis2HdQGsycUvHWSzo9kOvnGgvtrYRgoCEwPBwwAL8/6crOp3+f47tPwI/LI1dZrhSji7PNsGKGHbwyAhw==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [win32]
 
-  '@biomejs/cli-win32-x64@1.9.2':
-    resolution: {integrity: sha512-JC3XvdYcjmu1FmAehVwVV0SebLpeNTnO2ZaMdGCSOdS7f8O9Fq14T2P1gTG1Q29Q8Dt1S03hh0IdVpIZykOL8g==}
+  '@biomejs/cli-win32-x64@1.9.3':
+    resolution: {integrity: sha512-cQMy2zanBkVLpmmxXdK6YePzmZx0s5Z7KEnwmrW54rcXK3myCNbQa09SwGZ8i/8sLw0H9F3X7K4rxVNGU8/D4Q==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
@@ -360,8 +360,8 @@ packages:
   '@changesets/changelog-git@0.2.0':
     resolution: {integrity: sha512-bHOx97iFI4OClIT35Lok3sJAwM31VbUM++gnMBV16fdbtBhgYu4dxsphBF/0AZZsyAHMrnM0yFcj5gZM1py6uQ==}
 
-  '@changesets/cli@2.27.8':
-    resolution: {integrity: sha512-gZNyh+LdSsI82wBSHLQ3QN5J30P4uHKJ4fXgoGwQxfXwYFTJzDdvIJasZn8rYQtmKhyQuiBj4SSnLuKlxKWq4w==}
+  '@changesets/cli@2.27.9':
+    resolution: {integrity: sha512-q42a/ZbDnxPpCb5Wkm6tMVIxgeI9C/bexntzTeCFBrQEdpisQqk8kCHllYZMDjYtEc1ZzumbMJAG8H0Z4rdvjg==}
     hasBin: true
 
   '@changesets/config@3.0.3':
@@ -1203,9 +1203,6 @@ packages:
   '@types/react@18.3.9':
     resolution: {integrity: sha512-+BpAVyTpJkNWWSSnaLBk6ePpHLOGJKnEQNbINNovPWzvEUyAe3e+/d494QdEh71RekM/qV7lw6jzf1HGrJyAtQ==}
 
-  '@types/semver@7.5.8':
-    resolution: {integrity: sha512-I8EUhyrgfLrcTkzV3TSsGyl1tSuPrEDzr0yd5m90UgNxQkyDXULk3b6MlQqTCpZpNtWe1K0hzclnZkTcLBe2UQ==}
-
   '@types/send@0.17.4':
     resolution: {integrity: sha512-x2EM6TJOybec7c52BX0ZspPodMsQUd5L6PRwOunVyVUhXiBSKf3AezDL8Dgvgt5o0UfKNfuA0eMLr2wLT4AiBA==}
 
@@ -1227,8 +1224,8 @@ packages:
   '@universal-middleware/express@0.2.6':
     resolution: {integrity: sha512-PlpenjuPaq2yfgGgDfeitVMVabQtuZYdhVG+ud0gMEFF6LNqsDdovV1u5WK0cw2lzcejmvKaIaIfGgr5Qt/vHQ==}
 
-  '@vercel/build-utils@8.4.5':
-    resolution: {integrity: sha512-uqnc1OIA+CB4oIqsfQpn/7DCeUo9mO2TjoQLTdWEgYwb/PBkI25jJLB3oq4X6yKCnSFSTb1zoHdqkroWLCNsIw==}
+  '@vercel/build-utils@8.4.6':
+    resolution: {integrity: sha512-IsEBgICZ3wxgnJSamlNV3/ChI5XPreq0IdocYBdlRf4TxZPmJdRWwOWpAAgiSpY2e3LTNFOEd7P+CKFfkFHjVA==}
 
   '@vercel/edge-config-fs@0.1.0':
     resolution: {integrity: sha512-NRIBwfcS0bUoUbRWlNGetqjvLSwgYH/BqKqDN7vK1g32p7dN96k0712COgaz6VFizAm9b0g6IG6hR6+hc0KCPg==}
@@ -1258,8 +1255,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  '@vercel/node@3.2.17':
-    resolution: {integrity: sha512-TaT2ieOqq4dvi44g1S073MsP4+D+KRzdm2986WjmsldSp6Xpfhai/mowpBkSYGVToiQEnvdi+qb9b9lMnvr5jQ==}
+  '@vercel/node@3.2.18':
+    resolution: {integrity: sha512-1o/oUNQ3ls4o+7lvyRCq2NwqITgw8+zEaRL7sBRDDISAGy3QxPRUZDabv/Sgq97MrhXYwGTCCTdBT6DsxVEx+w==}
 
   '@vercel/og@0.6.3':
     resolution: {integrity: sha512-aoCrC9FqkeA+WEEb9CwSmjD0rGlFeNqbUsI41JPmKWR9Hx6FFn86tvH96O5HZMF6VAXTGHxa3nPH3BokROpdgA==}
@@ -3153,8 +3150,8 @@ packages:
       react-dom: '>=18.0.0'
       vike: '>=0.4.182'
 
-  vike@0.4.197:
-    resolution: {integrity: sha512-WPQjnMRx9moxukRx2yV0+PayQLDAv7JG4s11+d/xXvM2Y1WqNKNCXSTKbqMdIGae24GkK9lWyHzuFSPVFzb4sw==}
+  vike@0.4.198:
+    resolution: {integrity: sha512-+81aEkVL9Ruroxl5X1UcYAoGX0yiPx+8b9tgvuGbyNduvufF6FLDFxxRqd1G0+eaofit6xsbChG9uid4plMpog==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -3308,39 +3305,39 @@ snapshots:
       '@babel/helper-validator-identifier': 7.24.7
       to-fast-properties: 2.0.0
 
-  '@biomejs/biome@1.9.2':
+  '@biomejs/biome@1.9.3':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 1.9.2
-      '@biomejs/cli-darwin-x64': 1.9.2
-      '@biomejs/cli-linux-arm64': 1.9.2
-      '@biomejs/cli-linux-arm64-musl': 1.9.2
-      '@biomejs/cli-linux-x64': 1.9.2
-      '@biomejs/cli-linux-x64-musl': 1.9.2
-      '@biomejs/cli-win32-arm64': 1.9.2
-      '@biomejs/cli-win32-x64': 1.9.2
+      '@biomejs/cli-darwin-arm64': 1.9.3
+      '@biomejs/cli-darwin-x64': 1.9.3
+      '@biomejs/cli-linux-arm64': 1.9.3
+      '@biomejs/cli-linux-arm64-musl': 1.9.3
+      '@biomejs/cli-linux-x64': 1.9.3
+      '@biomejs/cli-linux-x64-musl': 1.9.3
+      '@biomejs/cli-win32-arm64': 1.9.3
+      '@biomejs/cli-win32-x64': 1.9.3
 
-  '@biomejs/cli-darwin-arm64@1.9.2':
+  '@biomejs/cli-darwin-arm64@1.9.3':
     optional: true
 
-  '@biomejs/cli-darwin-x64@1.9.2':
+  '@biomejs/cli-darwin-x64@1.9.3':
     optional: true
 
-  '@biomejs/cli-linux-arm64-musl@1.9.2':
+  '@biomejs/cli-linux-arm64-musl@1.9.3':
     optional: true
 
-  '@biomejs/cli-linux-arm64@1.9.2':
+  '@biomejs/cli-linux-arm64@1.9.3':
     optional: true
 
-  '@biomejs/cli-linux-x64-musl@1.9.2':
+  '@biomejs/cli-linux-x64-musl@1.9.3':
     optional: true
 
-  '@biomejs/cli-linux-x64@1.9.2':
+  '@biomejs/cli-linux-x64@1.9.3':
     optional: true
 
-  '@biomejs/cli-win32-arm64@1.9.2':
+  '@biomejs/cli-win32-arm64@1.9.3':
     optional: true
 
-  '@biomejs/cli-win32-x64@1.9.2':
+  '@biomejs/cli-win32-x64@1.9.3':
     optional: true
 
   '@brillout/import@0.2.3': {}
@@ -3386,7 +3383,7 @@ snapshots:
     dependencies:
       '@changesets/types': 6.0.0
 
-  '@changesets/cli@2.27.8':
+  '@changesets/cli@2.27.9':
     dependencies:
       '@changesets/apply-release-plan': 7.0.5
       '@changesets/assemble-release-plan': 6.0.4
@@ -3403,14 +3400,12 @@ snapshots:
       '@changesets/types': 6.0.0
       '@changesets/write': 0.3.2
       '@manypkg/get-packages': 1.1.3
-      '@types/semver': 7.5.8
       ansi-colors: 4.1.3
       ci-info: 3.9.0
       enquirer: 2.4.1
       external-editor: 3.1.0
       fs-extra: 7.0.1
       mri: 1.2.0
-      outdent: 0.5.0
       p-limit: 2.3.0
       package-manager-detector: 0.2.0
       picocolors: 1.1.0
@@ -4085,8 +4080,6 @@ snapshots:
       '@types/prop-types': 15.7.13
       csstype: 3.1.3
 
-  '@types/semver@7.5.8': {}
-
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
@@ -4112,7 +4105,7 @@ snapshots:
     dependencies:
       '@universal-middleware/core': 0.2.10
 
-  '@vercel/build-utils@8.4.5': {}
+  '@vercel/build-utils@8.4.6': {}
 
   '@vercel/edge-config-fs@0.1.0': {}
 
@@ -4160,13 +4153,13 @@ snapshots:
       - encoding
       - supports-color
 
-  '@vercel/node@3.2.17(@swc/core@1.7.28)':
+  '@vercel/node@3.2.18(@swc/core@1.7.28)':
     dependencies:
       '@edge-runtime/node-utils': 2.3.0
       '@edge-runtime/primitives': 4.1.0
       '@edge-runtime/vm': 3.2.0
       '@types/node': 16.18.11
-      '@vercel/build-utils': 8.4.5
+      '@vercel/build-utils': 8.4.6
       '@vercel/error-utils': 2.0.2
       '@vercel/nft': 0.27.3
       '@vercel/static-config': 3.0.0
@@ -6318,14 +6311,14 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike-react@0.5.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.197(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.8(@types/node@18.19.51))):
+  vike-react@0.5.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.198(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.8(@types/node@18.19.51))):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-streaming: 0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.197(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
+      vike: 0.4.198(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51))
 
-  vike@0.4.197(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51)):
+  vike@0.4.198(react-streaming@0.3.43)(vite@5.4.8(@types/node@18.19.51)):
     dependencies:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.13

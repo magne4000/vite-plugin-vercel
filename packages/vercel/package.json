@@ -47,13 +47,13 @@
     "@vite-plugin-vercel/vike": "workspace:*",
     "tsup": "^8.3.0",
     "typescript": "^5.6.2",
-    "vike": "^0.4.197",
+    "vike": "^0.4.198",
     "vite": "^5.4.8"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@vercel/build-utils": "^8.4.5",
+    "@vercel/build-utils": "^8.4.6",
     "@vercel/nft": "^0.27.4",
     "@vercel/routing-utils": "^3.1.0",
     "esbuild": "^0.24.0",
