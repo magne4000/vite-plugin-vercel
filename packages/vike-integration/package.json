@@ -31,7 +31,7 @@
     "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@types/node": "^18.19.51",
+    "@types/node": "^18.19.54",
     "@types/qs": "^6.9.16",
     "@vercel/edge": "^1.1.2",
     "@vercel/node": "^3.2.18",

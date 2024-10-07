@@ -43,7 +43,7 @@
     }
   },
   "devDependencies": {
-    "@types/node": "^18.19.51",
+    "@types/node": "^18.19.54",
     "@vite-plugin-vercel/vike": "workspace:*",
     "tsup": "^8.3.0",
     "typescript": "^5.6.2",
