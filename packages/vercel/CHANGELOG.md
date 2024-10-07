@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 9.0.3
+
+### Patch Changes
+
+- fix: pass endpoint buildOptions to esbuild
+
 ## 9.0.2
 
 ### Patch Changes
