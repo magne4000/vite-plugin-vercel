@@ -34,10 +34,10 @@
     "@types/node": "^18.19.54",
     "@types/qs": "^6.9.16",
     "@vercel/edge": "^1.1.2",
-    "@vercel/node": "^3.2.18",
+    "@vercel/node": "^3.2.23",
     "tsup": "^8.3.0",
-    "typescript": "^5.6.2",
-    "vike": "^0.4.198",
+    "typescript": "^5.6.3",
+    "vike": "^0.4.199",
     "vite": "^5.4.8",
     "vite-plugin-vercel": "workspace:*"
   },
