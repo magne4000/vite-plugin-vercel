@@ -118,9 +118,9 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       };
     },
 
-    configEnvironment(name, options) {
-      console.log("configEnvironment", name, options.build?.rollupOptions);
-    },
+    // configEnvironment(name, options) {
+    //   console.log("configEnvironment", name, options.build?.rollupOptions);
+    // },
 
     options(options) {
       // options.input = {};
