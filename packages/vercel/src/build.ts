@@ -2,7 +2,7 @@ import fs, { copyFile } from "node:fs/promises";
 import { builtinModules } from "node:module";
 import path, { basename } from "node:path";
 import { findRoot } from "@manypkg/find-root";
-import { getNodeVersion } from "@vercel/build-utils";
+import type { NodeVersion } from "@vercel/build-utils";
 import { nodeFileTrace } from "@vercel/nft";
 import type { Header, Rewrite } from "@vercel/routing-utils";
 import { type BuildOptions, type Plugin, build } from "esbuild";
@@ -12,7 +12,7 @@ import type { ResolvedConfig } from "vite";
 import { assert } from "./assert";
 import { vercelOutputVcConfigSchema } from "./schemas/config/vc-config";
 import { vercelEndpointExports } from "./schemas/exports";
-import type { VercelOutputIsr, ViteVercelApiEntry } from "./types";
+import type { VercelOutputIsr, ViteVercelApiEntry, ViteVercelConfig } from "./types";
 import { getOutput, getRoot, pathRelativeTo } from "./utils";
 
 export async function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
@@ -233,6 +233,32 @@ const __dirname = VPV_dirname(__filename);
   return output;
 }
 
+export function getVcConfig(
+  pluginConfig: ViteVercelConfig,
+  filename: string,
+  options: {
+    edge: boolean;
+    nodeVersion: NodeVersion;
+    streaming?: boolean;
+  },
+) {
+  return vercelOutputVcConfigSchema.parse(
+    options.edge
+      ? {
+          runtime: "edge",
+          entrypoint: filename,
+        }
+      : {
+          runtime: options.nodeVersion.runtime,
+          handler: filename,
+          maxDuration: pluginConfig.defaultMaxDuration,
+          launcherType: "Nodejs",
+          shouldAddHelpers: true,
+          supportsResponseStreaming: options.streaming ?? pluginConfig.defaultSupportsResponseStreaming,
+        },
+  );
+}
+
 export async function writeVcConfig(
   resolvedConfig: ResolvedConfig,
   destination: string,
@@ -244,29 +270,10 @@ export async function writeVcConfig(
 ): Promise<void> {
   const vcConfig = path.join(getOutput(resolvedConfig, "functions"), destination, ".vc-config.json");
 
-  const nodeVersion = await getNodeVersion(getOutput(resolvedConfig));
-
   await fs.writeFile(
     vcConfig,
-    JSON.stringify(
-      vercelOutputVcConfigSchema.parse(
-        options.edge
-          ? {
-              runtime: "edge",
-              entrypoint: filename,
-            }
-          : {
-              runtime: nodeVersion.runtime,
-              handler: filename,
-              maxDuration: resolvedConfig.vercel?.defaultMaxDuration,
-              launcherType: "Nodejs",
-              shouldAddHelpers: true,
-              supportsResponseStreaming: options.streaming ?? resolvedConfig.vercel?.defaultSupportsResponseStreaming,
-            },
-      ),
-      undefined,
-      2,
-    ),
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    JSON.stringify(getVcConfig(resolvedConfig.vercel!, filename, options), undefined, 2),
     "utf-8",
   );
 }

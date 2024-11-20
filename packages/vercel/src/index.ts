@@ -1,11 +1,20 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { Plugin, PluginOption, ResolvedConfig } from "vite";
-import { buildEndpoints } from "./build";
-import { writeConfig } from "./config";
+import { getNodeVersion } from "@vercel/build-utils";
+import type { NodeVersion } from "@vercel/build-utils/dist";
+import {
+  BuildEnvironment,
+  type EnvironmentOptions,
+  type Plugin,
+  type PluginOption,
+  type ResolvedConfig,
+  mergeConfig,
+} from "vite";
+import { buildEndpoints, getVcConfig } from "./build";
+import { getConfig, writeConfig } from "./config";
 import { copyDir } from "./helpers";
 import { buildPrerenderConfigs, execPrerender } from "./prerender";
-import type { ViteVercelPrerenderRoute } from "./types";
+import type { ViteVercelConfig, ViteVercelPrerenderRoute } from "./types";
 import { getOutput, getPublic } from "./utils";
 
 export * from "./types";
@@ -34,37 +43,128 @@ function vercelPluginCleanup(): Plugin {
   };
 }
 
-type Writeable<T> = { -readonly [P in keyof T]: T[P] };
+const outDir = path.join(".vercel", "output");
 
-function vercelPlugin(): Plugin {
-  let resolvedConfig: Writeable<ResolvedConfig>;
-  let vikeFound = false;
+function createVercelEnvironmentOptions(
+  input: Record<string, string>,
+  overrides?: EnvironmentOptions,
+): EnvironmentOptions {
+  return mergeConfig(
+    {
+      build: {
+        createEnvironment(name, config) {
+          return new BuildEnvironment(name, config);
+        },
+        outDir,
+        rollupOptions: {
+          input,
+        },
+      },
+      keepProcessEnv: true,
+    } satisfies EnvironmentOptions,
+    overrides ?? {},
+  );
+}
+
+function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
+  const virtualEntry = "virtual:vite-plugin-vercel:entry";
+  const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
+  let nodeVersion!: NodeVersion;
 
   return {
     apply: "build",
     name: "vite-plugin-vercel",
     enforce: "post",
 
-    configResolved(config) {
-      resolvedConfig = config;
-      vikeFound = resolvedConfig.plugins.some((p) => p.name.match("^vite-plugin-ssr:|^vike:"));
+    async buildStart() {
+      nodeVersion = await getNodeVersion(process.cwd());
+    },
 
-      if (typeof resolvedConfig.vercel?.distContainsOnlyStatic === "undefined") {
-        resolvedConfig.vercel ??= {};
-        resolvedConfig.vercel.distContainsOnlyStatic = !vikeFound;
+    config(config) {
+      const entries = pluginConfig.entries ?? [];
+      const inputs = entries.reduce(
+        (acc, curr) => {
+          const destination = `${path.posix.resolve("/", curr.destination)}.func/index`;
+          if (curr.edge) {
+            // .vercel/output/**/*.func/index.js
+            acc.edge[destination] = `${virtualEntry}:${curr.input}`;
+          } else {
+            // .vercel/output/**/*.func/index.mjs
+            acc.node[destination] = `${virtualEntry}:${curr.input}`;
+          }
+
+          return acc;
+        },
+        { node: {} as Record<string, string>, edge: {} as Record<string, string> },
+      );
+      config.environments ??= {};
+      config.environments["vercel-edge"] = createVercelEnvironmentOptions(inputs.edge);
+      config.environments["vercel-node"] = createVercelEnvironmentOptions(inputs.node);
+    },
+
+    resolveId(id) {
+      if (id.startsWith(virtualEntry)) {
+        return `\0${id}`;
       }
     },
+
+    load(id) {
+      if (id.startsWith(resolvedVirtualEntry)) {
+        const isEdge = this.environment.name === "vercel-edge";
+        const fn = isEdge ? "createEdgeHandler" : "createNodeHandler";
+        const [, , , input] = id.split(":");
+
+        const entries = pluginConfig.entries ?? [];
+        const entry = entries.find((e) => e.input === input);
+
+        if (!entry) {
+          throw new Error("TODO");
+        }
+
+        // Generate .vc-config.json
+        const filename = entry.edge ? "index.js" : "index.mjs";
+        this.emitFile({
+          type: "asset",
+          fileName: `${path.posix.resolve("/", entry.destination)}.func/.vc-config.json`,
+          source: JSON.stringify(
+            getVcConfig(pluginConfig, filename, {
+              nodeVersion,
+              edge: Boolean(entry.edge),
+              streaming: entry.streaming,
+            }),
+            undefined,
+            2,
+          ),
+        });
+
+        // TODO generate *.prerender-config.json when necessary
+
+        //language=javascript
+        return `
+import { ${fn} } from "@universal-middleware/vercel";
+import handler from "${input}";
+
+return ${fn}(handler)();
+`;
+      }
+    },
+
+    generateBundle(options) {
+      this.emitFile({
+        type: "asset",
+        fileName: "config.json",
+        // TODO rewrites
+        // TODO overrides
+        // TODO headers
+        source: JSON.stringify(getConfig(pluginConfig), undefined, 2),
+      });
+    },
+
     writeBundle: {
       order: "post",
       sequential: true,
       async handler() {
-        if (!resolvedConfig.build?.ssr) {
-          // special case: Vike triggers a second build with --ssr
-          // TODO: find a way to fix that in a more generic way
-          if (vikeFound) {
-            return;
-          }
-        }
+        const resolvedConfig = this.environment.config;
 
         // step 2:	Execute prerender
         const overrides = await execPrerender(resolvedConfig);

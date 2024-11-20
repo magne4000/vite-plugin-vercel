@@ -60,6 +60,10 @@ export interface ViteVercelConfig {
    */
   defaultSupportsResponseStreaming?: boolean;
   /**
+   * TODO
+   */
+  entries?: ViteVercelEntry[],
+  /**
    * By default, all `api/*` endpoints are compiled under `.vercel/output/functions/api/*.func`.
    * If others serverless functions need to be compiled under `.vercel/output/functions`, they should be added here.
    * For instance, a framework can leverage this to have a generic ssr endpoint
@@ -78,6 +82,8 @@ export interface ViteVercelConfig {
    *   ]
    * }
    * ```
+   *
+   * @deprecated
    */
   additionalEndpoints?: (
     | ViteVercelApiEntry
@@ -109,6 +115,7 @@ export interface ViteVercelConfig {
    * ```
    *
    * @protected
+   * @deprecated
    */
   isr?: Record<string, VercelOutputIsr> | (() => Awaitable<Record<string, VercelOutputIsr>>);
   /**
@@ -136,6 +143,42 @@ export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
 export type ViteVercelPrerenderRoute = VercelOutputConfig["overrides"];
 export type ViteVercelPrerenderFn = (resolvedConfig: ResolvedConfig) => Awaitable<ViteVercelPrerenderRoute>;
 
+export interface ViteVercelEntry {
+  /**
+   * Path to input file
+   */
+  input: string;
+  /**
+   * Relative to `.vercel/output/functions`, without extension
+   */
+  destination: string;
+  /**
+   * If `true`, guesses route for the function, and adds it to config.json (mimics defaults Vercel behavior).
+   * If a string is provided, it will be equivalent to a `rewrites` rule.
+   * Set to `false` to disable
+   */
+  route?: string | boolean;
+  /**
+   * Set to `true` to mark this function as an Edge Function
+   */
+  edge?: boolean;
+  /**
+   * Additional headers
+   */
+  headers?: Record<string, string> | null;
+  /**
+   * ISR config
+   */
+  isr?: VercelOutputIsr;
+  /**
+   * When true, the Serverless Function will stream the response to the client
+   */
+  streaming?: boolean;
+}
+
+/**
+ * @deprecated use ViteVercelEntry
+ */
 export interface ViteVercelApiEntry {
   /**
    * Path to entry file, or stdin config

@@ -1,17 +1,17 @@
-import type { ResolvedConfig } from "vite";
-import path from "node:path";
-import { getOutput } from "./utils";
-import { type VercelOutputConfig, vercelOutputConfigSchema } from "./schemas/config/config";
 import fs from "node:fs/promises";
+import path from "node:path";
 import {
-  getTransformedRoutes,
   type Header,
-  mergeRoutes,
-  normalizeRoutes,
   type Rewrite,
   type Route,
+  getTransformedRoutes,
+  mergeRoutes,
+  normalizeRoutes,
 } from "@vercel/routing-utils";
-import type { ViteVercelRewrite } from "./types";
+import type { ResolvedConfig } from "vite";
+import { type VercelOutputConfig, vercelOutputConfigSchema } from "./schemas/config/config";
+import type { ViteVercelConfig, ViteVercelRewrite } from "./types";
+import { getOutput } from "./utils";
 
 function reorderEnforce<T extends { enforce?: "pre" | "post" }>(arr: T[]) {
   return [
@@ -22,22 +22,22 @@ function reorderEnforce<T extends { enforce?: "pre" | "post" }>(arr: T[]) {
 }
 
 export function getConfig(
-  resolvedConfig: ResolvedConfig,
+  pluginConfig: ViteVercelConfig,
   rewrites?: ViteVercelRewrite[],
   overrides?: VercelOutputConfig["overrides"],
   headers?: Header[],
 ): VercelOutputConfig {
   const _rewrites: ViteVercelRewrite[] = [
     // User provided config always comes first
-    ...(resolvedConfig.vercel?.rewrites ?? []),
+    ...(pluginConfig.rewrites ?? []),
     ...(rewrites ?? []),
   ];
 
   const { routes, error } = getTransformedRoutes({
-    cleanUrls: resolvedConfig.vercel?.cleanUrls ?? true,
-    trailingSlash: resolvedConfig.vercel?.trailingSlash,
+    cleanUrls: pluginConfig.cleanUrls ?? true,
+    trailingSlash: pluginConfig.trailingSlash,
     rewrites: reorderEnforce(_rewrites),
-    redirects: resolvedConfig.vercel?.redirects ? reorderEnforce(resolvedConfig.vercel?.redirects) : undefined,
+    redirects: pluginConfig.redirects ? reorderEnforce(pluginConfig.redirects) : undefined,
     headers,
   });
 
@@ -46,9 +46,9 @@ export function getConfig(
   }
 
   if (
-    resolvedConfig.vercel?.config?.routes &&
-    resolvedConfig.vercel.config.routes.length > 0 &&
-    !resolvedConfig.vercel.config.routes.every((r) => "continue" in r && r.continue)
+    pluginConfig.config?.routes &&
+    pluginConfig.config.routes.length > 0 &&
+    !pluginConfig.config.routes.every((r) => "continue" in r && r.continue)
   ) {
     console.warn(
       'Did you forget to add `"continue": true` to your routes? See https://vercel.com/docs/build-output-api/v3/configuration#source-route\n' +
@@ -60,8 +60,8 @@ export function getConfig(
   let userRoutes: Route[] = [];
   let buildRoutes: Route[] = [];
 
-  if (resolvedConfig.vercel?.config?.routes) {
-    const norm = normalizeRoutes(resolvedConfig.vercel.config.routes);
+  if (pluginConfig.config?.routes) {
+    const norm = normalizeRoutes(pluginConfig.config.routes);
 
     if (norm.error) {
       throw norm.error;
@@ -93,10 +93,10 @@ export function getConfig(
 
   return vercelOutputConfigSchema.parse({
     version: 3,
-    ...resolvedConfig.vercel?.config,
+    ...pluginConfig.config,
     routes: cleanRoutes,
     overrides: {
-      ...resolvedConfig.vercel?.config?.overrides,
+      ...pluginConfig.config?.overrides,
       ...overrides,
     },
   });
@@ -114,7 +114,8 @@ export async function writeConfig(
 ): Promise<void> {
   await fs.writeFile(
     getConfigDestination(resolvedConfig),
-    JSON.stringify(getConfig(resolvedConfig, rewrites, overrides, headers), undefined, 2),
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    JSON.stringify(getConfig(resolvedConfig.vercel!, rewrites, overrides, headers), undefined, 2),
     "utf-8",
   );
 }
