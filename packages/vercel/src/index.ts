@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { getNodeVersion } from "@vercel/build-utils";
 import type { NodeVersion } from "@vercel/build-utils/dist";
+import type { EmittedFile } from "rollup";
 import {
   BuildEnvironment,
   type EnvironmentOptions,
@@ -47,6 +48,7 @@ const outDir = path.join(".vercel", "output");
 
 function createVercelEnvironmentOptions(
   input: Record<string, string>,
+  extension: "js" | "mjs",
   overrides?: EnvironmentOptions,
 ): EnvironmentOptions {
   return mergeConfig(
@@ -58,6 +60,11 @@ function createVercelEnvironmentOptions(
         outDir,
         rollupOptions: {
           input,
+          output: {
+            entryFileNames(chunkInfo) {
+              return `${chunkInfo.name}.${extension}`;
+            },
+          },
         },
         emptyOutDir: false,
       },
@@ -71,6 +78,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const virtualEntry = "virtual:vite-plugin-vercel:entry";
   const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
   let nodeVersion: NodeVersion;
+  const filesToEmit: EmittedFile[] = [];
 
   return {
     apply: "build",
@@ -105,10 +113,10 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
       const environments: Record<string, EnvironmentOptions> = {};
       if (Object.keys(inputs.edge).length > 0) {
-        environments.vercel_edge = createVercelEnvironmentOptions(inputs.edge);
+        environments.vercel_edge = createVercelEnvironmentOptions(inputs.edge, "js");
       }
       if (Object.keys(inputs.node).length > 0) {
-        environments.vercel_node = createVercelEnvironmentOptions(inputs.node);
+        environments.vercel_node = createVercelEnvironmentOptions(inputs.node, "mjs");
       }
 
       return {
@@ -150,7 +158,8 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
         // Generate .vc-config.json
         const filename = entry.edge ? "index.js" : "index.mjs";
-        this.emitFile({
+        // TODO: investigate why calling this.emitFile here does nothing (no error, file not created)
+        filesToEmit.push({
           type: "asset",
           fileName: `${path.posix.join("functions/", entry.destination)}.func/.vc-config.json`,
           source: JSON.stringify(
@@ -166,7 +175,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
         // Generate *.prerender-config.json when necessary
         if (entry.isr) {
-          this.emitFile({
+          filesToEmit.push({
             type: "asset",
             fileName: `${path.posix.join("functions/", entry.destination)}.prerender-config.json`,
             source: JSON.stringify(vercelOutputPrerenderConfigSchema.parse(entry.isr), undefined, 2),
@@ -195,6 +204,7 @@ export default ${fn}(handler)();
     },
 
     async generateBundle() {
+      // FIXME: call once per env
       console.log("generateBundle", this.environment.name);
       // Compute overrides for static HTML files
       const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
@@ -212,6 +222,10 @@ export default ${fn}(handler)();
         fileName: "config.json",
         source: JSON.stringify(getConfig(pluginConfig), undefined, 2),
       });
+
+      for (const f of filesToEmit) {
+        this.emitFile(f);
+      }
     },
 
     // writeBundle: {
