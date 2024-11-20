@@ -41,7 +41,7 @@ export interface ViteVercelConfig {
    * @see {@link https://vercel.com/docs/projects/project-configuration#headers}
    * @beta
    */
-  headers?: Header[] | (() => Awaitable<Header[]>);
+  headers?: Header[];
   /**
    * @see {@link https://vercel.com/docs/projects/project-configuration#redirects}
    */
@@ -62,7 +62,7 @@ export interface ViteVercelConfig {
   /**
    * TODO
    */
-  entries?: ViteVercelEntry[],
+  entries?: ViteVercelEntry[];
   /**
    * By default, all `api/*` endpoints are compiled under `.vercel/output/functions/api/*.func`.
    * If others serverless functions need to be compiled under `.vercel/output/functions`, they should be added here.

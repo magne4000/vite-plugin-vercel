@@ -10,10 +10,10 @@ import {
   type ResolvedConfig,
   mergeConfig,
 } from "vite";
-import { buildEndpoints, getVcConfig } from "./build";
-import { getConfig, writeConfig } from "./config";
+import { getVcConfig } from "./build";
+import { getConfig } from "./config";
 import { copyDir } from "./helpers";
-import { buildPrerenderConfigs, execPrerender } from "./prerender";
+import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelPrerenderRoute } from "./types";
 import { getOutput, getPublic } from "./utils";
 
@@ -69,7 +69,7 @@ function createVercelEnvironmentOptions(
 function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const virtualEntry = "virtual:vite-plugin-vercel:entry";
   const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
-  let nodeVersion!: NodeVersion;
+  let nodeVersion: NodeVersion;
 
   return {
     apply: "build",
@@ -84,7 +84,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       const entries = pluginConfig.entries ?? [];
       const inputs = entries.reduce(
         (acc, curr) => {
-          const destination = `${path.posix.resolve("/", curr.destination)}.func/index`;
+          const destination = `${path.posix.resolve("/functions/", curr.destination)}.func/index`;
           if (curr.edge) {
             // .vercel/output/**/*.func/index.js
             acc.edge[destination] = `${virtualEntry}:${curr.input}`;
@@ -125,7 +125,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         const filename = entry.edge ? "index.js" : "index.mjs";
         this.emitFile({
           type: "asset",
-          fileName: `${path.posix.resolve("/", entry.destination)}.func/.vc-config.json`,
+          fileName: `${path.posix.resolve("/functions/", entry.destination)}.func/.vc-config.json`,
           source: JSON.stringify(
             getVcConfig(pluginConfig, filename, {
               nodeVersion,
@@ -137,7 +137,23 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           ),
         });
 
-        // TODO generate *.prerender-config.json when necessary
+        // Generate *.prerender-config.json when necessary
+        if (entry.isr) {
+          this.emitFile({
+            type: "asset",
+            fileName: `${path.posix.resolve("/functions/", entry.destination)}.prerender-config.json`,
+            source: JSON.stringify(vercelOutputPrerenderConfigSchema.parse(entry.isr), undefined, 2),
+          });
+        }
+
+        // Generate rewrites
+        if (entry.route) {
+          pluginConfig.rewrites ??= [];
+          pluginConfig.rewrites.push({
+            source: `(${entry.route})`,
+            destination: `${entry.destination}/?__original_path=$1`,
+          });
+        }
 
         //language=javascript
         return `
@@ -149,50 +165,47 @@ return ${fn}(handler)();
       }
     },
 
-    generateBundle(options) {
+    async generateBundle() {
+      // Compute overrides for static HTML files
+      const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
+      // Copy dist folder to static
+      await copyDistToStatic(this.environment.config);
+
+      // Update overrides with static files paths
+      pluginConfig.config ??= {};
+      pluginConfig.config.overrides ??= {};
+      Object.assign(pluginConfig.config.overrides, userOverrides);
+
+      // Generate config.json
       this.emitFile({
         type: "asset",
         fileName: "config.json",
-        // TODO rewrites
-        // TODO overrides
-        // TODO headers
         source: JSON.stringify(getConfig(pluginConfig), undefined, 2),
       });
     },
 
-    writeBundle: {
-      order: "post",
-      sequential: true,
-      async handler() {
-        const resolvedConfig = this.environment.config;
-
-        // step 2:	Execute prerender
-        const overrides = await execPrerender(resolvedConfig);
-
-        // step 3:	Compute overrides for static HTML files
-        const userOverrides = await computeStaticHtmlOverrides(resolvedConfig);
-
-        // step 4:	Compile serverless functions to ".vercel/output/functions"
-        const { rewrites, isr, headers } = await buildEndpoints(resolvedConfig);
-
-        // step 5:	Generate prerender config files
-        rewrites.push(...(await buildPrerenderConfigs(resolvedConfig, isr)));
-
-        // step 6:	Generate config file
-        await writeConfig(
-          resolvedConfig,
-          rewrites,
-          {
-            ...userOverrides,
-            ...overrides,
-          },
-          headers,
-        );
-
-        // step 7: Copy dist folder to static
-        await copyDistToStatic(resolvedConfig);
-      },
-    },
+    // writeBundle: {
+    //   order: "post",
+    //   sequential: true,
+    //   async handler() {
+    //     // Compile serverless functions to ".vercel/output/functions"
+    //     // /api auto bundling
+    //     // TODO: make this opt-in, and /api folder should be configurable
+    //     // const { rewrites, isr, headers } = await buildEndpoints(resolvedConfig);
+    //     // Generate prerender config files
+    //     // rewrites.push(...(await buildPrerenderConfigs(resolvedConfig, isr)));
+    //     // Generate config file
+    //     // await writeConfig(
+    //     //   resolvedConfig,
+    //     //   rewrites,
+    //     //   {
+    //     //     ...userOverrides,
+    //     //     ...overrides,
+    //     //   },
+    //     //   headers,
+    //     // );
+    //   },
+    // },
   };
 }
 
@@ -259,39 +272,6 @@ async function getStaticHtmlFiles(src: string) {
   return htmlFiles;
 }
 
-/**
- * Auto import `@vite-plugin-vercel/vike` if it is part of dependencies.
- * Ensures that `vike/plugin` is also present to ensure predictable behavior
- */
-
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-async function tryImportVpvv(options: any) {
-  try {
-    // @ts-ignore
-    await import("vike/plugin");
-    // @ts-ignore
-    const vpvv = await import("@vite-plugin-vercel/vike");
-    return vpvv.default(options);
-  } catch (e) {
-    try {
-      // @ts-ignore
-      await import("vite-plugin-ssr/plugin");
-      // @ts-ignore
-      const vpvv = await import("@vite-plugin-vercel/vike");
-      return vpvv.default(options);
-    } catch (e) {
-      return null;
-    }
-  }
-}
-
-// `smart` param only exist to circumvent a pnpm issue in dev
-// See https://github.com/pnpm/pnpm/issues/3697#issuecomment-1708687974
-// FIXME: Could be fixed by:
-//  - shared-workspace-lockfile=false in .npmrc. See https://pnpm.io/npmrc#shared-workspace-lockfile
-//  - Moving demo test in dedicated repo, with each a correct package.json
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
-export default function allPlugins(options: any = {}): PluginOption[] {
-  const { smart, ...rest } = options;
-  return [vercelPluginCleanup(), vercelPlugin(), smart !== false ? tryImportVpvv(rest) : null];
+export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
+  return [vercelPluginCleanup(), vercelPlugin(pluginConfig)];
 }
