@@ -159,14 +159,14 @@ importers:
         specifier: ^18.19.54
         version: 18.19.67
       '@vercel/node':
-        specifier: ^3.2.18
+        specifier: ^3.2.25
         version: 3.2.27(@swc/core@1.7.28)
       typescript:
-        specifier: ^5.6.2
+        specifier: ^5.6.3
         version: 5.7.2
       vite:
-        specifier: ^5.4.8
-        version: 5.4.11(@types/node@18.19.67)
+        specifier: ^6.0.0-beta.10
+        version: 6.0.2(@types/node@18.19.67)(tsx@4.19.2)
 
   packages/vercel:
     dependencies:

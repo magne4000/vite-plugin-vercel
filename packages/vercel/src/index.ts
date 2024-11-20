@@ -68,13 +68,14 @@ function createVercelEnvironmentOptions(
 
 function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const virtualEntry = "virtual:vite-plugin-vercel:entry";
+  const virtualRelativeFromProjectRoot = "virtual:vite-plugin-vercel:fromRoot";
   const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
   let nodeVersion: NodeVersion;
 
   return {
     apply: "build",
     name: "vite-plugin-vercel",
-    enforce: "post",
+    // enforce: "post",
 
     async buildStart() {
       nodeVersion = await getNodeVersion(process.cwd());
@@ -84,7 +85,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       const entries = pluginConfig.entries ?? [];
       const inputs = entries.reduce(
         (acc, curr) => {
-          const destination = `${path.posix.resolve("/functions/", curr.destination)}.func/index`;
+          const destination = `${path.posix.join("functions/", curr.destination)}.func/index`;
           if (curr.edge) {
             // .vercel/output/**/*.func/index.js
             acc.edge[destination] = `${virtualEntry}:${curr.input}`;
@@ -97,18 +98,47 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         },
         { node: {} as Record<string, string>, edge: {} as Record<string, string> },
       );
-      config.environments ??= {};
-      config.environments["vercel-edge"] = createVercelEnvironmentOptions(inputs.edge);
-      config.environments["vercel-node"] = createVercelEnvironmentOptions(inputs.node);
+
+      const environments: Record<string, EnvironmentOptions> = {};
+      if (Object.keys(inputs.edge).length > 0) {
+        environments.vercel_edge = createVercelEnvironmentOptions(inputs.edge);
+      }
+      if (Object.keys(inputs.node).length > 0) {
+        environments.vercel_node = createVercelEnvironmentOptions(inputs.node);
+      }
+
+      return {
+        appType: "custom",
+        environments,
+        build: {
+          rollupOptions: {
+            external: ["@universal-middleware/vercel"],
+          },
+        },
+      };
+    },
+
+    configEnvironment(name, options) {
+      console.log("configEnvironment", options.build?.rollupOptions);
+    },
+
+    options(options) {
+      // options.input = {};
+      console.log("options.input", this.environment.name, options.input);
     },
 
     resolveId(id) {
+      console.log("1 resolveId", id);
       if (id.startsWith(virtualEntry)) {
+        console.log("2 resolveId", id);
         return `\0${id}`;
       }
     },
 
     load(id) {
+      // TODO: split plugins
+      if (id.startsWith(resolvedVirtualEntry)) {
+      }
       if (id.startsWith(resolvedVirtualEntry)) {
         const isEdge = this.environment.name === "vercel-edge";
         const fn = isEdge ? "createEdgeHandler" : "createNodeHandler";
@@ -125,7 +155,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         const filename = entry.edge ? "index.js" : "index.mjs";
         this.emitFile({
           type: "asset",
-          fileName: `${path.posix.resolve("/functions/", entry.destination)}.func/.vc-config.json`,
+          fileName: `${path.posix.join("functions/", entry.destination)}.func/.vc-config.json`,
           source: JSON.stringify(
             getVcConfig(pluginConfig, filename, {
               nodeVersion,
@@ -141,7 +171,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         if (entry.isr) {
           this.emitFile({
             type: "asset",
-            fileName: `${path.posix.resolve("/functions/", entry.destination)}.prerender-config.json`,
+            fileName: `${path.posix.join("functions/", entry.destination)}.prerender-config.json`,
             source: JSON.stringify(vercelOutputPrerenderConfigSchema.parse(entry.isr), undefined, 2),
           });
         }
@@ -155,12 +185,14 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           });
         }
 
+        const absoluteInput = path.posix.join(this.environment.config.root, input);
+
         //language=javascript
         return `
 import { ${fn} } from "@universal-middleware/vercel";
-import handler from "${input}";
+import handler from "${absoluteInput}";
 
-return ${fn}(handler)();
+export default ${fn}(handler)();
 `;
       }
     },
