@@ -30,13 +30,13 @@ function vercelPluginCleanup(): Plugin {
     configResolved(config) {
       resolvedConfig = config;
     },
-    writeBundle: {
+    buildStart: {
       order: "pre",
       sequential: true,
-      async handler() {
+      async handler(options) {
         if (!resolvedConfig.build?.ssr) {
-          // step 1:	Clean .vercel/ouput dir
-          await cleanOutputDirectory(resolvedConfig);
+          // FIXME ensure unique execution, or check if we can leverage `emptyOutDir` option
+          // await cleanOutputDirectory(resolvedConfig);
         }
       },
     },
@@ -59,6 +59,7 @@ function createVercelEnvironmentOptions(
         rollupOptions: {
           input,
         },
+        emptyOutDir: false,
       },
       keepProcessEnv: true,
     } satisfies EnvironmentOptions,
@@ -68,7 +69,6 @@ function createVercelEnvironmentOptions(
 
 function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const virtualEntry = "virtual:vite-plugin-vercel:entry";
-  const virtualRelativeFromProjectRoot = "virtual:vite-plugin-vercel:fromRoot";
   const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
   let nodeVersion: NodeVersion;
 
@@ -79,6 +79,10 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
     async buildStart() {
       nodeVersion = await getNodeVersion(process.cwd());
+    },
+
+    applyToEnvironment(env) {
+      return env.name === "vercel_node" || env.name === "vercel_edge";
     },
 
     config(config) {
@@ -110,16 +114,12 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       return {
         appType: "custom",
         environments,
-        build: {
-          rollupOptions: {
-            external: ["@universal-middleware/vercel"],
-          },
-        },
+        sharedDuringBuild: true,
       };
     },
 
     configEnvironment(name, options) {
-      console.log("configEnvironment", options.build?.rollupOptions);
+      console.log("configEnvironment", name, options.build?.rollupOptions);
     },
 
     options(options) {
@@ -136,11 +136,8 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     load(id) {
-      // TODO: split plugins
       if (id.startsWith(resolvedVirtualEntry)) {
-      }
-      if (id.startsWith(resolvedVirtualEntry)) {
-        const isEdge = this.environment.name === "vercel-edge";
+        const isEdge = this.environment.name === "vercel_edge";
         const fn = isEdge ? "createEdgeHandler" : "createNodeHandler";
         const [, , , input] = id.split(":");
 
@@ -189,7 +186,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
         //language=javascript
         return `
-import { ${fn} } from "@universal-middleware/vercel";
+import { ${fn} } from "vite-plugin-vercel/universal-middleware";
 import handler from "${absoluteInput}";
 
 export default ${fn}(handler)();
@@ -198,6 +195,7 @@ export default ${fn}(handler)();
     },
 
     async generateBundle() {
+      console.log("generateBundle", this.environment.name);
       // Compute overrides for static HTML files
       const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
       // Copy dist folder to static

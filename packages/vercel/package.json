@@ -10,9 +10,12 @@
   "module": "./dist/index.js",
   "exports": {
     ".": {
-      "types": "./index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
+    },
+    "./universal-middleware": {
+      "import": "./dist/universal-middleware.js",
+      "require": "./dist/universal-middleware.cjs"
     },
     "./types": {
       "types": "./index.d.ts"

@@ -10,6 +10,10 @@ export default defineConfig({
           destination: "api/edge",
           edge: true,
         },
+        {
+          input: "_api/endpoint.ts",
+          destination: "api/endpoint",
+        },
       ],
     }),
   ],
