@@ -205,7 +205,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 import { ${fn} } from "vite-plugin-vercel/universal-middleware";
 import handler from "${absoluteInput}";
 
-export default ${fn}(handler)();
+export default ${fn}(() => handler)();
 `;
       }
     },
