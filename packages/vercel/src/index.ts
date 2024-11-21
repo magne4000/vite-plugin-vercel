@@ -65,18 +65,6 @@ function createVercelEnvironmentOptions(
             entryFileNames(chunkInfo) {
               return `${chunkInfo.name}.${extension}`;
             },
-            // assetFileNames(chunkInfo) {
-            //   // console.log("assetFileNames", chunkInfo);
-            //   return "functions/assets.js";
-            // },
-            // chunkFileNames(chunkInfo) {
-            //   // console.log("chunkFileNames", chunkInfo);
-            //   return "functions/chunks.js";
-            // },
-            // manualChunks(id, meta) {
-            //   console.log("manualChunks", id, Array.from(meta.getModuleIds()));
-            //   return undefined;
-            // },
           },
         },
         emptyOutDir: false,
