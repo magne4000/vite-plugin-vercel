@@ -1,8 +1,9 @@
+import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { getNodeVersion } from "@vercel/build-utils";
 import type { NodeVersion } from "@vercel/build-utils/dist";
-import type { EmittedFile } from "rollup";
+import type { EmittedFile, LoadResult } from "rollup";
 import {
   BuildEnvironment,
   type EnvironmentOptions,
@@ -64,14 +65,18 @@ function createVercelEnvironmentOptions(
             entryFileNames(chunkInfo) {
               return `${chunkInfo.name}.${extension}`;
             },
-            assetFileNames(chunkInfo) {
-              // console.log("assetFileNames", chunkInfo);
-              return "functions/assets.js";
-            },
-            chunkFileNames(chunkInfo) {
-              // console.log("chunkFileNames", chunkInfo);
-              return "functions/chunks.js";
-            },
+            // assetFileNames(chunkInfo) {
+            //   // console.log("assetFileNames", chunkInfo);
+            //   return "functions/assets.js";
+            // },
+            // chunkFileNames(chunkInfo) {
+            //   // console.log("chunkFileNames", chunkInfo);
+            //   return "functions/chunks.js";
+            // },
+            // manualChunks(id, meta) {
+            //   console.log("manualChunks", id, Array.from(meta.getModuleIds()));
+            //   return undefined;
+            // },
           },
         },
         emptyOutDir: false,
@@ -318,8 +323,41 @@ async function getStaticHtmlFiles(src: string) {
   return htmlFiles;
 }
 
+// Inspired by https://github.com/rollup/rollup/issues/2756#issuecomment-2078799110
+function disableChunks(): Plugin {
+  return {
+    name: "vite-plugin-vercel:disable-chunks",
+    enforce: "pre",
+    async resolveId(source, importer, options) {
+      if (
+        !source.startsWith("virtual:vite-plugin-vercel:entry") &&
+        (this.environment.name === "vercel_node" || this.environment.name === "vercel_edge")
+      ) {
+        const resolved = await this.resolve(source, importer, options);
+
+        if (resolved && !resolved.external) {
+          return `${resolved.id}?unique=${randomUUID()}`;
+        }
+      }
+    },
+    // TODO
+    // resolveDynamicImport(specifier, importer) {
+    //   console.log("\nresolveDynamicImport", {
+    //     specifier,
+    //     importer,
+    //   });
+    // },
+    load(id) {
+      const regex = /(\?unique=.*)$/;
+      if (regex.test(id)) {
+        return this.load({ id: id.replace(regex, "") }) as Promise<LoadResult>;
+      }
+    },
+  };
+}
+
 export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
-  return [vercelPluginCleanup(), vercelPlugin(pluginConfig)];
+  return [vercelPluginCleanup(), disableChunks(), vercelPlugin(pluginConfig)];
 }
 
 function getSourceAndDestination(destination: string) {
