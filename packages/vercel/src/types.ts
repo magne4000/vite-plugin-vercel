@@ -1,6 +1,5 @@
 import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
 import type { BuildOptions, StdinOptions } from "esbuild";
-import type { ResolvedConfig } from "vite";
 import type { VercelOutputConfig } from "./schemas/config/config";
 import type { VercelOutputPrerenderConfig } from "./schemas/config/prerender-config";
 import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
@@ -9,10 +8,6 @@ export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderCon
 
 export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
 export type ViteVercelRedirect = Redirect & { enforce?: "pre" | "post" };
-
-export type Awaitable<T> = T | Promise<T>;
-
-// Vite config for Vercel
 
 export interface ViteVercelConfig {
   /**
@@ -27,12 +22,6 @@ export interface ViteVercelConfig {
    * @see {@link https://vercel.com/docs/build-output-api/v3#vercel-primitives/prerender-functions/configuration}
    */
   expiration?: number;
-  /**
-   * Also known as Server Side Generation, or SSG.
-   * If present, this function is responsible to create static files in `.vercel/output/static`.
-   * Defaults to `false`, which disables prerendering.
-   */
-  prerender?: ViteVercelPrerenderFn | false;
   /**
    * @see {@link https://vercel.com/docs/projects/project-configuration#rewrites}
    */
@@ -64,60 +53,11 @@ export interface ViteVercelConfig {
    */
   entries?: ViteVercelEntry[];
   /**
-   * By default, all `api/*` endpoints are compiled under `.vercel/output/functions/api/*.func`.
-   * If others serverless functions need to be compiled under `.vercel/output/functions`, they should be added here.
-   * For instance, a framework can leverage this to have a generic ssr endpoint
-   * without requiring the user to write any code.
-   *
-   * @example
-   * ```
-   * {
-   *   additionalEndpoints: [
-   *     {
-   *       // can also be an Object representing an esbuild StdinOptions
-   *       source: '/path/to/file.ts',
-   *       // URL path of the handler, will be generated to `.vercel/output/functions/api/file.func/index.js`
-   *       destination: '/api/file',
-   *     }
-   *   ]
-   * }
-   * ```
-   *
-   * @deprecated
-   */
-  additionalEndpoints?: (
-    | ViteVercelApiEntry
-    | (() => Awaitable<ViteVercelApiEntry>)
-    | (() => Awaitable<ViteVercelApiEntry[]>)
-  )[];
-  /**
    * Advanced configuration to override .vercel/output/config.json
    * @see {@link https://vercel.com/docs/build-output-api/v3/configuration#configuration}
    * @protected
    */
   config?: Partial<Omit<VercelOutputConfig, "version">>;
-  /**
-   * ISR and SSG pages are mutually exclusive. If a page is found in both, ISR prevails.
-   * Keys are path relative to .vercel/output/functions directory, either without extension,
-   * or with `.prerender-config.json` extension.
-   * If you have multiple isr configurations pointing to the same underlying function, you can leverage the `symlink`
-   * property. See example below.
-   *
-   * @example
-   * ```
-   * // Here `ssr_` means that a function is available under `.vercel/output/functions/ssr_.func`
-   * isr: {
-   *   '/pages/a': { expiration: 15, symlink: 'ssr_', route: '^/a/.*$' },
-   *   '/pages/b/c': { expiration: 15, symlink: 'ssr_', route: '^/b/c/.*$' },
-   *   '/pages/d': { expiration: 15, symlink: 'ssr_', route: '^/d$' },
-   *   '/pages/e': { expiration: 25 }
-   * }
-   * ```
-   *
-   * @protected
-   * @deprecated
-   */
-  isr?: Record<string, VercelOutputIsr> | (() => Awaitable<Record<string, VercelOutputIsr>>);
   /**
    * Defaults to `.vercel/output`. Mostly useful for testing purpose
    * @protected
@@ -141,7 +81,6 @@ export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
  * Keys are path relative to .vercel/output/static directory
  */
 export type ViteVercelPrerenderRoute = VercelOutputConfig["overrides"];
-export type ViteVercelPrerenderFn = (resolvedConfig: ResolvedConfig) => Awaitable<ViteVercelPrerenderRoute>;
 
 export interface ViteVercelEntry {
   /**

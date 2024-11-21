@@ -2,6 +2,7 @@ import { defineConfig } from "tsup";
 
 const entry = {
   index: "./src/index.ts",
+  utils: "./src/utils/index.ts",
   "universal-middleware": "./src/universal-middleware.ts",
 };
 

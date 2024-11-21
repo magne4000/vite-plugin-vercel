@@ -10,13 +10,13 @@ import {
   type PluginOption,
   type ResolvedConfig,
   mergeConfig,
+  normalizePath,
 } from "vite";
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
-import { copyDir } from "./helpers";
+import { copyDir, getOutput, getPublic } from "./helpers";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelPrerenderRoute } from "./types";
-import { getOutput, getPublic } from "./utils";
 
 export * from "./types";
 
@@ -126,19 +126,8 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       };
     },
 
-    // configEnvironment(name, options) {
-    //   console.log("configEnvironment", name, options.build?.rollupOptions);
-    // },
-
-    options(options) {
-      // options.input = {};
-      console.log("options.input", this.environment.name, options.input);
-    },
-
     resolveId(id) {
-      console.log("1 resolveId", id);
       if (id.startsWith(virtualEntry)) {
-        console.log("2 resolveId", id);
         return `\0${id}`;
       }
     },
@@ -191,7 +180,9 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           });
         }
 
-        const absoluteInput = path.posix.join(this.environment.config.root, input);
+        const absoluteInput = normalizePath(
+          path.isAbsolute(input) ? input : path.posix.join(this.environment.config.root, input),
+        );
 
         //language=javascript
         return `

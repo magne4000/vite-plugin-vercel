@@ -17,6 +17,10 @@
       "import": "./dist/universal-middleware.js",
       "require": "./dist/universal-middleware.cjs"
     },
+    "./utils": {
+      "import": "./dist/utils.js",
+      "require": "./dist/utils.cjs"
+    },
     "./types": {
       "types": "./index.d.ts"
     }

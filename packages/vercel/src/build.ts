@@ -1,72 +1,7 @@
-import path from "node:path";
 import type { NodeVersion } from "@vercel/build-utils";
 import type { BuildOptions, Plugin } from "esbuild";
-import glob from "fast-glob";
-import type { ResolvedConfig } from "vite";
 import { vercelOutputVcConfigSchema } from "./schemas/config/vc-config";
-import type { ViteVercelApiEntry, ViteVercelConfig } from "./types";
-import { getRoot, pathRelativeTo } from "./utils";
-
-export async function getAdditionalEndpoints(resolvedConfig: ResolvedConfig) {
-  const userEndpoints: ViteVercelApiEntry[] = [];
-  if (Array.isArray(resolvedConfig.vercel?.additionalEndpoints)) {
-    for (const endpoint of resolvedConfig.vercel.additionalEndpoints) {
-      if (typeof endpoint === "function") {
-        const res = await endpoint();
-        if (Array.isArray(res)) {
-          userEndpoints.push(...res);
-        } else {
-          userEndpoints.push(res);
-        }
-      } else {
-        userEndpoints.push(endpoint);
-      }
-    }
-  }
-
-  return userEndpoints.map((e) => ({
-    ...e,
-    route: e.route ?? true,
-    // path.resolve removes the trailing slash if any
-    destination: `${path.posix.resolve("/", e.destination)}.func`,
-  }));
-}
-
-export async function getEntries(resolvedConfig: ResolvedConfig): Promise<ViteVercelApiEntry[]> {
-  const apiEntries = glob
-    .sync(`${getRoot(resolvedConfig)}/api/**/*.*([a-zA-Z0-9])`)
-    // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
-    .filter((filepath) => !path.basename(filepath).startsWith("_"));
-
-  if (apiEntries.length > 0) {
-    console.warn(
-      "@vercel/build is currently force building /api files itself, with no way to disable it. " +
-        "In order to avoid double compilation, you should temporarily rename /api to /_api while using this plugin. " +
-        "/_api functions are compiled under .vercel/output/functions/api/*.func as if they were in /api.",
-    );
-  }
-
-  const otherApiEntries = glob
-    .sync(`${getRoot(resolvedConfig)}/_api/**/*.*([a-zA-Z0-9])`)
-    // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
-    .filter((filepath) => !path.basename(filepath).startsWith("_"));
-
-  return [...apiEntries, ...otherApiEntries].reduce(
-    (entryPoints, filePath) => {
-      const outFilePath = pathRelativeTo(filePath, resolvedConfig, filePath.includes("/_api/") ? "_api" : "api");
-      const parsed = path.posix.parse(outFilePath);
-
-      entryPoints.push({
-        source: filePath,
-        destination: `api/${path.posix.join(parsed.dir, parsed.name)}.func`,
-        route: true,
-      });
-
-      return entryPoints;
-    },
-    await getAdditionalEndpoints(resolvedConfig),
-  );
-}
+import type { ViteVercelConfig } from "./types";
 
 const edgeWasmPlugin: Plugin = {
   name: "edge-wasm-vercel",
@@ -285,39 +220,6 @@ export function getVcConfig(
 //     .join("/");
 // }
 
-// function isPrimitive(test: unknown) {
-//   return test !== Object(test);
-// }
-
-// export function _eval(code: unknown): boolean {
-//   const func = new Function(`{ return function(){ return ${code} } };`);
-//   return func.call(null).call(null);
-// }
-//
-// function evalExport(exp: unknown) {
-//   if (!exp) return;
-//
-//   const code = isPrimitive(exp) ? exp : generateCode(exp as ASTNode).code;
-//
-//   return _eval(code);
-// }
-
-// async function extractExports(filepath: string) {
-//   try {
-//     const mod = await loadFile(filepath);
-//
-//     const subject = {
-//       edge: evalExport(mod.exports.edge),
-//       headers: evalExport(mod.exports.headers),
-//       streaming: evalExport(mod.exports.streaming),
-//       isr: evalExport(mod.exports.isr),
-//     };
-//
-//     return vercelEndpointExports.parse(subject);
-//   } catch (e) {
-//     console.warn(`Warning: failed to read exports of '${filepath}'`, e);
-//   }
-// }
 //
 // async function extractHeaders(resolvedConfig: ResolvedConfig) {
 //   let headers: Header[] = [];
