@@ -64,6 +64,14 @@ function createVercelEnvironmentOptions(
             entryFileNames(chunkInfo) {
               return `${chunkInfo.name}.${extension}`;
             },
+            assetFileNames(chunkInfo) {
+              // console.log("assetFileNames", chunkInfo);
+              return "functions/assets.js";
+            },
+            chunkFileNames(chunkInfo) {
+              // console.log("chunkFileNames", chunkInfo);
+              return "functions/chunks.js";
+            },
           },
         },
         emptyOutDir: false,
@@ -209,8 +217,6 @@ export default ${fn}(handler)();
       pluginConfig.config ??= {};
       pluginConfig.config.overrides ??= {};
       Object.assign(pluginConfig.config.overrides, userOverrides);
-
-      console.log("pluginConfig", pluginConfig);
 
       // Generate config.json
       this.emitFile({
