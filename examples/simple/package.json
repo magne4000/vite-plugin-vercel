@@ -5,7 +5,7 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "build": "vite build",
+    "build": "vite build --app",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],

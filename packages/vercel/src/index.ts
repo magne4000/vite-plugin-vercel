@@ -175,7 +175,10 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         if (entry.route) {
           pluginConfig.rewrites ??= [];
           pluginConfig.rewrites.push({
-            source: `(${entry.route})`,
+            source:
+              typeof entry.route === "string"
+                ? `(${entry.route})`
+                : replaceBrackets(getSourceAndDestination(entry.destination)),
             destination: `${entry.destination}/?__original_path=$1`,
           });
         }
@@ -206,6 +209,8 @@ export default ${fn}(handler)();
       pluginConfig.config ??= {};
       pluginConfig.config.overrides ??= {};
       Object.assign(pluginConfig.config.overrides, userOverrides);
+
+      console.log("pluginConfig", pluginConfig);
 
       // Generate config.json
       this.emitFile({
@@ -309,4 +314,19 @@ async function getStaticHtmlFiles(src: string) {
 
 export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
   return [vercelPluginCleanup(), vercelPlugin(pluginConfig)];
+}
+
+function getSourceAndDestination(destination: string) {
+  if (destination.startsWith("api/")) {
+    return path.posix.resolve("/", destination);
+  }
+  return path.posix.resolve("/", destination, ":match*");
+}
+
+const RE_BRACKETS = /^\[([^/]+)\]$/gm;
+function replaceBrackets(source: string) {
+  return source
+    .split("/")
+    .map((segment) => segment.replace(RE_BRACKETS, ":$1"))
+    .join("/");
 }

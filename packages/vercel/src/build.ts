@@ -205,21 +205,6 @@ export function getVcConfig(
 //   );
 // }
 
-// function getSourceAndDestination(destination: string) {
-//   if (destination.startsWith("api/")) {
-//     return path.posix.resolve("/", destination);
-//   }
-//   return path.posix.resolve("/", destination, ":match*");
-// }
-//
-// const RE_BRACKETS = /^\[([^/]+)\]$/gm;
-// function replaceBrackets(source: string) {
-//   return source
-//     .split("/")
-//     .map((segment) => segment.replace(RE_BRACKETS, ":$1"))
-//     .join("/");
-// }
-
 //
 // async function extractHeaders(resolvedConfig: ResolvedConfig) {
 //   let headers: Header[] = [];
