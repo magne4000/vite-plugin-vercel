@@ -15,41 +15,41 @@ importers:
         specifier: ^1.9.4
         version: 1.9.4
       '@changesets/cli':
-        specifier: ^2.27.9
+        specifier: ^2.27.10
         version: 2.27.10
       '@types/node':
-        specifier: ^18.19.54
+        specifier: ^18.19.67
         version: 18.19.67
       cross-env:
         specifier: ^7.0.3
         version: 7.0.3
       typescript:
-        specifier: ^5.6.3
+        specifier: ^5.7.2
         version: 5.7.2
 
   examples/demo:
     dependencies:
       '@mdx-js/mdx':
-        specifier: ^3.0.1
+        specifier: ^3.1.0
         version: 3.1.0(acorn@8.12.1)
       '@mdx-js/react':
-        specifier: ^3.0.1
+        specifier: ^3.1.0
         version: 3.1.0(@types/react@18.3.12)(react@18.3.1)
       '@mdx-js/rollup':
-        specifier: ^3.0.1
+        specifier: ^3.1.0
         version: 3.1.0(acorn@8.12.1)(rollup@4.28.0)
       '@vercel/edge-config':
-        specifier: ^1.3.0
+        specifier: ^1.4.0
         version: 1.4.0
       '@vercel/og':
-        specifier: ^0.6.3
+        specifier: ^0.6.4
         version: 0.6.4
       '@vite-plugin-vercel/vike':
         specifier: workspace:*
         version: link:../../packages/vike-integration
       '@vitejs/plugin-react-swc':
-        specifier: ^3.7.1
-        version: 3.7.2(vite@5.4.11(@types/node@18.19.67))
+        specifier: ^3.7.2
+        version: 3.7.2(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2))
       cross-fetch:
         specifier: ^4.0.0
         version: 4.0.0
@@ -63,38 +63,38 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       typescript:
-        specifier: ^5.6.2
+        specifier: ^5.7.2
         version: 5.7.2
       vike:
-        specifier: ^0.4.198
-        version: 0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.67))
+        specifier: ^0.4.206
+        version: 0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2))
       vite:
-        specifier: ^5.4.8
-        version: 5.4.11(@types/node@18.19.67)
+        specifier: ^6.0.2
+        version: 6.0.2(@types/node@18.19.67)(tsx@4.19.2)
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vercel
     devDependencies:
       '@types/node':
-        specifier: ^18.19.54
+        specifier: ^18.19.67
         version: 18.19.67
       '@types/node-fetch':
-        specifier: ^2.6.11
+        specifier: ^2.6.12
         version: 2.6.12
       '@types/react':
-        specifier: ^18.3.11
+        specifier: ^18.3.12
         version: 18.3.12
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: ^18.3.1
         version: 18.3.1
       '@vercel/node':
-        specifier: ^3.2.18
+        specifier: ^3.2.27
         version: 3.2.27(@swc/core@1.7.28)
       fast-glob:
         specifier: ^3.3.2
         version: 3.3.2
       vitest:
-        specifier: ^2.1.2
+        specifier: ^2.1.7
         version: 2.1.7(@edge-runtime/vm@3.2.0)(@types/node@18.19.67)
       zod:
         specifier: ^3.23.8
@@ -110,44 +110,44 @@ importers:
         specifier: ^4.17.21
         version: 4.17.21
       '@types/node':
-        specifier: ^18.19.54
+        specifier: ^18.19.67
         version: 18.19.67
       '@types/react':
-        specifier: ^18.3.11
+        specifier: ^18.3.12
         version: 18.3.12
       '@types/react-dom':
-        specifier: ^18.3.0
+        specifier: ^18.3.1
         version: 18.3.1
       '@universal-middleware/express':
-        specifier: ^0.2.6
-        version: 0.2.10
+        specifier: ^0.3.0
+        version: 0.3.0
       '@vercel/node':
-        specifier: ^3.2.18
+        specifier: ^3.2.27
         version: 3.2.27(@swc/core@1.7.28)
       '@vitejs/plugin-react-swc':
-        specifier: ^3.7.1
-        version: 3.7.2(vite@5.4.11(@types/node@18.19.67))
+        specifier: ^3.7.2
+        version: 3.7.2(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2))
       express:
-        specifier: ^4.21.0
+        specifier: ^4.21.1
         version: 4.21.1
       react:
         specifier: ^18.3.1
         version: 18.3.1
       tsx:
-        specifier: ^4.19.1
+        specifier: ^4.19.2
         version: 4.19.2
       typescript:
-        specifier: ^5.6.2
+        specifier: ^5.7.2
         version: 5.7.2
       vike:
-        specifier: ^0.4.198
-        version: 0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.67))
+        specifier: ^0.4.206
+        version: 0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2))
       vike-react:
-        specifier: ^0.5.7
-        version: 0.5.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.67)))
+        specifier: ^0.5.9
+        version: 0.5.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2)))
       vite:
-        specifier: ^5.4.8
-        version: 5.4.11(@types/node@18.19.67)
+        specifier: ^6.0.2
+        version: 6.0.2(@types/node@18.19.67)(tsx@4.19.2)
 
   examples/simple:
     dependencies:
@@ -156,16 +156,16 @@ importers:
         version: link:../../packages/vercel
     devDependencies:
       '@types/node':
-        specifier: ^18.19.54
+        specifier: ^18.19.67
         version: 18.19.67
       '@vercel/node':
-        specifier: ^3.2.25
+        specifier: ^3.2.27
         version: 3.2.27(@swc/core@1.7.28)
       typescript:
-        specifier: ^5.6.3
+        specifier: ^5.7.2
         version: 5.7.2
       vite:
-        specifier: ^6.0.0-beta.10
+        specifier: ^6.0.2
         version: 6.0.2(@types/node@18.19.67)(tsx@4.19.2)
 
   packages/vercel:
@@ -177,13 +177,13 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       '@universal-middleware/vercel':
-        specifier: ^0.1.1-beta
-        version: 0.1.1-beta
+        specifier: ^0.3.0
+        version: 0.3.0
       '@vercel/build-utils':
-        specifier: ^8.4.12
+        specifier: ^8.6.0
         version: 8.6.0
       '@vercel/nft':
-        specifier: ^0.27.6
+        specifier: ^0.27.7
         version: 0.27.7(rollup@4.28.0)
       '@vercel/routing-utils':
         specifier: ^3.1.0
@@ -202,22 +202,22 @@ importers:
         version: 3.23.8
     devDependencies:
       '@types/node':
-        specifier: ^18.19.54
+        specifier: ^18.19.67
         version: 18.19.67
       '@vite-plugin-vercel/vike':
         specifier: workspace:*
         version: link:../vike-integration
       rollup:
-        specifier: ^4.27.3
+        specifier: ^4.28.0
         version: 4.28.0
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(@swc/core@1.7.28)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
       typescript:
-        specifier: ^5.6.3
+        specifier: ^5.7.2
         version: 5.7.2
       vite:
-        specifier: ^6.0.0-beta.10
+        specifier: ^6.0.2
         version: 6.0.2(@types/node@18.19.67)(tsx@4.19.2)
 
   packages/vike-integration:
@@ -226,14 +226,14 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       nanoid:
-        specifier: ^5.0.8
+        specifier: ^5.0.9
         version: 5.0.9
       qs:
         specifier: ^6.13.1
         version: 6.13.1
     devDependencies:
       '@types/node':
-        specifier: ^18.19.54
+        specifier: ^18.19.67
         version: 18.19.67
       '@types/qs':
         specifier: ^6.9.17
@@ -242,20 +242,20 @@ importers:
         specifier: ^1.1.2
         version: 1.1.2
       '@vercel/node':
-        specifier: ^3.2.24
+        specifier: ^3.2.27
         version: 3.2.27(@swc/core@1.7.28)
       tsup:
         specifier: ^8.3.5
         version: 8.3.5(@swc/core@1.7.28)(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
       typescript:
-        specifier: ^5.6.3
+        specifier: ^5.7.2
         version: 5.7.2
       vike:
-        specifier: ^0.4.203
-        version: 0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.67))
+        specifier: ^0.4.206
+        version: 0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2))
       vite:
-        specifier: ^5.4.11
-        version: 5.4.11(@types/node@18.19.67)
+        specifier: ^6.0.2
+        version: 6.0.2(@types/node@18.19.67)(tsx@4.19.2)
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../vercel
@@ -1225,14 +1225,14 @@ packages:
   '@ungap/structured-clone@1.2.0':
     resolution: {integrity: sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==}
 
-  '@universal-middleware/core@0.2.14':
-    resolution: {integrity: sha512-HrbFL8vafL3WK1EHOAWjaqCXW4bfsvx2mbouSwenLjA2rGmgLcxspBCYzIuDDHdqSCU9vJdqMyswcB3l935RcA==}
+  '@universal-middleware/core@0.3.0':
+    resolution: {integrity: sha512-s29PZin5GWiRGyp8BSJhwrJQXwHaYPT6Sg5NKHbfvv6ezngVXMlt4bsbuDQnMOA+HyMu76cSj2WwY917JSvXtw==}
 
-  '@universal-middleware/express@0.2.10':
-    resolution: {integrity: sha512-jRPY2o40ikpznHGUo0GxeSej6NU4XhjOvTgKMqLB98SpZ5hP+kTDvwv15JqeUFRiMsyN0Vu73RyE4IjzU79tQQ==}
+  '@universal-middleware/express@0.3.0':
+    resolution: {integrity: sha512-kwZ1Go/Z3eOh/8rknTCLL4VzrA3heO6fhFKauQBoTZB3UnWwH3AxLUf2QYhQhWNzDPESCLITUc9yJltf5S0QDQ==}
 
-  '@universal-middleware/vercel@0.1.1-beta':
-    resolution: {integrity: sha512-rj22/KIN6+OprAQbe9ntYB6sSh+Ys6gunwOSjCYKPN1kaxkYHosBsq5DBt4KuzE+SyGMJsUl+zYhgXe+EeGSCA==}
+  '@universal-middleware/vercel@0.3.0':
+    resolution: {integrity: sha512-6uC5CwdFu1C5db176n/WUkVQN6/IteY4s54wwCFw8foSM7A3jkvca/AUqrFPQQiDlbhtcEGFn8euChxEg9UVgw==}
 
   '@vercel/build-utils@8.6.0':
     resolution: {integrity: sha512-shST7/8zY0Oi2uxgwt9S/fjat96Ohpt0bXB+4/TeekdDmIIIL8t+mg9ASEg1WGF8JjWqWx+tYQfXlvv7d/D+dg==}
@@ -4102,19 +4102,19 @@ snapshots:
 
   '@ungap/structured-clone@1.2.0': {}
 
-  '@universal-middleware/core@0.2.14':
+  '@universal-middleware/core@0.3.0':
     dependencies:
       regexparam: 3.0.0
       tough-cookie: 5.0.0
 
-  '@universal-middleware/express@0.2.10':
+  '@universal-middleware/express@0.3.0':
     dependencies:
-      '@universal-middleware/core': 0.2.14
+      '@universal-middleware/core': 0.3.0
 
-  '@universal-middleware/vercel@0.1.1-beta':
+  '@universal-middleware/vercel@0.3.0':
     dependencies:
-      '@universal-middleware/core': 0.2.14
-      '@universal-middleware/express': 0.2.10
+      '@universal-middleware/core': 0.3.0
+      '@universal-middleware/express': 0.3.0
 
   '@vercel/build-utils@8.6.0': {}
 
@@ -4211,10 +4211,10 @@ snapshots:
       json-schema-to-ts: 1.6.4
       ts-morph: 12.0.0
 
-  '@vitejs/plugin-react-swc@3.7.2(vite@5.4.11(@types/node@18.19.67))':
+  '@vitejs/plugin-react-swc@3.7.2(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2))':
     dependencies:
       '@swc/core': 1.7.28
-      vite: 5.4.11(@types/node@18.19.67)
+      vite: 6.0.2(@types/node@18.19.67)(tsx@4.19.2)
     transitivePeerDependencies:
       - '@swc/helpers'
 
@@ -6303,14 +6303,14 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike-react@0.5.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.67))):
+  vike-react@0.5.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2))):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-streaming: 0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.67))
+      vike: 0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2))
 
-  vike@0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.67)):
+  vike@0.4.206(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.2(@types/node@18.19.67)(tsx@4.19.2)):
     dependencies:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.13
@@ -6324,7 +6324,7 @@ snapshots:
       fast-glob: 3.3.2
       semver: 7.6.3
       source-map-support: 0.5.21
-      vite: 5.4.11(@types/node@18.19.67)
+      vite: 6.0.2(@types/node@18.19.67)(tsx@4.19.2)
     optionalDependencies:
       react-streaming: 0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 

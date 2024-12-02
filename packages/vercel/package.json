@@ -37,22 +37,22 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "vite": "^6"
+    "vite": ">=6"
   },
   "devDependencies": {
-    "@types/node": "^18.19.54",
+    "@types/node": "^18.19.67",
     "@vite-plugin-vercel/vike": "workspace:*",
-    "rollup": "^4.27.3",
+    "rollup": "^4.28.0",
     "tsup": "^8.3.5",
-    "typescript": "^5.6.3",
-    "vite": "^6.0.0-beta.10"
+    "typescript": "^5.7.2",
+    "vite": "^6.0.2"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@universal-middleware/vercel": "^0.1.1-beta",
-    "@vercel/build-utils": "^8.4.12",
-    "@vercel/nft": "^0.27.6",
+    "@universal-middleware/vercel": "^0.3.0",
+    "@vercel/build-utils": "^8.6.0",
+    "@vercel/nft": "^0.27.7",
     "@vercel/routing-utils": "^3.1.0",
     "esbuild": "^0.24.0",
     "fast-glob": "^3.3.2",

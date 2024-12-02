@@ -31,19 +31,19 @@
     "lint:ts": "eslint . --max-warnings 0 --ignore-pattern dist"
   },
   "devDependencies": {
-    "@types/node": "^18.19.54",
+    "@types/node": "^18.19.67",
     "@types/qs": "^6.9.17",
     "@vercel/edge": "^1.1.2",
-    "@vercel/node": "^3.2.24",
+    "@vercel/node": "^3.2.27",
     "tsup": "^8.3.5",
-    "typescript": "^5.6.3",
-    "vike": "^0.4.203",
-    "vite": "^5.4.11",
+    "typescript": "^5.7.2",
+    "vike": "^0.4.206",
+    "vite": "^6.0.2",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "nanoid": "^5.0.8",
+    "nanoid": "^5.0.9",
     "qs": "^6.13.1"
   },
   "peerDependencies": {
