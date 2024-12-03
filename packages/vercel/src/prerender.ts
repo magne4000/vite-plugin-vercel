@@ -1,11 +1,10 @@
-import type { ResolvedConfig } from "vite";
-import path from "node:path";
-import { getOutput } from "./utils";
-import { type VercelOutputPrerenderConfig, vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import fs from "node:fs/promises";
-import type { VercelOutputIsr, ViteVercelPrerenderRoute } from "./types";
+import path from "node:path";
 import type { Rewrite } from "@vercel/routing-utils";
-import { copyDir } from "./helpers";
+import type { ResolvedConfig } from "vite";
+import { copyDir, getOutput } from "./helpers";
+import { type VercelOutputPrerenderConfig, vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
+import type { VercelOutputIsr, ViteVercelPrerenderRoute } from "./types";
 
 export function execPrerender(
   resolvedConfig: ResolvedConfig,
