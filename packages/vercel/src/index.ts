@@ -1,9 +1,8 @@
-import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { getNodeVersion } from "@vercel/build-utils";
 import type { NodeVersion } from "@vercel/build-utils/dist";
-import type { EmittedFile, LoadResult } from "rollup";
+import type { EmittedFile } from "rollup";
 import {
   BuildEnvironment,
   type EnvironmentOptions,
@@ -16,34 +15,12 @@ import {
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
 import { copyDir, getOutput, getPublic } from "./helpers";
+import { vercelPluginCleanup } from "./plugins/cleanup";
+import { disableChunks } from "./plugins/disable-chunks";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelPrerenderRoute } from "./types";
 
 export * from "./types";
-
-function vercelPluginCleanup(): Plugin {
-  let resolvedConfig: ResolvedConfig;
-
-  return {
-    apply: "build",
-    name: "vite-plugin-vercel:cleanup",
-    enforce: "pre",
-
-    configResolved(config) {
-      resolvedConfig = config;
-    },
-    buildStart: {
-      order: "pre",
-      sequential: true,
-      async handler(options) {
-        if (!resolvedConfig.build?.ssr) {
-          // FIXME ensure unique execution, or check if we can leverage `emptyOutDir` option
-          // await cleanOutputDirectory(resolvedConfig);
-        }
-      },
-    },
-  };
-}
 
 const outDir = path.join(".vercel", "output");
 
@@ -309,39 +286,6 @@ async function getStaticHtmlFiles(src: string) {
   }
 
   return htmlFiles;
-}
-
-// Inspired by https://github.com/rollup/rollup/issues/2756#issuecomment-2078799110
-function disableChunks(): Plugin {
-  return {
-    name: "vite-plugin-vercel:disable-chunks",
-    enforce: "pre",
-    async resolveId(source, importer, options) {
-      if (
-        !source.startsWith("virtual:vite-plugin-vercel:entry") &&
-        (this.environment.name === "vercel_node" || this.environment.name === "vercel_edge")
-      ) {
-        const resolved = await this.resolve(source, importer, options);
-
-        if (resolved && !resolved.external) {
-          return `${resolved.id}?unique=${randomUUID()}`;
-        }
-      }
-    },
-    // TODO
-    // resolveDynamicImport(specifier, importer) {
-    //   console.log("\nresolveDynamicImport", {
-    //     specifier,
-    //     importer,
-    //   });
-    // },
-    load(id) {
-      const regex = /(\?unique=.*)$/;
-      if (regex.test(id)) {
-        return this.load({ id: id.replace(regex, "") }) as Promise<LoadResult>;
-      }
-    },
-  };
 }
 
 export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
