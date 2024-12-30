@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 9.0.3
+
+### Patch Changes
+
+- Update peerDependencies to include Vite6
+
 ## 9.0.2
 
 ### Patch Changes
