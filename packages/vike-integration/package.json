@@ -48,7 +48,7 @@
   },
   "peerDependencies": {
     "vike": "^0.4.183",
-    "vite": "^4.4 || ^5.0.2",
+    "vite": "^4.4 || ^5.0.2 || ^6",
     "vite-plugin-vercel": "*"
   },
   "license": "MIT"
