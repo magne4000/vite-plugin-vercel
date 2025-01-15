@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { prerender as prerenderCli } from "vike/prerender";
+import { prerender as prerenderCli } from "vike/api";
 import type { PageContextServer } from "vike/types";
 import { type Plugin, type ResolvedConfig, type UserConfig, normalizePath } from "vite";
 import type {
