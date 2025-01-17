@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vike dev",
     "build": "vike build",
-    "preview": "vike build && vike preview",
+    "preview": "vike build && NODE_ENV=production node dist/server/index.mjs",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm run test:01 && pnpm run test:02 && pnpm run test:03 && pnpm run test:04 && pnpm run test:05",
     "test:01": "vitest run --dir tests/01-minimal --config tests/01-minimal/vitest.config.ts",
