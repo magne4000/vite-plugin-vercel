@@ -6,25 +6,6 @@ export function getTmpDir(displayName: string) {
   return path.join(os.tmpdir(), `vpv-demo-${displayName}`);
 }
 
-declare module "vite" {
-  interface BuildOptions {
-    vitePluginSsr?: {
-      prerender?:
-        | boolean
-        | {
-            noExtraDir?: boolean;
-            parallel?: boolean | number;
-            partial?: boolean;
-            disableAutoRun?: boolean;
-          };
-      pageFiles?: { include?: string[] };
-      disableAutoFullBuild?: boolean;
-      includeCSS?: string[];
-      includeAssetsImportedByServer?: boolean;
-    };
-  }
-}
-
 export async function callBuild(dirname: string, config: InlineConfig) {
   const tmpdir = getTmpDir(dirname);
 

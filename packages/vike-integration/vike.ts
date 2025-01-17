@@ -363,11 +363,6 @@ export function vikeVercelPlugin(options: Options = {}): Plugin {
       ];
 
       return {
-        vitePluginSsr: {
-          prerender: {
-            disableAutoRun: true,
-          },
-        },
         vercel: {
           prerender: userConfig.vercel?.prerender ?? prerender,
           additionalEndpoints,
