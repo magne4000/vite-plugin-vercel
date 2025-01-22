@@ -3,17 +3,33 @@ import { setup as _setup } from "../common/setup";
 import { teardown as _teardown } from "../common/teardown";
 import react from "@vitejs/plugin-react-swc";
 import vercel from "vite-plugin-vercel";
+import { getEntriesFromFs } from "vite-plugin-vercel/utils";
+import { getTmpDir } from "../common/utils";
 
-export const setup = _setup(path.basename(__dirname), {
+const dirname = path.basename(__dirname);
+
+export const setup = _setup(dirname, {
   configFile: false,
   mode: "production",
   root: process.cwd(),
   plugins: [
     react(),
     vercel({
-      smart: false,
+      outDir: getTmpDir(dirname),
+      entries: [
+        ...(await getEntriesFromFs("_api", {
+          destination: "api",
+        })),
+        ...(await getEntriesFromFs("endpoints", {
+          // Auto mapping:
+          //   endpoints/edge.ts -> /edge
+          //   endpoints/og-node.tsx -> /og-node
+          //   endpoints/og-edge.tsx -> og-edge
+          destination: "",
+        })),
+      ],
     }),
   ],
 });
 
-export const teardown = _teardown(path.basename(__dirname));
+export const teardown = _teardown(dirname);

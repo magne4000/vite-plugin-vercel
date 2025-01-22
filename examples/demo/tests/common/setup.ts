@@ -1,12 +1,10 @@
 import fs from "node:fs/promises";
-import os from "node:os";
-import path from "node:path";
 import type { InlineConfig } from "vite";
-import { callBuild } from "./utils";
+import { callBuild, getTmpDir } from "./utils";
 
 export function setup(displayName: string, inlineConfig: InlineConfig) {
   return async () => {
-    const tmpdir = path.join(os.tmpdir(), `vpv-demo-${displayName}`);
+    const tmpdir = getTmpDir(displayName);
 
     await fs.rm(tmpdir, {
       recursive: true,
@@ -16,6 +14,6 @@ export function setup(displayName: string, inlineConfig: InlineConfig) {
       recursive: true,
     });
 
-    await callBuild(displayName, inlineConfig);
+    await callBuild(inlineConfig);
   };
 }

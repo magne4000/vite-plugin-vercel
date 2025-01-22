@@ -5,7 +5,8 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "build": "vite build --app",
+    "dev": "vite",
+    "build": "vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],
@@ -14,7 +15,7 @@
     "@types/node": "^18.19.67",
     "@vercel/node": "^3.2.27",
     "typescript": "^5.7.2",
-    "vite": "^6.0.2"
+    "vite": "^6.0.11"
   },
   "dependencies": {
     "vite-plugin-vercel": "workspace:*"

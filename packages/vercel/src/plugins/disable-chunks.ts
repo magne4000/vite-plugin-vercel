@@ -1,11 +1,12 @@
 import { randomUUID } from "node:crypto";
 import type { LoadResult } from "rollup";
-// Inspired by https://github.com/rollup/rollup/issues/2756#issuecomment-2078799110
 import type { Plugin } from "vite";
 
+// Inspired by https://github.com/rollup/rollup/issues/2756#issuecomment-2078799110
 export function disableChunks(): Plugin {
   return {
     name: "vite-plugin-vercel:disable-chunks",
+    apply: "build",
     enforce: "pre",
     async resolveId(source, importer, options) {
       if (
