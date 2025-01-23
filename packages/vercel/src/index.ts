@@ -71,7 +71,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
   let nodeVersion: NodeVersion;
   const filesToEmit: Record<string, EmittedFile[]> = { client: [] };
-  let cleaned = false;
   let generateConfigAt: "client" | "vercel_edge" | "vercel_node" = "client";
 
   return {
@@ -87,13 +86,13 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
     config(config, env) {
       const entries = pluginConfig.entries ?? [];
-      const outDirOverride = pluginConfig.outDir
+      const outDirOverride: EnvironmentOptions = pluginConfig.outDir
         ? {
             build: {
               outDir: pluginConfig.outDir,
             },
           }
-        : undefined;
+        : {};
       const inputs = entries.reduce(
         (acc, curr) => {
           const destination = `${path.posix.join("functions/", curr.destination)}.func/index`;
@@ -123,25 +122,46 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       if (Object.keys(inputs.edge).length > 0) {
         generateConfigAt = "vercel_edge";
         filesToEmit.vercel_edge = [];
-        environments.vercel_edge = createVercelEnvironmentOptions(inputs.edge, "js", {
-          resolve: {
-            conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
-          },
-          optimizeDeps: {
-            // entries: ["_api/edge.ts"],
-            esbuildOptions: {
-              target: "es2022",
-              format: "esm",
+        environments.vercel_edge = createVercelEnvironmentOptions(
+          inputs.edge,
+          "js",
+          mergeConfig<EnvironmentOptions, EnvironmentOptions>(
+            {
+              resolve: {
+                conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
+              },
+              optimizeDeps: {
+                // entries: ["_api/edge.ts"],
+                esbuildOptions: {
+                  target: "es2022",
+                  format: "esm",
+                },
+                // entries: Object.values(input).map((i) => i.replace(`virtual:vite-plugin-vercel:entry:`, "")),
+              },
+              build: {
+                emptyOutDir: true,
+              },
             },
-            // entries: Object.values(input).map((i) => i.replace(`virtual:vite-plugin-vercel:entry:`, "")),
-          },
-          ...outDirOverride,
-        });
+            outDirOverride,
+          ),
+        );
       }
       if (Object.keys(inputs.node).length > 0) {
         generateConfigAt = "vercel_node";
         filesToEmit.vercel_node = [];
-        environments.vercel_node = createVercelEnvironmentOptions(inputs.node, "mjs", outDirOverride);
+        environments.vercel_node = createVercelEnvironmentOptions(
+          inputs.node,
+          "mjs",
+          mergeConfig<EnvironmentOptions, EnvironmentOptions>(
+            {
+              build: {
+                // Ensure that outDir is emptied only once
+                emptyOutDir: !("vercel_edge" in environments),
+              },
+            },
+            outDirOverride,
+          ),
+        );
       }
 
       return {
@@ -275,74 +295,40 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       }
     },
 
-    async generateBundle() {
-      if (!cleaned) {
-        await cleanOutputDirectory(this.environment.config);
-        cleaned = true;
-      }
+    generateBundle: {
+      order: "post",
+      async handler() {
+        for (const f of filesToEmit[this.environment.name]) {
+          this.emitFile(f);
+        }
 
-      for (const f of filesToEmit[this.environment.name]) {
-        this.emitFile(f);
-      }
+        // TODO check if necessary or needs refactor
+        // Compute overrides for static HTML files
+        const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
+        // Update overrides with static files paths
+        pluginConfig.config ??= {};
+        pluginConfig.config.overrides ??= {};
+        Object.assign(pluginConfig.config.overrides, userOverrides);
 
-      // TODO check if necessary or needs refactor
-      // Compute overrides for static HTML files
-      const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
-      // Update overrides with static files paths
-      pluginConfig.config ??= {};
-      pluginConfig.config.overrides ??= {};
-      Object.assign(pluginConfig.config.overrides, userOverrides);
+        if (this.environment.name === generateConfigAt) {
+          // Copy dist folder to static
+          // TODO still necessary? Should copy for all envs?
+          await copyDistToStatic(this.environment.config);
 
-      if (this.environment.name === generateConfigAt) {
-        // Copy dist folder to static
-        // TODO still necessary? Should copy for all envs?
-        await copyDistToStatic(this.environment.config);
+          console.log(pluginConfig);
 
-        console.log(pluginConfig);
-
-        // Generate config.json
-        this.emitFile({
-          type: "asset",
-          fileName: "config.json",
-          source: JSON.stringify(getConfig(pluginConfig), undefined, 2),
-        });
-      }
+          // Generate config.json
+          this.emitFile({
+            type: "asset",
+            fileName: "config.json",
+            source: JSON.stringify(getConfig(pluginConfig), undefined, 2),
+          });
+        }
+      },
     },
 
     sharedDuringBuild: true,
-
-    // writeBundle: {
-    //   order: "post",
-    //   sequential: true,
-    //   async handler() {
-    //     // Compile serverless functions to ".vercel/output/functions"
-    //     // /api auto bundling
-    //     // TODO: make this opt-in, and /api folder should be configurable
-    //     // const { rewrites, isr, headers } = await buildEndpoints(resolvedConfig);
-    //     // Generate prerender config files
-    //     // rewrites.push(...(await buildPrerenderConfigs(resolvedConfig, isr)));
-    //     // Generate config file
-    //     // await writeConfig(
-    //     //   resolvedConfig,
-    //     //   rewrites,
-    //     //   {
-    //     //     ...userOverrides,
-    //     //     ...overrides,
-    //     //   },
-    //     //   headers,
-    //     // );
-    //   },
-    // },
   };
-}
-
-async function cleanOutputDirectory(resolvedConfig: ResolvedConfig) {
-  await fs.rm(getOutput(resolvedConfig), {
-    recursive: true,
-    force: true,
-  });
-
-  await fs.mkdir(getOutput(resolvedConfig), { recursive: true });
 }
 
 async function copyDistToStatic(resolvedConfig: ResolvedConfig) {
