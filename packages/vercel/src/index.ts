@@ -177,6 +177,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       };
     },
 
+    // TODO
     configureServer(server) {
       const transformedRoutes = getTransformedRoutes({
         rewrites: pluginConfig.entries?.map((entry) => ({
