@@ -112,6 +112,8 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       const environments: Record<string, EnvironmentOptions> = {};
 
       // See https://github.com/vercel/examples/tree/main/build-output-api/static-files
+      // FIXME incompat with Vike.
+      //       manually copy public dir then? Vike `dist/client` files should be copied too, how?
       environments.client = {
         build: {
           outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
