@@ -131,12 +131,10 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
                 conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
               },
               optimizeDeps: {
-                // entries: ["_api/edge.ts"],
                 esbuildOptions: {
                   target: "es2022",
                   format: "esm",
                 },
-                // entries: Object.values(input).map((i) => i.replace(`virtual:vite-plugin-vercel:entry:`, "")),
               },
               build: {
                 emptyOutDir: true,
