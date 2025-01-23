@@ -13,7 +13,11 @@ describe("fs", () => {
     "/functions/api/post.func/.vc-config.json",
     "/functions/edge.func/index.js",
     "/functions/edge.func/.vc-config.json",
+    "/functions/og-edge.func/.vc-config.json",
+    "/functions/og-edge.func/index.js",
+    "/functions/og-node.func/.vc-config.json",
+    "/functions/og-node.func/index.mjs",
+    "/static/index.html",
     "/static/test.html",
-    "/static/tests/common/index.html",
   ]);
 });

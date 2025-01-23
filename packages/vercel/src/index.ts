@@ -45,12 +45,14 @@ function createVercelEnvironmentOptions(
           return new BuildEnvironment(name, config);
         },
         outDir,
+        copyPublicDir: false,
         rollupOptions: {
           input,
           output: {
-            entryFileNames(chunkInfo) {
-              return `${chunkInfo.name}.${extension}`;
+            entryFileNames() {
+              return `[name].${extension}`;
             },
+            sanitizeFileName: false,
           },
         },
         emptyOutDir: false,
@@ -83,8 +85,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "client";
     },
 
-    config(config) {
-      // TODO client env does not respect outDir override
+    config(config, env) {
       const entries = pluginConfig.entries ?? [];
       const outDirOverride = pluginConfig.outDir
         ? {
@@ -132,12 +133,19 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         environments.vercel_node = createVercelEnvironmentOptions(inputs.node, "mjs", outDirOverride);
       }
 
+      // See https://github.com/vercel/examples/tree/main/build-output-api/static-files
+      environments.client = {
+        build: {
+          outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
+          copyPublicDir: true,
+        },
+      };
+
       return {
         appType: "custom",
         // equivalent to --app CLI option
         builder: {
           buildApp: async (builder) => {
-            console.log("buildApp");
             const environments = Object.values(builder.environments);
             // console.log("environments", environments);
             return Promise.all(environments.map((environment) => builder.build(environment))) as any;
@@ -256,14 +264,12 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       }
     },
 
-    async generateBundle(bundle) {
+    async generateBundle(_opts, bundle) {
       if (!cleaned) {
         await cleanOutputDirectory(this.environment.config);
         cleaned = true;
       }
 
-      console.log("filesToEmit", filesToEmit);
-      console.log("this.environment.name", this.environment.name);
       for (const f of filesToEmit[this.environment.name]) {
         this.emitFile(f);
       }
