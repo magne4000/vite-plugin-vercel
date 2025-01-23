@@ -25,9 +25,14 @@ prepareTestJsonFileContent(path.basename(__dirname), "config.json", (context) =>
       },
       { handle: "filesystem" },
       {
-        src: "^/edge(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$",
-        dest: "/edge/$1",
         check: true,
+        src: "^/edge$",
+        dest: "/edge",
+      },
+      {
+        check: true,
+        src: "^/og-edge$",
+        dest: "/og-edge",
       },
       {
         check: true,
@@ -43,6 +48,11 @@ prepareTestJsonFileContent(path.basename(__dirname), "config.json", (context) =>
         check: true,
         src: "^/api/name(?:/([^/]+?))$",
         dest: "/api/name/[name]?name=$1",
+      },
+      {
+        check: true,
+        src: "^/og-node$",
+        dest: "/og-node",
       },
     ]);
     expect(context.file).toHaveProperty("overrides", {});

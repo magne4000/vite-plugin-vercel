@@ -22,7 +22,7 @@ import { copyDir, getOutput, getPublic } from "./helpers";
 import { vercelPluginCleanup } from "./plugins/cleanup";
 import { disableChunks } from "./plugins/disable-chunks";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
-import type { ViteVercelConfig, ViteVercelPrerenderRoute } from "./types";
+import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
 
 export * from "./types";
 
@@ -72,7 +72,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   let nodeVersion: NodeVersion;
   const filesToEmit: Record<string, EmittedFile[]> = { client: [] };
   let cleaned = false;
-  let generated = false;
+  let generateConfigAt: "client" | "vercel_edge" | "vercel_node" = "client";
 
   return {
     name: "vite-plugin-vercel",
@@ -111,7 +111,17 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       );
 
       const environments: Record<string, EnvironmentOptions> = {};
+
+      // See https://github.com/vercel/examples/tree/main/build-output-api/static-files
+      environments.client = {
+        build: {
+          outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
+          copyPublicDir: true,
+        },
+      };
+
       if (Object.keys(inputs.edge).length > 0) {
+        generateConfigAt = "vercel_edge";
         filesToEmit.vercel_edge = [];
         environments.vercel_edge = createVercelEnvironmentOptions(inputs.edge, "js", {
           resolve: {
@@ -129,26 +139,20 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         });
       }
       if (Object.keys(inputs.node).length > 0) {
+        generateConfigAt = "vercel_node";
         filesToEmit.vercel_node = [];
         environments.vercel_node = createVercelEnvironmentOptions(inputs.node, "mjs", outDirOverride);
       }
-
-      // See https://github.com/vercel/examples/tree/main/build-output-api/static-files
-      environments.client = {
-        build: {
-          outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
-          copyPublicDir: true,
-        },
-      };
 
       return {
         appType: "custom",
         // equivalent to --app CLI option
         builder: {
           buildApp: async (builder) => {
-            const environments = Object.values(builder.environments);
-            // console.log("environments", environments);
-            return Promise.all(environments.map((environment) => builder.build(environment))) as any;
+            for (const environment of Object.values(builder.environments)) {
+              console.log(environment.name);
+              await builder.build(environment);
+            }
           },
         },
         environments,
@@ -158,10 +162,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     configureServer(server) {
       const transformedRoutes = getTransformedRoutes({
         rewrites: pluginConfig.entries?.map((entry) => ({
-          source:
-            typeof entry.route === "string"
-              ? `(${entry.route})`
-              : replaceBrackets(getSourceAndDestination(entry.destination)),
+          source: typeof entry.route === "string" ? `(${entry.route})` : entryToPathtoregex(entry),
           destination: entry.destination,
         })),
       });
@@ -241,13 +242,23 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         // Generate rewrites
         if (entry.route) {
           pluginConfig.rewrites ??= [];
+          const source = typeof entry.route === "string" ? `(${entry.route})` : entryToPathtoregex(entry);
           pluginConfig.rewrites.push({
-            source:
-              typeof entry.route === "string"
-                ? `(${entry.route})`
-                : replaceBrackets(getSourceAndDestination(entry.destination)),
-            destination: `${entry.destination}/?__original_path=$1`,
+            source,
+            destination: `/${entry.destination}`,
           });
+
+          // Generate headers
+          if (entry.headers) {
+            pluginConfig.headers ??= [];
+            pluginConfig.headers.push({
+              source,
+              headers: Object.entries(entry.headers).map(([key, value]) => ({
+                key,
+                value,
+              })),
+            });
+          }
         }
 
         const absoluteInput = normalizePath(
@@ -264,7 +275,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       }
     },
 
-    async generateBundle(_opts, bundle) {
+    async generateBundle() {
       if (!cleaned) {
         await cleanOutputDirectory(this.environment.config);
         cleaned = true;
@@ -274,17 +285,20 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         this.emitFile(f);
       }
 
-      // Must respect `outDir` override
-      if (!generated && this.environment.name !== "client") {
-        generated = true;
-        // Compute overrides for static HTML files
-        const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
+      // TODO check if necessary or needs refactor
+      // Compute overrides for static HTML files
+      const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
+      // Update overrides with static files paths
+      pluginConfig.config ??= {};
+      pluginConfig.config.overrides ??= {};
+      Object.assign(pluginConfig.config.overrides, userOverrides);
+
+      if (this.environment.name === generateConfigAt) {
         // Copy dist folder to static
+        // TODO still necessary? Should copy for all envs?
         await copyDistToStatic(this.environment.config);
-        // Update overrides with static files paths
-        pluginConfig.config ??= {};
-        pluginConfig.config.overrides ??= {};
-        Object.assign(pluginConfig.config.overrides, userOverrides);
+
+        console.log(pluginConfig);
 
         // Generate config.json
         this.emitFile({
@@ -389,18 +403,17 @@ export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption
   return [vercelPluginCleanup(), disableChunks(), vercelPlugin(pluginConfig)];
 }
 
-function getSourceAndDestination(destination: string) {
-  if (destination.startsWith("api/")) {
-    return path.posix.resolve("/", destination);
-  }
-  return path.posix.resolve("/", destination, ":match*");
-}
-
-const RE_BRACKETS = /^\[([^/]+)\]$/gm;
-
-function replaceBrackets(source: string) {
-  return source
+// @vercel/routing-utils respects path-to-regexp syntax
+function entryToPathtoregex(entry: ViteVercelEntry) {
+  return path.posix
+    .resolve("/", entry.destination)
     .split("/")
-    .map((segment) => segment.replace(RE_BRACKETS, ":$1"))
+    .map((segment) =>
+      segment
+        .replace(/^\[\[\.\.\.([^/]+)\]\]$/g, ":$1*")
+        .replace(/^\[\[([^/]+)\]\]$/g, ":$1?")
+        .replace(/^\[\.\.\.([^/]+)\]$/g, ":$1+")
+        .replace(/^\[([^/]+)\]$/g, ":$1"),
+    )
     .join("/");
 }
