@@ -11,6 +11,7 @@ import type {
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from "vite-plugin-vercel";
+import "vike/__internal/setup";
 // @ts-ignore
 import { newError } from "@brillout/libassert";
 import { nanoid } from "nanoid";
