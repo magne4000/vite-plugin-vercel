@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  vike: 0.4.218-commit-da1f60b
+  vike: 0.4.218-commit-5d388ee
   path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
 
 importers:
@@ -67,8 +67,8 @@ importers:
         specifier: ^5.6.2
         version: 5.6.3
       vike:
-        specifier: 0.4.218-commit-da1f60b
-        version: 0.4.218-commit-da1f60b(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
+        specifier: 0.4.218-commit-5d388ee
+        version: 0.4.218-commit-5d388ee(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
       vite:
         specifier: ^5.4.8
         version: 5.4.11(@types/node@18.19.54)
@@ -141,11 +141,11 @@ importers:
         specifier: ^5.6.2
         version: 5.6.3
       vike:
-        specifier: 0.4.218-commit-da1f60b
-        version: 0.4.218-commit-da1f60b(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
+        specifier: 0.4.218-commit-5d388ee
+        version: 0.4.218-commit-5d388ee(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
       vike-react:
         specifier: ^0.5.7
-        version: 0.5.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.218-commit-da1f60b(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.54)))
+        version: 0.5.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.218-commit-5d388ee(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.54)))
       vite:
         specifier: ^5.4.8
         version: 5.4.11(@types/node@18.19.54)
@@ -212,8 +212,8 @@ importers:
         specifier: ^5.6.3
         version: 5.6.3
       vike:
-        specifier: 0.4.218-commit-da1f60b
-        version: 0.4.218-commit-da1f60b(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
+        specifier: 0.4.218-commit-5d388ee
+        version: 0.4.218-commit-5d388ee(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
       vite:
         specifier: ^5.4.11
         version: 5.4.11(@types/node@18.19.54)
@@ -249,8 +249,8 @@ importers:
         specifier: ^5.6.3
         version: 5.6.3
       vike:
-        specifier: 0.4.218-commit-da1f60b
-        version: 0.4.218-commit-da1f60b(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
+        specifier: 0.4.218-commit-5d388ee
+        version: 0.4.218-commit-5d388ee(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
       vite:
         specifier: ^5.4.11
         version: 5.4.11(@types/node@18.19.54)
@@ -3102,10 +3102,10 @@ packages:
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
-      vike: 0.4.218-commit-da1f60b
+      vike: 0.4.218-commit-5d388ee
 
-  vike@0.4.218-commit-da1f60b:
-    resolution: {integrity: sha512-80lwZJJFvi/HBfEugYnJr8sKgP7DlqFgSu14gjIup9NMI9M9TYscK2DvNGZNklzntwNtYLENVXjXJFcBXh7Gjw==}
+  vike@0.4.218-commit-5d388ee:
+    resolution: {integrity: sha512-NTXaDLwcmc3s5rrvjon1sIhOFNSbTU1+uPenYDfNXi0h4Or6H7qC+xmPzgUXIwqwDhNAILGo7y2FzqasUPln2g==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -6215,14 +6215,14 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike-react@0.5.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.218-commit-da1f60b(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.54))):
+  vike-react@0.5.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.218-commit-5d388ee(react-streaming@0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@5.4.11(@types/node@18.19.54))):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-streaming: 0.3.43(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.218-commit-da1f60b(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
+      vike: 0.4.218-commit-5d388ee(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54))
 
-  vike@0.4.218-commit-da1f60b(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54)):
+  vike@0.4.218-commit-5d388ee(react-streaming@0.3.43)(vite@5.4.11(@types/node@18.19.54)):
     dependencies:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.15
