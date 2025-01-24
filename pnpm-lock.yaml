@@ -66,7 +66,7 @@ importers:
         specifier: ^5.6.2
         version: 5.6.3
       vike:
-        specifier: ^0.4.217
+        specifier: ^0.4.219
         version: 0.4.219(react-streaming@0.3.47)(vite@5.4.11(@types/node@18.19.54))
       vite:
         specifier: ^5.4.8
@@ -140,7 +140,7 @@ importers:
         specifier: ^5.6.2
         version: 5.6.3
       vike:
-        specifier: ^0.4.217
+        specifier: ^0.4.219
         version: 0.4.219(react-streaming@0.3.47)(vite@5.4.11(@types/node@18.19.54))
       vike-react:
         specifier: ^0.5.12
@@ -211,7 +211,7 @@ importers:
         specifier: ^5.6.3
         version: 5.6.3
       vike:
-        specifier: ^0.4.217
+        specifier: ^0.4.219
         version: 0.4.219(react-streaming@0.3.47)(vite@5.4.11(@types/node@18.19.54))
       vite:
         specifier: ^5.4.11
@@ -248,7 +248,7 @@ importers:
         specifier: ^5.6.3
         version: 5.6.3
       vike:
-        specifier: ^0.4.217
+        specifier: ^0.4.219
         version: 0.4.219(react-streaming@0.3.47)(vite@5.4.11(@types/node@18.19.54))
       vite:
         specifier: ^5.4.11
