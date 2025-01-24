@@ -47,7 +47,7 @@
     "qs": "^6.13.1"
   },
   "peerDependencies": {
-    "vike": "^0.4.213",
+    "vike": "^0.4.183",
     "vite": "^4.4 || ^5.0.2 || ^6",
     "vite-plugin-vercel": "*"
   },

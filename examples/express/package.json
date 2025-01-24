@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx ./express-entry.ts",
-    "build": "vike build",
+    "build": "vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],
