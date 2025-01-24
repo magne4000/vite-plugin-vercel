@@ -11,6 +11,7 @@ import type {
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
 } from "vite-plugin-vercel";
+// TODO/next-major-release: remove this and require >=vike@0.4.219
 import "vike/__internal/setup";
 // @ts-ignore
 import { newError } from "@brillout/libassert";
