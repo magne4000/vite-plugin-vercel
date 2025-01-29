@@ -70,8 +70,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const virtualEntry = "virtual:vite-plugin-vercel:entry";
   const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
   let nodeVersion: NodeVersion;
-  const filesToEmit: Record<string, EmittedFile[]> = { client: [] };
-  let generateConfigAt: "client" | "vercel_edge" | "vercel_node" = "client";
+  const filesToEmit: Record<string, EmittedFile[]> = { vercel_client: [] };
 
   return {
     name: "vite-plugin-vercel",
@@ -81,7 +80,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     applyToEnvironment(env) {
-      return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "client";
+      return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
     },
 
     config(config, env) {
@@ -111,18 +110,11 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
       const environments: Record<string, EnvironmentOptions> = {};
 
-      // See https://github.com/vercel/examples/tree/main/build-output-api/static-files
-      // FIXME incompat with Vike.
-      //       manually copy public dir then? Vike `dist/client` files should be copied too, how?
-      environments.client = {
-        build: {
-          outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
-          copyPublicDir: true,
-        },
-      };
+      // TODO API ideas for frameworks: Custom hooks?
+      //  or public API: https://github.com/vitejs/vite/discussions/6257#discussioncomment-1870069
 
+      // vercel_edge
       if (Object.keys(inputs.edge).length > 0) {
-        generateConfigAt = "vercel_edge";
         filesToEmit.vercel_edge = [];
         environments.vercel_edge = createVercelEnvironmentOptions(
           inputs.edge,
@@ -146,30 +138,52 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           ),
         );
       }
-      if (Object.keys(inputs.node).length > 0) {
-        generateConfigAt = "vercel_node";
-        filesToEmit.vercel_node = [];
-        environments.vercel_node = createVercelEnvironmentOptions(
-          inputs.node,
-          "mjs",
-          mergeConfig<EnvironmentOptions, EnvironmentOptions>(
-            {
-              build: {
-                // Ensure that outDir is emptied only once
-                emptyOutDir: !("vercel_edge" in environments),
-              },
+
+      // vercel_node
+      filesToEmit.vercel_node = [];
+      environments.vercel_node = createVercelEnvironmentOptions(
+        inputs.node,
+        "mjs",
+        mergeConfig<EnvironmentOptions, EnvironmentOptions>(
+          {
+            build: {
+              // Ensure that outDir is emptied only once
+              emptyOutDir: !("vercel_edge" in environments),
             },
-            outDirOverride,
-          ),
-        );
-      }
+          },
+          outDirOverride,
+        ),
+      );
+
+      // vercel_client
+      environments.vercel_client = {
+        build: {
+          outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
+          copyPublicDir: true,
+        },
+        consumer: "client",
+      };
 
       return {
         appType: "custom",
         // equivalent to --app CLI option
         builder: {
           buildApp: async (builder) => {
-            for (const environment of Object.values(builder.environments)) {
+            const priority: Record<string, number> = {
+              vercel_edge: 1,
+              vercel_node: 2,
+              vercel_client: 3,
+            }; // Higher priority values should be at the end
+
+            const envs = Object.values(builder.environments);
+            envs.sort((a, b) => {
+              const aPriority = priority[a.name] ?? 0;
+              const bPriority = priority[b.name] ?? 0;
+
+              return aPriority - bPriority;
+            });
+
+            for (const environment of envs) {
               console.log(environment.name);
               await builder.build(environment);
             }
@@ -299,11 +313,12 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     generateBundle: {
       order: "post",
       async handler() {
-        for (const f of filesToEmit[this.environment.name]) {
-          this.emitFile(f);
+        if (this.environment.name in filesToEmit) {
+          for (const f of filesToEmit[this.environment.name]) {
+            this.emitFile(f);
+          }
         }
 
-        // TODO check if necessary or needs refactor
         // Compute overrides for static HTML files
         const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
         // Update overrides with static files paths
@@ -311,19 +326,17 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         pluginConfig.config.overrides ??= {};
         Object.assign(pluginConfig.config.overrides, userOverrides);
 
-        if (this.environment.name === generateConfigAt) {
-          // Copy dist folder to static
-          // TODO still necessary? Should copy for all envs?
-          await copyDistToStatic(this.environment.config);
-
-          console.log(pluginConfig);
-
+        if (this.environment.name === "vercel_node") {
           // Generate config.json
           this.emitFile({
             type: "asset",
             fileName: "config.json",
             source: JSON.stringify(getConfig(pluginConfig), undefined, 2),
           });
+        }
+
+        if (this.environment.name === "vercel_client") {
+          await copyDistToStatic(this.environment.config);
         }
       },
     },

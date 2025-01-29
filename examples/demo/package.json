@@ -26,7 +26,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "^5.7.2",
-    "vike": "^0.4.218",
+    "vike": "^0.4.220",
     "vite": "^6.0.11",
     "vite-plugin-vercel": "workspace:*"
   },

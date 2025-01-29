@@ -55,7 +55,11 @@ prepareTestJsonFileContent(path.basename(__dirname), "config.json", (context) =>
         dest: "/og-node",
       },
     ]);
-    expect(context.file).toHaveProperty("overrides", {});
+    expect(context.file).toHaveProperty("overrides", {
+      "test.html": {
+        path: "test",
+      },
+    });
     expect(Object.keys(context.file as any).sort()).toMatchObject(["version", "overrides", "routes"].sort());
   });
 });

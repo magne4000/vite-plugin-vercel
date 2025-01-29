@@ -37,7 +37,7 @@
     "@vercel/node": "^3.2.27",
     "tsup": "^8.3.5",
     "typescript": "^5.7.2",
-    "vike": "^0.4.218",
+    "vike": "^0.4.220",
     "vite": "^6.0.11",
     "vite-plugin-vercel": "workspace:*"
   },
@@ -47,7 +47,7 @@
     "qs": "^6.13.1"
   },
   "peerDependencies": {
-    "vike": "^0.4.218",
+    "vike": "^0.4.220",
     "vite": "^4.4 || ^5.0.2",
     "vite-plugin-vercel": "*"
   },

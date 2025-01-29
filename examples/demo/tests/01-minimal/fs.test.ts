@@ -1,10 +1,9 @@
-import { testFs } from "../common/helpers";
-import { describe } from "vitest";
 import path from "node:path";
+import { describe } from "vitest";
+import { testFs } from "../common/helpers";
 
 describe("fs", () => {
   testFs(path.basename(__dirname), [
-    "/config.json",
     "/functions/api/name/[name].func/.vc-config.json",
     "/functions/api/name/[name].func/index.mjs",
     "/functions/api/page.func/index.mjs",
@@ -17,6 +16,7 @@ describe("fs", () => {
     "/functions/og-edge.func/index.js",
     "/functions/og-node.func/.vc-config.json",
     "/functions/og-node.func/index.mjs",
+    "/config.json",
     "/static/index.html",
     "/static/test.html",
   ]);
