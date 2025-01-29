@@ -259,6 +259,8 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
                 const fileEntry = await devEnv.runner.import(r.entry.input);
                 return fileEntry.default(newRequest);
               }
+
+              throw new Error(`${devEnv.name} environment is not Runnable`);
             }
           }
         })(),
@@ -281,7 +283,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         const entry = entries.find((e) => e.input === input);
 
         if (!entry) {
-          throw new Error("TODO");
+          throw new Error(`Unable to find entry for "${input}"`);
         }
 
         // Generate .vc-config.json
