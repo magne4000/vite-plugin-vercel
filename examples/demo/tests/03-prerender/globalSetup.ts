@@ -28,7 +28,7 @@ export const setup = _setup(dirname, {
           // Auto mapping:
           //   endpoints/edge.ts -> /edge
           //   endpoints/og-node.tsx -> /og-node
-          //   endpoints/og-edge.tsx -> og-edge
+          //   endpoints/og-edge.tsx -> /og-edge
           destination: "",
         })),
       ],

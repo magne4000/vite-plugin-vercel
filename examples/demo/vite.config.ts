@@ -1,5 +1,5 @@
 import react from "@vitejs/plugin-react-swc";
-import ssr from "vike/plugin";
+import vike from "vike/plugin";
 import type { UserConfig } from "vite";
 import vercel from "vite-plugin-vercel";
 import { getEntriesFromFs } from "vite-plugin-vercel/utils";
@@ -7,12 +7,13 @@ import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 export default {
   plugins: [
     react(),
-    ssr({
-      prerender: true,
+    vike({
+      prerender: {
+        disableAutoRun: true,
+      },
     }),
     vercel({
       expiration: 25,
-      // Scan `_api` directory for entries, and map them to `/api/*`
       entries: [
         ...(await getEntriesFromFs("_api", {
           destination: "api",
@@ -21,7 +22,7 @@ export default {
           // Auto mapping:
           //   endpoints/edge.ts -> /edge
           //   endpoints/og-node.tsx -> /og-node
-          //   endpoints/og-edge.tsx -> og-edge
+          //   endpoints/og-edge.tsx -> /og-edge
           destination: "",
         })),
       ],
