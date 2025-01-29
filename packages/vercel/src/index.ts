@@ -3,7 +3,7 @@ import path from "node:path";
 import { createMiddleware } from "@universal-middleware/express";
 import { getNodeVersion } from "@vercel/build-utils";
 import type { NodeVersion } from "@vercel/build-utils/dist";
-import { getTransformedRoutes } from "@vercel/routing-utils";
+import { getTransformedRoutes, type RouteWithSrc } from "@vercel/routing-utils";
 import type { EmittedFile } from "rollup";
 import {
   BuildEnvironment,
@@ -207,7 +207,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       };
     },
 
-    // TODO
+    // TODO watch/hmr
     configureServer(server) {
       const transformedRoutes = getTransformedRoutes({
         rewrites: pluginConfig.entries?.map((entry) => ({
@@ -216,27 +216,48 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         })),
       });
 
-      const routes =
-        transformedRoutes.routes
-          ?.filter((r) => Boolean(r.src))
-          .map((r) => ({
-            src: new RegExp(r.src!),
-            dest: r.dest!,
-            entry: pluginConfig.entries?.find((e) => e.destination === r.dest)!,
-          })) ?? [];
+      const routes = (transformedRoutes.routes ?? [])
+        .filter((r): r is RouteWithSrc => Boolean(r.src))
+        .map((r) => ({
+          src: new RegExp(r.src),
+          dest: r.dest,
+          entry: pluginConfig.entries?.find((e) => e.destination === r.dest),
+        }));
 
+      // This middleware is in charge of adding user-provided headers onto the Response
+      const routesWithAddedHeaders = routes.filter((r) => r.entry?.headers);
+      if (routesWithAddedHeaders.length > 0) {
+        server.middlewares.use(
+          createMiddleware(() => async (request) => {
+            return (response) => {
+              const url = new URL(request.url);
+              for (const r of routesWithAddedHeaders) {
+                if (r.entry?.headers && r.src.test(url.pathname)) {
+                  for (const [key, value] of Object.entries(r.entry.headers)) response.headers.set(key, value);
+                }
+              }
+              return response;
+            };
+          })(),
+        );
+      }
+
+      // This middleware is in charge of mapping a request to a UniversalHandler
       server.middlewares.use(
         createMiddleware(() => async (request) => {
           const url = new URL(request.url);
           for (const r of routes) {
-            if (r.src.test(url.pathname)) {
-              console.log(url, r);
-
+            if (r.entry && r.src.test(url.pathname)) {
               const devEnv = r.entry.edge ? server.environments.vercel_edge : server.environments.vercel_node;
 
               if (isRunnableDevEnvironment(devEnv)) {
-                const a = await devEnv.runner.import(r.entry!.input);
-                return a.default(new Request("http://localhost:3000"));
+                const newRequest = request.clone();
+                if (r.entry.headers) {
+                  for (const [key, value] of Object.entries(r.entry.headers)) newRequest.headers.set(key, value);
+                }
+
+                const fileEntry = await devEnv.runner.import(r.entry.input);
+                return fileEntry.default(newRequest);
               }
             }
           }
