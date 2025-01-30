@@ -12,9 +12,9 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@types/node": "^18.19.67",
-    "@vercel/node": "^3.2.27",
-    "typescript": "^5.7.2",
+    "@types/node": "^18.19.74",
+    "@vercel/node": "^3.2.29",
+    "typescript": "^5.7.3",
     "vite": "^6.0.11"
   },
   "dependencies": {

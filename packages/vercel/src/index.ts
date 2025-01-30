@@ -281,7 +281,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     load(id) {
       if (id.startsWith(resolvedVirtualEntry)) {
         if (id.includes(DUMMY)) {
-          return "";
+          return "export default {};";
         }
 
         const isEdge = this.environment.name === "vercel_edge";
