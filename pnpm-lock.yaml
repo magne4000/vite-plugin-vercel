@@ -86,8 +86,8 @@ importers:
         specifier: ^0.3.3
         version: 0.3.3(hono@4.6.19)
       '@vercel/build-utils':
-        specifier: ^8.8.0
-        version: 8.8.0
+        specifier: ^9.1.0
+        version: 9.1.0
       '@vercel/fun':
         specifier: ^1.1.2
         version: 1.1.2
@@ -937,8 +937,8 @@ packages:
   '@vercel/build-utils@8.7.0':
     resolution: {integrity: sha512-ofZX+ABiW76u5khIyYyH5xK5KSuiAteqRu5hz2k1a2WHLwF7VpeBg8gdFR+HwbVnNkHtkMA64ya5Dd/lNoABkw==}
 
-  '@vercel/build-utils@8.8.0':
-    resolution: {integrity: sha512-4jkeJ/Xr0epojgfiyQufB8vC0ubE9SCfA9I2BGcOIKcf65C25juSvuYwaLixnjZXHUTO4Y9W7fdgiLUk55MgbA==}
+  '@vercel/build-utils@9.1.0':
+    resolution: {integrity: sha512-ccknvdKH6LDB9ZzZaX8a8cOvFbI441APLHvKrunJE/wezY0skmfuEUK1qnfPApXMs4FMWzZQj2LO9qpzfgBPsQ==}
 
   '@vercel/error-utils@2.0.3':
     resolution: {integrity: sha512-CqC01WZxbLUxoiVdh9B/poPbNpY9U+tO1N9oWHwTl5YAZxcqXmmWJ8KNMFItJCUUWdY3J3xv8LvAuQv2KZ5YdQ==}
@@ -3048,7 +3048,7 @@ snapshots:
 
   '@vercel/build-utils@8.7.0': {}
 
-  '@vercel/build-utils@8.8.0': {}
+  '@vercel/build-utils@9.1.0': {}
 
   '@vercel/error-utils@2.0.3': {}
 
