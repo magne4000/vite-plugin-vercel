@@ -26,6 +26,7 @@ import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from
 export * from "./types";
 
 const outDir = path.join(".vercel", "output");
+const DUMMY = "__DUMMY__";
 
 function createVercelEnvironmentOptions(
   input: Record<string, string>,
@@ -144,10 +145,14 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       }
 
       // vercel_node
-      // FIXME crashes when no entries
       filesToEmit.vercel_node = [];
       environments.vercel_node = createVercelEnvironmentOptions(
-        inputs.node,
+        {
+          // Workaround to be able to have a complete build process even without entries.
+          // __DUMMY__ is deleted from the bundle before being written.
+          [DUMMY]: `${virtualEntry}:${DUMMY}`,
+          ...inputs.node,
+        },
         "mjs",
         mergeConfig<EnvironmentOptions, EnvironmentOptions>(
           {
@@ -275,6 +280,10 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
     load(id) {
       if (id.startsWith(resolvedVirtualEntry)) {
+        if (id.includes(DUMMY)) {
+          return "";
+        }
+
         const isEdge = this.environment.name === "vercel_edge";
         const fn = isEdge ? "createEdgeHandler" : "createNodeHandler";
         const [, , , input] = id.split(":");
@@ -349,11 +358,16 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
     generateBundle: {
       order: "post",
-      async handler() {
+      async handler(_opts, bundle) {
         if (this.environment.name in filesToEmit) {
           for (const f of filesToEmit[this.environment.name]) {
             this.emitFile(f);
           }
+        }
+
+        const dummy = Object.keys(bundle).find((key) => key.includes(DUMMY));
+        if (dummy) {
+          delete bundle[dummy];
         }
 
         // Compute overrides for static HTML files
