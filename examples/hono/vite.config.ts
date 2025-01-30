@@ -8,8 +8,10 @@ export default {
     vercel({
       entries: [
         {
-          input: "express-entry.ts",
-          destination: "",
+          input: "hono-entry.ts",
+          // catch-all
+          destination: "index",
+          route: ".*",
         },
       ],
     }),

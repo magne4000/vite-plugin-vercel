@@ -34,6 +34,9 @@ function createVercelEnvironmentOptions(
 ): EnvironmentOptions {
   return mergeConfig(
     {
+      resolve: {
+        noExternal: true,
+      },
       dev: {
         async createEnvironment(name, config) {
           return createRunnableDevEnvironment(name, config);
@@ -52,8 +55,10 @@ function createVercelEnvironmentOptions(
               return `[name].${extension}`;
             },
             sanitizeFileName: false,
+            sourcemap: false,
           },
         },
+        target: "es2022",
         emptyOutDir: false,
       },
 
@@ -139,6 +144,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       }
 
       // vercel_node
+      // FIXME crashes when no entries
       filesToEmit.vercel_node = [];
       environments.vercel_node = createVercelEnvironmentOptions(
         inputs.node,

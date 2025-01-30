@@ -15,8 +15,16 @@ export function disableChunks(): Plugin {
       ) {
         const resolved = await this.resolve(source, importer, options);
 
-        if (resolved && !resolved.external) {
-          return `${resolved.id}?unique=${randomUUID()}`;
+        if (resolved && !resolved.external && !resolved.attributes.unique) {
+          // Reuse importer UUID if it exists
+          const match = importer?.match(/\?unique=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/);
+          const uuid = match?.[1] ?? randomUUID();
+          return {
+            id: `${resolved.id}?unique=${uuid}`,
+            attributes: {
+              unique: uuid,
+            },
+          };
         }
       }
     },
