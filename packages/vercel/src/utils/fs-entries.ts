@@ -9,17 +9,17 @@ export async function getEntriesFromFs(
   dir: string,
   { destination = dir, tryParseExports = true },
 ): Promise<ViteVercelEntry[]> {
-  dir = normalizePath(dir);
+  const normalizedDir = normalizePath(dir);
   destination = normalizePath(destination);
   const apiEntries = glob
-    .sync(`${path.posix.resolve(dir)}/**/*.?(m)[jt]s?(x)`)
+    .sync(`${path.posix.resolve(normalizedDir)}/**/*.?(m)[jt]s?(x)`)
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith("_"));
 
   const entryPoints: ViteVercelEntry[] = [];
 
   for (const filePath of apiEntries) {
-    const outFilePath = pathRelativeTo(filePath, dir);
+    const outFilePath = pathRelativeTo(filePath, normalizedDir);
     const parsed = path.posix.parse(outFilePath);
     let xports: VercelEndpointExports | undefined | null = undefined;
 

@@ -4,8 +4,6 @@ import type { UserConfig } from "vite";
 import vercel from "vite-plugin-vercel";
 import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 
-let c: any;
-
 export default {
   plugins: [
     react(),
@@ -29,17 +27,6 @@ export default {
         })),
       ],
     }),
-    {
-      apply: "build",
-      name: "testitest",
-      enforce: "post",
-      configResolved(config) {
-        c = config;
-      },
-      writeBundle() {
-        console.log(c.vike);
-      },
-    },
   ],
   // We manually add a list of dependencies to be pre-bundled, in order to avoid a page reload at dev start which breaks vike's CI
   // (The 'react/jsx-runtime' entry is not needed in Vite 3 anymore.)
