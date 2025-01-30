@@ -19,7 +19,7 @@
     "@mdx-js/rollup": "^3.1.0",
     "@vercel/edge-config": "^1.4.0",
     "@vercel/og": "^0.6.4",
-    "@vite-plugin-vercel/vike": "workspace:*",
+    "@vite-plugin-vercel/vike": "^9.0.3",
     "@vitejs/plugin-react-swc": "^3.7.2",
     "cross-fetch": "^4.0.0",
     "node-fetch": "^3.3.2",
@@ -28,7 +28,7 @@
     "typescript": "^5.7.2",
     "vike": "^0.4.220",
     "vite": "^6.0.11",
-    "vite-plugin-vercel": "workspace:*"
+    "vite-plugin-vercel": "^9.0.4"
   },
   "type": "module",
   "version": null,

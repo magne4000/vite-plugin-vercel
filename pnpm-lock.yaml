@@ -140,9 +140,6 @@ importers:
       '@universal-middleware/express':
         specifier: ^0.3.3
         version: 0.3.3
-      '@vite-plugin-vercel/vike':
-        specifier: workspace:*
-        version: link:../vike-integration
       rollup:
         specifier: ^4.31.0
         version: 4.31.0
@@ -155,46 +152,6 @@ importers:
       vite:
         specifier: ^6.0.11
         version: 6.0.11(@types/node@18.19.74)(tsx@4.19.2)
-
-  packages/vike-integration:
-    dependencies:
-      '@brillout/libassert':
-        specifier: ^0.5.8
-        version: 0.5.8
-      nanoid:
-        specifier: ^5.0.9
-        version: 5.0.9
-      qs:
-        specifier: ^6.13.1
-        version: 6.14.0
-    devDependencies:
-      '@types/node':
-        specifier: ^18.19.67
-        version: 18.19.74
-      '@types/qs':
-        specifier: ^6.9.17
-        version: 6.9.18
-      '@vercel/edge':
-        specifier: ^1.1.2
-        version: 1.2.1
-      '@vercel/node':
-        specifier: ^3.2.27
-        version: 3.2.29(@swc/core@1.10.9)
-      tsup:
-        specifier: ^8.3.5
-        version: 8.3.5(@swc/core@1.10.9)(postcss@8.5.1)(tsx@4.19.2)(typescript@5.7.3)
-      typescript:
-        specifier: ^5.7.2
-        version: 5.7.3
-      vike:
-        specifier: ^0.4.220
-        version: 0.4.220(react-streaming@0.3.47(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.0.11(@types/node@18.19.74)(tsx@4.19.2))
-      vite:
-        specifier: ^6.0.11
-        version: 6.0.11(@types/node@18.19.74)(tsx@4.19.2)
-      vite-plugin-vercel:
-        specifier: workspace:*
-        version: link:../vercel
 
 packages:
 
@@ -1030,9 +987,6 @@ packages:
 
   '@vercel/build-utils@8.8.0':
     resolution: {integrity: sha512-4jkeJ/Xr0epojgfiyQufB8vC0ubE9SCfA9I2BGcOIKcf65C25juSvuYwaLixnjZXHUTO4Y9W7fdgiLUk55MgbA==}
-
-  '@vercel/edge@1.2.1':
-    resolution: {integrity: sha512-1++yncEyIAi68D3UEOlytYb1IUcIulMWdoSzX2h9LuSeeyR7JtaIgR8DcTQ6+DmYOQn+5MCh6LY+UmK6QBByNA==}
 
   '@vercel/error-utils@2.0.3':
     resolution: {integrity: sha512-CqC01WZxbLUxoiVdh9B/poPbNpY9U+tO1N9oWHwTl5YAZxcqXmmWJ8KNMFItJCUUWdY3J3xv8LvAuQv2KZ5YdQ==}
@@ -2021,11 +1975,6 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@5.0.9:
-    resolution: {integrity: sha512-Aooyr6MXU6HpvvWXKoVoXwKMs/KyVakWwg7xQfv5/S/RIgJMy0Ifa45H9qqYy7pTCszrHzP21Uk4PZq2HpEM8Q==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
-
   negotiator@0.6.3:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
@@ -2257,10 +2206,6 @@ packages:
 
   qs@6.13.0:
     resolution: {integrity: sha512-+38qI9SOr8tfZ4QmJNplMUxqjbe7LKvvZgWdExBOmd+egZTtjLB67Gu0HRX3u/XOq7UU2Nx6nsjvS16Z9uwfpg==}
-    engines: {node: '>=0.6'}
-
-  qs@6.14.0:
-    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
     engines: {node: '>=0.6'}
 
   queue-microtask@1.2.3:
@@ -3234,7 +3179,7 @@ snapshots:
       detect-libc: 2.0.3
       https-proxy-agent: 5.0.1
       make-dir: 3.1.0
-      node-fetch: 2.6.9
+      node-fetch: 2.7.0
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
@@ -3509,8 +3454,6 @@ snapshots:
   '@vercel/build-utils@8.7.0': {}
 
   '@vercel/build-utils@8.8.0': {}
-
-  '@vercel/edge@1.2.1': {}
 
   '@vercel/error-utils@2.0.3': {}
 
@@ -4542,8 +4485,6 @@ snapshots:
 
   nanoid@3.3.8: {}
 
-  nanoid@5.0.9: {}
-
   negotiator@0.6.3: {}
 
   node-fetch@2.6.7:
@@ -4707,10 +4648,6 @@ snapshots:
   punycode@2.3.1: {}
 
   qs@6.13.0:
-    dependencies:
-      side-channel: 1.1.0
-
-  qs@6.14.0:
     dependencies:
       side-channel: 1.1.0
 
