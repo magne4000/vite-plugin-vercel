@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 9.0.4
+
+### Patch Changes
+
+- Update peerDependencies to include Vite6
+- Updated dependencies
+  - @vite-plugin-vercel/vike@9.0.3
+
 ## 9.0.3
 
 ### Patch Changes
