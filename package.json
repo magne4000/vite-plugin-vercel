@@ -1,16 +1,17 @@
 {
   "name": "vite-plugin-vercel-workspace-root",
-  "packageManager": "pnpm@9.4.0",
+  "packageManager": "pnpm@9.14.4",
   "private": "true",
   "type": "module",
   "scripts": {
-    "dev:all": "pnpm -r --filter \"./packages/*\" --parallel dev",
-    "dev:demo": "pnpm -r --filter \"./examples/demo\" --parallel dev",
-    "vercel-build": "pnpm run build:all",
-    "build:all": "pnpm -r --filter \"./packages/vercel\" build && pnpm -r --filter \"./packages/vike-integration\" build && pnpm -r --filter \"./examples/*\" build",
-    "build:demo": "pnpm run build:all && cp -rf examples/demo/public examples/demo/.vercel .",
-    "typecheck:all": "pnpm -r typecheck",
-    "test": "pnpm run build:all && pnpm run -r test",
+    "dev": "pnpm run -C ./packages/vercel dev",
+    "vercel-build": "pnpm run build",
+    "build": "pnpm run -C ./packages/vercel build",
+    "build:simple": "pnpm run build && pnpm run -C ./examples/simple build",
+    "build:hono": "pnpm run build && pnpm run -C ./examples/hono build",
+    "build:hono-edge": "pnpm run build && pnpm run -C ./examples/hono build:edge",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm run build && pnpm run -r test",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "prepublishOnly": "pnpm run test && changeset version",
@@ -19,10 +20,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@changesets/cli": "^2.27.9",
-    "@types/node": "^18.19.54",
+    "@changesets/cli": "^2.27.10",
+    "@types/node": "^18.19.67",
     "cross-env": "^7.0.3",
-    "typescript": "^5.6.3"
+    "typescript": "^5.7.2"
   },
   "pnpm": {
     "overrides": {

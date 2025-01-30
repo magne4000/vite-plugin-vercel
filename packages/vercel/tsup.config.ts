@@ -1,17 +1,23 @@
 import { defineConfig } from "tsup";
 
+const entry = {
+  index: "./src/index.ts",
+  utils: "./src/utils/index.ts",
+  "universal-middleware": "./src/universal-middleware.ts",
+};
+
 export default defineConfig([
   {
-    entry: ["./src/index.ts"],
+    entry,
     external: ["esbuild", "vike"],
     format: ["esm", "cjs"],
     platform: "node",
     target: "node18",
     dts: {
-      entry: "./src/index.ts",
+      entry,
       compilerOptions: {
-        paths: {}
-      }
+        paths: {},
+      },
     },
   },
 ]);

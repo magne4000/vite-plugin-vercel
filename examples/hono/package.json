@@ -7,13 +7,17 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:edge": "cross-env EDGE=1 vite build",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],
   "author": "",
   "devDependencies": {
     "@types/node": "^18.19.67",
-    "@vercel/node": "^3.2.27",
+    "@universal-middleware/core": "^0.4.0",
+    "@universal-middleware/hono": "^0.4.0",
+    "cross-env": "^7.0.3",
+    "hono": "^4.6.19",
     "typescript": "^5.7.2",
     "vite": "^6.0.11"
   },

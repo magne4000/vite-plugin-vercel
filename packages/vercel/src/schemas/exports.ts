@@ -10,3 +10,5 @@ export const vercelEndpointExports = z.object({
     })
     .optional(),
 });
+
+export type VercelEndpointExports = z.infer<typeof vercelEndpointExports>;
