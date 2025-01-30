@@ -8,7 +8,7 @@
     "vercel-build": "pnpm run build",
     "build": "pnpm run -C ./packages/vercel build",
     "build:demo": "pnpm run build && pnpm run -C ./examples/simple build && cp -rf examples/simple/.vercel .",
-    "typecheck:all": "pnpm -r typecheck",
+    "typecheck": "pnpm -r typecheck",
     "test": "pnpm run build && pnpm run -r test",
     "format": "biome format --write .",
     "lint": "biome lint .",
