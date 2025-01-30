@@ -183,24 +183,19 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
               return aPriority - bPriority;
             });
 
-            console.log(
-              "buildApp",
-              envs.map((e) => e.name),
-            );
+            // console.log(
+            //   "buildApp",
+            //   envs.map((e) => e.name),
+            // );
 
             for (const environment of envs) {
-              console.log("buildApp", environment.name);
-              try {
-                await builder.build(environment);
-                // FIXME: Vike seems to process.exit(0) when { prerender: true }
-              } catch (e) {
-                console.error(e);
-              }
-
-              console.log("buildApp", environment.name, "END");
+              // console.log("buildApp", environment.name);
+              await builder.build(environment);
+              // FIXME: Vike seems to process.exit(0) when { prerender: true }
+              // console.log("buildApp", environment.name, "END");
             }
 
-            console.log("buildApp", "END");
+            // console.log("buildApp", "END");
           },
         },
         environments,
