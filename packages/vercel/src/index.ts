@@ -19,7 +19,6 @@ import {
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
 import { copyDir, getOutput, getPublic } from "./helpers";
-import { vercelPluginCleanup } from "./plugins/cleanup";
 import { disableChunks } from "./plugins/disable-chunks";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
@@ -432,7 +431,7 @@ async function getStaticHtmlFiles(src: string) {
 }
 
 export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
-  return [vercelPluginCleanup(), disableChunks(), vercelPlugin(pluginConfig)];
+  return [disableChunks(), vercelPlugin(pluginConfig)];
 }
 
 // @vercel/routing-utils respects path-to-regexp syntax
