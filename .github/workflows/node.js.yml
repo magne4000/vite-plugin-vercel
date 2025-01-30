@@ -30,6 +30,12 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm run build
+      - name: Build
+        run: pnpm run build:simple
+      - name: Build
+        run: pnpm run build:hono
+      - name: Build
+        run: pnpm run build:hono-edge
       - name: Typecheck
         run: pnpm run typecheck
       - name: Lint

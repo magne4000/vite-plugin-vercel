@@ -12,6 +12,7 @@ export default {
           // catch-all
           destination: "index",
           route: ".*",
+          edge: Boolean(process.env.EDGE),
         },
       ],
     }),
