@@ -1,6 +1,6 @@
 # vite-plugin-vercel
 
-> [!NOTE]
+> [!WARNING]
 > You are on the [Vite Environment API](https://vite.dev/guide/api-environment.html#environment-configuration) development branch. Check out [v9 branch](https://github.com/magne4000/vite-plugin-vercel/tree/v9) current stable version.
 
 Vercel adapter for [Vite 6](https://vitejs.dev/).
