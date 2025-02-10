@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { prerender as prerenderCli } from "vike/api";
 import type { PageContextServer } from "vike/types";
-import { type Plugin, type ResolvedConfig, type UserConfig, normalizePath } from "vite";
+import { normalizePath, type Plugin, type ResolvedConfig, type UserConfig } from "vite";
 import type {
   VercelOutputIsr,
   ViteVercelApiEntry,
@@ -16,7 +16,7 @@ import "vike/__internal/setup";
 // @ts-ignore
 import { newError } from "@brillout/libassert";
 import { nanoid } from "nanoid";
-import { type PageFile, type PageRoutes, getPagesAndRoutes, route } from "vike/__internal";
+import { getPagesAndRoutes, type PageFile, type PageRoutes, route } from "vike/__internal";
 import { getParametrizedRoute } from "./route-regex";
 
 declare module "vite" {
@@ -241,6 +241,8 @@ export const prerender: ViteVercelPrerenderFn = async (
     },
   });
 
+  (resolvedConfig.vercel as Record<string, unknown>)._prerendered = true;
+
   return routes;
 };
 
@@ -365,6 +367,7 @@ export function vikeVercelPlugin(options: Options = {}): Plugin {
 
       return {
         vercel: {
+          _prerendered: false,
           prerender: userConfig.vercel?.prerender ?? prerender,
           additionalEndpoints,
           defaultSupportsResponseStreaming: true,
@@ -583,9 +586,15 @@ export function vitePluginVercelVikeCopyStaticAssetsPlugins(): Plugin {
     configResolved(config) {
       resolvedConfig = config;
     },
-    async closeBundle() {
-      if (!resolvedConfig.build?.ssr) return;
-      await copyDistClientToOutputStatic(resolvedConfig);
+    closeBundle: {
+      order: "post",
+      async handler() {
+        if (!resolvedConfig.build?.ssr) return;
+        await copyDistClientToOutputStatic(resolvedConfig);
+        if ((resolvedConfig.vercel as Record<string, unknown>)._prerendered) {
+          process.exit(0);
+        }
+      },
     },
   };
 }
