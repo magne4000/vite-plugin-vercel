@@ -1,5 +1,11 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 9.0.4
+
+### Patch Changes
+
+- Improve compatibility with latest Vike versions
+
 ## 9.0.3
 
 ### Patch Changes
