@@ -7,11 +7,7 @@ import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 export default {
   plugins: [
     react(),
-    vike({
-      prerender: {
-        disableAutoRun: true,
-      },
-    }),
+    vike(),
     vercel({
       expiration: 25,
       entries: [

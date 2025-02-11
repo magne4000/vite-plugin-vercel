@@ -168,10 +168,21 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       // vercel_client
       environments.vercel_client = {
         build: {
+          // FIXME Vike only, should be in its dedicated plugin
+          cssTarget: "es2022",
+          target: "es2022",
           outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
           copyPublicDir: true,
         },
         consumer: "client",
+      };
+
+      // FIXME Vike only, should be in its dedicated plugin
+      environments.client = {
+        build: {
+          cssTarget: "es2022",
+          target: "es2022",
+        },
       };
 
       return {
@@ -179,10 +190,12 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         // equivalent to --app CLI option
         builder: {
           buildApp: async (builder) => {
+            console.log("BUILDADD VPV");
             const priority: Record<string, number> = {
-              vercel_edge: 1,
-              vercel_node: 2,
-              vercel_client: 3,
+              client: 1,
+              vercel_edge: 2,
+              vercel_node: 3,
+              vercel_client: 4,
             }; // Higher priority values should be at the end
 
             const envs = Object.values(builder.environments);
@@ -199,6 +212,11 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
             // );
 
             for (const environment of envs) {
+              // FIXME Vike only, should be in its dedicated plugin
+              if (environment.name === "ssr") {
+                continue;
+              }
+              console.log("BUILDADD", environment.name);
               // console.log("buildApp", environment.name);
               await builder.build(environment);
               // FIXME: Vike seems to process.exit(0) when { prerender: true }

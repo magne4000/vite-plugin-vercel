@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.74",
+    "@vercel/node": "^5.1.0",
     "@universal-middleware/express": "^0.4.0",
     "rollup": "^4.34.1",
     "tsup": "^8.3.6",
@@ -49,12 +50,8 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@manypkg/find-root": "^2.2.3",
     "@universal-middleware/vercel": "^0.4.0",
     "@vercel/build-utils": "^9.2.0",
-    "@vercel/fun": "^1.1.2",
-    "@vercel/nft": "^0.29.1",
-    "@vercel/node": "^5.1.0",
     "@vercel/routing-utils": "^5.0.2",
     "esbuild": "^0.24.2",
     "fast-glob": "^3.3.3",
