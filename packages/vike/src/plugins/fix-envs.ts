@@ -1,5 +1,5 @@
-import type { EnvironmentOptions, Plugin } from "vite";
 import assert from "node:assert";
+import type { EnvironmentOptions, Plugin } from "vite";
 
 function setTargetAndCssTarget(env: EnvironmentOptions) {
   env.build ??= {};
@@ -14,12 +14,13 @@ export function fixEnvsPlugins(): Plugin {
     config(previousConfig) {
       assert(previousConfig.builder);
       previousConfig.builder.buildApp = async (builder) => {
-        console.log("BUILDADD vike-vercel");
+        console.log("BUILDAPP vike-vercel");
         const priority: Record<string, number> = {
           client: 1,
-          vercel_edge: 2,
-          vercel_node: 3,
-          vercel_client: 4,
+          ssr: 2,
+          vercel_edge: 3,
+          vercel_node: 4,
+          vercel_client: 5,
         }; // Higher priority values should be at the end
 
         const envs = Object.values(builder.environments);
@@ -36,10 +37,7 @@ export function fixEnvsPlugins(): Plugin {
         // );
 
         for (const environment of envs) {
-          if (environment.name === "ssr") {
-            continue;
-          }
-          console.log("BUILDADD vike-vercel", environment.name);
+          console.log("BUILDAPP vike-vercel", environment.name);
           // console.log("buildApp", environment.name);
           await builder.build(environment);
           // console.log("buildApp", environment.name, "END");

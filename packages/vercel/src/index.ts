@@ -19,7 +19,6 @@ import {
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
 import { copyDir, getOutput, getPublic } from "./helpers";
-import { disableChunks } from "./plugins/disable-chunks";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
 
@@ -179,7 +178,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         // equivalent to --app CLI option
         builder: {
           buildApp: async (builder) => {
-            console.log("BUILDADD VPV");
+            console.log("BUILDAPP VPV");
             const priority: Record<string, number> = {
               vercel_edge: 1,
               vercel_node: 2,
@@ -448,7 +447,7 @@ async function getStaticHtmlFiles(src: string) {
 }
 
 export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
-  return [disableChunks(), vercelPlugin(pluginConfig)];
+  return [/*disableChunks(),*/ /*wasm(), */ vercelPlugin(pluginConfig)];
 }
 
 // @vercel/routing-utils respects path-to-regexp syntax

@@ -1,5 +1,5 @@
 {
-  "name": "vite-plugin-vercel-vike",
+  "name": "vike-vercel",
   "version": "1.0.0",
   "type": "module",
   "files": [
@@ -16,6 +16,10 @@
     "./plugins": {
       "import": "./dist/plugins.js",
       "require": "./dist/plugins.cjs"
+    },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "default": "./dist/config.js"
     }
   },
   "types": "./index.d.ts",
@@ -39,5 +43,6 @@
     "vite": "^6.0.11"
   },
   "dependencies": {
+    "vike": "file:../../../vike/vike"
   }
 }

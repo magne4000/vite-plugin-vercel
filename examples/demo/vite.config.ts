@@ -1,8 +1,8 @@
 import react from "@vitejs/plugin-react-swc";
+import { plugins } from "vike-vercel/plugins";
 import vike from "vike/plugin";
 import type { UserConfig } from "vite";
 import vercel from "vite-plugin-vercel";
-import { plugins } from "vite-plugin-vercel-vike/plugins";
 import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 
 export default {

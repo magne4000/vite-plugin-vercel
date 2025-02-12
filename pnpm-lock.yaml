@@ -63,17 +63,17 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
       vike:
-        specifier: ^0.4.221
-        version: 0.4.221(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+        specifier: file:../../../vike/vike
+        version: file:../vike/vike(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+      vike-vercel:
+        specifier: workspace:^
+        version: link:../../packages/vike
       vite:
         specifier: ^6.1.0
         version: 6.1.0(@types/node@18.19.74)(tsx@4.19.2)
       vite-plugin-vercel:
         specifier: workspace:^
         version: link:../../packages/vercel
-      vite-plugin-vercel-vike:
-        specifier: workspace:^
-        version: link:../../packages/vike
     devDependencies:
       '@types/node':
         specifier: ^18.19.74
@@ -170,6 +170,9 @@ importers:
       magicast:
         specifier: ^0.3.5
         version: 0.3.5
+      vite-plugin-wasm:
+        specifier: ^3.4.1
+        version: 3.4.1(vite@6.0.11(@types/node@18.19.74)(tsx@4.19.2))
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -197,6 +200,10 @@ importers:
         version: 6.0.11(@types/node@18.19.74)(tsx@4.19.2)
 
   packages/vike:
+    dependencies:
+      vike:
+        specifier: file:../../../vike/vike
+        version: file:../vike/vike(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
     devDependencies:
       '@types/node':
         specifier: ^18.19.74
@@ -2599,8 +2606,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vike@0.4.221:
-    resolution: {integrity: sha512-oi5DPfhWlflJHpZNDuW1rBAhgefaZ0bV7mdi4GP66m3JDQRifJpMTb4zr1bMxk74tyCdSVsgoK+37aRVLy0++Q==}
+  vike@file:../vike/vike:
+    resolution: {directory: ../vike/vike, type: directory}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -2616,6 +2623,11 @@ packages:
     resolution: {integrity: sha512-02JEJl7SbtwSDJdYS537nU6l+ktdvcREfLksk/NDAqtdKWGqHl+joXzEubHROmS3E6pip+Xgu2tFezMu75jH7A==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
+
+  vite-plugin-wasm@3.4.1:
+    resolution: {integrity: sha512-ja3nSo2UCkVeitltJGkS3pfQHAanHv/DqGatdI39ja6McgABlpsZ5hVgl6wuR8Qx5etY3T5qgDQhOWzc5RReZA==}
+    peerDependencies:
+      vite: ^2 || ^3 || ^4 || ^5 || ^6
 
   vite@6.0.11:
     resolution: {integrity: sha512-4VL9mQPKoHy4+FE0NnRE/kbY51TOfaknxAjt3fJbGJxhIpBZiqVzlZDEesWWsuREXHwNdAoOFZ9MkPEVXczHwg==}
@@ -5315,7 +5327,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike@0.4.221(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
+  vike@file:../vike/vike(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
     dependencies:
       '@brillout/import': 0.2.3
       '@brillout/json-serializer': 0.5.15
@@ -5353,6 +5365,10 @@ snapshots:
       - terser
       - tsx
       - yaml
+
+  vite-plugin-wasm@3.4.1(vite@6.0.11(@types/node@18.19.74)(tsx@4.19.2)):
+    dependencies:
+      vite: 6.0.11(@types/node@18.19.74)(tsx@4.19.2)
 
   vite@6.0.11(@types/node@18.19.74)(tsx@4.19.2):
     dependencies:
