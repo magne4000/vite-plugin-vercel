@@ -21,6 +21,10 @@
       "import": "./dist/utils.js",
       "require": "./dist/utils.cjs"
     },
+    "./api": {
+      "import": "./dist/api.js",
+      "require": "./dist/api.cjs"
+    },
     "./types": {
       "types": "./index.d.ts"
     }

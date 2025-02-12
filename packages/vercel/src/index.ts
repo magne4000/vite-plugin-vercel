@@ -4,18 +4,19 @@ import { createMiddleware } from "@universal-middleware/express";
 import { getNodeVersion } from "@vercel/build-utils";
 import type { NodeVersion } from "@vercel/build-utils/dist";
 import { getTransformedRoutes, type RouteWithSrc } from "@vercel/routing-utils";
-import type { EmittedFile } from "rollup";
+import type { EmittedFile, PluginContext } from "rollup";
 import {
   BuildEnvironment,
   createRunnableDevEnvironment,
   type EnvironmentOptions,
   isRunnableDevEnvironment,
   mergeConfig,
-  normalizePath,
   type Plugin,
   type PluginOption,
   type ResolvedConfig,
 } from "vite";
+import { createAPI } from "./api";
+import { assert } from "./assert";
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
 import { copyDir, getOutput, getPublic } from "./helpers";
@@ -75,6 +76,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
   let nodeVersion: NodeVersion;
   const filesToEmit: Record<string, EmittedFile[]> = { vercel_client: [] };
+  const entries = pluginConfig.entries ?? [];
 
   return {
     name: "vite-plugin-vercel",
@@ -83,12 +85,16 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       nodeVersion = await getNodeVersion(process.cwd());
     },
 
+    api(pluginContext: PluginContext) {
+      return createAPI(entries, pluginContext);
+    },
+
     applyToEnvironment(env) {
       return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
     },
 
+    // TODO public api: Helpers
     config(config, env) {
-      const entries = pluginConfig.entries ?? [];
       const outDirOverride: EnvironmentOptions = pluginConfig.outDir
         ? {
             build: {
@@ -211,7 +217,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     // TODO watch/hmr
     configureServer(server) {
       const transformedRoutes = getTransformedRoutes({
-        rewrites: pluginConfig.entries?.map((entry) => ({
+        rewrites: entries.map((entry) => ({
           source: typeof entry.route === "string" ? `(${entry.route})` : entryToPathtoregex(entry),
           destination: entry.destination,
         })),
@@ -222,7 +228,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         .map((r) => ({
           src: new RegExp(r.src),
           dest: r.dest,
-          entry: pluginConfig.entries?.find((e) => e.destination === r.dest),
+          entry: entries.find((e) => e.destination === r.dest),
         }));
 
       // This middleware is in charge of adding user-provided headers onto the Response
@@ -274,7 +280,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       }
     },
 
-    load(id) {
+    async load(id) {
       if (id.startsWith(resolvedVirtualEntry)) {
         if (id.includes(DUMMY)) {
           return "export default {};";
@@ -282,9 +288,9 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
         const isEdge = this.environment.name === "vercel_edge";
         const fn = isEdge ? "createEdgeHandler" : "createNodeHandler";
-        const [, , , input] = id.split(":");
+        const [, , , ..._input] = id.split(":");
+        const input = _input.join(":");
 
-        const entries = pluginConfig.entries ?? [];
         const entry = entries.find((e) => e.input === input);
 
         if (!entry) {
@@ -338,14 +344,15 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           }
         }
 
-        const absoluteInput = normalizePath(
-          path.isAbsolute(input) ? input : path.posix.join(this.environment.config.root, input),
-        );
+        const resolved = await this.resolve(input, undefined, {
+          isEntry: true,
+        });
+        assert(resolved, `Failed to resolve input ${input}`);
 
         //language=javascript
         return `
           import { ${fn} } from "vite-plugin-vercel/universal-middleware";
-          import handler from "${absoluteInput}";
+          import handler from "${resolved.id}";
 
           export default ${fn}(() => handler)();
         `;

@@ -12,6 +12,9 @@ declare global {
 
 export default {
   name: "vike-vercel",
+  require: {
+    vike: ">=0.4.219",
+  },
   meta: {
     isr: {
       env: { server: true },

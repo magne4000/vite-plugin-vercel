@@ -201,6 +201,9 @@ importers:
 
   packages/vike:
     dependencies:
+      '@brillout/libassert':
+        specifier: ^0.5.8
+        version: 0.5.8
       vike:
         specifier: file:../../../vike/vike
         version: file:../vike/vike(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
@@ -217,6 +220,9 @@ importers:
       vite:
         specifier: ^6.0.11
         version: 6.1.0(@types/node@18.19.74)(tsx@4.19.2)
+      vite-plugin-vercel:
+        specifier: workspace:^
+        version: link:../vercel
 
 packages:
 

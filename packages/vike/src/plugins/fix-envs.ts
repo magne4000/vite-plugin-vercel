@@ -11,6 +11,7 @@ export function fixEnvsPlugins(): Plugin {
   return {
     name: "vike-vercel:fix-envs",
 
+    // FIXME use configEnvironment https://vite.dev/guide/api-environment-plugins.html#configuring-environment-using-hooks
     config(previousConfig) {
       assert(previousConfig.builder);
       previousConfig.builder.buildApp = async (builder) => {
