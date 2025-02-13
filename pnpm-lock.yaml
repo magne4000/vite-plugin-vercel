@@ -204,6 +204,9 @@ importers:
       '@brillout/libassert':
         specifier: ^0.5.8
         version: 0.5.8
+      esbuild:
+        specifier: ^0.24.2
+        version: 0.24.2
       vike:
         specifier: file:../../../vike/vike
         version: file:../vike/vike(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
