@@ -20,10 +20,10 @@ import { assert } from "./assert";
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
 import { copyDir, getOutput, getPublic } from "./helpers";
-import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
-import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
 import { bundlePlugin } from "./plugins/bundle";
 import { wasmPlugin } from "./plugins/wasm";
+import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
+import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
 
 export * from "./types";
 
@@ -122,9 +122,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
       const environments: Record<string, EnvironmentOptions> = {};
 
-      // TODO API ideas for frameworks: Custom hooks?
-      //  or public API: https://github.com/vitejs/vite/discussions/6257#discussioncomment-1870069
-
       // vercel_edge
       if (Object.keys(inputs.edge).length > 0) {
         filesToEmit.vercel_edge = [];
@@ -134,15 +131,20 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           mergeConfig<EnvironmentOptions, EnvironmentOptions>(
             {
               resolve: {
-                conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
+                // FIXME while emulating in node (so node runtime + edge runtime IN DEV only)
+                //       we do not import the right files
+                //       So we need to override this only for BUILD
+                // conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
               },
               optimizeDeps: {
+                ...config.optimizeDeps,
                 esbuildOptions: {
                   target: "es2022",
                   format: "esm",
                 },
               },
               build: {
+                // FIXME it empties `_tmp`, which is useless now
                 emptyOutDir: true,
               },
             },
@@ -163,6 +165,9 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         "mjs",
         mergeConfig<EnvironmentOptions, EnvironmentOptions>(
           {
+            optimizeDeps: {
+              ...config.optimizeDeps,
+            },
             build: {
               // Ensure that outDir is emptied only once
               emptyOutDir: !("vercel_edge" in environments),
@@ -486,7 +491,7 @@ async function getStaticHtmlFiles(src: string) {
 }
 
 export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
-  return [/*disableChunks(),*/ /*wasm(), */ wasmPlugin(), vercelPlugin(pluginConfig), bundlePlugin(pluginConfig)];
+  return [wasmPlugin(), vercelPlugin(pluginConfig), bundlePlugin(pluginConfig)];
 }
 
 // @vercel/routing-utils respects path-to-regexp syntax

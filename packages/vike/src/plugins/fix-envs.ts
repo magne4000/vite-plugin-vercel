@@ -1,5 +1,5 @@
 import assert from "node:assert";
-import { type EnvironmentOptions, type Plugin } from "vite";
+import type { EnvironmentOptions, Plugin } from "vite";
 
 function setTargetAndCssTarget(env: EnvironmentOptions) {
   env.build ??= {};
@@ -10,12 +10,14 @@ function setTargetAndCssTarget(env: EnvironmentOptions) {
 export function fixEnvsPlugins(): Plugin {
   return {
     name: "vike-vercel:fix-envs",
+    apply: "build",
 
     // FIXME use configEnvironment https://vite.dev/guide/api-environment-plugins.html#configuring-environment-using-hooks
     config(previousConfig) {
       assert(previousConfig.builder);
       previousConfig.builder.buildApp = async (builder) => {
         console.log("BUILDAPP vike-vercel");
+        // FIXME, can we provide something via the api?
         const priority: Record<string, number> = {
           client: 1,
           ssr: 2,

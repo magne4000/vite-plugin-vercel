@@ -37,6 +37,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin {
   return {
     name: "vite-plugin-vercel:bundle",
     enforce: "post",
+    apply: "build",
 
     generateBundle(_opts, bundle) {
       for (const b of Object.values(bundle)) {
