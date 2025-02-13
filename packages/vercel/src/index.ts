@@ -22,6 +22,8 @@ import { getConfig } from "./config";
 import { copyDir, getOutput, getPublic } from "./helpers";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
+import { bundlePlugin } from "./plugins/bundle";
+import { wasmPlugin } from "./plugins/wasm";
 
 export * from "./types";
 
@@ -48,6 +50,7 @@ function createVercelEnvironmentOptions(
           return new BuildEnvironment(name, config);
         },
         outDir,
+        emitAssets: true,
         copyPublicDir: false,
         rollupOptions: {
           input,
@@ -485,7 +488,7 @@ async function getStaticHtmlFiles(src: string) {
 }
 
 export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
-  return [/*disableChunks(),*/ /*wasm(), */ vercelPlugin(pluginConfig)];
+  return [/*disableChunks(),*/ /*wasm(), */ wasmPlugin(), vercelPlugin(pluginConfig), bundlePlugin()];
 }
 
 // @vercel/routing-utils respects path-to-regexp syntax

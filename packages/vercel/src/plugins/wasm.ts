@@ -9,23 +9,29 @@ export function wasmPlugin(): Plugin {
     resolveId: {
       order: "pre",
       // FIXME wasm files are not copied to outDir
-      handler(id, importer) {
+      async handler(id, importer, options) {
         if (id.endsWith(".wasm?module")) {
           const newId = id.replace(/\.wasm\?module$/i, ".wasm?url");
-          const newIdAbsolute = importer ? resolve(importer, "..", newId) : newId;
 
-          // const ref = this.emitFile({
+          const resolved = await this.resolve(newId, importer, options);
+
+          if (!resolved) return;
+
+          // const newId = id.replace(/\.wasm\?module$/i, ".wasm");
+          // const newIdAbsolute = importer ? resolve(importer, "..", newId) : newId;
+          const newIdAbsolute = importer ? resolve(importer, "..", id) : id;
+
+          // FIXME use @vercel/nft. Could I make a rollup-plugin-nft?
+          // this.emitFile({
           //   type: "asset",
-          //   name: newId.split("/").at(-1),
+          //   fileName: newId.split("/").at(-1),
           //   source: readFileSync(newIdAbsolute),
           //   originalFileName: newIdAbsolute,
           // });
 
           // console.log("REF", ref);
 
-          return {
-            id: newIdAbsolute,
-          };
+          return resolved;
         }
       },
     },
