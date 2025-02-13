@@ -4,7 +4,7 @@ import type { Plugin } from "vite";
 import { assert } from "./assert";
 import type { ViteVercelEntry } from "./types";
 
-export function createAPI(entries: ViteVercelEntry[], pluginContext: PluginContext) {
+export function createAPI(entries: ViteVercelEntry[], outfiles: ViteVercelOutFile[], pluginContext: PluginContext) {
   return {
     emitVercelEntry(entry: ViteVercelEntry) {
       entries.push(entry);
@@ -15,10 +15,13 @@ export function createAPI(entries: ViteVercelEntry[], pluginContext: PluginConte
         importer: undefined,
       });
     },
+    getOutFiles(): ViteVercelOutFile[] {
+      assert(outfiles.length > 0, "getOutFiles() must be called after all outputs have been generated");
+
+      return outfiles;
+    },
   };
 }
-
-export type ViteVercelApi = ReturnType<typeof createAPI>;
 
 export function getAPI(pluginContext: PluginContext) {
   const vpv: Plugin<(pluginContext: PluginContext) => ViteVercelApi> | undefined =
@@ -27,4 +30,23 @@ export function getAPI(pluginContext: PluginContext) {
   assert(vpv.api, "Missing `api`. Make sure vite-plugin-vercel is up-to-date");
 
   return vpv.api(pluginContext);
+}
+
+export type ViteVercelApi = ReturnType<typeof createAPI>;
+
+export type ViteVercelOutFile = ViteVercelOutFileChunk | ViteVercelOutFileAsset;
+
+interface ViteVercelOutFileCommon {
+  filepath: string;
+  root: string;
+  outdir: string;
+}
+
+export interface ViteVercelOutFileChunk extends ViteVercelOutFileCommon {
+  type: "chunk";
+  relatedEntry: ViteVercelEntry;
+}
+
+export interface ViteVercelOutFileAsset extends ViteVercelOutFileCommon {
+  type: "asset";
 }

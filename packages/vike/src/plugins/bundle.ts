@@ -1,5 +1,6 @@
 import type { Plugin } from "vite";
 import { build } from "esbuild";
+import { getAPI } from "vite-plugin-vercel/api";
 
 // We cannot disable code-splitting with Vite/Rollup,
 // so we use esbuild when all files are written on the filesystem to bundle each functions.
@@ -16,7 +17,10 @@ export function bundlePlugin(): Plugin {
     closeBundle: {
       order: "post",
       async handler() {
-        // TODO api.getVercelEntries()
+        const api = getAPI(this);
+
+        console.log("api.getOutFiles()", api.getOutFiles());
+
         await build({
           platform: "browser",
           format: "esm",

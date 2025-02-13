@@ -15,7 +15,7 @@ import {
   type PluginOption,
   type ResolvedConfig,
 } from "vite";
-import { createAPI } from "./api";
+import { createAPI, type ViteVercelOutFile } from "./api";
 import { assert } from "./assert";
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
@@ -77,6 +77,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   let nodeVersion: NodeVersion;
   const filesToEmit: Record<string, EmittedFile[]> = { vercel_client: [] };
   const entries = pluginConfig.entries ?? [];
+  const outfiles: ViteVercelOutFile[] = [];
 
   return {
     name: "vite-plugin-vercel",
@@ -86,7 +87,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     api(pluginContext: PluginContext) {
-      return createAPI(entries, pluginContext);
+      return createAPI(entries, outfiles, pluginContext);
     },
 
     applyToEnvironment(env) {
@@ -395,8 +396,38 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       },
     },
 
+    // Compute outfiles for the API
+    writeBundle(_opts, bundle) {
+      if (this.environment.name !== "vercel_edge" && this.environment.name !== "vercel_node") return;
+
+      const entryMap = new Map(entries.map((e) => [`${path.posix.join("functions/", e.destination)}.func/index`, e]));
+
+      for (const [key, value] of Object.entries(bundle)) {
+        if (value.type === "chunk" && value.isEntry && entryMap.has(removeExtension(key))) {
+          outfiles.push({
+            type: "chunk",
+            root: this.environment.config.root,
+            outdir: this.environment.config.build.outDir,
+            filepath: key,
+            relatedEntry: entryMap.get(removeExtension(key))!,
+          });
+        } else if ((value.type === "asset" && key.startsWith("functions/")) || key === "config.json") {
+          outfiles.push({
+            type: "asset",
+            root: this.environment.config.root,
+            outdir: this.environment.config.build.outDir,
+            filepath: key,
+          });
+        }
+      }
+    },
+
     sharedDuringBuild: true,
   };
+}
+
+function removeExtension(subject: string) {
+  return subject.replace(/\.[^/.]+$/, "");
 }
 
 async function copyDistToStatic(resolvedConfig: ResolvedConfig) {
