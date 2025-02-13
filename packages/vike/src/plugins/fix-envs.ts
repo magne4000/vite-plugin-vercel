@@ -1,15 +1,10 @@
 import assert from "node:assert";
-import { type EnvironmentOptions, normalizePath, type Plugin } from "vite";
+import { type EnvironmentOptions, type Plugin } from "vite";
 
 function setTargetAndCssTarget(env: EnvironmentOptions) {
   env.build ??= {};
   env.build.target = "es2022";
   env.build.cssTarget = "es2022";
-}
-
-function setOutDir(env: EnvironmentOptions) {
-  env.build ??= {};
-  env.build.outDir = normalizePath(`${env.build.outDir}/_tmp`);
 }
 
 export function fixEnvsPlugins(): Plugin {
@@ -57,12 +52,6 @@ export function fixEnvsPlugins(): Plugin {
       setTargetAndCssTarget(previousConfig.environments.vercel_client);
       assert(previousConfig.environments.client);
       setTargetAndCssTarget(previousConfig.environments.client);
-
-      // tmp outDir, to let esbuild correctly bundle files afterward
-      assert(previousConfig.environments.vercel_node);
-      setOutDir(previousConfig.environments.vercel_node);
-      assert(previousConfig.environments.vercel_edge);
-      setOutDir(previousConfig.environments.vercel_edge);
     },
   };
 }

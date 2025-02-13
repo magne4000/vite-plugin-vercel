@@ -27,7 +27,7 @@ import { wasmPlugin } from "./plugins/wasm";
 
 export * from "./types";
 
-const outDir = path.join(".vercel", "output");
+const outDir = ".vercel/output";
 const DUMMY = "__DUMMY__";
 
 function createVercelEnvironmentOptions(
@@ -49,8 +49,7 @@ function createVercelEnvironmentOptions(
         createEnvironment(name, config) {
           return new BuildEnvironment(name, config);
         },
-        outDir,
-        emitAssets: true,
+        outDir: path.posix.join(outDir, "_tmp"),
         copyPublicDir: false,
         rollupOptions: {
           input,
@@ -97,12 +96,11 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
     },
 
-    // TODO public api: Helpers
     config(config, env) {
       const outDirOverride: EnvironmentOptions = pluginConfig.outDir
         ? {
             build: {
-              outDir: pluginConfig.outDir,
+              outDir: path.posix.join(pluginConfig.outDir, "_tmp"),
             },
           }
         : {};
@@ -488,7 +486,7 @@ async function getStaticHtmlFiles(src: string) {
 }
 
 export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
-  return [/*disableChunks(),*/ /*wasm(), */ wasmPlugin(), vercelPlugin(pluginConfig), bundlePlugin()];
+  return [/*disableChunks(),*/ /*wasm(), */ wasmPlugin(), vercelPlugin(pluginConfig), bundlePlugin(pluginConfig)];
 }
 
 // @vercel/routing-utils respects path-to-regexp syntax
