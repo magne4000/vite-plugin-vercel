@@ -7,9 +7,9 @@ export function wasmPlugin(): Plugin {
 
     resolveId: {
       order: "pre",
-      async handler(id, importer, options) {
+      async handler(id) {
         if (!id.endsWith(".wasm?module")) return;
-        if (this.environment.name !== "vercel-edge") return;
+        if (this.environment.name !== "vercel_edge") return;
 
         return {
           id,
