@@ -24,6 +24,7 @@ import { bundlePlugin } from "./plugins/bundle";
 import { wasmPlugin } from "./plugins/wasm";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
+import { vercelCleanupPlugin } from "./plugins/clean-outdir";
 
 export * from "./types";
 
@@ -150,10 +151,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
                   format: "esm",
                 },
               },
-              build: {
-                // FIXME it empties `_tmp`, which is useless now
-                emptyOutDir: true,
-              },
             },
             outDirOverride,
           ),
@@ -174,10 +171,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           {
             optimizeDeps: {
               ...config.optimizeDeps,
-            },
-            build: {
-              // Ensure that outDir is emptied only once
-              emptyOutDir: !("vercel_edge" in environments),
             },
           },
           outDirOverride,
@@ -474,10 +467,6 @@ async function getStaticHtmlFiles(src: string) {
   return htmlFiles;
 }
 
-export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
-  return [wasmPlugin(), vercelPlugin(pluginConfig), bundlePlugin(pluginConfig)];
-}
-
 // @vercel/routing-utils respects path-to-regexp syntax
 function entryToPathtoregex(entry: ViteVercelEntry) {
   return path.posix
@@ -491,4 +480,8 @@ function entryToPathtoregex(entry: ViteVercelEntry) {
         .replace(/^\[([^/]+)\]$/g, ":$1"),
     )
     .join("/");
+}
+
+export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption[] {
+  return [vercelCleanupPlugin(), wasmPlugin(), vercelPlugin(pluginConfig), bundlePlugin(pluginConfig)];
 }
