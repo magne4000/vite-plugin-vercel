@@ -15,7 +15,7 @@ import {
   type PluginOption,
   type ResolvedConfig,
 } from "vite";
-import { createAPI, type ViteVercelOutFile } from "./api";
+import { createAPI, vercelBuildApp, type ViteVercelOutFile } from "./api";
 import { assert } from "./assert";
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
@@ -198,30 +198,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         // equivalent to --app CLI option
         builder: {
           buildApp: async (builder) => {
-            console.log("BUILDAPP VPV");
-            const priority: Record<string, number> = {
-              vercel_edge: 1,
-              vercel_node: 2,
-              vercel_client: 3,
-            }; // Higher priority values should be at the end
-
-            const envs = Object.values(builder.environments);
-            envs.sort((a, b) => {
-              const aPriority = priority[a.name] ?? 0;
-              const bPriority = priority[b.name] ?? 0;
-
-              return aPriority - bPriority;
-            });
-
-            // console.log(
-            //   "buildApp",
-            //   envs.map((e) => e.name),
-            // );
-
-            for (const environment of envs) {
-              console.log("BUILDAPP", environment.name);
-              await builder.build(environment);
-            }
+            await vercelBuildApp(builder);
           },
         },
         environments,

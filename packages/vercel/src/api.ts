@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { PluginContext } from "rollup";
-import type { Plugin } from "vite";
+import type { BuildEnvironment, Plugin, ViteBuilder } from "vite";
 import { assert } from "./assert";
 import type { ViteVercelEntry } from "./types";
 
@@ -32,6 +32,40 @@ export function getAPI(pluginContext: PluginContext) {
   return vpv.api(pluginContext);
 }
 
+export async function vercelBuildApp(builder: ViteBuilder, otherEnvsOrder?: Record<string, "pre" | "post" | number>) {
+  const priority: Record<string, number> = {
+    vercel_edge: 10,
+    vercel_node: 20,
+    vercel_client: 30,
+  }; // Higher priority values should be at the end
+
+  const envs = Object.values(builder.environments);
+  envs.sort((a, b) => {
+    const aPriority = priority[a.name] ?? prePostToOrder(otherEnvsOrder?.[a.name]) ?? 0;
+    const bPriority = priority[b.name] ?? prePostToOrder(otherEnvsOrder?.[b.name]) ?? 0;
+
+    return aPriority - bPriority;
+  });
+
+  // console.log(
+  //   "buildApp",
+  //   envs.map((e) => e.name),
+  // );
+
+  for (const environment of envs) {
+    console.log("BUILDAPP", environment.name);
+    await builder.build(environment);
+  }
+}
+
+function prePostToOrder(s?: string | number) {
+  if (!s) return 0;
+  if (typeof s === "number") return s;
+  if (s === "pre") return -1;
+  if (s === "post") return 50;
+  throw new Error(`Unsupported order ${s}`);
+}
+
 export type ViteVercelApi = ReturnType<typeof createAPI>;
 
 export type ViteVercelOutFile = ViteVercelOutFileChunk | ViteVercelOutFileAsset;
@@ -49,4 +83,9 @@ export interface ViteVercelOutFileChunk extends ViteVercelOutFileCommon {
 
 export interface ViteVercelOutFileAsset extends ViteVercelOutFileCommon {
   type: "asset";
+}
+
+export interface BuildEnvironmentWithOrder {
+  env: BuildEnvironment;
+  order?: "pre" | "post";
 }
