@@ -124,6 +124,15 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
       // vercel_edge
       if (Object.keys(inputs.edge).length > 0) {
+        // See https://vercel.com/docs/functions/runtimes/edge#compatible-node.js-modules
+        const external = ["async_hooks", "events", "buffer", "assert", "util"];
+        // In dev, we're running on node env, so we do not apply edge conditions
+        const conditions =
+          env.command === "build"
+            ? {
+                conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
+              }
+            : {};
         filesToEmit.vercel_edge = [];
         environments.vercel_edge = createVercelEnvironmentOptions(
           inputs.edge,
@@ -131,10 +140,8 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           mergeConfig<EnvironmentOptions, EnvironmentOptions>(
             {
               resolve: {
-                // FIXME while emulating in node (so node runtime + edge runtime IN DEV only)
-                //       we do not import the right files
-                //       So we need to override this only for BUILD
-                // conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
+                external: [...external, ...external.map((e) => `node:${e}`)],
+                ...conditions,
               },
               optimizeDeps: {
                 ...config.optimizeDeps,
