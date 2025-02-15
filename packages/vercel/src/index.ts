@@ -1,9 +1,11 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { createMiddleware } from "@universal-middleware/express";
+import { createNodeHandler } from "@universal-middleware/vercel";
 import { getNodeVersion } from "@vercel/build-utils";
 import type { NodeVersion } from "@vercel/build-utils/dist";
 import { getTransformedRoutes, type RouteWithSrc } from "@vercel/routing-utils";
+import { match } from "path-to-regexp";
 import type { EmittedFile, PluginContext } from "rollup";
 import {
   BuildEnvironment,
@@ -21,10 +23,10 @@ import { getVcConfig } from "./build";
 import { getConfig } from "./config";
 import { copyDir, getOutput, getPublic } from "./helpers";
 import { bundlePlugin } from "./plugins/bundle";
+import { vercelCleanupPlugin } from "./plugins/clean-outdir";
 import { wasmPlugin } from "./plugins/wasm";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
-import { vercelCleanupPlugin } from "./plugins/clean-outdir";
 
 export * from "./types";
 
@@ -209,11 +211,15 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
       const routes = (transformedRoutes.routes ?? [])
         .filter((r): r is RouteWithSrc => Boolean(r.src))
-        .map((r) => ({
-          src: new RegExp(r.src),
-          dest: r.dest,
-          entry: entries.find((e) => e.destination === r.dest),
-        }));
+        .map((r) => {
+          const entry = entries.find((e) => e.destination === r.dest?.split("?")[0]);
+          return {
+            src: new RegExp(r.src),
+            dest: r.dest,
+            entry: entries.find((e) => e.destination === r.dest?.split("?")[0]),
+            re: entry ? match(entryToPathtoregex(entry)) : null,
+          };
+        });
 
       // This middleware is in charge of adding user-provided headers onto the Response
       const routesWithAddedHeaders = routes.filter((r) => r.entry?.headers);
@@ -233,12 +239,13 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         );
       }
 
-      // This middleware is in charge of mapping a request to a UniversalHandler
+      // This handler is in charge of mapping a request to a UniversalHandler
       server.middlewares.use(
-        createMiddleware(() => async (request) => {
+        createNodeHandler(() => async (request, ctx, runtime) => {
           const url = new URL(request.url);
           for (const r of routes) {
-            if (r.entry && r.src.test(url.pathname)) {
+            const found = r.re?.(url.pathname);
+            if (r.entry && found) {
               const devEnv = r.entry.edge ? server.environments.vercel_edge : server.environments.vercel_node;
 
               if (isRunnableDevEnvironment(devEnv)) {
@@ -247,8 +254,17 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
                   for (const [key, value] of Object.entries(r.entry.headers)) newRequest.headers.set(key, value);
                 }
 
+                // Add 'x-now-route-matches' header
+                request.headers.set(
+                  "x-now-route-matches",
+                  new URLSearchParams(found.params as Record<string, string>).toString(),
+                );
+                // patch `runtime.params` because its computing is based on 'x-now-route-matches' header
+                // which we just added.
+                runtime.params = found.params as Record<string, string>;
+
                 const fileEntry = await devEnv.runner.import(r.entry.input);
-                return fileEntry.default(newRequest);
+                return fileEntry.default(newRequest, ctx, runtime);
               }
 
               throw new Error(`${devEnv.name} environment is not Runnable`);
