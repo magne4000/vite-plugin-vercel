@@ -21,7 +21,7 @@ import { createAPI, vercelBuildApp, type ViteVercelOutFile } from "./api";
 import { assert } from "./assert";
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
-import { copyDir, getOutput, getPublic } from "./helpers";
+import { getOutput, getPublic } from "./helpers";
 import { bundlePlugin } from "./plugins/bundle";
 import { vercelCleanupPlugin } from "./plugins/clean-outdir";
 import { wasmPlugin } from "./plugins/wasm";
@@ -411,6 +411,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
             root: this.environment.config.root,
             outdir: this.environment.config.build.outDir,
             filepath: key,
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
             relatedEntry: entryMap.get(removeExtension(key))!,
           });
         } else if ((value.type === "asset" && key.startsWith("functions/")) || key === "config.json") {
@@ -432,15 +433,16 @@ function removeExtension(subject: string) {
   return subject.replace(/\.[^/.]+$/, "");
 }
 
-async function copyDistToStatic(resolvedConfig: ResolvedConfig) {
-  if (resolvedConfig.vercel?.distContainsOnlyStatic) {
-    await copyDir(resolvedConfig.build.outDir, getOutput(resolvedConfig, "static"));
+async function copyDistToStatic(pluginConfig: ViteVercelConfig) {
+  if (pluginConfig.distContainsOnlyStatic) {
+    // TODO
   }
 }
 
 async function computeStaticHtmlOverrides(
   resolvedConfig: ResolvedConfig,
 ): Promise<NonNullable<ViteVercelPrerenderRoute>> {
+  // FIXME getOutput is deprecated
   const staticAbsolutePath = getOutput(resolvedConfig, "static");
   const files = await getStaticHtmlFiles(staticAbsolutePath);
 
