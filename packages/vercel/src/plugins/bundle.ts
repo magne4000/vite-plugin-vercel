@@ -3,23 +3,22 @@ import { copyFile, rm } from "node:fs/promises";
 import path from "node:path";
 import { findRoot } from "@manypkg/find-root";
 import { nodeFileTrace } from "@vercel/nft";
-import { build } from "esbuild";
+import { build, type Plugin as ESBuildPlugin } from "esbuild";
 import type { Environment, Plugin } from "vite";
 import { getAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../api";
 import type { ViteVercelConfig } from "../types";
 
-// TODO cleanup
-// const edgeWasmPlugin: ESBuildPlugin = {
-//   name: "edge-wasm-vercel",
-//   setup(build) {
-//     build.onResolve({ filter: /\.wasm/ }, (args) => {
-//       return {
-//         path: args.path.replace(/\.wasm\?module$/i, ".wasm"),
-//         external: true,
-//       };
-//     });
-//   },
-// };
+const edgeWasmPlugin: ESBuildPlugin = {
+  name: "edge-wasm-vercel",
+  setup(build) {
+    build.onResolve({ filter: /\.wasm/ }, (args) => {
+      return {
+        path: args.path.replace(/\.wasm\?module$/i, ".wasm"),
+        external: true,
+      };
+    });
+  },
+};
 
 interface BundleAsset {
   env: string;
@@ -119,9 +118,7 @@ async function bundle(
     // allowOverwrite: true,
     // metafile: true,
     logOverride: { "ignored-bare-import": "silent" },
-
-    // Should already have been rewritten by Vite
-    // plugins: [edgeWasmPlugin],
+    plugins: [edgeWasmPlugin],
   });
 
   let base = environment.config.root;
