@@ -263,6 +263,9 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
                 // which we just added.
                 runtime.params = found.params as Record<string, string>;
 
+                // Other internal headers are listed here if we need future support
+                // https://github.com/vercel/next.js/blob/c994df87a55c1912a99b4ca25cd5d5d5790c1dac/packages/next/src/server/lib/server-ipc/utils.ts#L42
+
                 const fileEntry = await devEnv.runner.import(r.entry.input);
                 return fileEntry.default(newRequest, ctx, runtime);
               }
