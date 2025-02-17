@@ -21,12 +21,12 @@ import { createAPI, vercelBuildApp, type ViteVercelOutFile } from "./api";
 import { assert } from "./assert";
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
+import { joinAbsolute } from "./helpers";
 import { bundlePlugin } from "./plugins/bundle";
 import { vercelCleanupPlugin } from "./plugins/clean-outdir";
 import { wasmPlugin } from "./plugins/wasm";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
-import { joinAbsolute } from "./helpers";
 
 export * from "./types";
 
