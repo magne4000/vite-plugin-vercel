@@ -132,7 +132,7 @@ importers:
         version: 5.7.3
       vite:
         specifier: ^6.0.11
-        version: 6.0.11(@types/node@18.19.74)(tsx@4.19.2)
+        version: 6.1.0(@types/node@18.19.74)(tsx@4.19.2)
 
   examples/simple:
     dependencies:
@@ -151,7 +151,7 @@ importers:
         version: 5.7.3
       vite:
         specifier: ^6.0.11
-        version: 6.0.11(@types/node@18.19.74)(tsx@4.19.2)
+        version: 6.1.0(@types/node@18.19.74)(tsx@4.19.2)
 
   packages/vercel:
     dependencies:
@@ -187,7 +187,7 @@ importers:
         version: 8.2.0
       vite-plugin-wasm:
         specifier: ^3.4.1
-        version: 3.4.1(vite@6.0.11(@types/node@18.19.74)(tsx@4.19.2))
+        version: 3.4.1(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
       zod:
         specifier: ^3.24.1
         version: 3.24.1
@@ -212,7 +212,7 @@ importers:
         version: 5.7.3
       vite:
         specifier: ^6.0.11
-        version: 6.0.11(@types/node@18.19.74)(tsx@4.19.2)
+        version: 6.1.0(@types/node@18.19.74)(tsx@4.19.2)
 
   packages/vike:
     dependencies:
@@ -299,11 +299,6 @@ packages:
     resolution: {integrity: sha512-8NHiL98vsi0mbPQmYAGWwfcFaOy4j2HY49fXJCfuDcdE7fMIsH9a7GdaeXpIBsbT7307WU8KCMp5pUVDNL4f9A==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/parser@7.26.5':
-    resolution: {integrity: sha512-SRJ4jYmXRqV1/Xc+TIVG84WjHBXKlxO9sHQnA2Pf12QQEAp1LOh6kDzNHXcUnbH1QI0FDoPPVOt+vyUDucxpaw==}
-    engines: {node: '>=6.0.0'}
-    hasBin: true
-
   '@babel/parser@7.26.8':
     resolution: {integrity: sha512-TZIQ25pkSoaKEYYaHbbxkfL36GNsQ6iFiBbeuzAkLnXayKR1yP1zFe+NxuZWWsUyvt8icPU9CCq0sgWGXR1GEw==}
     engines: {node: '>=6.0.0'}
@@ -343,10 +338,6 @@ packages:
 
   '@babel/traverse@7.26.8':
     resolution: {integrity: sha512-nic9tRkjYH0oB2dzr/JoGIm+4Q6SuYeLEiIiZDwBscRMYFJ+tMAz98fuel9ZnbXViA2I0HVSSRRK8DW5fjXStA==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/types@7.26.5':
-    resolution: {integrity: sha512-L6mZmwFDK6Cjh1nRCLXpa6no13ZIioJDz7mdkzHv399pThrTa/k0nUlNaenOeh2kWu/iaOQYElEpKPUswUa9Vg==}
     engines: {node: '>=6.9.0'}
 
   '@babel/types@7.26.8':
@@ -2835,46 +2826,6 @@ packages:
     peerDependencies:
       vite: ^2 || ^3 || ^4 || ^5 || ^6
 
-  vite@6.0.11:
-    resolution: {integrity: sha512-4VL9mQPKoHy4+FE0NnRE/kbY51TOfaknxAjt3fJbGJxhIpBZiqVzlZDEesWWsuREXHwNdAoOFZ9MkPEVXczHwg==}
-    engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
-    hasBin: true
-    peerDependencies:
-      '@types/node': ^18.0.0 || ^20.0.0 || >=22.0.0
-      jiti: '>=1.21.0'
-      less: '*'
-      lightningcss: ^1.21.0
-      sass: '*'
-      sass-embedded: '*'
-      stylus: '*'
-      sugarss: '*'
-      terser: ^5.16.0
-      tsx: ^4.8.1
-      yaml: ^2.4.2
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-      jiti:
-        optional: true
-      less:
-        optional: true
-      lightningcss:
-        optional: true
-      sass:
-        optional: true
-      sass-embedded:
-        optional: true
-      stylus:
-        optional: true
-      sugarss:
-        optional: true
-      terser:
-        optional: true
-      tsx:
-        optional: true
-      yaml:
-        optional: true
-
   vite@6.1.0:
     resolution: {integrity: sha512-RjjMipCKVoR4hVfPY6GQTgveinjNuyLw+qruksLDvA5ktI1150VmcMBKmQaEWJhg/j6Uaf6dNCNA0AfdzUb/hQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -3085,10 +3036,6 @@ snapshots:
       '@babel/template': 7.26.8
       '@babel/types': 7.26.8
 
-  '@babel/parser@7.26.5':
-    dependencies:
-      '@babel/types': 7.26.8
-
   '@babel/parser@7.26.8':
     dependencies:
       '@babel/types': 7.26.8
@@ -3140,11 +3087,6 @@ snapshots:
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
-
-  '@babel/types@7.26.5':
-    dependencies:
-      '@babel/helper-string-parser': 7.25.9
-      '@babel/helper-validator-identifier': 7.25.9
 
   '@babel/types@7.26.8':
     dependencies:
@@ -3792,8 +3734,8 @@ snapshots:
 
   '@types/babel__core@7.20.5':
     dependencies:
-      '@babel/parser': 7.26.5
-      '@babel/types': 7.26.5
+      '@babel/parser': 7.26.8
+      '@babel/types': 7.26.8
       '@types/babel__generator': 7.6.8
       '@types/babel__template': 7.4.4
       '@types/babel__traverse': 7.20.6
@@ -3804,7 +3746,7 @@ snapshots:
 
   '@types/babel__template@7.4.4':
     dependencies:
-      '@babel/parser': 7.26.5
+      '@babel/parser': 7.26.8
       '@babel/types': 7.26.8
 
   '@types/babel__traverse@7.20.6':
@@ -4831,8 +4773,8 @@ snapshots:
 
   magicast@0.3.5:
     dependencies:
-      '@babel/parser': 7.26.5
-      '@babel/types': 7.26.5
+      '@babel/parser': 7.26.8
+      '@babel/types': 7.26.8
       source-map-js: 1.2.1
 
   make-error@1.3.6: {}
@@ -5813,19 +5755,9 @@ snapshots:
       - tsx
       - yaml
 
-  vite-plugin-wasm@3.4.1(vite@6.0.11(@types/node@18.19.74)(tsx@4.19.2)):
+  vite-plugin-wasm@3.4.1(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
     dependencies:
-      vite: 6.0.11(@types/node@18.19.74)(tsx@4.19.2)
-
-  vite@6.0.11(@types/node@18.19.74)(tsx@4.19.2):
-    dependencies:
-      esbuild: 0.24.2
-      postcss: 8.5.1
-      rollup: 4.34.1
-    optionalDependencies:
-      '@types/node': 18.19.74
-      fsevents: 2.3.3
-      tsx: 4.19.2
+      vite: 6.1.0(@types/node@18.19.74)(tsx@4.19.2)
 
   vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2):
     dependencies:

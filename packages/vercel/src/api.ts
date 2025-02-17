@@ -52,7 +52,9 @@ export async function vercelBuildApp(builder: ViteBuilder, otherEnvsOrder?: Reco
   //   envs.map((e) => e.name),
   // );
 
+  let i = 0;
   for (const environment of envs) {
+    environment.logger.info(`[vite-plugin-vercel] Build step ${++i}/${envs.length}: ${environment.name}`);
     await builder.build(environment);
   }
 }

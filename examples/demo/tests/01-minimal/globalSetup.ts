@@ -1,5 +1,5 @@
 import path from "node:path";
-import react from "@vitejs/plugin-react-swc";
+import react from "@vitejs/plugin-react";
 import vercel from "vite-plugin-vercel";
 import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 import { setup as _setup } from "../common/setup";

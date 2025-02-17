@@ -49,7 +49,9 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin {
             env: this.environment.name,
             root: this.environment.config.root,
             outDir: this.environment.config.build.outDir,
-            outFile: path.join(this.environment.config.root, this.environment.config.build.outDir, b.fileName),
+            outFile: path.isAbsolute(this.environment.config.build.outDir)
+              ? path.join(this.environment.config.build.outDir, b.fileName)
+              : path.join(this.environment.config.root, this.environment.config.build.outDir, b.fileName),
             fileName: b.fileName,
           };
 
@@ -89,7 +91,9 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin {
 }
 
 function getAbsoluteOutFile(outfile: ViteVercelOutFile) {
-  const source = path.posix.join(outfile.root, outfile.outdir, outfile.filepath);
+  const source = path.isAbsolute(outfile.outdir)
+    ? path.posix.join(outfile.outdir, outfile.filepath)
+    : path.posix.join(outfile.root, outfile.outdir, outfile.filepath);
   // effectively removes appended _tmp folder
   const destination = source.replace(outfile.outdir, path.dirname(outfile.outdir));
   return {

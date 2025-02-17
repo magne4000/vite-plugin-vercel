@@ -1,8 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
 import type { Plugin } from "vite";
+import type { ViteVercelConfig } from "../types";
 
-export function vercelCleanupPlugin(): Plugin {
+export function vercelCleanupPlugin(pluginConfig?: ViteVercelConfig): Plugin {
   let alreadyRun = false;
 
   return {
@@ -11,17 +12,20 @@ export function vercelCleanupPlugin(): Plugin {
     enforce: "pre",
 
     applyToEnvironment(env) {
-      return env.name === "vercel_edge" || env.name === "vercel_node";
+      return env.name === "client";
     },
 
-    writeBundle: {
+    buildStart: {
       order: "pre",
       sequential: true,
       handler() {
         if (alreadyRun) return;
         alreadyRun = true;
-        const absoluteOutdir = path.join(this.environment.config.root, this.environment.config.build.outDir);
-        cleanOutputDirectory(absoluteOutdir.endsWith("_tmp") ? path.dirname(absoluteOutdir) : absoluteOutdir);
+        const absoluteOutdir =
+          pluginConfig?.outDir && path.isAbsolute(pluginConfig.outDir)
+            ? pluginConfig.outDir
+            : path.join(this.environment.config.root, pluginConfig?.outDir ?? ".vercel/output");
+        cleanOutputDirectory(absoluteOutdir);
       },
     },
 
