@@ -73,7 +73,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin {
 
         for (const outfile of outfiles) {
           if (outfile.type === "asset") {
-            const { source, destination } = getAbsoluteOutFile(outfile);
+            const { source, destination } = getAbsoluteOutFileWithout_tmp(outfile);
             await copyFile(source, destination);
           } else {
             await bundle(this.environment, bundledAssets, outfile);
@@ -90,7 +90,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin {
   };
 }
 
-function getAbsoluteOutFile(outfile: ViteVercelOutFile) {
+function getAbsoluteOutFileWithout_tmp(outfile: ViteVercelOutFile) {
   const source = path.isAbsolute(outfile.outdir)
     ? path.posix.join(outfile.outdir, outfile.filepath)
     : path.posix.join(outfile.root, outfile.outdir, outfile.filepath);
@@ -107,7 +107,7 @@ async function bundle(
   bundledAssets: Map<string, BundleAsset>,
   outfile: ViteVercelOutFileChunk,
 ) {
-  const { source, destination } = getAbsoluteOutFile(outfile);
+  const { source, destination } = getAbsoluteOutFileWithout_tmp(outfile);
 
   await build({
     platform: outfile.relatedEntry.edge ? "browser" : "node",
