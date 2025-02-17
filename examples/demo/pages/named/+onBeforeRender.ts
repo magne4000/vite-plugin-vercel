@@ -1,7 +1,7 @@
-import type { PageContextBuiltInServer } from "vike/types";
+import type { PageContextServer } from "vike/types";
 
 // https://vike.dev/onBeforeRender
-export default function onBeforeRender(pageContext: PageContextBuiltInServer) {
+export default function onBeforeRender(pageContext: PageContextServer) {
   return {
     pageContext: {
       pageProps: {

@@ -53,7 +53,6 @@ export async function vercelBuildApp(builder: ViteBuilder, otherEnvsOrder?: Reco
   // );
 
   for (const environment of envs) {
-    console.log("BUILDAPP", environment.name);
     await builder.build(environment);
   }
 }

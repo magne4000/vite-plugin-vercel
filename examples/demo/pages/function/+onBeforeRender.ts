@@ -1,5 +1,3 @@
-import { PageContextBuiltInServer } from "vike/types";
-
 // https://vike.dev/onBeforeRender
 export default function onBeforeRender() {
   return {

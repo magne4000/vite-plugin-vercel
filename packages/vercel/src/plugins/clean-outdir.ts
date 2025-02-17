@@ -10,6 +10,10 @@ export function vercelCleanupPlugin(): Plugin {
     name: "vite-plugin-vercel:cleanup",
     enforce: "pre",
 
+    applyToEnvironment(env) {
+      return env.name === "vercel_edge" || env.name === "vercel_node";
+    },
+
     writeBundle: {
       order: "pre",
       sequential: true,
@@ -17,7 +21,7 @@ export function vercelCleanupPlugin(): Plugin {
         if (alreadyRun) return;
         alreadyRun = true;
         const absoluteOutdir = path.join(this.environment.config.root, this.environment.config.build.outDir);
-        cleanOutputDirectory(absoluteOutdir);
+        cleanOutputDirectory(absoluteOutdir.endsWith("_tmp") ? path.dirname(absoluteOutdir) : absoluteOutdir);
       },
     },
 

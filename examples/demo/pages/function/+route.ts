@@ -1,6 +1,6 @@
-import type { PageContextBuiltInServer } from "vike/types";
+import type { PageContextServer } from "vike/types";
 
-export default function (pageContext: PageContextBuiltInServer) {
+export function route(pageContext: PageContextServer) {
   if (!pageContext.urlPathname.startsWith("/function/")) return false;
   return {
     precedence: -1,

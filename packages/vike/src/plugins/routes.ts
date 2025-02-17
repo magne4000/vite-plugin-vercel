@@ -1,12 +1,13 @@
-import { getPagesAndRoutes, type PageRoutes } from "vike/__internal";
-import type { PrerenderContextPublic } from "vike/types";
+import type { PageRoutes } from "vike/__internal";
 import { normalizePath, type Plugin } from "vite";
 import { getAPI } from "vite-plugin-vercel/api";
 import { assert } from "../utils/assert";
 
 export function routesPlugin(): Plugin {
-  let vikePrerenderContext: PrerenderContextPublic | undefined = undefined;
-  let vikePages: {
+  // TODO use it + typing
+  const vikePrerenderContext: any | undefined = undefined;
+  let vikeConfig: any | undefined = undefined;
+  const vikePages: {
     pageId: string;
     filePath: string;
     isr: number | null;
@@ -15,76 +16,92 @@ export function routesPlugin(): Plugin {
     route: string | null;
   }[] = [];
   let i = 0;
+  let resolvedConfig: any;
 
   return {
     name: "vike-vercel:routes",
+    enforce: "post",
+
+    configResolved: {
+      order: "post",
+      handler(conf) {
+        console.log("configResolved", conf.vike.pages["/pages/function"].route);
+        resolvedConfig = conf;
+      },
+    },
 
     closeBundle: {
       order: "post",
       async handler() {
+        console.log("ENV closeBundle", this.environment.name);
         if (this.environment.name === "ssr") {
-          vikePrerenderContext = this.environment.config.vike?.prerenderContext;
-          const { allPageIds, pageRoutes, pageConfigs } = await getPagesAndRoutes();
+          vikeConfig = resolvedConfig.vike;
+          console.log({
+            env: "ssr",
+            route: resolvedConfig.vike.pages["/pages/function"].route,
+            route2: this.environment.config.vike.pages["/pages/function"].route,
+          });
+          // const { allPageIds, pageRoutes, pageConfigs } = await getPagesAndRoutes();
 
-          vikePages = await Promise.all(
-            allPageIds.map(async (pageId) => {
-              const pageConfig = pageConfigs.find((p) => p.pageId === pageId);
-
-              assert(
-                pageConfig,
-                `Cannot find page config ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
-              );
-
-              const simplePageConfig: Record<string, unknown> = {};
-
-              for (const [k, v] of Object.entries(pageConfig.configValues)) {
-                simplePageConfig[k] = v.value;
-              }
-
-              const page = {
-                config: simplePageConfig,
-                filePath: pageConfig.pageId,
-              };
-
-              const _route = getRouteDynamicRoute(pageRoutes, pageId) ?? getRouteFsRoute(pageRoutes, pageId);
-              const rawIsr = extractIsr(page.config);
-              let isr = assertIsr(page.config);
-              const edge = assertEdge(page.config);
-              const headers = assertHeaders(page.config);
-
-              // if ISR + Function routing -> warn because ISR is not unsupported in this case
-              if (typeof _route === "function" && isr) {
-                console.warn(
-                  `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
-                );
-                isr = null;
-              }
-
-              if (edge && rawIsr !== null && typeof rawIsr === "object") {
-                throw new Error(
-                  `Page ${pageId}: ISR cannot be enabled for edge functions. Remove \`{ isr }\` config or set \`{ edge: false }\`.`,
-                );
-              }
-
-              const route = typeof _route === "string" ? getParametrizedRoute(_route) : null;
-
-              if (!route && headers !== null && headers !== undefined) {
-                console.warn(
-                  `Page ${pageId}: headers is not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
-                );
-              }
-
-              return {
-                pageId,
-                // used for debug purpose
-                filePath: page.filePath,
-                isr,
-                edge,
-                headers,
-                route,
-              };
-            }),
-          );
+          // vikePages = await Promise.all(
+          //   allPageIds.map(async (pageId) => {
+          //     const pageConfig = pageConfigs.find((p) => p.pageId === pageId);
+          //
+          //     assert(
+          //       pageConfig,
+          //       `Cannot find page config ${pageId}. Contact the vite-plugin-vercel maintainer on GitHub / Discord`,
+          //     );
+          //
+          //     const simplePageConfig: Record<string, unknown> = {};
+          //
+          //     for (const [k, v] of Object.entries(pageConfig.configValues)) {
+          //       simplePageConfig[k] = v.value;
+          //     }
+          //
+          //     const page = {
+          //       config: simplePageConfig,
+          //       filePath: pageConfig.pageId,
+          //     };
+          //
+          //     const _route = getRouteDynamicRoute(pageRoutes, pageId) ?? getRouteFsRoute(pageRoutes, pageId);
+          //     const rawIsr = extractIsr(page.config);
+          //     let isr = assertIsr(page.config);
+          //     const edge = assertEdge(page.config);
+          //     const headers = assertHeaders(page.config);
+          //
+          //     // if ISR + Function routing -> warn because ISR is not unsupported in this case
+          //     if (typeof _route === "function" && isr) {
+          //       console.warn(
+          //         `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
+          //       );
+          //       isr = null;
+          //     }
+          //
+          //     if (edge && rawIsr !== null && typeof rawIsr === "object") {
+          //       throw new Error(
+          //         `Page ${pageId}: ISR cannot be enabled for edge functions. Remove \`{ isr }\` config or set \`{ edge: false }\`.`,
+          //       );
+          //     }
+          //
+          //     const route = typeof _route === "string" ? getParametrizedRoute(_route) : null;
+          //
+          //     if (!route && headers !== null && headers !== undefined) {
+          //       console.warn(
+          //         `Page ${pageId}: headers is not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
+          //       );
+          //     }
+          //
+          //     return {
+          //       pageId,
+          //       // used for debug purpose
+          //       filePath: page.filePath,
+          //       isr,
+          //       edge,
+          //       headers,
+          //       route,
+          //     };
+          //   }),
+          // );
         }
       },
     },
