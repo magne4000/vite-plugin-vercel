@@ -8,7 +8,6 @@ export function routesPlugin(): Plugin {
   let vikeConfig: any | undefined = undefined;
   const vikePages: {
     pageId: string;
-    filePath: string;
     isr: number | null;
     edge: null | boolean;
     headers: Record<string, string> | null;
@@ -25,10 +24,6 @@ export function routesPlugin(): Plugin {
         if (this.environment.name === "ssr") {
           // TODO assert
           vikeConfig = this.environment.config.vike;
-          console.log({
-            env: "ssr",
-            route: this.environment.config.vike.pages["/pages/function"].route,
-          });
 
           for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
             const rawIsr = extractIsr(page.config);
@@ -37,7 +32,7 @@ export function routesPlugin(): Plugin {
             const headers = assertHeaders(page.config);
 
             if (typeof page.config.route === "function" && isr) {
-              console.warn(
+              this.warn(
                 `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
               );
               isr = null;
@@ -52,15 +47,13 @@ export function routesPlugin(): Plugin {
             const route = typeof page.config.route === "string" ? getParametrizedRoute(page.config.route) : null;
 
             if (!route && headers !== null && headers !== undefined) {
-              console.warn(
-                `Page ${pageId}: headers is not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
+              this.warn(
+                `Page ${pageId}: { headers } are not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
               );
             }
 
             vikePages.push({
               pageId,
-              // used for debug purpose
-              filePath: page.filePath,
               isr,
               edge,
               headers,
@@ -87,7 +80,6 @@ export function routesPlugin(): Plugin {
         for (const page of currentEnvPages.filter(
           (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
         )) {
-          // console.log("EMIT", this.environment.name, page);
           emitVercelEntry({
             input: `vike/universal-middleware?i=${i++}`,
             destination: normalizePath(`${key}/${page.pageId}`),
@@ -99,7 +91,6 @@ export function routesPlugin(): Plugin {
         }
 
         if (currentEnvPages.length > 0) {
-          // console.log("EMIT", this.environment.name, "DEFAULT");
           // Catch-all
           emitVercelEntry({
             input: `vike/universal-middleware?i=${i++}`,
@@ -108,18 +99,6 @@ export function routesPlugin(): Plugin {
             edge: isEdge,
           });
         }
-
-        // console.log("PAGES", this.environment.name, vikePages);
-
-        // console.log(
-        //   "vikePrerenderContext",
-        //   this.environment.name,
-        //   vikePrerenderContext?.pageContexts.map((x) => ({
-        //     pageId: x.pageId,
-        //     config: x.config,
-        //     configEntries: x.configEntries,
-        //   })),
-        // );
       },
     },
 
