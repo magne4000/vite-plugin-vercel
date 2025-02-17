@@ -13,17 +13,21 @@ declare global {
 export default {
   name: "vike-vercel",
   require: {
-    vike: ">=0.4.219",
+    // FIXME should be >=0.4.224 when released
+    vike: ">=0.4.223",
   },
   meta: {
     isr: {
-      env: { server: true },
+      env: { server: true, config: true },
+      eager: true,
     },
     edge: {
-      env: { server: true },
+      env: { server: true, config: true },
+      eager: true,
     },
     headers: {
-      env: { server: true },
+      env: { server: true, config: true },
+      eager: true,
     },
   },
 } satisfies Config;
