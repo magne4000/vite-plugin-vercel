@@ -65,13 +65,6 @@ export interface ViteVercelConfig {
    * @protected
    */
   outDir?: string;
-  /**
-   * By default, Vite generates static files under `dist` folder.
-   * But usually, when used through a Framework, such as Vike,
-   * this folder can contain anything, requiring custom integration.
-   * Set this to false if you create a plugin for a Framework.
-   */
-  distContainsOnlyStatic?: boolean;
 }
 
 export interface VercelOutputIsr extends VercelOutputPrerenderConfig {

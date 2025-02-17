@@ -391,10 +391,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
             source: JSON.stringify(getConfig(pluginConfig), undefined, 2),
           });
         }
-
-        if (this.environment.name === "vercel_client") {
-          await copyDistToStatic(this.environment.config);
-        }
       },
     },
 
@@ -431,12 +427,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
 function removeExtension(subject: string) {
   return subject.replace(/\.[^/.]+$/, "");
-}
-
-async function copyDistToStatic(pluginConfig: ViteVercelConfig) {
-  if (pluginConfig.distContainsOnlyStatic) {
-    // TODO
-  }
 }
 
 async function computeStaticHtmlOverrides(
