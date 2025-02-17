@@ -16,7 +16,7 @@ export function buildAppPlugins(): Plugin {
             async buildApp(builder) {
               console.log("BUILDAPP vike-vercel");
               // Build order:
-              // client -> ssr -> vercel_edge -> vercel_node -> vercel_client
+              // client -> ssr -> vercel_client -> vercel_edge -> vercel_node
               await vercelBuildApp(builder, { client: 1, ssr: 2 });
             },
           },

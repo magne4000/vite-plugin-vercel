@@ -1,5 +1,5 @@
 import path from "node:path";
-import { normalizePath, type ResolvedConfig, type UserConfig } from "vite";
+import { type Environment, normalizePath, type ResolvedConfig, type UserConfig } from "vite";
 
 /**
  * TODO TO REMOVE
@@ -26,4 +26,20 @@ export function getOutput(
  */
 export function getPublic(config: ResolvedConfig): string {
   return path.join(getRoot(config), config.publicDir || "public");
+}
+
+export function joinAbsolute(env: Environment, p1: string, ...p: string[]) {
+  if (path.isAbsolute(p1)) {
+    return path.join(p1, ...p);
+  } else {
+    return path.join(env.config.root, p1, ...p);
+  }
+}
+
+export function joinAbsolutePosix(env: Environment, p1: string, ...p: string[]) {
+  if (path.isAbsolute(p1)) {
+    return path.posix.join(p1, ...p);
+  } else {
+    return path.posix.join(env.config.root, p1, ...p);
+  }
 }

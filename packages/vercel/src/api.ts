@@ -34,9 +34,9 @@ export function getAPI(pluginContext: PluginContext) {
 
 export async function vercelBuildApp(builder: ViteBuilder, otherEnvsOrder?: Record<string, "pre" | "post" | number>) {
   const priority: Record<string, number> = {
-    vercel_edge: 10,
-    vercel_node: 20,
-    vercel_client: 30,
+    vercel_client: 10,
+    vercel_edge: 20,
+    vercel_node: 30,
   }; // Higher priority values should be at the end
 
   const envs = Object.values(builder.environments);

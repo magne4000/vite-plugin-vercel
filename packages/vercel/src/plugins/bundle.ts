@@ -65,8 +65,8 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin {
     closeBundle: {
       order: "post",
       async handler() {
-        // We assume that vercel_client always runs last
-        if (this.environment.name !== "vercel_client") return;
+        // We assume that vercel_node always runs last
+        if (this.environment.name !== "vercel_node") return;
 
         const api = getAPI(this);
         const outfiles = api.getOutFiles();

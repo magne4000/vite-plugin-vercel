@@ -10,23 +10,23 @@ import type { EmittedFile, PluginContext } from "rollup";
 import {
   BuildEnvironment,
   createRunnableDevEnvironment,
+  type Environment,
   type EnvironmentOptions,
   isRunnableDevEnvironment,
   mergeConfig,
   type Plugin,
   type PluginOption,
-  type ResolvedConfig,
 } from "vite";
 import { createAPI, vercelBuildApp, type ViteVercelOutFile } from "./api";
 import { assert } from "./assert";
 import { getVcConfig } from "./build";
 import { getConfig } from "./config";
-import { getOutput, getPublic } from "./helpers";
 import { bundlePlugin } from "./plugins/bundle";
 import { vercelCleanupPlugin } from "./plugins/clean-outdir";
 import { wasmPlugin } from "./plugins/wasm";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
+import { joinAbsolute } from "./helpers";
 
 export * from "./types";
 
@@ -377,7 +377,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
         }
 
         // Compute overrides for static HTML files
-        const userOverrides = await computeStaticHtmlOverrides(this.environment.config);
+        const userOverrides = await computeStaticHtmlOverrides(this.environment);
         // Update overrides with static files paths
         pluginConfig.config ??= {};
         pluginConfig.config.overrides ??= {};
@@ -407,7 +407,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
             root: this.environment.config.root,
             outdir: this.environment.config.build.outDir,
             filepath: key,
-            // biome-ignore lint/style/noNonNullAssertion: <explanation>
+            // biome-ignore lint/style/noNonNullAssertion: guarded by entryMap.has(...)
             relatedEntry: entryMap.get(removeExtension(key))!,
           });
         } else if ((value.type === "asset" && key.startsWith("functions/")) || key === "config.json") {
@@ -429,30 +429,32 @@ function removeExtension(subject: string) {
   return subject.replace(/\.[^/.]+$/, "");
 }
 
-async function computeStaticHtmlOverrides(
-  resolvedConfig: ResolvedConfig,
-): Promise<NonNullable<ViteVercelPrerenderRoute>> {
-  // FIXME getOutput is deprecated
-  const staticAbsolutePath = getOutput(resolvedConfig, "static");
-  const files = await getStaticHtmlFiles(staticAbsolutePath);
+async function computeStaticHtmlOverrides(env: Environment): Promise<NonNullable<ViteVercelPrerenderRoute>> {
+  if (env.name === "vercel_client") {
+    const outDir = joinAbsolute(env, env.config.build.outDir);
+    // public files copied by vite by default https://vitejs.dev/guide/assets.html#the-public-directory
+    const copyPublicDir = env.getTopLevelConfig().build.copyPublicDir;
+    if (copyPublicDir) {
+      const publicDir = env.getTopLevelConfig().publicDir;
+      const publicFiles = await getStaticHtmlFiles(publicDir);
+      const files = publicFiles.map((f) => f.replace(publicDir, outDir));
 
-  // public files copied by vite by default https://vitejs.dev/guide/assets.html#the-public-directory
-  const publicDir = getPublic(resolvedConfig);
-  const publicFiles = await getStaticHtmlFiles(publicDir);
-  files.push(...publicFiles.map((f) => f.replace(publicDir, staticAbsolutePath)));
+      return files.reduce(
+        (acc, curr) => {
+          const relPath = path.relative(outDir, curr);
+          const parsed = path.parse(relPath);
+          const pathJoined = path.join(parsed.dir, parsed.name);
+          acc[relPath] = {
+            path: pathJoined,
+          };
+          return acc;
+        },
+        {} as NonNullable<ViteVercelPrerenderRoute>,
+      );
+    }
+  }
 
-  return files.reduce(
-    (acc, curr) => {
-      const relPath = path.relative(staticAbsolutePath, curr);
-      const parsed = path.parse(relPath);
-      const pathJoined = path.join(parsed.dir, parsed.name);
-      acc[relPath] = {
-        path: pathJoined,
-      };
-      return acc;
-    },
-    {} as NonNullable<ViteVercelPrerenderRoute>,
-  );
+  return {};
 }
 
 async function getStaticHtmlFiles(src: string) {
