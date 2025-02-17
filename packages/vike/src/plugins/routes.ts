@@ -63,7 +63,7 @@ export function routesPlugin(): Plugin {
             const prerenderContext: any = vikeConfig.prerenderContext;
             if (prerenderContext) {
               console.log(prerenderContext._output);
-              const prerenderedPages = prerenderContext.pageContexts.filter((p) => p.pageId === pageId);
+              // const prerenderedPages = prerenderContext.pageContexts.filter((p) => p.pageId === pageId);
 
               // if (prerenderedPages) {
               //   console.log(
@@ -72,7 +72,6 @@ export function routesPlugin(): Plugin {
               //     // prerenderedPages.map((x) => x._prerenderContext.output),
               //   );
               // }
-              // TODO could Vike provide filepaths to prerendered .html and .pageContext.js files?
               // TODO copy prerendered files to static (Use this.emitFile() in `vercel_client` env)
               // TODO add overrides to pluginConfig.config.overrides (api?)
             }
