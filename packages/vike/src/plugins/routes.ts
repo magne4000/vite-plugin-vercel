@@ -1,11 +1,21 @@
+import path from "node:path";
 import { normalizePath, type Plugin } from "vite";
 import { getAPI } from "vite-plugin-vercel/api";
+import type { ViteVercelRouteOverrides } from "vite-plugin-vercel/types";
 import { assert } from "../utils/assert";
+
+type PrerenderContextOutputPage = {
+  filePath: string;
+  fileType: string;
+  fileContent: string;
+  pageContext: any;
+};
 
 export function routesPlugin(): Plugin {
   // TODO use prerenderContext data
   // FIXME typing
   let vikeConfig: any | undefined = undefined;
+  let vikePrerenderOutdir: string | undefined = undefined;
   const vikePages: {
     pageId: string;
     isr: number | null;
@@ -21,6 +31,13 @@ export function routesPlugin(): Plugin {
     closeBundle: {
       order: "post",
       async handler() {
+        if (this.environment.name === "client") {
+          vikePrerenderOutdir = normalizePath(
+            path.isAbsolute(this.environment.config.build.outDir)
+              ? this.environment.config.build.outDir
+              : path.posix.join(this.environment.config.root, this.environment.config.build.outDir),
+          );
+        }
         if (this.environment.name === "ssr") {
           // TODO assert
           vikeConfig = this.environment.config.vike;
@@ -60,21 +77,7 @@ export function routesPlugin(): Plugin {
               route,
             });
 
-            const prerenderContext: any = vikeConfig.prerenderContext;
-            if (prerenderContext) {
-              console.log(prerenderContext._output);
-              // const prerenderedPages = prerenderContext.pageContexts.filter((p) => p.pageId === pageId);
-
-              // if (prerenderedPages) {
-              //   console.log(
-              //     pageId,
-              //     prerenderedPages,
-              //     // prerenderedPages.map((x) => x._prerenderContext.output),
-              //   );
-              // }
-              // TODO copy prerendered files to static (Use this.emitFile() in `vercel_client` env)
-              // TODO add overrides to pluginConfig.config.overrides (api?)
-            }
+            // FIXME should we add routes for 404?
           }
         }
       },
@@ -83,7 +86,41 @@ export function routesPlugin(): Plugin {
     buildStart: {
       order: "post",
       handler() {
+        if (this.environment.name === "vercel_client") {
+          // Emit prerendered files
+          const prerenderContext: { _output?: PrerenderContextOutputPage[] } | undefined = vikeConfig?.prerenderContext;
+          if (prerenderContext?._output && vikePrerenderOutdir) {
+            // With overrides, HTML file can be accessed without the .html file extension
+            const overrides: ViteVercelRouteOverrides = {};
+
+            for (const file of prerenderContext._output) {
+              const is404 = Boolean(file.pageContext.is404);
+
+              const key = is404 ? "404.html" : normalizePath(file.filePath).substring(vikePrerenderOutdir.length + 1);
+              if (!is404 && key.endsWith(".html")) {
+                overrides[key] = {
+                  path:
+                    file.pageContext.urlOriginal[0] === "/"
+                      ? file.pageContext.urlOriginal.substring(1)
+                      : file.pageContext.urlOriginal,
+                };
+              }
+              this.emitFile({
+                type: "asset",
+                fileName: key,
+                originalFileName: key,
+                source: file.fileContent,
+              });
+            }
+
+            const { config } = getAPI(this);
+            config.overrides ??= {};
+            Object.assign(config.overrides, overrides);
+          }
+        }
+
         if (this.environment.name !== "vercel_node" && this.environment.name !== "vercel_edge") return;
+        // Emit vercel functions
         const isEdge = this.environment.name === "vercel_edge";
         const key = isEdge ? "__vike_edge" : "__vike_node";
 

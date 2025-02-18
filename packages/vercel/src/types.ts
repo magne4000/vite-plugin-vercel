@@ -75,7 +75,7 @@ export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
 /**
  * Keys are path relative to .vercel/output/static directory
  */
-export type ViteVercelPrerenderRoute = VercelOutputConfig["overrides"];
+export type ViteVercelRouteOverrides = VercelOutputConfig["overrides"];
 
 export interface ViteVercelEntry {
   /**

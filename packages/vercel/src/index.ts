@@ -26,7 +26,7 @@ import { bundlePlugin } from "./plugins/bundle";
 import { vercelCleanupPlugin } from "./plugins/clean-outdir";
 import { wasmPlugin } from "./plugins/wasm";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
-import type { ViteVercelConfig, ViteVercelEntry, ViteVercelPrerenderRoute } from "./types";
+import type { ViteVercelConfig, ViteVercelEntry, ViteVercelRouteOverrides } from "./types";
 
 export * from "./types";
 
@@ -92,7 +92,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     api(pluginContext: PluginContext) {
-      return createAPI(entries, outfiles, pluginContext);
+      return createAPI(entries, outfiles, pluginConfig, pluginContext);
     },
 
     applyToEnvironment(env) {
@@ -429,7 +429,7 @@ function removeExtension(subject: string) {
   return subject.replace(/\.[^/.]+$/, "");
 }
 
-async function computeStaticHtmlOverrides(env: Environment): Promise<NonNullable<ViteVercelPrerenderRoute>> {
+async function computeStaticHtmlOverrides(env: Environment): Promise<NonNullable<ViteVercelRouteOverrides>> {
   if (env.name === "vercel_client") {
     const outDir = joinAbsolute(env, env.config.build.outDir);
     // public files copied by vite by default https://vitejs.dev/guide/assets.html#the-public-directory
@@ -449,7 +449,7 @@ async function computeStaticHtmlOverrides(env: Environment): Promise<NonNullable
           };
           return acc;
         },
-        {} as NonNullable<ViteVercelPrerenderRoute>,
+        {} as NonNullable<ViteVercelRouteOverrides>,
       );
     }
   }

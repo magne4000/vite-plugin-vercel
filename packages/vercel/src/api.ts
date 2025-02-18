@@ -2,9 +2,14 @@ import path from "node:path";
 import type { PluginContext } from "rollup";
 import type { BuildEnvironment, Plugin, ViteBuilder } from "vite";
 import { assert } from "./assert";
-import type { ViteVercelEntry } from "./types";
+import type { VercelOutputConfig, ViteVercelConfig, ViteVercelEntry } from "./types";
 
-export function createAPI(entries: ViteVercelEntry[], outfiles: ViteVercelOutFile[], pluginContext: PluginContext) {
+export function createAPI(
+  entries: ViteVercelEntry[],
+  outfiles: ViteVercelOutFile[],
+  pluginConfig: ViteVercelConfig,
+  pluginContext: PluginContext,
+) {
   return {
     emitVercelEntry(entry: ViteVercelEntry) {
       entries.push(entry);
@@ -19,6 +24,10 @@ export function createAPI(entries: ViteVercelEntry[], outfiles: ViteVercelOutFil
       assert(outfiles.length > 0, "getOutFiles() must be called after all outputs have been generated");
 
       return outfiles;
+    },
+    get config(): Partial<Omit<VercelOutputConfig, "version">> {
+      pluginConfig.config ??= {};
+      return pluginConfig.config;
     },
   };
 }
