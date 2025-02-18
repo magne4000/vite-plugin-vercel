@@ -3,6 +3,7 @@ import { normalizePath, type Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
 import type { ViteVercelRouteOverrides } from "vite-plugin-vercel/types";
 import { assert } from "../utils/assert";
+import { getVikeConfig } from "vike/plugin";
 
 type PrerenderContextOutputPage = {
   filePath: string;
@@ -12,8 +13,7 @@ type PrerenderContextOutputPage = {
 };
 
 export function routesPlugin(): Plugin {
-  // FIXME typing
-  let vikeConfig: any | undefined = undefined;
+  let vikeConfig: ReturnType<typeof getVikeConfig> | undefined = undefined;
   let vikePrerenderOutdir: string | undefined = undefined;
   const vikePages: {
     pageId: string;
@@ -39,8 +39,7 @@ export function routesPlugin(): Plugin {
           );
         }
         if (this.environment.name === "ssr") {
-          // TODO assert
-          vikeConfig = this.environment.config.vike;
+          vikeConfig = getVikeConfig(this.environment.config);
 
           for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
             const rawIsr = extractIsr(page.config);
@@ -88,7 +87,8 @@ export function routesPlugin(): Plugin {
       handler() {
         if (this.environment.name === "vercel_client") {
           // Emit prerendered files
-          const prerenderContext: { _output?: PrerenderContextOutputPage[] } | undefined = vikeConfig?.prerenderContext;
+          const prerenderContext: { _output?: PrerenderContextOutputPage[] } | undefined =
+            vikeConfig?.prerenderContext as any;
           if (prerenderContext?._output && vikePrerenderOutdir) {
             // With overrides, HTML file can be accessed without the .html file extension
             const overrides: ViteVercelRouteOverrides = {};
@@ -167,7 +167,7 @@ export function routesPluginDev(): Plugin {
 
     configureServer(server) {
       const { addVercelEntry } = getVercelAPI(server);
-      const vikeConfig = server.config.vike;
+      const vikeConfig = getVikeConfig(server.config);
 
       const vikePages: {
         pageId: string;
