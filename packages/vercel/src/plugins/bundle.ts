@@ -5,7 +5,7 @@ import { findRoot } from "@manypkg/find-root";
 import { nodeFileTrace } from "@vercel/nft";
 import { build, type Plugin as ESBuildPlugin } from "esbuild";
 import type { Environment, Plugin } from "vite";
-import { getAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../api";
+import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../api";
 import { joinAbsolute, joinAbsolutePosix } from "../helpers";
 import type { ViteVercelConfig } from "../types";
 
@@ -67,7 +67,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin {
         // We assume that vercel_node always runs last
         if (this.environment.name !== "vercel_node") return;
 
-        const api = getAPI(this);
+        const api = getVercelAPI(this);
         const outfiles = api.getOutFiles();
 
         for (const outfile of outfiles) {

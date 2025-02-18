@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { PluginContext } from "rollup";
-import type { BuildEnvironment, Plugin, ViteBuilder } from "vite";
+import type { BuildEnvironment, Plugin, ViteBuilder, ViteDevServer } from "vite";
 import { assert } from "./assert";
 import type { VercelOutputConfig, ViteVercelConfig, ViteVercelEntry } from "./types";
 
@@ -8,17 +8,19 @@ export function createAPI(
   entries: ViteVercelEntry[],
   outfiles: ViteVercelOutFile[],
   pluginConfig: ViteVercelConfig,
-  pluginContext: PluginContext,
+  pluginContext?: PluginContext,
 ) {
   return {
-    emitVercelEntry(entry: ViteVercelEntry) {
+    addVercelEntry(entry: ViteVercelEntry) {
       entries.push(entry);
-      return pluginContext.emitFile({
-        type: "chunk",
-        fileName: `${path.posix.join("functions/", entry.destination)}.func/index.${entry.edge ? "js" : "mjs"}`,
-        id: `virtual:vite-plugin-vercel:entry:${entry.input}`,
-        importer: undefined,
-      });
+      if (pluginContext?.environment.mode === "build") {
+        return pluginContext.emitFile({
+          type: "chunk",
+          fileName: `${path.posix.join("functions/", entry.destination)}.func/index.${entry.edge ? "js" : "mjs"}`,
+          id: `virtual:vite-plugin-vercel:entry:${entry.input}`,
+          importer: undefined,
+        });
+      }
     },
     getOutFiles(): ViteVercelOutFile[] {
       assert(outfiles.length > 0, "getOutFiles() must be called after all outputs have been generated");
@@ -32,13 +34,16 @@ export function createAPI(
   };
 }
 
-export function getAPI(pluginContext: PluginContext) {
-  const vpv: Plugin<(pluginContext: PluginContext) => ViteVercelApi> | undefined =
-    pluginContext.environment.config.plugins.find((p) => p.name === "vite-plugin-vercel");
+export function getVercelAPI(pluginContextOrServer: PluginContext | ViteDevServer) {
+  const config =
+    "environment" in pluginContextOrServer ? pluginContextOrServer.environment.config : pluginContextOrServer.config;
+  const vpv: Plugin<(pluginContext?: PluginContext) => ViteVercelApi> | undefined = config.plugins.find(
+    (p) => p.name === "vite-plugin-vercel",
+  );
   assert(vpv, "Could not find vite-plugin-vercel plugin");
   assert(vpv.api, "Missing `api`. Make sure vite-plugin-vercel is up-to-date");
 
-  return vpv.api(pluginContext);
+  return vpv.api("environment" in pluginContextOrServer ? pluginContextOrServer : undefined);
 }
 
 export async function vercelBuildApp(builder: ViteBuilder, otherEnvsOrder?: Record<string, "pre" | "post" | number>) {

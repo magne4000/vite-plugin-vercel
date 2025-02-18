@@ -1,7 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { createMiddleware } from "@universal-middleware/express";
-import { createNodeHandler } from "@universal-middleware/vercel";
 import { getNodeVersion } from "@vercel/build-utils";
 import type { NodeVersion } from "@vercel/build-utils/dist";
 import { getTransformedRoutes, type RouteWithSrc } from "@vercel/routing-utils";
@@ -91,7 +90,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       nodeVersion = await getNodeVersion(process.cwd());
     },
 
-    api(pluginContext: PluginContext) {
+    api(pluginContext?: PluginContext) {
       return createAPI(entries, outfiles, pluginConfig, pluginContext);
     },
 
@@ -201,80 +200,94 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     // TODO watch/hmr
-    configureServer(server) {
-      const transformedRoutes = getTransformedRoutes({
-        rewrites: entries.map((entry) => ({
-          source: typeof entry.route === "string" ? `(${entry.route})` : entryToPathtoregex(entry),
-          destination: entry.destination,
-        })),
-      });
-
-      const routes = (transformedRoutes.routes ?? [])
-        .filter((r): r is RouteWithSrc => Boolean(r.src))
-        .map((r) => {
-          const entry = entries.find((e) => e.destination === r.dest?.split("?")[0]);
-          return {
-            src: new RegExp(r.src),
-            dest: r.dest,
-            entry: entries.find((e) => e.destination === r.dest?.split("?")[0]),
-            re: entry ? match(entryToPathtoregex(entry)) : null,
-          };
+    configureServer: {
+      order: "post",
+      handler(server) {
+        const transformedRoutes = getTransformedRoutes({
+          rewrites: entries.map((entry) => ({
+            source: typeof entry.route === "string" ? `(${entry.route})` : entryToPathtoregex(entry),
+            destination: entry.destination,
+          })),
         });
 
-      // This middleware is in charge of adding user-provided headers onto the Response
-      const routesWithAddedHeaders = routes.filter((r) => r.entry?.headers);
-      if (routesWithAddedHeaders.length > 0) {
-        server.middlewares.use(
-          createMiddleware(() => async (request) => {
-            return (response) => {
-              const url = new URL(request.url);
-              for (const r of routesWithAddedHeaders) {
-                if (r.entry?.headers && r.src.test(url.pathname)) {
-                  for (const [key, value] of Object.entries(r.entry.headers)) response.headers.set(key, value);
-                }
-              }
-              return response;
+        const routes = (transformedRoutes.routes ?? [])
+          .filter((r): r is RouteWithSrc => Boolean(r.src))
+          .map((r) => {
+            const entry = entries.find((e) => e.destination === r.dest?.split("?")[0]);
+            return {
+              src: new RegExp(r.src),
+              dest: r.dest,
+              entry: entries.find((e) => e.destination === r.dest?.split("?")[0]),
+              re: entry
+                ? typeof entry.route === "string"
+                  ? (str: string) => str.match(entry.route as string)
+                  : match(entryToPathtoregex(entry))
+                : null,
             };
-          })(),
-        );
-      }
+          });
 
-      // This handler is in charge of mapping a request to a UniversalHandler
-      server.middlewares.use(
-        createNodeHandler(() => async (request, ctx, runtime) => {
-          const url = new URL(request.url);
-          for (const r of routes) {
-            const found = r.re?.(url.pathname);
-            if (r.entry && found) {
-              const devEnv = r.entry.edge ? server.environments.vercel_edge : server.environments.vercel_node;
-
-              if (isRunnableDevEnvironment(devEnv)) {
-                const newRequest = request.clone();
-                if (r.entry.headers) {
-                  for (const [key, value] of Object.entries(r.entry.headers)) newRequest.headers.set(key, value);
-                }
-
-                // Add 'x-now-route-matches' header
-                request.headers.set(
-                  "x-now-route-matches",
-                  new URLSearchParams(found.params as Record<string, string>).toString(),
-                );
-                // patch `runtime.params` because its computing is based on 'x-now-route-matches' header
-                // which we just added.
-                runtime.params = found.params as Record<string, string>;
-
-                // Other internal headers are listed here if we need future support
-                // https://github.com/vercel/next.js/blob/c994df87a55c1912a99b4ca25cd5d5d5790c1dac/packages/next/src/server/lib/server-ipc/utils.ts#L42
-
-                const fileEntry = await devEnv.runner.import(r.entry.input);
-                return fileEntry.default(newRequest, ctx, runtime);
-              }
-
-              throw new Error(`${devEnv.name} environment is not Runnable`);
-            }
+        // Inject Post Middleware that executes AFTER Vite's internal middlewares
+        return () => {
+          const routesWithAddedHeaders = routes.filter((r) => r.entry?.headers);
+          if (routesWithAddedHeaders.length > 0) {
+            // This middleware is in charge of adding user-provided headers onto the Response
+            server.middlewares.use(
+              createMiddleware(() => async (request) => {
+                return (response) => {
+                  const url = new URL(request.url);
+                  for (const r of routesWithAddedHeaders) {
+                    if (r.entry?.headers && r.src.test(url.pathname)) {
+                      for (const [key, value] of Object.entries(r.entry.headers)) response.headers.set(key, value);
+                    }
+                  }
+                  return response;
+                };
+              })(),
+            );
           }
-        })(),
-      );
+
+          // This middleware is in charge of resolving Vercel entries
+          server.middlewares.use(
+            createMiddleware(() => async (request, ctx, runtime) => {
+              const url = new URL(request.url);
+
+              for (const r of routes) {
+                const found = r.re?.(url.pathname);
+                if (r.entry && found) {
+                  const devEnv = r.entry.edge ? server.environments.vercel_edge : server.environments.vercel_node;
+
+                  if (isRunnableDevEnvironment(devEnv)) {
+                    const newRequest = request.clone();
+                    if (r.entry.headers) {
+                      for (const [key, value] of Object.entries(r.entry.headers)) newRequest.headers.set(key, value);
+                    }
+
+                    // FIXME: extract params for entries with `entry.route` regex
+                    const params = "params" in found ? found.params : {};
+
+                    // Add 'x-now-route-matches' header
+                    request.headers.set(
+                      "x-now-route-matches",
+                      new URLSearchParams(params as Record<string, string>).toString(),
+                    );
+                    // patch `runtime.params` because its computing is based on 'x-now-route-matches' header
+                    // which we just added.
+                    runtime.params = params as Record<string, string>;
+
+                    // Other internal headers are listed here if we need future support
+                    // https://github.com/vercel/next.js/blob/c994df87a55c1912a99b4ca25cd5d5d5790c1dac/packages/next/src/server/lib/server-ipc/utils.ts#L42
+
+                    const fileEntry = await devEnv.runner.import(r.entry.input);
+                    return fileEntry.default(newRequest, ctx, runtime);
+                  }
+
+                  throw new Error(`${devEnv.name} environment is not Runnable`);
+                }
+              }
+            })(),
+          );
+        };
+      },
     },
 
     resolveId(id) {
@@ -482,6 +495,7 @@ async function getStaticHtmlFiles(src: string) {
 
 // @vercel/routing-utils respects path-to-regexp syntax
 function entryToPathtoregex(entry: ViteVercelEntry) {
+  assert(typeof entry.route !== "string", "Do not pass entry with route string to entryToPathtoregex");
   return path.posix
     .resolve("/", entry.destination)
     .split("/")
