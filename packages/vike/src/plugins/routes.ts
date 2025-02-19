@@ -12,7 +12,7 @@ type PrerenderContextOutputPage = {
   pageContext: any;
 };
 
-export function routesPlugin(): Plugin {
+function routesPluginBuild(): Plugin {
   let vikeConfig: ReturnType<typeof getVikeConfig> | undefined = undefined;
   let vikePrerenderOutdir: string | undefined = undefined;
   const vikePages: {
@@ -159,8 +159,7 @@ export function routesPlugin(): Plugin {
   };
 }
 
-// TODO dev support to run in Vercel env
-export function routesPluginDev(): Plugin {
+function routesPluginDev(): Plugin {
   return {
     name: "vike-vercel:routes:serve",
     apply: "serve",
@@ -237,6 +236,14 @@ export function routesPluginDev(): Plugin {
       });
     },
   };
+}
+
+export function routesPlugins(): Plugin[] {
+  return [
+    routesPluginBuild(),
+    // TODO Once Vike have no more CJS at runtime, we should be able to activate this plugin
+    // routesPluginDev(),
+  ];
 }
 
 function extractIsr(exports: unknown) {
