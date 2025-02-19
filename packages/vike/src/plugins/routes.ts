@@ -159,6 +159,7 @@ function routesPluginBuild(): Plugin {
   };
 }
 
+// TODO refactor share code with build plugin above
 function routesPluginDev(): Plugin {
   return {
     name: "vike-vercel:routes:serve",
