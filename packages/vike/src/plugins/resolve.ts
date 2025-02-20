@@ -33,7 +33,10 @@ import handler from "vike/universal-middleware";
 
 export default function vercelVikeHandler(request, context, runtime) {
   const originalUrl = new URL(request.url);
+  console.log('originalUrl', originalUrl);
   const originalPath = originalUrl.searchParams.get('__original_path');
+  console.log('originalPath', originalPath);
+  console.log('newRequest', originalPath ? new URL(originalPath, request.url).toString() : originalPath);
   const newRequest = originalPath ? new Request(new URL(originalPath, request.url).toString(), {
     method: request.method,
     headers: request.headers,
