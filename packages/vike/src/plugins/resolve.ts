@@ -1,6 +1,6 @@
 import type { Plugin } from "vite";
 
-const resolvedModuleId = "virtual:vike-universal-handler";
+export const resolvedModuleId = "virtual:vike-universal-handler";
 const resolvedVirtualModuleId = "\0virtual:vike-universal-handler";
 
 export function resolvePlugin(): Plugin {
