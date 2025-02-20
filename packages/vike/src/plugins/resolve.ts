@@ -26,6 +26,7 @@ export function resolvePlugin(): Plugin {
     load(id) {
       if (id === resolvedVirtualModuleId) {
         // Vike's Universal Handler wrapped to ensure that we also import ./dist/server/entry when bundling
+        // It also fixes the actual request URL thanks to `x-now-route-matches` and `__original_path`
         //language=javascript
         return `
 import "virtual:@brillout/vite-plugin-server-entry:serverEntry";
@@ -38,26 +39,17 @@ export default function vercelVikeHandler(request, context, runtime) {
   let newUrl = null;
   
   let newRequest = request;
-
-  console.log({
-    xNowRouteMatchesHeader,
-    originalUrl: request.url,
-    originalPath
-  });
   
   if (originalPath) {
     newUrl = new URL(originalPath, request.url).toString();
-    console.log('newUrl 1', newUrl);
   } else if (typeof xNowRouteMatchesHeader === "string") {
     const originalPathBis = new URLSearchParams(xNowRouteMatchesHeader).get("1");
     if (originalPathBis) {
       newUrl = new URL(originalPathBis, request.url).toString();
-      console.log('newUrl 2', newUrl);
     }
   }
   
   if (newUrl) {
-    console.log('newRequest');
     newRequest = new Request(newUrl, {
       method: request.method,
       headers: request.headers,
