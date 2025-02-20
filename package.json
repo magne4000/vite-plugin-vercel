@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "pnpm run -C ./packages/vercel dev",
     "vercel-build": "pnpm run build",
-    "build": "pnpm run -C ./packages/vercel build",
+    "build": "pnpm run -C ./packages/vercel build && pnpm run -C ./packages/vike build",
     "build:simple": "pnpm run build && pnpm run -C ./examples/simple build",
     "build:hono": "pnpm run build && pnpm run -C ./examples/hono build",
     "build:hono-edge": "pnpm run build && pnpm run -C ./examples/hono build:edge",
