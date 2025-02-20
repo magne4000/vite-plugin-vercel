@@ -47,7 +47,7 @@ function routesPluginBuild(): Plugin {
             const edge = assertEdge(page.config);
             const headers = assertHeaders(page.config);
 
-            if (typeof page.config.route === "function" && isr) {
+            if (typeof page.route === "function" && isr) {
               this.warn(
                 `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
               );
@@ -60,7 +60,7 @@ function routesPluginBuild(): Plugin {
               );
             }
 
-            const route = typeof page.config.route === "string" ? getParametrizedRoute(page.config.route) : null;
+            const route = typeof page.route === "string" ? getParametrizedRoute(page.route) : null;
 
             if (!route && headers !== null && headers !== undefined) {
               this.warn(
@@ -128,7 +128,6 @@ function routesPluginBuild(): Plugin {
         // By default, a unique Vike function is necessary per env (node, edge)
         // We only need to create a new function when either `isr` or `headers` is provided
         const currentEnvPages = vikePages.filter((p) => Boolean(p.edge) === isEdge);
-
         // Specific routes
         for (const page of currentEnvPages.filter(
           (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
@@ -143,7 +142,11 @@ function routesPluginBuild(): Plugin {
           });
         }
 
-        if (currentEnvPages.length > 0) {
+        if (
+          currentEnvPages.length > 0 &&
+          // Only generate one default route
+          isEdge === Boolean(vikeConfig?.config.edge)
+        ) {
           // Catch-all
           addVercelEntry({
             input: `vike/universal-middleware?i=${i++}`,

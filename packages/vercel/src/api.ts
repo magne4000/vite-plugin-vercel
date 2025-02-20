@@ -31,6 +31,48 @@ export function createAPI(
       pluginConfig.config ??= {};
       return pluginConfig.config;
     },
+    get defaultMaxDuration() {
+      return pluginConfig.defaultMaxDuration;
+    },
+    set defaultMaxDuration(value) {
+      pluginConfig.defaultMaxDuration = value;
+    },
+    get expiration() {
+      return pluginConfig.expiration;
+    },
+    set expiration(value) {
+      pluginConfig.expiration = value;
+    },
+    get rewrites() {
+      pluginConfig.rewrites ??= [];
+      return pluginConfig.rewrites;
+    },
+    get headers() {
+      pluginConfig.headers ??= [];
+      return pluginConfig.headers;
+    },
+    get redirects() {
+      pluginConfig.redirects ??= [];
+      return pluginConfig.redirects;
+    },
+    get cleanUrls() {
+      return pluginConfig.cleanUrls;
+    },
+    set cleanUrls(value) {
+      pluginConfig.cleanUrls = value;
+    },
+    get trailingSlash() {
+      return pluginConfig.trailingSlash;
+    },
+    set trailingSlash(value) {
+      pluginConfig.trailingSlash = value;
+    },
+    get defaultSupportsResponseStreaming() {
+      return pluginConfig.defaultSupportsResponseStreaming;
+    },
+    set defaultSupportsResponseStreaming(value) {
+      pluginConfig.defaultSupportsResponseStreaming = value;
+    },
   };
 }
 

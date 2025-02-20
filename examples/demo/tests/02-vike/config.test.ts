@@ -1,4 +1,4 @@
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
 import { vercelOutputConfigSchema } from "../../../../packages/vercel/src/schemas/config/config";
 import { testSchema } from "../common/helpers";
 import { prepareTestJsonFileContent } from "./utils";
@@ -9,14 +9,7 @@ prepareTestJsonFileContent("config.json", (context) => {
   it("should have defaults routes only", () => {
     const expected = [
       {
-        src: "^/vike-edge$",
-        headers: {
-          "X-VitePluginVercel-Test": "test",
-        },
-        continue: true,
-      },
-      {
-        src: "^/vike-edge/index\\.pageContext\\.json$",
+        src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
         headers: {
           "X-VitePluginVercel-Test": "test",
         },
@@ -39,23 +32,23 @@ prepareTestJsonFileContent("config.json", (context) => {
       },
       { handle: "filesystem" },
       {
-        src: "^/edge(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$",
-        dest: "/edge/$1",
+        src: "^/edge$",
+        dest: "/edge",
         check: true,
       },
       {
-        src: "^/og-node(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$",
-        dest: "/og-node/$1",
+        src: "^/og-node$",
+        dest: "/og-node",
         check: true,
       },
       {
-        src: "^/og-edge(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$",
-        dest: "/og-edge/$1",
+        src: "^/og-edge$",
+        dest: "/og-edge",
         check: true,
       },
       {
         src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
-        dest: expect.stringMatching("/pages/vike-edge-edge-([^/]+?)/\\?__original_path=\\$1"),
+        dest: "/__vike_edge/pages/vike-edge",
         check: true,
       },
       {
@@ -65,8 +58,8 @@ prepareTestJsonFileContent("config.json", (context) => {
       },
       {
         check: true,
-        src: "^/api/post$",
-        dest: "/api/post",
+        src: "^/api/isr$",
+        dest: "/api/isr",
       },
       {
         check: true,
@@ -76,25 +69,23 @@ prepareTestJsonFileContent("config.json", (context) => {
       {
         check: true,
         src: "^(/catch-all/.+?(?:/index\\.pageContext\\.json)?)$",
-        dest: expect.stringMatching("/pages/catch-all-([^/]+?)/\\?__original_path=\\$1"),
+        dest: "/__vike_node/pages/catch-all",
       },
       {
         check: true,
         src: "^(/isr(?:/index\\.pageContext\\.json)?)$",
-        dest: expect.stringMatching("/pages/isr-([^/]+?)/\\?__original_path=\\$1"),
+        dest: "/__vike_node/pages/isr",
       },
       {
         check: true,
         src: "^(/named/[^/]+(?:/index\\.pageContext\\.json)?)$",
-        dest: expect.stringMatching("/pages/named-([^/]+?)/\\?__original_path=\\$1"),
+        dest: "/__vike_node/pages/named",
       },
-      { check: true, dest: "/ssr_/?__original_path=$1", src: "^((?!/api).*)$" },
+      { check: true, dest: "/__vike_node/__all", src: "^(.*)$" },
     ];
 
-    expect((context.file as any).routes).toHaveLength(expected.length);
-    for (const route of expected) {
-      expect((context.file as any).routes).toContainEqual(route);
-    }
+    assert.sameDeepMembers(expected, (context.file as any).routes);
+
     expect((context.file as any).overrides).toMatchObject({
       // '404.html': {
       //   path: '404',

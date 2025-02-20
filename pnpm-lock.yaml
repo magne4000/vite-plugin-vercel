@@ -165,14 +165,14 @@ importers:
         specifier: ^0.4.1
         version: 0.4.1(hono@4.6.20)
       '@vercel/build-utils':
-        specifier: ^9.2.0
-        version: 9.2.0
+        specifier: ^10.1.0
+        version: 10.1.0
       '@vercel/nft':
         specifier: ^0.29.1
         version: 0.29.1(rollup@4.34.1)
       '@vercel/routing-utils':
-        specifier: ^5.0.2
-        version: 5.0.2
+        specifier: ^5.0.45.0.2
+        version: 5.0.4
       esbuild:
         specifier: ^0.24.2
         version: 0.24.2
@@ -1182,6 +1182,9 @@ packages:
   '@universal-middleware/vercel@0.4.1':
     resolution: {integrity: sha512-9KOLAMT06TtZR6yuB7sn9rCmj35iPMUiiDrN0scJu65leUF1DAfjeYqQ7pgoqSFomKhFCzj+HOnLP38U0dyVhg==}
 
+  '@vercel/build-utils@10.1.0':
+    resolution: {integrity: sha512-JPff3brfZx0mTl+0Cmzz220MmnTSYnBgVqVvT6a8lVALJHr75sKaNxZy0/hWZe8ev+w2JwLGMmJwP2TKHtKeHA==}
+
   '@vercel/build-utils@9.2.0':
     resolution: {integrity: sha512-e6S+gj+UNsaWH93fRF59HDhNbEypqQlOFJWJcrjrxodmLReXs9lHaYrouPVt3O/3wrQPY1GYKAH7lonQ39Op3Q==}
 
@@ -1217,8 +1220,8 @@ packages:
     resolution: {integrity: sha512-GFXtgid3+TcVHTd668a10vGpzAh4Ty/yBZPRxKf1UicI8Vi8EthfvSxcaLW0KvQBBe1+d7TcjecLZHRT8JzQ4g==}
     engines: {node: '>=16'}
 
-  '@vercel/routing-utils@5.0.2':
-    resolution: {integrity: sha512-uJViB3+HEo+kzHYELs7cQWX5k0kCNvq9G/8nJQX8mP5Ta0fG68CBRmOaaG8A+2xbtTp/QuGORIwV8CsI9ebcNg==}
+  '@vercel/routing-utils@5.0.4':
+    resolution: {integrity: sha512-4ke67zkXVi2fRZdoYckABcsSkRC9CnrdadOGxoS/Bk22+ObHjGQWvUHExRSXh339anwu9YY7ZacNSGH4gUnTQA==}
 
   '@vercel/static-config@3.0.0':
     resolution: {integrity: sha512-2qtvcBJ1bGY0dYGYh3iM7yGKkk971FujLEDXzuW5wcZsPr1GSEjO/w2iSr3qve6nDDtBImsGoDEnus5FI4+fIw==}
@@ -3853,6 +3856,8 @@ snapshots:
       - h3
       - hono
 
+  '@vercel/build-utils@10.1.0': {}
+
   '@vercel/build-utils@9.2.0': {}
 
   '@vercel/edge-config-fs@0.1.0': {}
@@ -3937,7 +3942,7 @@ snapshots:
       satori: 0.12.1
       yoga-wasm-web: 0.3.3
 
-  '@vercel/routing-utils@5.0.2':
+  '@vercel/routing-utils@5.0.4':
     dependencies:
       path-to-regexp: 6.3.0
       path-to-regexp-updated: path-to-regexp@6.3.0

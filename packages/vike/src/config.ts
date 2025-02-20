@@ -20,6 +20,14 @@ export default {
     isr: {
       env: { server: true, config: true },
       eager: true,
+      // effect({ configValue }) {
+      //   // an actual ISR value exists for a Page
+      //   if (configValue) {
+      //     return {
+      //       prerender: false,
+      //     };
+      //   }
+      // },
     },
     edge: {
       env: { server: true, config: true },
@@ -29,5 +37,8 @@ export default {
       env: { server: true, config: true },
       eager: true,
     },
+  },
+  prerender: {
+    partial: true,
   },
 } satisfies Config;

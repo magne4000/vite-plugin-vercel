@@ -4,12 +4,13 @@ import { testFs } from "../common/helpers";
 
 describe("fs", () => {
   testFs(path.basename(__dirname), [
+    "/functions/api/isr.func/.vc-config.json",
+    "/functions/api/isr.func/index.mjs",
+    "/functions/api/isr.prerender-config.json",
     "/functions/api/name/[name].func/.vc-config.json",
     "/functions/api/name/[name].func/index.mjs",
     "/functions/api/page.func/index.mjs",
     "/functions/api/page.func/.vc-config.json",
-    "/functions/api/post.func/index.mjs",
-    "/functions/api/post.func/.vc-config.json",
     "/functions/edge.func/index.js",
     "/functions/edge.func/.vc-config.json",
     "/functions/og-edge.func/.vc-config.json",

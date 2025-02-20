@@ -58,7 +58,6 @@ export default defineConfig({
       ...(await getEntriesFromFs("_api", {
         // Auto mapping examples:
         //   _api/page.ts -> /api/page
-        //   _api/post.ts -> /api/post
         //   _api/name/[name].ts -> /api/name/*
         destination: "api",
       }))

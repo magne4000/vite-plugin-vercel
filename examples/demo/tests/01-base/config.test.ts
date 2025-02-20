@@ -25,9 +25,19 @@ prepareTestJsonFileContent(path.basename(__dirname), "config.json", (context) =>
       },
       { handle: "filesystem" },
       {
-        src: "^/edge(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))?$",
-        dest: "/edge/$1",
         check: true,
+        src: "^/edge$",
+        dest: "/edge",
+      },
+      {
+        check: true,
+        src: "^/og-edge$",
+        dest: "/og-edge",
+      },
+      {
+        check: true,
+        dest: "/api/isr",
+        src: "^/api/isr$",
       },
       {
         check: true,
@@ -36,17 +46,20 @@ prepareTestJsonFileContent(path.basename(__dirname), "config.json", (context) =>
       },
       {
         check: true,
-        src: "^/api/post$",
-        dest: "/api/post",
-      },
-      {
-        check: true,
         src: "^/api/name(?:/([^/]+?))$",
         dest: "/api/name/[name]?name=$1",
       },
-      { check: true, dest: "page1/?__original_path=$1", src: "^(/page1)$" },
+      {
+        check: true,
+        src: "^/og-node$",
+        dest: "/og-node",
+      },
     ]);
-    expect(context.file).toHaveProperty("overrides", {});
-    expect(Object.keys(context.file as any).sort()).toEqual(["version", "overrides", "routes"].sort());
+    expect(context.file).toHaveProperty("overrides", {
+      "test.html": {
+        path: "test",
+      },
+    });
+    expect(Object.keys(context.file as any).sort()).toMatchObject(["version", "overrides", "routes"].sort());
   });
 });

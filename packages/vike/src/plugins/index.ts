@@ -1,6 +1,6 @@
 import type { Plugin } from "vite";
 import { buildAppPlugins } from "./build-app";
-import { fixEnvsPlugins } from "./fix-envs";
+import { overrideConfPlugin } from "./override-conf";
 import { routesPlugins } from "./routes";
 
-export const plugins: Plugin[] = [fixEnvsPlugins(), ...routesPlugins(), buildAppPlugins()];
+export const plugins: Plugin[] = [overrideConfPlugin(), ...routesPlugins(), buildAppPlugins()];

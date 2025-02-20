@@ -1,26 +1,20 @@
-import path from "node:path";
 import react from "@vitejs/plugin-react";
+import vike from "vike/plugin";
+import { plugins } from "vike-vercel/plugins";
 import vercel from "vite-plugin-vercel";
-import { getEntriesFromFs } from "vite-plugin-vercel/utils";
-import { setup as _setup } from "../common/setup";
-import { teardown as _teardown } from "../common/teardown";
-import { getTmpDir } from "../common/utils";
 
-const dirname = path.basename(__dirname);
-
-export const setup = _setup(dirname, {
-  configFile: false,
+export default {
   mode: "production",
   root: process.cwd(),
   plugins: [
     react(),
+    vike(),
     vercel({
       outDir: getTmpDir(dirname),
       entries: [
         ...(await getEntriesFromFs("_api", {
           // Auto mapping:
           //   _api/page.ts -> /api/page
-          //   _api/post.ts -> /api/post
           //   _api/name/[name].ts -> /api/name/*
           destination: "api",
         })),
@@ -33,7 +27,9 @@ export const setup = _setup(dirname, {
         })),
       ],
     }),
+    plugins,
   ],
-});
-
-export const teardown = _teardown(dirname);
+  // We manually add a list of dependencies to be pre-bundled, in order to avoid a page reload at dev start which breaks vike's CI
+  // Also, react ones are here to fix issues while loading CJS
+  optimizeDeps: { include: ["cross-fetch", "react/jsx-runtime", "react/jsx-dev-runtime"] },
+};
