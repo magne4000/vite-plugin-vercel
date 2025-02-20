@@ -11,17 +11,14 @@ export function resolvePlugin(): Plugin {
       return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
     },
 
-    async resolveId(id, importer, options) {
+    async resolveId(id, _importer, options) {
       // ./dist/server/entry should already have been generated during "ssr" env build phase
       // So after that, we can directly import it when needed, for instance inside universal-handler
       if (id === "virtual:@brillout/vite-plugin-server-entry:serverEntry") {
         const resolved = await this.resolve("./dist/server/entry", undefined, options);
         return resolved?.id;
       }
-      if (id.startsWith(resolvedModuleId)) {
-        return resolvedVirtualModuleId;
-      }
-      if (id === resolvedVirtualModuleId) {
+      if (id.startsWith(resolvedModuleId) || id === resolvedVirtualModuleId) {
         return resolvedVirtualModuleId;
       }
     },
@@ -29,8 +26,8 @@ export function resolvePlugin(): Plugin {
     load(id) {
       if (id === resolvedVirtualModuleId) {
         // Vike's Universal Handler wrapped to ensure that we also import ./dist/server/entry when bundling
-        return `
-import handler from "vike/universal-middleware";
+        //language=javascript
+        return `import handler from "vike/universal-middleware";
 
 export default async function vikeVercelHandler(...args) {
   await import("virtual:@brillout/vite-plugin-server-entry:serverEntry");
