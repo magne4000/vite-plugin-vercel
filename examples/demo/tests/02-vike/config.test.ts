@@ -48,7 +48,7 @@ prepareTestJsonFileContent("config.json", (context) => {
       },
       {
         src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_edge/pages/vike-edge",
+        dest: "/__vike_edge/pages/vike-edge?__original_path=$1",
         check: true,
       },
       {
@@ -69,19 +69,19 @@ prepareTestJsonFileContent("config.json", (context) => {
       {
         check: true,
         src: "^(/catch-all/.+?(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/catch-all",
+        dest: "/__vike_node/pages/catch-all?__original_path=$1",
       },
       {
         check: true,
         src: "^(/isr(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/isr",
+        dest: "/__vike_node/pages/isr?__original_path=$1",
       },
       {
         check: true,
         src: "^(/named/[^/]+(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/named",
+        dest: "/__vike_node/pages/named?__original_path=$1",
       },
-      { check: true, dest: "/__vike_node/__all", src: "^(.*)$" },
+      { check: true, dest: "/__vike_node/__all?__original_path=$1", src: "^(.*)$" },
     ];
 
     assert.sameDeepMembers(expected, (context.file as any).routes);

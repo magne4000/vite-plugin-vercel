@@ -31,7 +31,23 @@ export function resolvePlugin(): Plugin {
 import "virtual:@brillout/vite-plugin-server-entry:serverEntry";
 import handler from "vike/universal-middleware";
 
-export default handler;
+export default function vercelVikeHandler(request, context, runtime) {
+  const originalUrl = new URL(request.url);
+  const originalPath = originalUrl.searchParams.get('__original_path');
+  const newRequest = originalPath ? new Request(new URL(originalPath, request.url).toString(), {
+    method: request.method,
+    headers: request.headers,
+    body: request.body,
+    mode: request.mode,
+    credentials: request.credentials,
+    cache: request.cache,
+    redirect: request.redirect,
+    referrer: request.referrer,
+    integrity: request.integrity
+  }) : request;
+  
+  return handler(newRequest, context, runtime);
+}
 `;
       }
     },

@@ -344,7 +344,8 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           const source = typeof entry.route === "string" ? `(${entry.route})` : entryToPathtoregex(entry);
           pluginConfig.rewrites.push({
             source,
-            destination: `/${entry.destination}`,
+            destination:
+              typeof entry.route === "string" ? `/${entry.destination}?__original_path=$1` : `/${entry.destination}`,
           });
 
           // Generate headers
