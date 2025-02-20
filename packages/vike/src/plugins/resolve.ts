@@ -32,6 +32,7 @@ import "virtual:@brillout/vite-plugin-server-entry:serverEntry";
 import handler from "vike/universal-middleware";
 
 export default function vercelVikeHandler(request, context, runtime) {
+  console.log('request', request);
   const originalUrl = new URL(request.url);
   console.log('originalUrl', originalUrl);
   const originalPath = originalUrl.searchParams.get('__original_path');
