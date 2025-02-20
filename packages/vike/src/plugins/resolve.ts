@@ -11,7 +11,7 @@ export function resolvePlugin(): Plugin {
       return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
     },
 
-    async resolveId(id, _importer, options) {
+    async resolveId(id) {
       if (id.startsWith(resolvedModuleId) || id === resolvedVirtualModuleId) {
         return resolvedVirtualModuleId;
       }
