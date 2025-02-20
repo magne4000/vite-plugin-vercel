@@ -27,12 +27,12 @@ export function resolvePlugin(): Plugin {
       if (id === resolvedVirtualModuleId) {
         // Vike's Universal Handler wrapped to ensure that we also import ./dist/server/entry when bundling
         //language=javascript
-        return `import handler from "vike/universal-middleware";
+        return `
+import "virtual:@brillout/vite-plugin-server-entry:serverEntry";
+import handler from "vike/universal-middleware";
 
-export default async function vikeVercelHandler(...args) {
-  await import("virtual:@brillout/vite-plugin-server-entry:serverEntry");
-  return handler(...args);
-}`;
+export default handler;
+`;
       }
     },
   };
