@@ -12,7 +12,7 @@ export function fixEnvsPlugins(): Plugin {
     apply: "build",
 
     configEnvironment(name, options) {
-      if (name === "vercel_client" || name === "client") {
+      if (name === "vercel_client" || name === "client" || name === "ssr") {
         setTargetAndCssTarget(options);
       }
     },
