@@ -63,8 +63,8 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
       vike:
-        specifier: file:../../../vike/vike
-        version: file:../vike/vike(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+        specifier: 0.4.223-commit-586dbfb
+        version: 0.4.223-commit-586dbfb(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
       vike-vercel:
         specifier: workspace:^
         version: link:../../packages/vike
@@ -220,8 +220,8 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       vike:
-        specifier: file:../../../vike/vike
-        version: file:../vike/vike(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+        specifier: 0.4.223-commit-586dbfb
+        version: 0.4.223-commit-586dbfb(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
     devDependencies:
       '@types/node':
         specifier: ^18.19.74
@@ -397,8 +397,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@brillout/import@0.2.3':
-    resolution: {integrity: sha512-1T8WlD75eeFSMrptGy8jiLHmfHgMmSjWvLOIUvHmSVZt+6k0eQqYUoK4KbmE4T9pVLIfxvZSOm2D68VEqKRHRw==}
+  '@brillout/import@0.2.6':
+    resolution: {integrity: sha512-1GUTmADc8trUC1YSW2lp9r6PmwluMoEyHajnE1kxVdbKGD0wJOlq/DvTWMUqLtBDCnQR+n//qgMtz6HwA/lotA==}
 
   '@brillout/json-serializer@0.5.15':
     resolution: {integrity: sha512-iLAyV1HNC3nG07ypBwCJohFrajY1HeZdfBBgGuRtMH/JPddgG9bPmoSI18A1RBx67vRmY6/8rgisjR5YfTvZHA==}
@@ -406,8 +406,8 @@ packages:
   '@brillout/libassert@0.5.8':
     resolution: {integrity: sha512-u/fu+jTRUdNdbLONGq1plCfh+k2/XjSbGVTfnF3rHnSPZd+ABWp0XinR5ifrFkyGOzMbzv8IiQ44lZ4U6ZGrGA==}
 
-  '@brillout/picocolors@1.0.15':
-    resolution: {integrity: sha512-VrgvPtfnKP/i8kxCAyQVd0DWg6xU8OZJndbLf/lrywd96UdMhnGL/PK42HhHhhwkDSkaiQU+zc+OPWpvqOe4Cg==}
+  '@brillout/picocolors@1.0.25':
+    resolution: {integrity: sha512-O/yzJsSGEQyGbRpZBZeGScBjUgHsp9atr/QejTIC7igjnlP6PLIvDHfDNa1BWbop47xOxJ+7vMPc+5l+nIZ8ZQ==}
 
   '@brillout/require-shim@0.1.2':
     resolution: {integrity: sha512-3I4LRHnVZXoSAsEoni5mosq9l6eiJED58d9V954W4CIZ88AUfYBanWGBGbJG3NztaRTpFHEA6wB3Hn93BmmJdg==}
@@ -2806,8 +2806,8 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vike@file:../vike/vike:
-    resolution: {directory: ../vike/vike, type: directory}
+  vike@0.4.223-commit-586dbfb:
+    resolution: {integrity: sha512-67QFZw0Y0bwK/4Nfq4BSZe+zGn91YqygMiMlK8DlLuaMn6vtg+YXv+NtsYQefR3+XcR5vA08n3yeT0lq3akEOQ==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -3131,20 +3131,20 @@ snapshots:
   '@biomejs/cli-win32-x64@1.9.4':
     optional: true
 
-  '@brillout/import@0.2.3': {}
+  '@brillout/import@0.2.6': {}
 
   '@brillout/json-serializer@0.5.15': {}
 
   '@brillout/libassert@0.5.8': {}
 
-  '@brillout/picocolors@1.0.15': {}
+  '@brillout/picocolors@1.0.25': {}
 
   '@brillout/require-shim@0.1.2': {}
 
   '@brillout/vite-plugin-server-entry@0.6.0':
     dependencies:
-      '@brillout/import': 0.2.3
-      '@brillout/picocolors': 1.0.15
+      '@brillout/import': 0.2.6
+      '@brillout/picocolors': 1.0.25
 
   '@changesets/apply-release-plan@7.0.8':
     dependencies:
@@ -5721,11 +5721,11 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike@file:../vike/vike(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
+  vike@0.4.223-commit-586dbfb(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
     dependencies:
-      '@brillout/import': 0.2.3
+      '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.15
-      '@brillout/picocolors': 1.0.15
+      '@brillout/picocolors': 1.0.25
       '@brillout/require-shim': 0.1.2
       '@brillout/vite-plugin-server-entry': 0.6.0
       acorn: 8.14.0

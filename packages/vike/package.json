@@ -46,6 +46,6 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "vike": "file:../../../vike/vike"
+    "vike": "0.4.223-commit-586dbfb"
   }
 }
