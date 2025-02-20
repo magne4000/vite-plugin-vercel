@@ -9,6 +9,7 @@ type PrerenderContextOutputPage = {
   filePath: string;
   fileType: string;
   fileContent: string;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   pageContext: any;
 };
 
@@ -88,6 +89,7 @@ function routesPluginBuild(): Plugin {
         if (this.environment.name === "vercel_client") {
           // Emit prerendered files
           const prerenderContext: { _output?: PrerenderContextOutputPage[] } | undefined =
+            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
             vikeConfig?.prerenderContext as any;
           if (prerenderContext?._output && vikePrerenderOutdir) {
             // With overrides, HTML file can be accessed without the .html file extension
