@@ -32,23 +32,44 @@ import "virtual:@brillout/vite-plugin-server-entry:serverEntry";
 import handler from "vike/universal-middleware";
 
 export default function vercelVikeHandler(request, context, runtime) {
-  console.log('request', request);
+  const xNowRouteMatchesHeader = request.headers.get("x-now-route-matches");
   const originalUrl = new URL(request.url);
-  console.log('originalUrl', originalUrl);
-  const originalPath = originalUrl.searchParams.get('__original_path');
-  console.log('originalPath', originalPath);
-  console.log('newRequest', originalPath ? new URL(originalPath, request.url).toString() : originalPath);
-  const newRequest = originalPath ? new Request(new URL(originalPath, request.url).toString(), {
-    method: request.method,
-    headers: request.headers,
-    body: request.body,
-    mode: request.mode,
-    credentials: request.credentials,
-    cache: request.cache,
-    redirect: request.redirect,
-    referrer: request.referrer,
-    integrity: request.integrity
-  }) : request;
+  const originalPath = originalUrl.searchParams.get("__original_path");
+  let newUrl = null;
+  
+  let newRequest = request;
+
+  console.log({
+    xNowRouteMatchesHeader,
+    originalUrl: request.url,
+    originalPath
+  });
+  
+  if (originalPath) {
+    newUrl = new URL(originalPath, request.url).toString();
+    console.log('newUrl 1', newUrl);
+  } else if (typeof xNowRouteMatchesHeader === "string") {
+    const originalPathBis = new URLSearchParams(xNowRouteMatchesHeader).get("1");
+    if (originalPathBis) {
+      newUrl = new URL(originalPathBis, request.url).toString();
+      console.log('newUrl 2', newUrl);
+    }
+  }
+  
+  if (newUrl) {
+    console.log('newRequest');
+    newRequest = new Request(newUrl, {
+      method: request.method,
+      headers: request.headers,
+      body: request.body,
+      mode: request.mode,
+      credentials: request.credentials,
+      cache: request.cache,
+      redirect: request.redirect,
+      referrer: request.referrer,
+      integrity: request.integrity
+    })
+  }
   
   return handler(newRequest, context, runtime);
 }
