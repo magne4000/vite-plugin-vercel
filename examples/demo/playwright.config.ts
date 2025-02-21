@@ -42,7 +42,7 @@ export default defineConfig({
   ],
 
   /* Run your local dev server before starting the tests */
-  webServer: !process.env.CI
+  webServer: !process.env.BASE_URL
     ? {
         command: "pnpm run dev",
         url: "http://localhost:3000",
