@@ -5,13 +5,13 @@ import { getVercelAPI } from "vite-plugin-vercel/api";
 import type { ViteVercelRouteOverrides } from "vite-plugin-vercel/types";
 import { assert } from "../utils/assert";
 import { resolvedModuleId } from "./resolve";
+import type { PageContext } from "vike/types";
 
 type PrerenderContextOutputPage = {
   filePath: string;
   fileType: string;
   fileContent: string;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  pageContext: any;
+  pageContext: PageContext;
 };
 
 function routesPluginBuild(): Plugin {
@@ -77,8 +77,6 @@ function routesPluginBuild(): Plugin {
               headers,
               route,
             });
-
-            // FIXME should we add routes for 404?
           }
         }
       },
