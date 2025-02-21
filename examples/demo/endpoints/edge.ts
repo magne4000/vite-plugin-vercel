@@ -3,7 +3,7 @@ import { createClient } from "@vercel/edge-config";
 export const edge = true;
 
 export default async function handler() {
-  const EDGE_CONFIG = import.meta.env.EDGE_CONFIG ?? process.env.EDGE_CONFIG;
+  const EDGE_CONFIG = import.meta.env.EDGE_CONFIG || process.env.EDGE_CONFIG;
 
   if (import.meta.env.NODE_ENV === "development" && !EDGE_CONFIG) {
     throw new Error(
