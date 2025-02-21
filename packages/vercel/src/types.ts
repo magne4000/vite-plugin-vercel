@@ -93,6 +93,10 @@ export interface ViteVercelEntry {
    */
   route?: string | boolean;
   /**
+   * Ensures that the route is added before or after others
+   */
+  enforce?: "post" | "pre";
+  /**
    * Set to `true` to mark this function as an Edge Function
    */
   edge?: boolean;

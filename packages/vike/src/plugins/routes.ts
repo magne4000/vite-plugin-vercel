@@ -1,11 +1,11 @@
 import path from "node:path";
 import { getVikeConfig } from "vike/plugin";
+import type { PageContext } from "vike/types";
 import { normalizePath, type Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
 import type { ViteVercelRouteOverrides } from "vite-plugin-vercel/types";
 import { assert } from "../utils/assert";
 import { resolvedModuleId } from "./resolve";
-import type { PageContext } from "vike/types";
 
 type PrerenderContextOutputPage = {
   filePath: string;
@@ -154,6 +154,7 @@ function routesPluginBuild(): Plugin {
             destination: normalizePath(`${key}/__all`),
             route: ".*",
             edge: isEdge,
+            enforce: "post",
           });
         }
       },
@@ -238,6 +239,7 @@ function routesPluginDev(): Plugin {
         destination: normalizePath("__vike_node/__all"),
         route: ".*",
         edge: false,
+        enforce: "post",
       });
     },
   };

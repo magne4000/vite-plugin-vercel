@@ -343,6 +343,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           pluginConfig.rewrites ??= [];
           const source = typeof entry.route === "string" ? `(${entry.route})` : entryToPathtoregex(entry);
           pluginConfig.rewrites.push({
+            enforce: entry.enforce,
             source,
             destination:
               typeof entry.route === "string" ? `/${entry.destination}?__original_path=$1` : `/${entry.destination}`,
