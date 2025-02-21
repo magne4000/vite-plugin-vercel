@@ -71,9 +71,6 @@ describe("fs", () => {
     "/static/isr/index.pageContext.json",
   ];
 
-  ("/functions/__vike_node/pages/catch-all.prerender-config.json");
-  ("/functions/__vike_node/pages/catch-all.prerender-config.json");
-
   it("should generate the right files", async () => {
     const dir = path.join(__dirname, "../../.vercel/output");
     const entries = await glob(`${dir}/**`, { dot: true });
