@@ -36,6 +36,11 @@ prepareTestJsonFileContent(path.basename(__dirname), "config.json", (context) =>
       },
       {
         check: true,
+        src: "^/og-node$",
+        dest: "/og-node",
+      },
+      {
+        check: true,
         dest: "/api/isr",
         src: "^/api/isr$",
       },
@@ -48,11 +53,6 @@ prepareTestJsonFileContent(path.basename(__dirname), "config.json", (context) =>
         check: true,
         src: "^/api/name(?:/([^/]+?))$",
         dest: "/api/name/[name]?name=$1",
-      },
-      {
-        check: true,
-        src: "^/og-node$",
-        dest: "/og-node",
       },
     ]);
     expect(context.file).toHaveProperty("overrides", {

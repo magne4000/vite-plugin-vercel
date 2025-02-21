@@ -27,6 +27,9 @@ export function Layout({
           <Link href="/vike-edge">Vike Edge Function endpoint</Link>
           <Link href="/og-edge">Edge OG endpoint</Link>
           <Link href="/og-node">Node OG endpoint</Link>
+          <Link href="/api/page">api/page</Link>
+          <Link href="/api/isr">api/isr</Link>
+          <Link href="/api/name/bob">api/name</Link>
         </Sidebar>
         <Content>{children}</Content>
       </div>

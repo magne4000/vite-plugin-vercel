@@ -12,14 +12,13 @@ export default {
     vercel({
       expiration: 25,
       entries: [
-        ...(await getEntriesFromFs("_api", {
-          destination: "api",
-        })),
         ...(await getEntriesFromFs("endpoints", {
           // Auto mapping:
           //   endpoints/edge.ts -> /edge
           //   endpoints/og-node.tsx -> /og-node
           //   endpoints/og-edge.tsx -> /og-edge
+          //   endpoints/api/isr.ts -> /api/isr
+          //   etc...
           destination: "",
         })),
       ],
