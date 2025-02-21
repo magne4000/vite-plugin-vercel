@@ -48,3 +48,5 @@ jobs:
       - name: Test e2e dev
         run: pnpm test:e2e
         working-directory: examples/demo
+        env:
+          EDGE_CONFIG: ${{ secrets.EDGE_CONFIG }}
