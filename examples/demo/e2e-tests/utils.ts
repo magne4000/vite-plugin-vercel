@@ -1,5 +1,7 @@
 import { expect, type Page } from "@playwright/test";
 
+export const isDeployed = process.env.NODE_ENV === "production";
+
 export async function testISRDates(page: Page, timeout: number) {
   await page.waitForTimeout(timeout + 1000);
 

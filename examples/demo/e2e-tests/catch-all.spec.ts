@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { goto, testDates, testISRDates } from "./utils";
+import { goto, isDeployed, testDates, testISRDates } from "./utils";
 
 test("catches all URLs", async ({ page }) => {
   {
@@ -14,7 +14,7 @@ test("catches all URLs", async ({ page }) => {
 });
 
 test("has static pages", async ({ page }) => {
-  test.skip(!process.env.CI);
+  test.skip(!isDeployed);
   await goto(page, "/catch-all/a/b/c");
   await testDates(page, "same");
 
@@ -23,7 +23,7 @@ test("has static pages", async ({ page }) => {
 });
 
 test("has ISR pages", async ({ page }) => {
-  test.skip(!process.env.CI);
+  test.skip(!isDeployed);
   test.slow();
   await goto(page, "/catch-all/c/d/e");
   await testISRDates(page, 5000);

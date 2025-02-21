@@ -22,3 +22,4 @@ jobs:
         working-directory: examples/demo
         env:
           BASE_URL: ${{ github.event.deployment_status.environment_url }}
+          NODE_ENV: production
