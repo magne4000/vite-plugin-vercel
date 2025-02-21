@@ -7,7 +7,7 @@ test("has interactive counter", async ({ page }) => {
 
   if (isDeployed) {
     // TODO: Not yet implemented in dev, needs Vike to pass full ESM to activate vite dev plugin
-    expect(response?.headerValue("x-vitepluginvercel-test")).toBe("test");
+    expect(await response?.headerValue("x-vitepluginvercel-test")).toBe("test");
   }
 
   const counter = page.getByRole("button");
