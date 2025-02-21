@@ -8,7 +8,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "pnpm run test:01 && pnpm run test:02",
     "test:01": "vitest run --dir tests/01-base --config tests/01-base/vitest.config.ts",
-    "test:02": "vite build && vitest run --dir tests/02-vike --config tests/02-vike/vitest.config.ts"
+    "test:02": "vite build && vitest run --dir tests/02-vike --config tests/02-vike/vitest.config.ts",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.0",
@@ -32,6 +33,7 @@
   "version": null,
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.25.9",
+    "@playwright/test": "^1.50.1",
     "@types/node": "^18.19.74",
     "@types/node-fetch": "^2.6.12",
     "@types/react": "^18.3.18",
@@ -39,6 +41,7 @@
     "@universal-middleware/core": "^0.4.0",
     "@vercel/node": "^5.1.0",
     "fast-glob": "^3.3.3",
+    "playwright": "^1.50.1",
     "vitest": "^3.0.4",
     "zod": "^3.24.1"
   }

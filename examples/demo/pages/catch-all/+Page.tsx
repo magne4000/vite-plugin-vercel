@@ -36,7 +36,7 @@ export default function Page() {
             </li>
           </ul>
         </li>
-        <li>{data.d}</li>
+        <li data-testid="date">{data.d}</li>
       </ul>
     </>
   );

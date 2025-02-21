@@ -7,7 +7,7 @@ prepareTestJsonFileContent("/functions/__vike_node/pages/catch-all.prerender-con
   testSchema(context, vercelOutputPrerenderConfigSchema);
 
   it("should have only necessary properties", () => {
-    expect(context.file).toHaveProperty("expiration", 15);
+    expect(context.file).toHaveProperty("expiration", 5);
     // expect(context.file).toHaveProperty("group");
     // expect((context.file as any).group).toBeTypeOf("number");
     expect(Object.keys(context.file as any)).toHaveLength(1);
@@ -18,7 +18,7 @@ prepareTestJsonFileContent("/functions/__vike_node/pages/isr.prerender-config.js
   testSchema(context, vercelOutputPrerenderConfigSchema);
 
   it("should have only necessary properties", () => {
-    expect(context.file).toHaveProperty("expiration", 15);
+    expect(context.file).toHaveProperty("expiration", 5);
     // expect(context.file).toHaveProperty("group");
     // expect((context.file as any).group).toBeTypeOf("number");
     expect(Object.keys(context.file as any)).toHaveLength(1);
