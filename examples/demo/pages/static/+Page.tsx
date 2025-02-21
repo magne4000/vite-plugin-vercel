@@ -12,7 +12,7 @@ export default function Page() {
         <li>Static</li>
         <li>Static html generated</li>
         <li>No ISR</li>
-        <li>{data.d}</li>
+        <li data-testid="date">{data.d}</li>
       </ul>
     </>
   );

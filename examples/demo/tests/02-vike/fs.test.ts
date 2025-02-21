@@ -67,9 +67,6 @@ describe("fs", () => {
     "/functions/__vike_node/__all.func/.vc-config.json",
     ...generatedFiles.map((f) => `/static/${f}`),
     "/static/_temp_manifest.json",
-    // FIXME REMOVE BEFORE MERGE, THOSE SHOULD NOT BE PRESENT, WAITING FOR VIKE FEATURE TO OVERRIDE CONFIG VALUES
-    "/static/isr/index.html",
-    "/static/isr/index.pageContext.json",
   ];
 
   it("should generate the right files", async () => {

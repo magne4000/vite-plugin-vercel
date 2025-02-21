@@ -49,7 +49,7 @@ export default function Page() {
           </ul>
         </li>
         <li>{isISR(data.someId) ? "ISR" : "Static"}</li>
-        <li>{data.d}</li>
+        <li data-testid="date">{data.d}</li>
       </ul>
     </>
   );

@@ -13,6 +13,7 @@ export async function testISRDates(page: Page, timeout: number) {
 
 export async function testDates(page: Page, shouldBe: "same" | "newer") {
   const date1 = new Date(await page.getByTestId("date").innerText());
+  await page.waitForTimeout(1000);
   await page.reload();
   await page.waitForLoadState("networkidle");
   const date2 = new Date(await page.getByTestId("date").innerText());

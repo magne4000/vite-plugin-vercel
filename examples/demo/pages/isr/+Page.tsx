@@ -11,7 +11,7 @@ export default function Page() {
       <ul>
         <li>ISR</li>
         <li>ISR: regenerated after {15} seconds</li>
-        <li>{data.d}</li>
+        <li data-testid="date">{data.d}</li>
       </ul>
     </>
   );
