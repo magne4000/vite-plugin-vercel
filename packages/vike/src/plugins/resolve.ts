@@ -12,12 +12,6 @@ export function resolvePlugin(): Plugin {
     },
 
     async resolveId(id, _importer, options) {
-      // ./dist/server/entry should already have been generated during "ssr" env build phase
-      // So after that, we can directly import it when needed, for instance inside universal-handler
-      if (id === "virtual:@brillout/vite-plugin-server-entry:serverEntry") {
-        const resolved = await this.resolve("./dist/server/entry", undefined, options);
-        return resolved?.id;
-      }
       if (id.startsWith(resolvedModuleId) || id === resolvedVirtualModuleId) {
         return resolvedVirtualModuleId;
       }

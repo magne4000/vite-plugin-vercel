@@ -63,8 +63,11 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
       vike:
-        specifier: 0.4.223-commit-586dbfb
-        version: 0.4.223-commit-586dbfb(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+        specifier: 0.4.223-commit-62ca594
+        version: 0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+      vike-react:
+        specifier: ^0.5.13
+        version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)))
       vike-vercel:
         specifier: workspace:^
         version: link:../../packages/vike
@@ -220,8 +223,8 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       vike:
-        specifier: 0.4.223-commit-586dbfb
-        version: 0.4.223-commit-586dbfb(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+        specifier: 0.4.223-commit-62ca594
+        version: 0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
     devDependencies:
       '@types/node':
         specifier: ^18.19.74
@@ -406,14 +409,14 @@ packages:
   '@brillout/libassert@0.5.8':
     resolution: {integrity: sha512-u/fu+jTRUdNdbLONGq1plCfh+k2/XjSbGVTfnF3rHnSPZd+ABWp0XinR5ifrFkyGOzMbzv8IiQ44lZ4U6ZGrGA==}
 
-  '@brillout/picocolors@1.0.25':
-    resolution: {integrity: sha512-O/yzJsSGEQyGbRpZBZeGScBjUgHsp9atr/QejTIC7igjnlP6PLIvDHfDNa1BWbop47xOxJ+7vMPc+5l+nIZ8ZQ==}
+  '@brillout/picocolors@1.0.26':
+    resolution: {integrity: sha512-oJF92OEpzunaJyaEWXuS4PWY0k8JsqNO18kMf5hIwvsh+tyhbv+UwAnPPauSlO2eyvMSciui+YFKV9DEzTpmGA==}
 
   '@brillout/require-shim@0.1.2':
     resolution: {integrity: sha512-3I4LRHnVZXoSAsEoni5mosq9l6eiJED58d9V954W4CIZ88AUfYBanWGBGbJG3NztaRTpFHEA6wB3Hn93BmmJdg==}
 
-  '@brillout/vite-plugin-server-entry@0.6.0':
-    resolution: {integrity: sha512-ELqCpB3l4dCZviobZKcHcNvuSPG86ZfBAHUYQWnf3K28PToBrXEagwPBEU/63ITcdpK9m7DOamQPcShtitTx5g==}
+  '@brillout/vite-plugin-server-entry@0.6.3':
+    resolution: {integrity: sha512-uSbzC4d0xIBxnt8JbrZiUb0iylHsHXyDNIi1sYf7bnr4HY6FcNMnSTE2C5FLIH1pc0qQXnvZzdw6tn/jEGM/6A==}
 
   '@changesets/apply-release-plan@7.0.8':
     resolution: {integrity: sha512-qjMUj4DYQ1Z6qHawsn7S71SujrExJ+nceyKKyI9iB+M5p9lCL55afuEd6uLBPRpLGWQwkwvWegDHtwHJb1UjpA==}
@@ -1968,6 +1971,10 @@ packages:
     resolution: {integrity: sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==}
     engines: {node: '>=0.10.0'}
 
+  isbot-fast@1.2.0:
+    resolution: {integrity: sha512-twjuQzy2gKMDVfKGQyQqrx6Uy4opu/fiVUTTpdqtFsd7OQijIp5oXvb27n5EemYXaijh5fomndJt/SPRLsEdSg==}
+    engines: {node: '>=6.0.0'}
+
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
@@ -2437,6 +2444,12 @@ packages:
     resolution: {integrity: sha512-jCvmsr+1IUSMUyzOkRcvnVbX3ZYC6g9TDrDbFuFmRDq7PD4yaGbLKNQL6k2jnArV8hjYxh7hVhAZB6s9HDGpZA==}
     engines: {node: '>=0.10.0'}
 
+  react-streaming@0.3.48:
+    resolution: {integrity: sha512-AWU5iNZtDNuNf6rdiiJybbPqP5kQl54jwcFqBNApl337EfQxpWm5g/uaDSiY2U+C0WvQ6QmFYOdK4IxJ5WUVVA==}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+
   react@18.3.1:
     resolution: {integrity: sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==}
     engines: {node: '>=0.10.0'}
@@ -2806,8 +2819,15 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vike@0.4.223-commit-586dbfb:
-    resolution: {integrity: sha512-67QFZw0Y0bwK/4Nfq4BSZe+zGn91YqygMiMlK8DlLuaMn6vtg+YXv+NtsYQefR3+XcR5vA08n3yeT0lq3akEOQ==}
+  vike-react@0.5.13:
+    resolution: {integrity: sha512-gk5YzLqc349uCSatIZLuLA3/ZtpjWHOjPk1jVyQROqbJ3l6kJbsST7u7ItblKuQr+C5TTcFnJ73Hhl8lSMdXxg==}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
+      vike: '>=0.4.182'
+
+  vike@0.4.223-commit-62ca594:
+    resolution: {integrity: sha512-JZsAgL0rFCkGfTIXjP6PUk8yg3hNoBYHpMrS23B8cFCZ2rzYowwqSJkMPm+IyX5DdWFQ5tDDLoT3qP8CPo2NqA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -3137,14 +3157,14 @@ snapshots:
 
   '@brillout/libassert@0.5.8': {}
 
-  '@brillout/picocolors@1.0.25': {}
+  '@brillout/picocolors@1.0.26': {}
 
   '@brillout/require-shim@0.1.2': {}
 
-  '@brillout/vite-plugin-server-entry@0.6.0':
+  '@brillout/vite-plugin-server-entry@0.6.3':
     dependencies:
       '@brillout/import': 0.2.6
-      '@brillout/picocolors': 1.0.25
+      '@brillout/picocolors': 1.0.26
 
   '@changesets/apply-release-plan@7.0.8':
     dependencies:
@@ -4698,6 +4718,8 @@ snapshots:
 
   is-windows@1.0.2: {}
 
+  isbot-fast@1.2.0: {}
+
   isexe@2.0.0: {}
 
   jackspeak@3.4.3:
@@ -5280,6 +5302,15 @@ snapshots:
 
   react-refresh@0.14.2: {}
 
+  react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@brillout/import': 0.2.6
+      '@brillout/json-serializer': 0.5.15
+      '@brillout/picocolors': 1.0.26
+      isbot-fast: 1.2.0
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
   react@18.3.1:
     dependencies:
       loose-envify: 1.4.0
@@ -5721,13 +5752,20 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike@0.4.223-commit-586dbfb(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
+  vike-react@0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+      react-streaming: 0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      vike: 0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+
+  vike@0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.15
-      '@brillout/picocolors': 1.0.25
+      '@brillout/picocolors': 1.0.26
       '@brillout/require-shim': 0.1.2
-      '@brillout/vite-plugin-server-entry': 0.6.0
+      '@brillout/vite-plugin-server-entry': 0.6.3
       acorn: 8.14.0
       cac: 6.7.14
       es-module-lexer: 1.6.0
@@ -5737,6 +5775,7 @@ snapshots:
       source-map-support: 0.5.21
       tinyglobby: 0.2.10
     optionalDependencies:
+      react-streaming: 0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       vite: 6.1.0(@types/node@18.19.74)(tsx@4.19.2)
 
   vite-node@3.0.5(@types/node@18.19.74)(tsx@4.19.2):

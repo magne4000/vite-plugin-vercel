@@ -1,10 +1,8 @@
-export { Link };
-
-import { usePageContext } from "./usePageContext";
 import React from "react";
+import { usePageContext } from "vike-react/usePageContext";
 
-function Link({ href, children }: { href: string; children: string }) {
-  const pageContext = usePageContext() as { urlPathname: string };
+export function Link({ href, children }: { href: string; children: string }) {
+  const pageContext = usePageContext();
   const { urlPathname } = pageContext;
   const isActive = href === "/" ? urlPathname === href : urlPathname.startsWith(href);
   return (

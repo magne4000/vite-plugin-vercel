@@ -1,7 +1,10 @@
 import React from "react";
-import { Link } from "../../renderer/Link";
+import { Link } from "../../components/Link";
+import { useData } from "vike-react/useData";
 
-export default function Page(props: { d: string }) {
+export default function Page() {
+  const data = useData<{ d: string }>();
+
   return (
     <>
       <h1>Welcome</h1>
@@ -27,7 +30,7 @@ export default function Page(props: { d: string }) {
             </li>
           </ul>
         </li>
-        <li>{props.d}</li>
+        <li>{data.d}</li>
       </ul>
     </>
   );

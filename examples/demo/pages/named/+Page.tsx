@@ -1,17 +1,20 @@
 import React from "react";
-import { Link } from "../../renderer/Link";
+import { useData } from "vike-react/useData";
+import { Link } from "../../components/Link";
 
 function isISR(someId: string) {
   return someId !== "id-1" && someId !== "id-2";
 }
 
-export default function Page(props: { d: string; someId: string }) {
+export default function Page() {
+  const data = useData<{ d: string; someId: string }>();
+
   return (
     <>
       <h1>Welcome</h1>
       This page is:
       <ul>
-        <li>Static with url parameter: {props.someId}</li>
+        <li>Static with url parameter: {data.someId}</li>
         <li>
           Some pages are static:
           <ul>
@@ -45,8 +48,8 @@ export default function Page(props: { d: string; someId: string }) {
             </li>
           </ul>
         </li>
-        <li>{isISR(props.someId) ? "ISR" : "Static"}</li>
-        <li>{props.d}</li>
+        <li>{isISR(data.someId) ? "ISR" : "Static"}</li>
+        <li>{data.d}</li>
       </ul>
     </>
   );

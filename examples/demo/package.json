@@ -22,7 +22,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "^5.7.3",
-    "vike": "0.4.223-commit-586dbfb",
+    "vike": "0.4.223-commit-62ca594",
+    "vike-react": "^0.5.13",
     "vike-vercel": "workspace:^",
     "vite": "^6.1.0",
     "vite-plugin-vercel": "workspace:^"
