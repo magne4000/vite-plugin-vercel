@@ -5,6 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  vike: 0.4.223-commit-33cc798
   path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
 
 importers:
@@ -66,11 +67,11 @@ importers:
         specifier: ^5.7.3
         version: 5.7.3
       vike:
-        specifier: 0.4.223-commit-62ca594
-        version: 0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+        specifier: 0.4.223-commit-33cc798
+        version: 0.4.223-commit-33cc798(react-streaming@0.3.48)(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
       vike-react:
         specifier: ^0.5.13
-        version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)))
+        version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.223-commit-33cc798(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)))
       vike-vercel:
         specifier: workspace:^
         version: link:../../packages/vike
@@ -232,8 +233,8 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       vike:
-        specifier: 0.4.223-commit-62ca594
-        version: 0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+        specifier: 0.4.223-commit-33cc798
+        version: 0.4.223-commit-33cc798(react-streaming@0.3.48)(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
     devDependencies:
       '@types/node':
         specifier: ^18.19.74
@@ -2853,10 +2854,10 @@ packages:
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
-      vike: '>=0.4.182'
+      vike: 0.4.223-commit-33cc798
 
-  vike@0.4.223-commit-62ca594:
-    resolution: {integrity: sha512-JZsAgL0rFCkGfTIXjP6PUk8yg3hNoBYHpMrS23B8cFCZ2rzYowwqSJkMPm+IyX5DdWFQ5tDDLoT3qP8CPo2NqA==}
+  vike@0.4.223-commit-33cc798:
+    resolution: {integrity: sha512-eFE/36MtuB6Ob7zJHEej84utlwpK19eosuDk4OZeq/+vhm7tsa+rJpBuO85JgLZta7XiM+10jmjRKyvILudWnw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -5796,14 +5797,14 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike-react@0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))):
+  vike-react@0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.223-commit-33cc798(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-streaming: 0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
+      vike: 0.4.223-commit-33cc798(react-streaming@0.3.48)(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2))
 
-  vike@0.4.223-commit-62ca594(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
+  vike@0.4.223-commit-33cc798(react-streaming@0.3.48)(vite@6.1.0(@types/node@18.19.74)(tsx@4.19.2)):
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.15

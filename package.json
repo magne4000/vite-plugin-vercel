@@ -29,6 +29,7 @@
   },
   "pnpm": {
     "overrides": {
+      "vike": "0.4.223-commit-33cc798",
       "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0"
     }
   }
