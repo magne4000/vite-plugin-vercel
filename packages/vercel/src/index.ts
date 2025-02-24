@@ -199,7 +199,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       };
     },
 
-    // TODO watch/hmr
     configureServer: {
       order: "post",
       handler(server) {
