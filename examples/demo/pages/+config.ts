@@ -6,6 +6,6 @@ import { Layout } from "../components/Layout";
 export default {
   prerender: true,
   Layout,
-  viteEnvironmentAPI: true,
+  vite6BuilderApp: true,
   extends: [vikeReact, vikeVercel],
 } satisfies Config;

@@ -87,14 +87,14 @@ function routesPluginBuild(): Plugin {
       handler() {
         if (this.environment.name === "vercel_client") {
           // Emit prerendered files
-          const prerenderContext: { _output?: PrerenderContextOutputPage[] } | undefined =
+          const prerenderContext: { output?: PrerenderContextOutputPage[] } | undefined =
             // biome-ignore lint/suspicious/noExplicitAny: <explanation>
             vikeConfig?.prerenderContext as any;
-          if (prerenderContext?._output && vikePrerenderOutdir) {
+          if (prerenderContext?.output && vikePrerenderOutdir) {
             // With overrides, HTML file can be accessed without the .html file extension
             const overrides: ViteVercelRouteOverrides = {};
 
-            for (const file of prerenderContext._output) {
+            for (const file of prerenderContext.output) {
               const is404 = Boolean(file.pageContext.is404);
 
               const key = is404 ? "404.html" : normalizePath(file.filePath).substring(vikePrerenderOutdir.length + 1);
