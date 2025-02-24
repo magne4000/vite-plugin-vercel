@@ -6,10 +6,11 @@
   "scripts": {
     "dev": "pnpm run -C ./packages/vercel dev",
     "vercel-build": "pnpm run build",
-    "build": "pnpm run -C ./packages/vercel build",
+    "build": "pnpm run -C ./packages/vercel build && pnpm run -C ./packages/vike build",
     "build:simple": "pnpm run build && pnpm run -C ./examples/simple build",
     "build:hono": "pnpm run build && pnpm run -C ./examples/hono build",
     "build:hono-edge": "pnpm run build && pnpm run -C ./examples/hono build:edge",
+    "build:demo": "pnpm run build && pnpm run -C ./examples/demo build && cp -rf examples/demo/public examples/demo/.vercel .",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm run build && pnpm run -r test",
     "format": "biome format --write .",
@@ -23,6 +24,7 @@
     "@changesets/cli": "^2.27.12",
     "@types/node": "^18.19.74",
     "cross-env": "^7.0.3",
+    "playwright": "^1.50.1",
     "typescript": "^5.7.3"
   },
   "pnpm": {

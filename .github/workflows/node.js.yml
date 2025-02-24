@@ -28,17 +28,25 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+      - run: pnpm playwright install chromium
       - name: Build
         run: pnpm run build
-      - name: Build
+      - name: Build build:simple
         run: pnpm run build:simple
-      - name: Build
+      - name: Build build:hono
         run: pnpm run build:hono
-      - name: Build
+      - name: Build build:hono-edge
         run: pnpm run build:hono-edge
+      - name: Build build:demo
+        run: pnpm run build:demo
       - name: Typecheck
         run: pnpm run typecheck
       - name: Lint
         run: pnpm lint
       - name: Test
         run: pnpm test
+      - name: Test e2e dev
+        run: pnpm test:e2e
+        working-directory: examples/demo
+        env:
+          EDGE_CONFIG: ${{ secrets.EDGE_CONFIG }}

@@ -55,11 +55,10 @@ import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 export default defineConfig({
   plugins: [vercel({
     entries: [
-      ...(await getEntriesFromFs("_api", {
+      ...(await getEntriesFromFs("endpoints/api", {
         // Auto mapping examples:
-        //   _api/page.ts -> /api/page
-        //   _api/post.ts -> /api/post
-        //   _api/name/[name].ts -> /api/name/*
+        //   endpoints/api/page.ts -> /api/page
+        //   endpoints/api/name/[name].ts -> /api/name/*
         destination: "api",
       }))
     ]
@@ -68,16 +67,15 @@ export default defineConfig({
 ```
 
 > [!NOTE]
-> Prefer using `/_api` directory, as `@vercel/build` is currently force building `/api` files,
-> with no way to disable it, thus avoiding double compilation and unexpected behaviour.
+> `@vercel/build` currently forces the building of files in the _/api_ folder, with no way to disable this behavior.
+> It's recommended to place your files in a different folder.
 
 ### Configure endpoints
 
-Endpoints under `/api`, `/_api` or added through `additionalEndpoints` can be configured
-by exporting values from the endpoint file:
+Endpoints added via `getEntriesFromFs` can be configured by exporting values from the endpoint file:
 
 ```ts
-// file: _api/endpoint.ts
+// file: endpoints/api/endpoint.ts
 
 // Should run on edge runtime
 export const edge = true;

@@ -1,4 +1,4 @@
-import { type Route, getTransformedRoutes, mergeRoutes, normalizeRoutes } from "@vercel/routing-utils";
+import { getTransformedRoutes, mergeRoutes, normalizeRoutes, type Route } from "@vercel/routing-utils";
 import { type VercelOutputConfig, vercelOutputConfigSchema } from "./schemas/config/config";
 import type { ViteVercelConfig, ViteVercelRewrite } from "./types";
 

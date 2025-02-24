@@ -49,7 +49,9 @@ export interface ViteVercelConfig {
    */
   defaultSupportsResponseStreaming?: boolean;
   /**
-   * TODO
+   * Use `getEntriesFromFs` for mapping your filesystem routes to entries.
+   * If you are interfacing this plugin with a framework, entries can also be added through the api
+   * @todo API example
    */
   entries?: ViteVercelEntry[];
   /**
@@ -63,13 +65,6 @@ export interface ViteVercelConfig {
    * @protected
    */
   outDir?: string;
-  /**
-   * By default, Vite generates static files under `dist` folder.
-   * But usually, when used through a Framework, such as Vike,
-   * this folder can contain anything, requiring custom integration.
-   * Set this to false if you create a plugin for a Framework.
-   */
-  distContainsOnlyStatic?: boolean;
 }
 
 export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
@@ -80,7 +75,7 @@ export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
 /**
  * Keys are path relative to .vercel/output/static directory
  */
-export type ViteVercelPrerenderRoute = VercelOutputConfig["overrides"];
+export type ViteVercelRouteOverrides = VercelOutputConfig["overrides"];
 
 export interface ViteVercelEntry {
   /**
@@ -97,6 +92,10 @@ export interface ViteVercelEntry {
    * Set to `false` to disable
    */
   route?: string | boolean;
+  /**
+   * Ensures that the route is added before or after others
+   */
+  enforce?: "post" | "pre";
   /**
    * Set to `true` to mark this function as an Edge Function
    */
