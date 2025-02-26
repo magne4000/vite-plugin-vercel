@@ -20,14 +20,14 @@ export default {
     isr: {
       env: { server: true, config: true },
       eager: true,
-      // effect({ configValue }) {
-      //   // an actual ISR value exists for a Page
-      //   if (configValue) {
-      //     return {
-      //       prerender: false,
-      //     };
-      //   }
-      // },
+      effect({ configValue, configDefinedAt }) {
+        // an actual ISR value exists for a Page
+        if (configValue) {
+          return {
+            prerender: false,
+          };
+        }
+      },
     },
     edge: {
       env: { server: true, config: true },
