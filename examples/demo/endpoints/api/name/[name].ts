@@ -1,4 +1,4 @@
-import type { RuntimeAdapter } from '@universal-middleware/core'
+import type { RuntimeAdapter } from "@universal-middleware/core";
 
 // This is a Universal Handler
 // See https://universal-middleware.dev/definitions#handler
