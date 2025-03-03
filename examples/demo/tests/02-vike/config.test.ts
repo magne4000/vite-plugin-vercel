@@ -86,32 +86,19 @@ prepareTestJsonFileContent("config.json", (context) => {
 
     assert.sameDeepMembers(expected, (context.file as any).routes);
 
-    expect((context.file as any).overrides).toMatchObject({
-      // '404.html': {
-      //   path: '404',
-      // },
-      "catch-all/a/b/c/index.html": {
-        path: "catch-all/a/b/c",
-      },
-      "catch-all/a/d/index.html": {
-        path: "catch-all/a/d",
-      },
-      "function/a/index.html": {
-        path: "function/a",
-      },
-      "index.html": {
-        path: "",
-      },
-      "named/id-1/index.html": {
-        path: "named/id-1",
-      },
-      "named/id-2/index.html": {
-        path: "named/id-2",
-      },
-      "static/index.html": {
-        path: "static",
-      },
-    });
+    expect((context.file as any).overrides).toMatchInlineSnapshot(`
+      {
+        "index.html": {
+          "path": "",
+        },
+        "static/index.html": {
+          "path": "static",
+        },
+        "test.html": {
+          "path": "test",
+        },
+      }
+    `);
     expect(Object.keys(context.file as any).sort()).toEqual(["version", "overrides", "routes"].sort());
   });
 });
