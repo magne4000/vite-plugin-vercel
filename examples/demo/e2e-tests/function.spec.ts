@@ -1,11 +1,12 @@
 import { test } from '@playwright/test'
-import { goto, isDeployed, testDates } from './utils'
+import { goto, testDates } from './utils'
 
-test('has static pages', async ({ page }) => {
-  test.skip(!isDeployed)
-  await goto(page, '/function/a')
-  await testDates(page, 'same')
-})
+// Disabled by ISR, even if incompatible
+// test('has static pages', async ({ page }) => {
+//   test.skip(!isDeployed)
+//   await goto(page, '/function/a')
+//   await testDates(page, 'same')
+// })
 
 test('has dynamic pages', async ({ page }) => {
   await goto(page, '/function/a')
