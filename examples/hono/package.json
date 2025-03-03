@@ -13,13 +13,13 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@types/node": "^18.19.76",
-    "@universal-middleware/core": "^0.4.0",
-    "@universal-middleware/hono": "^0.4.0",
+    "@types/node": "^18.19.78",
+    "@universal-middleware/core": "^0.4.1",
+    "@universal-middleware/hono": "^0.4.1",
     "cross-env": "^7.0.3",
     "hono": "^4.7.2",
-    "typescript": "^5.7.3",
-    "vite": "^6.1.1"
+    "typescript": "^5.8.2",
+    "vite": "^6.2.0"
   },
   "dependencies": {
     "vite-plugin-vercel": "workspace:*"
