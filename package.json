@@ -24,7 +24,7 @@
     "@changesets/cli": "^2.28.1",
     "@types/node": "^18.19.78",
     "cross-env": "^7.0.3",
-    "playwright": "^1.50.1",
+    "playwright": "^1.51.0",
     "typescript": "^5.8.2"
   },
   "pnpm": {
