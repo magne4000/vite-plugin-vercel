@@ -41,11 +41,11 @@
     "@types/node": "^18.19.78",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.1",
+    "vite": "^6.2.2",
     "vite-plugin-vercel": "workspace:^"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "vike": "^0.4.224"
+    "vike": "^0.4.225"
   }
 }
