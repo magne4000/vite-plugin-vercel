@@ -49,7 +49,7 @@ importers:
         version: 0.6.5
       '@vitejs/plugin-react':
         specifier: ^4.3.4
-        version: 4.3.4(vite@6.2.1(@types/node@18.19.80))
+        version: 4.3.4(vite@6.2.2(@types/node@18.19.80))
       cross-fetch:
         specifier: ^4.1.0
         version: 4.1.0
@@ -67,16 +67,16 @@ importers:
         version: 5.8.2
       vike:
         specifier: ^0.4.224
-        version: 0.4.224(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.1(@types/node@18.19.80))
+        version: 0.4.225(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@18.19.80))
       vike-react:
         specifier: ^0.5.13
-        version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.224(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.1(@types/node@18.19.80)))
+        version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.225(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@18.19.80)))
       vike-vercel:
         specifier: workspace:^
         version: link:../../packages/vike
       vite:
         specifier: ^6.2.1
-        version: 6.2.1(@types/node@18.19.80)
+        version: 6.2.2(@types/node@18.19.80)
       vite-plugin-vercel:
         specifier: workspace:^
         version: link:../../packages/vercel
@@ -104,7 +104,7 @@ importers:
         version: 0.4.4(hono@4.7.4)
       '@vercel/node':
         specifier: ^5.1.12
-        version: 5.1.12(rollup@4.35.0)
+        version: 5.1.14(rollup@4.35.0)
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -144,7 +144,7 @@ importers:
         version: 5.8.2
       vite:
         specifier: ^6.2.1
-        version: 6.2.1(@types/node@18.19.80)
+        version: 6.2.2(@types/node@18.19.80)
 
   examples/simple:
     dependencies:
@@ -157,13 +157,13 @@ importers:
         version: 18.19.80
       '@vercel/node':
         specifier: ^5.1.10
-        version: 5.1.12(rollup@4.35.0)
+        version: 5.1.14(rollup@4.35.0)
       typescript:
         specifier: ^5.8.2
         version: 5.8.2
       vite:
         specifier: ^6.2.1
-        version: 6.2.1(@types/node@18.19.80)
+        version: 6.2.2(@types/node@18.19.80)
 
   packages/vercel:
     dependencies:
@@ -177,8 +177,8 @@ importers:
         specifier: ^0.4.8
         version: 0.4.8(hono@4.7.4)
       '@vercel/build-utils':
-        specifier: ^10.4.0
-        version: 10.4.0
+        specifier: ^10.5.1
+        version: 10.5.1
       '@vercel/nft':
         specifier: ^0.29.2
         version: 0.29.2(rollup@4.35.0)
@@ -199,7 +199,7 @@ importers:
         version: 8.2.0
       vite-plugin-wasm:
         specifier: ^3.4.1
-        version: 3.4.1(vite@6.2.1(@types/node@18.19.80))
+        version: 3.4.1(vite@6.2.2(@types/node@18.19.80))
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -211,8 +211,8 @@ importers:
         specifier: ^0.4.8
         version: 0.4.8(hono@4.7.4)
       '@vercel/node':
-        specifier: ^5.1.12
-        version: 5.1.12(rollup@4.35.0)
+        specifier: ^5.1.14
+        version: 5.1.14(rollup@4.35.0)
       rollup:
         specifier: ^4.35.0
         version: 4.35.0
@@ -223,8 +223,8 @@ importers:
         specifier: ^5.8.2
         version: 5.8.2
       vite:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@18.19.80)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@18.19.80)
 
   packages/vike:
     dependencies:
@@ -232,8 +232,8 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       vike:
-        specifier: ^0.4.224
-        version: 0.4.224(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.1(@types/node@18.19.80))
+        specifier: ^0.4.225
+        version: 0.4.225(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@18.19.80))
     devDependencies:
       '@types/node':
         specifier: ^18.19.78
@@ -245,8 +245,8 @@ importers:
         specifier: ^5.8.2
         version: 5.8.2
       vite:
-        specifier: ^6.2.1
-        version: 6.2.1(@types/node@18.19.80)
+        specifier: ^6.2.2
+        version: 6.2.2(@types/node@18.19.80)
       vite-plugin-vercel:
         specifier: workspace:^
         version: link:../vercel
@@ -893,6 +893,9 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  '@polka/url@1.0.0-next.28':
+    resolution: {integrity: sha512-8LduaNlMZGwdZ6qWrKlfa+2M4gahzFkprZiAt2TF8uS0qQgBizKXpXURqvTJ4WtmupWxaLqjRb2UCTe72mu+Aw==}
+
   '@resvg/resvg-wasm@2.4.0':
     resolution: {integrity: sha512-C7c51Nn4yTxXFKvgh2txJFNweaVcfUPQxwEUFw4aWsCmfiBDJsTSwviIF8EcwjQ6k8bPyMWCl1vw4BdxE569Cg==}
     engines: {node: '>= 10'}
@@ -1127,8 +1130,8 @@ packages:
   '@universal-middleware/vercel@0.4.8':
     resolution: {integrity: sha512-fKe2sRSiqTLGRtpkguV7m4fFxpvgDl30c5zYh7ysWYY5djR+u0CDSTCn4m/T5yBkZng4vU5qJM4vnxXeRIH57g==}
 
-  '@vercel/build-utils@10.4.0':
-    resolution: {integrity: sha512-gHh4ovvP75HmCXF+7+OBqOc6SoXkoUwKAGOrgpsKzEYwqmuOg3z0god0pTdfsJHYnZw9a/ZZr52b47FJbFKXFQ==}
+  '@vercel/build-utils@10.5.1':
+    resolution: {integrity: sha512-BtqwEmU1AoITpd0KxYrdQOwyKZL8RKba+bWxI8mr3gXPQZWRAE9ok1zF0AXfvMGCstYPHBPNolZGDSfWmY2jqg==}
 
   '@vercel/edge-config-fs@0.1.0':
     resolution: {integrity: sha512-NRIBwfcS0bUoUbRWlNGetqjvLSwgYH/BqKqDN7vK1g32p7dN96k0712COgaz6VFizAm9b0g6IG6hR6+hc0KCPg==}
@@ -1155,8 +1158,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@vercel/node@5.1.12':
-    resolution: {integrity: sha512-Rpid+Sz64D7jtSUWsKkLzL7Hh5XfUBE6fiisLG+1pB/TI7cJ58hDj7Lk9B8p/fGp/nnWkz7BDm4eq1X9XQp6Zg==}
+  '@vercel/node@5.1.14':
+    resolution: {integrity: sha512-kLXAR4ZtNSXJw5ffIzKPDAVHD4/Dwxw/287ZCnQlqtOQzY3IH1E5QM3nxn0LGfTkYxXpQFFOOcXL7fZW7MjC6A==}
 
   '@vercel/og@0.6.5':
     resolution: {integrity: sha512-GFXtgid3+TcVHTd668a10vGpzAh4Ty/yBZPRxKf1UicI8Vi8EthfvSxcaLW0KvQBBe1+d7TcjecLZHRT8JzQ4g==}
@@ -2227,6 +2230,10 @@ packages:
     resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
     engines: {node: '>=4'}
 
+  mrmime@2.0.1:
+    resolution: {integrity: sha512-Y3wQdFg2Va6etvQ5I82yUhGdsKrcYox6p7FfL1LbK2J4V01F9TGlepTIhnK24t7koZibmg82KGglhA1XK5IsLQ==}
+    engines: {node: '>=10'}
+
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
@@ -2565,6 +2572,10 @@ packages:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
 
+  sirv@3.0.1:
+    resolution: {integrity: sha512-FoqMu0NCGBLCcAkS1qA+XJIQTR6/JHfQXl+uGteNCQ76T91DMUjPa9xfmeqMY3z80nLSg9yQmNjK0Px6RWsH/A==}
+    engines: {node: '>=18'}
+
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
@@ -2699,6 +2710,10 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
+  totalist@3.0.1:
+    resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
+    engines: {node: '>=6'}
+
   tough-cookie@5.1.2:
     resolution: {integrity: sha512-FVDYdxtnj0G6Qm/DhNPSb8Ju59ULcup3tuJxkFb5K8Bv2pUXILbf0xZWU8PX8Ov19OXljbUyveOFwRMwkXzO+A==}
     engines: {node: '>=16'}
@@ -2831,8 +2846,8 @@ packages:
       react-dom: '>=18.0.0'
       vike: '>=0.4.182'
 
-  vike@0.4.224:
-    resolution: {integrity: sha512-EesWnstUnG6AfPVWUKWa91tbmpz6oHWn7Hb/L8bRWGCSAyooPIZwWged9/oDIKiH1rLm5CmZixcFFPeChh4Bgg==}
+  vike@0.4.225:
+    resolution: {integrity: sha512-p8rAj7O9aZcV3dduwFKd6Thg/olrK7I+2Gr52GFYBUjgEYy24dZUTQYc7L79/j5n5QeGN6Alknq7uSW6QwmB3w==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -2854,8 +2869,8 @@ packages:
     peerDependencies:
       vite: ^2 || ^3 || ^4 || ^5 || ^6
 
-  vite@6.2.1:
-    resolution: {integrity: sha512-n2GnqDb6XPhlt9B8olZPrgMD/es/Nd1RdChF6CBD/fHW6pUyUTt2sQW2fPRX5GiD9XEa6+8A6A4f2vT6pSsE7Q==}
+  vite@6.2.2:
+    resolution: {integrity: sha512-yW7PeMM+LkDzc7CgJuRLMW2Jz0FxMOsVJ8Lv3gpgW9WLcb9cTW+121UEr1hvmfR7w3SegR5ItvYyzVz1vxNJgQ==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
     hasBin: true
     peerDependencies:
@@ -3620,6 +3635,8 @@ snapshots:
     dependencies:
       playwright: 1.51.0
 
+  '@polka/url@1.0.0-next.28': {}
+
   '@resvg/resvg-wasm@2.4.0': {}
 
   '@rollup/pluginutils@5.1.4(rollup@4.35.0)':
@@ -3830,7 +3847,7 @@ snapshots:
       - h3
       - hono
 
-  '@vercel/build-utils@10.4.0': {}
+  '@vercel/build-utils@10.5.1': {}
 
   '@vercel/edge-config-fs@0.1.0': {}
 
@@ -3878,13 +3895,13 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vercel/node@5.1.12(rollup@4.35.0)':
+  '@vercel/node@5.1.14(rollup@4.35.0)':
     dependencies:
       '@edge-runtime/node-utils': 2.3.0
       '@edge-runtime/primitives': 4.1.0
       '@edge-runtime/vm': 3.2.0
       '@types/node': 16.18.11
-      '@vercel/build-utils': 10.4.0
+      '@vercel/build-utils': 10.5.1
       '@vercel/error-utils': 2.0.3
       '@vercel/nft': 0.27.10(rollup@4.35.0)
       '@vercel/static-config': 3.0.0
@@ -3927,14 +3944,14 @@ snapshots:
       json-schema-to-ts: 1.6.4
       ts-morph: 12.0.0
 
-  '@vitejs/plugin-react@4.3.4(vite@6.2.1(@types/node@18.19.80))':
+  '@vitejs/plugin-react@4.3.4(vite@6.2.2(@types/node@18.19.80))':
     dependencies:
       '@babel/core': 7.26.9
       '@babel/plugin-transform-react-jsx-self': 7.25.9(@babel/core@7.26.9)
       '@babel/plugin-transform-react-jsx-source': 7.25.9(@babel/core@7.26.9)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 6.2.1(@types/node@18.19.80)
+      vite: 6.2.2(@types/node@18.19.80)
     transitivePeerDependencies:
       - supports-color
 
@@ -3945,13 +3962,13 @@ snapshots:
       chai: 5.2.0
       tinyrainbow: 2.0.0
 
-  '@vitest/mocker@3.0.8(vite@6.2.1(@types/node@18.19.80))':
+  '@vitest/mocker@3.0.8(vite@6.2.2(@types/node@18.19.80))':
     dependencies:
       '@vitest/spy': 3.0.8
       estree-walker: 3.0.3
       magic-string: 0.30.17
     optionalDependencies:
-      vite: 6.2.1(@types/node@18.19.80)
+      vite: 6.2.2(@types/node@18.19.80)
 
   '@vitest/pretty-format@3.0.8':
     dependencies:
@@ -5160,6 +5177,8 @@ snapshots:
 
   mri@1.2.0: {}
 
+  mrmime@2.0.1: {}
+
   ms@2.1.3: {}
 
   mz@2.7.0:
@@ -5487,6 +5506,12 @@ snapshots:
 
   signal-exit@4.1.0: {}
 
+  sirv@3.0.1:
+    dependencies:
+      '@polka/url': 1.0.0-next.28
+      mrmime: 2.0.1
+      totalist: 3.0.1
+
   slash@3.0.0: {}
 
   source-map-js@1.2.1: {}
@@ -5617,6 +5642,8 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
+
+  totalist@3.0.1: {}
 
   tough-cookie@5.1.2:
     dependencies:
@@ -5764,14 +5791,14 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike-react@0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.224(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.1(@types/node@18.19.80))):
+  vike-react@0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.225(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@18.19.80))):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-streaming: 0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.224(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.1(@types/node@18.19.80))
+      vike: 0.4.225(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@18.19.80))
 
-  vike@0.4.224(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.1(@types/node@18.19.80)):
+  vike@0.4.225(react-streaming@0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@6.2.2(@types/node@18.19.80)):
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.15
@@ -5785,11 +5812,12 @@ snapshots:
       json5: 2.2.3
       picomatch: 4.0.2
       semver: 7.7.1
+      sirv: 3.0.1
       source-map-support: 0.5.21
       tinyglobby: 0.2.12
     optionalDependencies:
       react-streaming: 0.3.48(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vite: 6.2.1(@types/node@18.19.80)
+      vite: 6.2.2(@types/node@18.19.80)
 
   vite-node@3.0.8(@types/node@18.19.80):
     dependencies:
@@ -5797,7 +5825,7 @@ snapshots:
       debug: 4.4.0
       es-module-lexer: 1.6.0
       pathe: 2.0.3
-      vite: 6.2.1(@types/node@18.19.80)
+      vite: 6.2.2(@types/node@18.19.80)
     transitivePeerDependencies:
       - '@types/node'
       - jiti
@@ -5812,11 +5840,11 @@ snapshots:
       - tsx
       - yaml
 
-  vite-plugin-wasm@3.4.1(vite@6.2.1(@types/node@18.19.80)):
+  vite-plugin-wasm@3.4.1(vite@6.2.2(@types/node@18.19.80)):
     dependencies:
-      vite: 6.2.1(@types/node@18.19.80)
+      vite: 6.2.2(@types/node@18.19.80)
 
-  vite@6.2.1(@types/node@18.19.80):
+  vite@6.2.2(@types/node@18.19.80):
     dependencies:
       esbuild: 0.25.1
       postcss: 8.5.3
@@ -5828,7 +5856,7 @@ snapshots:
   vitest@3.0.8(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@18.19.80):
     dependencies:
       '@vitest/expect': 3.0.8
-      '@vitest/mocker': 3.0.8(vite@6.2.1(@types/node@18.19.80))
+      '@vitest/mocker': 3.0.8(vite@6.2.2(@types/node@18.19.80))
       '@vitest/pretty-format': 3.0.8
       '@vitest/runner': 3.0.8
       '@vitest/snapshot': 3.0.8
@@ -5844,7 +5872,7 @@ snapshots:
       tinyexec: 0.3.2
       tinypool: 1.0.2
       tinyrainbow: 2.0.0
-      vite: 6.2.1(@types/node@18.19.80)
+      vite: 6.2.2(@types/node@18.19.80)
       vite-node: 3.0.8(@types/node@18.19.80)
       why-is-node-running: 2.3.0
     optionalDependencies:
