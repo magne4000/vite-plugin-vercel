@@ -22,9 +22,9 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@changesets/cli": "^2.28.1",
-    "@types/node": "^18.19.78",
+    "@types/node": "^18.19.86",
     "cross-env": "^7.0.3",
-    "playwright": "^1.51.0",
+    "playwright": "^1.51.1",
     "typescript": "^5.8.2"
   },
   "pnpm": {

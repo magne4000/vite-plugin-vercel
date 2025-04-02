@@ -44,18 +44,18 @@
     "vite": ">=6"
   },
   "devDependencies": {
-    "@types/node": "^18.19.78",
-    "@universal-middleware/express": "^0.4.8",
+    "@types/node": "^18.19.86",
+    "@universal-middleware/express": "^0.4.12",
     "@vercel/node": "^5.1.14",
-    "rollup": "^4.35.0",
+    "rollup": "^4.39.0",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.2"
+    "vite": "^6.2.4"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@universal-middleware/vercel": "^0.4.8",
+    "@universal-middleware/vercel": "^0.4.12",
     "@vercel/build-utils": "^10.5.1",
     "@vercel/nft": "^0.29.2",
     "@vercel/routing-utils": "^5.0.45.0.2",

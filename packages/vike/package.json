@@ -38,14 +38,14 @@
     "vite-plugin-vercel": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^18.19.78",
+    "@types/node": "^18.19.86",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.2",
+    "vite": "^6.2.4",
     "vite-plugin-vercel": "workspace:^"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "vike": "^0.4.225"
+    "vike": "^0.4.227"
   }
 }
