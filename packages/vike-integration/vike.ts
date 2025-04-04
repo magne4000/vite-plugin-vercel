@@ -2,6 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { prerender as prerenderCli } from "vike/api";
+import { getVikeConfig } from "vike/plugin";
 import type { PageContextServer } from "vike/types";
 import { normalizePath, type Plugin, type ResolvedConfig, type UserConfig } from "vite";
 import type {
@@ -193,6 +194,11 @@ export const prerender: ViteVercelPrerenderFn = async (
   resolvedConfig: ResolvedConfig,
 ): Promise<ViteVercelPrerenderRoute> => {
   const routes: ViteVercelPrerenderRoute = {};
+
+  const vikeConfig = getVikeConfig(resolvedConfig);
+  if (!vikeConfig.prerenderContext.isPrerenderingEnabled) {
+    return;
+  }
 
   await prerenderCli({
     viteConfig: {
