@@ -39,6 +39,7 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.86",
+    "@universal-middleware/core": "^0.4.6",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
     "vite": "^6.2.4",
@@ -46,6 +47,7 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "vike": "^0.4.227"
+    "vike": "^0.4.227",
+    "vike-server": "1.0.12-commit-147e763"
   }
 }

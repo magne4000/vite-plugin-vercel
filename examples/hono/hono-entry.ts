@@ -18,7 +18,7 @@ app.get(
   })(),
 );
 
-// All entries MUST be respect UniversalHandler interface
+// All entries MUST respect UniversalHandler interface
 export default ((request: Request) => {
   return app.fetch(request, {});
 }) satisfies UniversalHandler;

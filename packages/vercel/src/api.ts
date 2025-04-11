@@ -93,7 +93,7 @@ export async function vercelBuildApp(builder: ViteBuilder, otherEnvsOrder?: Reco
     vercel_client: 10,
     vercel_edge: 20,
     vercel_node: 30,
-  }; // Higher priority values should be at the end
+  };
 
   const envs = Object.values(builder.environments);
   envs.sort((a, b) => {
