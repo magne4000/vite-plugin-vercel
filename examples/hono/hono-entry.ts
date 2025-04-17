@@ -1,24 +1,13 @@
-import { createHandler } from "@universal-middleware/hono";
 import { Hono } from "hono";
-import type { UniversalHandler } from "@universal-middleware/core";
+import { apply, serve } from "@photonjs/core/hono";
 
 const app = new Hono();
 
-app.get(
-  "/hello",
-  createHandler(() => () => {
-    return new Response("hello");
-  })(),
-);
+// FIXME catch-all is called by apply, so further registered routes are not taken into account
+apply(app);
 
-app.get(
-  "/*",
-  createHandler(() => () => {
-    return new Response("OK");
-  })(),
-);
+app.get("/hello", () => new Response("hello"));
 
-// All entries MUST respect UniversalHandler interface
-export default ((request: Request) => {
-  return app.fetch(request, {});
-}) satisfies UniversalHandler;
+app.get("/*", () => new Response("OK"));
+
+export default serve(app, {});

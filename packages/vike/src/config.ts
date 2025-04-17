@@ -1,5 +1,7 @@
 import type { Config } from "vike/types";
 import { plugins } from "./plugins";
+import photonjs from "@photonjs/core/plugin";
+import { vikeServer } from "vike-server/plugin";
 
 export default {
   name: "vike-vercel",
@@ -7,7 +9,8 @@ export default {
     vike: ">=0.4.227",
   },
   vite: {
-    plugins: [...plugins],
+    // biome-ignore lint/suspicious/noExplicitAny: avoid type mismatch between different Vite versions
+    plugins: [...plugins, photonjs(), vikeServer()] as any[],
   },
   extends: ["import:vike-server/config"],
   meta: {
@@ -31,15 +34,13 @@ export default {
       env: { server: true, config: true },
       eager: true,
     },
+    server: {
+      env: { config: true },
+      global: true,
+    },
   },
   prerender: {
     partial: true,
-  },
-  server: {
-    entry: "virtual:vike-cloudflare:auto-entry",
-    // We're using rollup's noExternal instead
-    // @ts-ignore
-    standalone: false,
   },
 } satisfies Config;
 
@@ -52,11 +53,6 @@ declare global {
       server?: {
         entry: string;
       };
-    }
-    interface ConfigResolved {
-      server?: {
-        entry: string;
-      }[];
     }
   }
 }

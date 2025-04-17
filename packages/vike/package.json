@@ -47,7 +47,8 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
+    "@photonjs/core": "0.0.1-commit-b7a38b6",
     "vike": "^0.4.227",
-    "vike-server": "1.0.12-commit-147e763"
+    "vike-server": "1.0.14-commit-b9f830b"
   }
 }

@@ -4,15 +4,17 @@ import vercel from "vite-plugin-vercel";
 export default {
   plugins: [
     vercel({
-      entries: [
-        {
-          input: "hono-entry.ts",
+      entries: {
+        index: {
+          id: "hono-entry.ts",
           // catch-all
-          destination: "index",
-          route: ".*",
-          edge: Boolean(process.env.EDGE),
+          vercel: {
+            destination: "index",
+            route: ".*",
+            edge: Boolean(process.env.EDGE),
+          },
         },
-      ],
+      },
     }),
   ],
 } as UserConfig;

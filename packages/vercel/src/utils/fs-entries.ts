@@ -1,14 +1,14 @@
+/// <reference types="@photonjs/core/api" />
 import path from "node:path";
 import glob from "fast-glob";
 import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
 import { type VercelEndpointExports, vercelEndpointExports } from "../schemas/exports";
-import type { ViteVercelEntry } from "../types";
 
 export async function getEntriesFromFs(
   dir: string,
   { destination = dir, tryParseExports = true },
-): Promise<ViteVercelEntry[]> {
+): Promise<Record<string, Photon.Entry>> {
   const normalizedDir = normalizePath(dir);
   destination = normalizePath(destination);
   const apiEntries = glob
@@ -16,7 +16,7 @@ export async function getEntriesFromFs(
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith("_"));
 
-  const entryPoints: ViteVercelEntry[] = [];
+  const entryPoints: Record<string, Photon.Entry> = {};
 
   for (const filePath of apiEntries) {
     const outFilePath = pathRelativeTo(filePath, normalizedDir);
@@ -27,15 +27,18 @@ export async function getEntriesFromFs(
       xports = await extractExports(filePath);
     }
 
-    entryPoints.push({
-      input: filePath,
-      destination: path.posix.join(destination, parsed.dir, parsed.name),
-      route: true,
-      edge: xports?.edge,
-      isr: xports?.isr,
-      headers: xports?.headers,
-      streaming: xports?.streaming,
-    });
+    const key = path.posix.join(destination, parsed.dir, parsed.name);
+    entryPoints[key] = {
+      id: filePath,
+      vercel: {
+        destination: key,
+        route: true,
+        edge: xports?.edge,
+        isr: xports?.isr,
+        headers: xports?.headers,
+        streaming: xports?.streaming,
+      },
+    };
   }
 
   return entryPoints;

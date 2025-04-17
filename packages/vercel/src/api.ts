@@ -1,27 +1,10 @@
-import path from "node:path";
 import type { PluginContext } from "rollup";
 import type { BuildEnvironment, Plugin, ViteBuilder, ViteDevServer } from "vite";
 import { assert } from "./assert";
-import type { VercelOutputConfig, ViteVercelConfig, ViteVercelEntry } from "./types";
+import type { VercelOutputConfig, ViteVercelConfig } from "./types";
 
-export function createAPI(
-  entries: ViteVercelEntry[],
-  outfiles: ViteVercelOutFile[],
-  pluginConfig: ViteVercelConfig,
-  pluginContext?: PluginContext,
-) {
+export function createAPI(outfiles: ViteVercelOutFile[], pluginConfig: ViteVercelConfig) {
   return {
-    addVercelEntry(entry: ViteVercelEntry) {
-      entries.push(entry);
-      if (pluginContext?.environment.mode === "build") {
-        return pluginContext.emitFile({
-          type: "chunk",
-          fileName: `${path.posix.join("functions/", entry.destination)}.func/index.${entry.edge ? "js" : "mjs"}`,
-          id: `virtual:vite-plugin-vercel:entry:${entry.input}`,
-          importer: undefined,
-        });
-      }
-    },
     getOutFiles(): ViteVercelOutFile[] {
       assert(outfiles.length > 0, "getOutFiles() must be called after all outputs have been generated");
 
@@ -130,7 +113,7 @@ interface ViteVercelOutFileCommon {
 
 export interface ViteVercelOutFileChunk extends ViteVercelOutFileCommon {
   type: "chunk";
-  relatedEntry: ViteVercelEntry;
+  relatedEntry: Photon.Entry;
 }
 
 export interface ViteVercelOutFileAsset extends ViteVercelOutFileCommon {

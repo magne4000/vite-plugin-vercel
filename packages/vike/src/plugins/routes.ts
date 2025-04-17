@@ -5,7 +5,7 @@ import { normalizePath, type Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
 import type { ViteVercelRouteOverrides } from "vite-plugin-vercel/types";
 import { assert } from "../utils/assert";
-import { resolvedModuleId } from "./resolve";
+import { setPhotonEntry } from "@photonjs/core/api";
 
 type PrerenderContextOutputPage = {
   filePath: string;
@@ -83,7 +83,7 @@ function routesPluginBuild(): Plugin {
     },
 
     buildStart: {
-      order: "post",
+      // order: "post",
       handler() {
         if (this.environment.name === "vercel_client") {
           // Emit prerendered files
@@ -125,7 +125,6 @@ function routesPluginBuild(): Plugin {
         const isEdge = this.environment.name === "vercel_edge";
         const key = isEdge ? "__vike_edge" : "__vike_node";
 
-        const { addVercelEntry } = getVercelAPI(this);
         // By default, a unique Vike function is necessary per env (node, edge)
         // We only need to create a new function when either `isr` or `headers` is provided
         const currentEnvPages = vikePages.filter((p) => Boolean(p.edge) === isEdge);
@@ -133,13 +132,17 @@ function routesPluginBuild(): Plugin {
         for (const page of currentEnvPages.filter(
           (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
         )) {
-          addVercelEntry({
-            input: `${resolvedModuleId}/${i++}`,
-            destination: normalizePath(`${key}/${page.pageId}`),
-            isr: page.isr ? { expiration: page.isr } : undefined,
-            headers: page.headers,
-            route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
-            edge: isEdge,
+          i++;
+          setPhotonEntry(this, `vikeVercelEntry${i}`, {
+            id: `${this.environment.config.photonjs.entry.index.id}/${i}`,
+            route: page.route ?? undefined,
+            vercel: {
+              destination: normalizePath(`${key}/${page.pageId}`),
+              isr: page.isr ? { expiration: page.isr } : undefined,
+              headers: page.headers,
+              route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
+              edge: isEdge,
+            },
           });
         }
 
@@ -149,14 +152,20 @@ function routesPluginBuild(): Plugin {
           isEdge === Boolean(vikeConfig?.config.edge)
         ) {
           // Catch-all
-          addVercelEntry({
-            input: `${resolvedModuleId}/${i++}`,
-            destination: normalizePath(`${key}/__all`),
-            route: ".*",
-            edge: isEdge,
-            enforce: "post",
+          i++;
+          setPhotonEntry(this, `vikeVercelEntry${i}`, {
+            id: `${this.environment.config.photonjs.entry.index.id}/${i}`,
+            route: "/**",
+            vercel: {
+              destination: normalizePath(`${key}/__all`),
+              route: ".*",
+              edge: isEdge,
+              enforce: "post",
+            },
           });
         }
+
+        console.log(this.environment.config.photonjs);
       },
     },
 
