@@ -174,85 +174,84 @@ function routesPluginBuild(): Plugin {
 }
 
 // TODO refactor share code with build plugin above
-function routesPluginDev(): Plugin {
-  return {
-    name: "vike-vercel:routes:serve",
-    apply: "serve",
-
-    configureServer(server) {
-      const { addVercelEntry } = getVercelAPI(server);
-      const vikeConfig = getVikeConfig(server.config);
-
-      const vikePages: {
-        pageId: string;
-        isr: number | null;
-        edge: null | boolean;
-        headers: Record<string, string> | null;
-        route: string | null;
-      }[] = [];
-
-      for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
-        const rawIsr = extractIsr(page.config);
-        let isr = assertIsr(page.config);
-        const edge = assertEdge(page.config);
-        const headers = assertHeaders(page.config);
-
-        if (typeof page.config.route === "function" && isr) {
-          server.config.logger.warn(
-            `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
-          );
-          isr = null;
-        }
-
-        if (edge && rawIsr !== null && typeof rawIsr === "object") {
-          throw new Error(
-            `Page ${pageId}: ISR cannot be enabled for edge functions. Remove \`{ isr }\` config or set \`{ edge: false }\`.`,
-          );
-        }
-
-        const route = typeof page.config.route === "string" ? getParametrizedRoute(page.config.route) : null;
-
-        if (!route && headers !== null && headers !== undefined) {
-          server.config.logger.warn(
-            `Page ${pageId}: { headers } are not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
-          );
-        }
-
-        vikePages.push({
-          pageId,
-          isr,
-          edge,
-          headers,
-          route,
-        });
-      }
-
-      let i = 0;
-      // Specific routes
-      for (const page of vikePages.filter((p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined))) {
-        // FIXME: is this necessary in dev? Or catch-all is enough?
-        const key = page.edge ? "__vike_edge" : "__vike_node";
-        addVercelEntry({
-          input: `vike/universal-middleware?i=${i++}`,
-          destination: normalizePath(`${key}/${page.pageId}`),
-          isr: page.isr ? { expiration: page.isr } : undefined,
-          headers: page.headers,
-          route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
-          edge: Boolean(page.edge),
-        });
-      }
-
-      // Catch-all
-      addVercelEntry({
-        input: `vike/universal-middleware?i=${i++}`,
-        destination: normalizePath("__vike_node/__all"),
-        route: ".*",
-        edge: false,
-        enforce: "post",
-      });
-    },
-  };
-}
+// function routesPluginDev(): Plugin {
+//   return {
+//     name: "vike-vercel:routes:serve",
+//     apply: "serve",
+//
+//     configureServer(server) {
+//       const vikeConfig = getVikeConfig(server.config);
+//
+//       const vikePages: {
+//         pageId: string;
+//         isr: number | null;
+//         edge: null | boolean;
+//         headers: Record<string, string> | null;
+//         route: string | null;
+//       }[] = [];
+//
+//       for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
+//         const rawIsr = extractIsr(page.config);
+//         let isr = assertIsr(page.config);
+//         const edge = assertEdge(page.config);
+//         const headers = assertHeaders(page.config);
+//
+//         if (typeof page.config.route === "function" && isr) {
+//           server.config.logger.warn(
+//             `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
+//           );
+//           isr = null;
+//         }
+//
+//         if (edge && rawIsr !== null && typeof rawIsr === "object") {
+//           throw new Error(
+//             `Page ${pageId}: ISR cannot be enabled for edge functions. Remove \`{ isr }\` config or set \`{ edge: false }\`.`,
+//           );
+//         }
+//
+//         const route = typeof page.config.route === "string" ? getParametrizedRoute(page.config.route) : null;
+//
+//         if (!route && headers !== null && headers !== undefined) {
+//           server.config.logger.warn(
+//             `Page ${pageId}: { headers } are not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
+//           );
+//         }
+//
+//         vikePages.push({
+//           pageId,
+//           isr,
+//           edge,
+//           headers,
+//           route,
+//         });
+//       }
+//
+//       let i = 0;
+//       // Specific routes
+//       for (const page of vikePages.filter((p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined))) {
+//         // FIXME: is this necessary in dev? Or catch-all is enough?
+//         const key = page.edge ? "__vike_edge" : "__vike_node";
+//         addVercelEntry({
+//           input: `vike/universal-middleware?i=${i++}`,
+//           destination: normalizePath(`${key}/${page.pageId}`),
+//           isr: page.isr ? { expiration: page.isr } : undefined,
+//           headers: page.headers,
+//           route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
+//           edge: Boolean(page.edge),
+//         });
+//       }
+//
+//       // Catch-all
+//       addVercelEntry({
+//         input: `vike/universal-middleware?i=${i++}`,
+//         destination: normalizePath("__vike_node/__all"),
+//         route: ".*",
+//         edge: false,
+//         enforce: "post",
+//       });
+//     },
+//   };
+// }
 
 export function routesPlugins(): Plugin[] {
   return [
