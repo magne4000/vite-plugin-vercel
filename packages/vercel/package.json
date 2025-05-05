@@ -47,7 +47,7 @@
     "@types/node": "^18.19.86",
     "@universal-middleware/express": "^0.4.12",
     "@vercel/node": "^5.1.14",
-    "rollup": "^4.39.0",
+    "rollup": "^4.40.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
     "vite": "^6.2.4"
@@ -55,7 +55,7 @@
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@photonjs/core": "0.0.1-commit-b7a38b6",
+    "@photonjs/core": "0.0.1-commit-ff9a7b7",
     "@universal-middleware/vercel": "^0.4.12",
     "@vercel/build-utils": "^10.5.1",
     "@vercel/nft": "^0.29.2",

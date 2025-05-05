@@ -134,7 +134,7 @@ function routesPluginBuild(): Plugin {
         )) {
           i++;
           setPhotonEntry(this, `vikeVercelEntry${i}`, {
-            id: `${this.environment.config.photonjs.entry.index.id}/${i}`,
+            id: `${this.environment.config.photon.entry.index.id}/${i}`,
             route: page.route ?? undefined,
             vercel: {
               destination: normalizePath(`${key}/${page.pageId}`),
@@ -154,7 +154,7 @@ function routesPluginBuild(): Plugin {
           // Catch-all
           i++;
           setPhotonEntry(this, `vikeVercelEntry${i}`, {
-            id: `${this.environment.config.photonjs.entry.index.id}/${i}`,
+            id: `${this.environment.config.photon.entry.index.id}/${i}`,
             route: "/**",
             vercel: {
               destination: normalizePath(`${key}/__all`),
@@ -165,7 +165,7 @@ function routesPluginBuild(): Plugin {
           });
         }
 
-        console.log(this.environment.config.photonjs);
+        console.log(this.environment.config.photon);
       },
     },
 

@@ -11,7 +11,7 @@ export default {
     vike(),
     vercel({
       expiration: 25,
-      entries: [
+      entries: {
         ...(await getEntriesFromFs("endpoints", {
           // Auto mapping:
           //   endpoints/edge.ts -> /edge
@@ -21,7 +21,7 @@ export default {
           //   etc...
           destination: "",
         })),
-      ],
+      },
     }),
     plugins,
   ],

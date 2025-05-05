@@ -47,7 +47,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
       buildStart: {
         order: "post",
         handler() {
-          for (const entry of Object.values(this.environment.config.photonjs.entry)) {
+          for (const entry of Object.values(this.environment.config.photon.entry)) {
             if (entry.vercel) {
               if (
                 (this.environment.name === "vercel_edge" && entry.vercel?.edge) ||
