@@ -35,6 +35,11 @@ export function getConfig(
 
   const _enforcedRewrites = reorderEnforce(_rewrites)
     .map(r => {
+      // optional catch-all
+      // :[...optionalCatchAll] -> :catchAll* (global)
+      r.source = r.source.replaceAll(/:\[(\.\.\.)(.*)\]/g, ":$2*");
+
+      // catch-all
       // :...catchAll -> :catchAll+ (global)
       r.source = r.source.replaceAll(/:(\.\.\.)(.*)/g, ":$2+");
 
