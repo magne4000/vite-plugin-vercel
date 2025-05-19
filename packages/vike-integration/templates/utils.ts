@@ -8,5 +8,5 @@ export function getOriginalUrl(xNowRouteMatchesHeader: unknown, originalPath: un
     ? originalPath
     : matches && typeof matches?.["1"] === "string"
       ? matches["1"]
-      : url ?? "";
+      : (url ?? "");
 }

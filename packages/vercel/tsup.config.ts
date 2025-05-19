@@ -10,8 +10,8 @@ export default defineConfig([
     dts: {
       entry: "./src/index.ts",
       compilerOptions: {
-        paths: {}
-      }
+        paths: {},
+      },
     },
   },
 ]);

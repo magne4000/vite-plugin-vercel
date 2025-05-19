@@ -483,6 +483,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
               edge,
               headers,
               route: typeof route === "string" ? getParametrizedRoute(route) : null,
+              routeFn: typeof route === "function" ? route : null,
             };
           }),
         );
@@ -497,7 +498,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
 
             return pagesWithConfigs
               .filter((page) => {
-                if (!page.route) {
+                if (page.routeFn) {
                   console.warn(
                     `Page ${page.pageId}: headers is not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
                   );
@@ -530,7 +531,7 @@ export function vitePluginVercelVikeConfigPlugin(): Plugin {
                   return page.edge === true;
                 })
                 .map((page) => {
-                  if (!page.route) {
+                  if (page.routeFn) {
                     console.warn(
                       `Page ${page.pageId}: edge is not supported when using route function. Remove \`{ edge }\` config or use a route string if possible.`,
                     );
