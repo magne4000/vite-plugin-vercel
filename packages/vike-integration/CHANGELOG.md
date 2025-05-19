@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 9.0.5-beta.0
+
+### Patch Changes
+
+- 4efb81e: wip
+- Updated dependencies [4efb81e]
+  - vite-plugin-vercel@9.0.6-beta.0
+
 ## 9.0.4
 
 ### Patch Changes
