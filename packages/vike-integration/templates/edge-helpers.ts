@@ -49,9 +49,9 @@ export function getDefaultEmptyResponseHandler(): Response {
  * Send `httpResponse` through `response`
  */
 export function getDefaultResponseHandler(httpResponse: HttpResponse): Response {
-  const { statusCode, body, headers } = httpResponse;
+  const { statusCode, headers } = httpResponse;
 
-  return new Response(body, {
+  return new Response(httpResponse.getReadableWebStream(), {
     status: statusCode,
     headers,
   });
