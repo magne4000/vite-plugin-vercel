@@ -8,6 +8,7 @@
     "@vite-plugin-vercel/vike": "9.0.4"
   },
   "changesets": [
-    "pink-pets-deliver"
+    "pink-pets-deliver",
+    "proud-books-wear"
   ]
 }

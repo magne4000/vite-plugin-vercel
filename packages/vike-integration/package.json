@@ -1,6 +1,6 @@
 {
   "name": "@vite-plugin-vercel/vike",
-  "version": "9.0.5-beta.0",
+  "version": "9.0.5-beta.1",
   "type": "module",
   "files": [
     "dist",

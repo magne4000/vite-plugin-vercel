@@ -1,5 +1,13 @@
 # @magne4000/vite-plugin-vercel-ssr
 
+## 9.0.5-beta.1
+
+### Patch Changes
+
+- use urlOriginal and headersOriginal
+- Updated dependencies
+  - vite-plugin-vercel@9.0.6-beta.1
+
 ## 9.0.5-beta.0
 
 ### Patch Changes
