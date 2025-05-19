@@ -3,4 +3,4 @@
 "vite-plugin-vercel": patch
 ---
 
-wip
+fix(vike): streaming error in \_error pages
