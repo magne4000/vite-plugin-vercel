@@ -1,4 +1,4 @@
-# @magne4000/vite-plugin-vercel-ssr
+# @vite-plugin-vercel/vike
 
 ## 9.0.4
 

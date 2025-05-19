@@ -1,16 +1,10 @@
 import react from "@vitejs/plugin-react-swc";
-import ssr from "vike/plugin";
+import vike from "vike/plugin";
 import type { UserConfig } from "vite";
 import vercel from "vite-plugin-vercel";
 
 export default {
-  plugins: [
-    react(),
-    ssr({
-      prerender: true,
-    }),
-    vercel(),
-  ],
+  plugins: [react(), vike(), vercel()],
   vercel: {
     expiration: 25,
     additionalEndpoints: [

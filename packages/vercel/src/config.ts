@@ -33,18 +33,17 @@ export function getConfig(
     ...(rewrites ?? []),
   ];
 
-  const _enforcedRewrites = reorderEnforce(_rewrites)
-    .map(r => {
-      // optional catch-all
-      // :[...optionalCatchAll] -> :catchAll* (global)
-      r.source = r.source.replaceAll(/:\[(\.\.\.)(.*)\]/g, ":$2*");
+  const _enforcedRewrites = reorderEnforce(_rewrites).map((r) => {
+    // optional catch-all
+    // :[...optionalCatchAll] -> :catchAll* (global)
+    r.source = r.source.replaceAll(/:\[(\.\.\.)(.*)\]/g, ":$2*");
 
-      // catch-all
-      // :...catchAll -> :catchAll+ (global)
-      r.source = r.source.replaceAll(/:(\.\.\.)(.*)/g, ":$2+");
+    // catch-all
+    // :...catchAll -> :catchAll+ (global)
+    r.source = r.source.replaceAll(/:(\.\.\.)(.*)/g, ":$2+");
 
-      return r
-    });
+    return r;
+  });
 
   const { routes, error } = getTransformedRoutes({
     cleanUrls: resolvedConfig.vercel?.cleanUrls ?? true,
@@ -65,8 +64,8 @@ export function getConfig(
   ) {
     console.warn(
       'Did you forget to add `"continue": true` to your routes? See https://vercel.com/docs/build-output-api/v3/configuration#source-route\n' +
-      "If not, it is discouraged to use `vercel.config.routes` to override routes. " +
-      "Prefer using `vercel.rewrites` and `vercel.redirects`.",
+        "If not, it is discouraged to use `vercel.config.routes` to override routes. " +
+        "Prefer using `vercel.rewrites` and `vercel.redirects`.",
     );
   }
 

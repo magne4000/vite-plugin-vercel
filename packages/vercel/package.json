@@ -47,8 +47,8 @@
     "@vite-plugin-vercel/vike": "workspace:*",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
-    "vike": "^0.4.221",
-    "vite": "^5.4.11"
+    "vike": "^0.4.229",
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
