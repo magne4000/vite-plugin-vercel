@@ -27,6 +27,7 @@ export function getDefaultPageContextInit(request: Request) {
 
   return {
     urlOriginal: url,
+    headersOriginal: request.headers,
     body: request.body,
     cookies,
   };

@@ -14,8 +14,8 @@ export function getDefaultPageContextInit(request: VercelRequest) {
   const query: Record<string, string | string[]> = request.query ?? {};
   const url = getOriginalUrl(request.headers["x-now-route-matches"], query.__original_path, request.url);
   return {
-    url,
     urlOriginal: url,
+    headersOriginal: request.headers,
     body: request.body,
     cookies: request.cookies,
   };
