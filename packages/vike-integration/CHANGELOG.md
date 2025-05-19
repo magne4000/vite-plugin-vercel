@@ -1,28 +1,4 @@
-# @magne4000/vite-plugin-vercel-ssr
-
-## 9.0.5-beta.2
-
-### Patch Changes
-
-- wip
-- Updated dependencies
-  - vite-plugin-vercel@9.0.6-beta.2
-
-## 9.0.5-beta.1
-
-### Patch Changes
-
-- use urlOriginal and headersOriginal
-- Updated dependencies
-  - vite-plugin-vercel@9.0.6-beta.1
-
-## 9.0.5-beta.0
-
-### Patch Changes
-
-- 4efb81e: wip
-- Updated dependencies [4efb81e]
-  - vite-plugin-vercel@9.0.6-beta.0
+# @vite-plugin-vercel/vike
 
 ## 9.0.4
 
