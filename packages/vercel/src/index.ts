@@ -613,5 +613,17 @@ export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption
       },
     }),
     ...installPhoton("vite-plugin-vercel"),
+    // FIXME move to photon repo
+    // FIXME ensure enhance is called
+    ...installPhoton("@photonjs/node", {
+      resolveMiddlewares(mode) {
+        // TODO also for dev
+        if (mode !== "dev") {
+          return Object.entries(this.environment.config.photon.entry)
+            .filter(([k, v]) => k !== "index" && v.type === "universal-handler")
+            .map(([_, v]) => v.id);
+        }
+      },
+    }),
   ];
 }

@@ -41,6 +41,7 @@ export default {
   },
   prerender: {
     partial: true,
+    keepDistServer: true,
   },
 } satisfies Config;
 

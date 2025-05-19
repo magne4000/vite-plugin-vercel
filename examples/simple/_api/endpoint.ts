@@ -1,3 +1,3 @@
-export default async function handler(request: Request) {
+export default function handler() {
   return new Response("ENDPOINT");
 }

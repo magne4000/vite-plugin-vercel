@@ -28,8 +28,11 @@ export async function getEntriesFromFs(
     }
 
     const key = path.posix.join(destination, parsed.dir, parsed.name);
+    // TODO support type: 'server'
     entryPoints[key] = {
       id: filePath,
+      // FIXME properly convert to rou3 format
+      route: key,
       vercel: {
         destination: key,
         route: true,
