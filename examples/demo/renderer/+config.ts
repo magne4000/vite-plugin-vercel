@@ -33,5 +33,6 @@ export default {
       },
     },
   },
+  prerender: true,
   extends: config,
 } satisfies Config;
