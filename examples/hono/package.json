@@ -20,7 +20,7 @@
     "vite": "^6.3.5"
   },
   "dependencies": {
-    "@photonjs/core": "0.0.1-commit-22648f9",
+    "@photonjs/core": "0.0.1-commit-2aa7ff2",
     "vite-plugin-vercel": "workspace:*"
   }
 }

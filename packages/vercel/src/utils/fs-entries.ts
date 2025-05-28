@@ -9,7 +9,7 @@ import { type VercelEndpointExports, vercelEndpointExports } from "../schemas/ex
 export async function getEntriesFromFs(
   dir: string,
   { destination = dir, tryParseExports = true },
-): Promise<Record<string, Photon.Entry>> {
+): Promise<Record<string, Photon.EntryUniversalHandler>> {
   const normalizedDir = normalizePath(dir);
   destination = normalizePath(destination);
   const apiEntries = glob
