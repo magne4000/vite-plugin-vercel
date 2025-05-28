@@ -11,10 +11,10 @@ import {
   createRunnableDevEnvironment,
   type Environment,
   type EnvironmentOptions,
-  isRunnableDevEnvironment,
   mergeConfig,
   type Plugin,
   type PluginOption,
+  type RunnableDevEnvironment,
 } from "vite";
 import { createAPI, vercelBuildApp, type ViteVercelOutFile } from "./api";
 import { assert } from "./assert";
@@ -26,7 +26,7 @@ import { vercelCleanupPlugin } from "./plugins/clean-outdir";
 import { wasmPlugin } from "./plugins/wasm";
 import { vercelOutputPrerenderConfigSchema } from "./schemas/config/prerender-config";
 import type { ViteVercelConfig, ViteVercelRouteOverrides } from "./types";
-import { isPhotonMeta } from "@photonjs/core/api";
+import { isPhotonMeta, resolvePhotonConfig } from "@photonjs/core/api";
 import { installPhoton, photon } from "@photonjs/core/vite";
 import { photonEntryDestination, photonEntryDestinationDefault } from "./utils/destination";
 
@@ -80,6 +80,10 @@ function createVercelEnvironmentOptions(
 
 const nonEdgeServers = ["express", "fastify"];
 
+export function isRunnableDevEnvironment(environment: Environment): environment is RunnableDevEnvironment {
+  return "runner" in environment;
+}
+
 // TODO move to plugins folder
 function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const virtualEntry = "virtual:vite-plugin-vercel:entry";
@@ -104,8 +108,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     config(config, env) {
-      assert(config.photon, "Cannot find Photon config");
-      const entries = config.photon.entry as Photon.ConfigResolved["entry"];
+      const photon = resolvePhotonConfig(config.photon) as Photon.ConfigResolved;
       const outDirOverride: EnvironmentOptions = pluginConfig.outDir
         ? {
             build: {
@@ -113,7 +116,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
             },
           }
         : {};
-      const inputs = Object.values(entries).reduce(
+      const inputs = Object.values(photon.handlers).reduce(
         (acc, curr) => {
           const destination = photonEntryDestination(curr, ".func/index");
           if (curr.vercel?.edge) {
@@ -135,7 +138,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       if (Object.keys(inputs.edge).length > 0) {
         // See https://vercel.com/docs/functions/runtimes/edge#compatible-node.js-modules
         const external = ["async_hooks", "events", "buffer", "assert", "util"];
-        // In dev, we're running on node env, so we do not apply edge conditions
+        // In dev, we're running on node, so we do not apply edge conditions
         const conditions =
           env.command === "build"
             ? {
@@ -195,8 +198,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
       };
 
       return {
-        appType: "custom",
-        // equivalent to --app CLI option
         builder: {
           buildApp: async (builder) => {
             await vercelBuildApp(builder);
@@ -209,7 +210,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     configureServer: {
       order: "post",
       async handler(server) {
-        const entries = server.config.photon.entry;
+        const entries = server.config.photon.handlers;
         const transformedRoutes = getTransformedRoutes({
           rewrites: Object.values(entries).map((entry) => ({
             source: typeof entry.vercel?.route === "string" ? `(${entry.vercel.route})` : entryToPathtoregex(entry),
@@ -235,30 +236,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
             };
           });
 
-        let alreadyRunning: string | undefined = undefined;
-        // Only one server process can run, we run it in vercel_node env
-        if (entries.index) {
-          const devEnv = server.environments.vercel_node;
-
-          if (isRunnableDevEnvironment(devEnv)) {
-            const fileEntry = await devEnv.runner.import(entries.index.id);
-
-            // TODO we should have a reusable util defined in Photon for that
-            if (typeof fileEntry.default === "function") {
-              // Universal Handler
-              // Do nothing, handled by middleware
-            } else if (fileEntry.default) {
-              // App
-              alreadyRunning = entries.index.id;
-            } else {
-              // TODO better error message
-              throw new Error(`Unable to determine entry type of ${entries.index.id}`);
-            }
-          } else {
-            throw new Error(`${devEnv.name} environment is not Runnable`);
-          }
-        }
-
         // Inject Post Middleware that executes AFTER Vite's internal middlewares
         return () => {
           const routesWithAddedHeaders = routes.filter((r) => r.entry?.vercel?.headers);
@@ -281,13 +258,14 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           }
 
           // This middleware is in charge of resolving Vercel entries
+          // TODO move this middleware to photon with getMiddlewares
           server.middlewares.use(
             createMiddleware(() => async (request, ctx, runtime) => {
               const url = new URL(request.url);
 
               for (const r of routes) {
                 const found = r.re?.(url.pathname);
-                if (r.entry && found && r.entry.id !== alreadyRunning) {
+                if (r.entry && found) {
                   const devEnv = r.entry.vercel?.edge
                     ? server.environments.vercel_edge
                     : server.environments.vercel_node;
@@ -321,11 +299,6 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
                       return fileEntry.default(newRequest, ctx, runtime);
                     }
                     if (fileEntry.default) {
-                      if (alreadyRunning) {
-                        throw new Error(
-                          `Running multiple server is not supported (${alreadyRunning} and ${r.entry.id})`,
-                        );
-                      }
                       throw new Error("Server entry must be defined under `index` entry");
                     }
                     // TODO better error message
@@ -353,7 +326,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
           return "export default {};";
         }
 
-        const entries = this.environment.config.photon.entry;
+        const entries = this.environment.config.photon.handlers;
 
         const isEdge = this.environment.name === "vercel_edge";
         const fn = isEdge ? "createEdgeHandler" : "createNodeHandler";
@@ -499,7 +472,7 @@ function vercelPlugin(pluginConfig: ViteVercelConfig): Plugin {
     writeBundle(_opts, bundle) {
       if (this.environment.name !== "vercel_edge" && this.environment.name !== "vercel_node") return;
 
-      const entries = this.environment.config.photon.entry;
+      const entries = this.environment.config.photon.handlers;
       const entryMapByDestination = new Map(
         Object.values(entries).map((e) => [photonEntryDestination(e, ".func/index"), e]),
       );
@@ -607,23 +580,11 @@ export default function allPlugins(pluginConfig: ViteVercelConfig): PluginOption
     vercelPlugin(pluginConfig),
     ...bundlePlugin(pluginConfig),
     photon({
-      entry: pluginConfig.entries,
+      handlers: pluginConfig.entries,
       devServer: {
-        autoServeIndex: false,
+        env: "vercel_node",
       },
     }),
     ...installPhoton("vite-plugin-vercel"),
-    // FIXME move to photon repo
-    // FIXME ensure enhance is called
-    ...installPhoton("@photonjs/node", {
-      resolveMiddlewares(mode) {
-        // TODO also for dev
-        if (mode !== "dev") {
-          return Object.entries(this.environment.config.photon.entry)
-            .filter(([k, v]) => k !== "index" && v.type === "universal-handler")
-            .map(([_, v]) => v.id);
-        }
-      },
-    }),
   ];
 }

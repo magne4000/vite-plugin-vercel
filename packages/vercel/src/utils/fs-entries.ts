@@ -1,6 +1,7 @@
 /// <reference types="@photonjs/core/api" />
 import path from "node:path";
 import glob from "fast-glob";
+import '../types'
 import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
 import { type VercelEndpointExports, vercelEndpointExports } from "../schemas/exports";
@@ -16,7 +17,7 @@ export async function getEntriesFromFs(
     // from Vercel doc: Files with the underscore prefix are not turned into Serverless Functions.
     .filter((filepath) => !path.basename(filepath).startsWith("_"));
 
-  const entryPoints: Record<string, Photon.Entry> = {};
+  const entryPoints: Record<string, Photon.EntryUniversalHandler> = {};
 
   for (const filePath of apiEntries) {
     const outFilePath = pathRelativeTo(filePath, normalizedDir);
@@ -28,9 +29,9 @@ export async function getEntriesFromFs(
     }
 
     const key = path.posix.join(destination, parsed.dir, parsed.name);
-    // TODO support type: 'server'
     entryPoints[key] = {
       id: filePath,
+      type: "universal-handler",
       // FIXME properly convert to rou3 format
       route: key,
       vercel: {

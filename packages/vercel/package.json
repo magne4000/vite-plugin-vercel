@@ -45,18 +45,18 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.86",
-    "@universal-middleware/express": "^0.4.12",
+    "@universal-middleware/express": "^0.4.16",
     "@vercel/node": "^5.1.14",
     "rollup": "^4.40.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.4"
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@photonjs/core": "0.0.1-commit-d0c663b",
-    "@universal-middleware/vercel": "^0.4.12",
+    "@photonjs/core": "0.0.1-commit-22648f9",
+    "@universal-middleware/vercel": "^0.4.16",
     "@vercel/build-utils": "^10.5.1",
     "@vercel/nft": "^0.29.2",
     "@vercel/routing-utils": "^5.0.45.0.2",

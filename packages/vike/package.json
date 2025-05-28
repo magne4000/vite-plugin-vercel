@@ -39,15 +39,15 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.86",
-    "@universal-middleware/core": "^0.4.6",
+    "@universal-middleware/core": "^0.4.7",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.4",
+    "vite": "^6.3.5",
     "vite-plugin-vercel": "workspace:^"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@photonjs/core": "0.0.1-commit-d0c663b",
+    "@photonjs/core": "0.0.1-commit-22648f9",
     "vike": "^0.4.228",
     "vike-server": "1.0.15-commit-3ad9b16"
   }

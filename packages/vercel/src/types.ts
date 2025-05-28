@@ -53,7 +53,7 @@ export interface ViteVercelConfig {
    * If you are interfacing this plugin with a framework, entries can also be added through the api
    * @todo API example
    */
-  entries?: Record<string, Photon.Entry>;
+  entries?: Record<string, Photon.EntryUniversalHandler>;
   /**
    * Advanced configuration to override .vercel/output/config.json
    * @see {@link https://vercel.com/docs/build-output-api/v3/configuration#configuration}
@@ -110,10 +110,15 @@ export interface VercelEntryOptions {
   streaming?: boolean;
 }
 
+// TODO better declaration merging on Photon's side
 declare global {
   export namespace Photon {
     export interface EntryBase {
       vercel?: VercelEntryOptions;
+    }
+
+    export interface ConfigResolved {
+      handlers: Record<string, Photon.EntryUniversalHandler>;
     }
   }
 }
