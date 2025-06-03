@@ -148,6 +148,8 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         `;
       }
     },
+
+    sharedDuringBuild: true,
   };
 }
 

@@ -72,7 +72,7 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     config(config, env) {
-      const photon = resolvePhotonConfig(config.photon) as Photon.ConfigResolved;
+      const photon = resolvePhotonConfig(config.photon);
       const outDirOverride: EnvironmentOptions = pluginConfig.outDir
         ? {
             build: {
@@ -80,6 +80,8 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
             },
           }
         : {};
+
+      // TODO handle photon.server
       const inputs = Object.values(photon.handlers).reduce(
         (acc, curr) => {
           const destination = photonEntryDestination(curr, ".func/index");

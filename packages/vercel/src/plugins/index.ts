@@ -19,7 +19,8 @@ export function vercel(pluginConfig: ViteVercelConfig): PluginOption[] {
     loaderPlugin(pluginConfig),
     ...bundlePlugin(pluginConfig),
     photon({
-      handlers: pluginConfig.entries,
+      handlers: pluginConfig.handlers,
+      server: pluginConfig.server,
       devServer: {
         env: "vercel_node",
       },

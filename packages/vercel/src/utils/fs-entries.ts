@@ -1,7 +1,7 @@
 /// <reference types="@photonjs/core/api" />
 import path from "node:path";
 import glob from "fast-glob";
-import '../types'
+import "../types";
 import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
 import { type VercelEndpointExports, vercelEndpointExports } from "../schemas/exports";

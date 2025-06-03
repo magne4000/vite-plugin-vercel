@@ -50,10 +50,13 @@ export interface ViteVercelConfig {
   defaultSupportsResponseStreaming?: boolean;
   /**
    * Use `getEntriesFromFs` for mapping your filesystem routes to entries.
-   * If you are interfacing this plugin with a framework, entries can also be added through the api
-   * @todo API example
+   * If you are interfacing this plugin with a framework, entries can also be added through the Photon API
    */
-  entries?: Record<string, Photon.EntryUniversalHandler>;
+  handlers?: Record<string, Photon.EntryUniversalHandler>;
+  /**
+   * TODO
+   */
+  server?: Photon.EntryServer;
   /**
    * Advanced configuration to override .vercel/output/config.json
    * @see {@link https://vercel.com/docs/build-output-api/v3/configuration#configuration}

@@ -11,7 +11,7 @@ export default {
     vike(),
     vercel({
       expiration: 25,
-      entries: {
+      handlers: {
         ...(await getEntriesFromFs("endpoints", {
           // Auto mapping:
           //   endpoints/edge.ts -> /edge

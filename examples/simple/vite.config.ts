@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     vercel({
       // Scan `_api` directory for entries, and map them to `/api/*`
-      entries: await getEntriesFromFs("_api", {
+      handlers: await getEntriesFromFs("_api", {
         destination: "api",
       }),
     }),
