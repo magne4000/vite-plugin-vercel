@@ -1,4 +1,3 @@
-import path from "node:path";
 import { expect, it } from "vitest";
 import { vercelOutputVcConfigSchema } from "../../../../packages/vercel/src/schemas/config/vc-config";
 import { testSchema } from "../common/helpers";
@@ -20,7 +19,7 @@ prepareTestJsonFilesContent(
       expect(context.file).toStrictEqual({
         handler: "index.mjs",
         launcherType: "Nodejs",
-        runtime: "nodejs20.x",
+        runtime: "nodejs22.x",
         shouldAddHelpers: true,
         supportsResponseStreaming: true,
       });
