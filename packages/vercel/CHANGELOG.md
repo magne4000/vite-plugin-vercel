@@ -1,5 +1,23 @@
 # vite-plugin-vercel
 
+## 9.0.7
+
+### Patch Changes
+
+- Updated dependencies
+  - @vite-plugin-vercel/vike@9.0.6
+
+## 9.0.6
+
+### Patch Changes
+
+- 3f3dd9c: fix(vike): do not show route function warnings for non route function
+- 3f3dd9c: fix(vike): streaming error in \_error pages
+- Updated dependencies
+- Updated dependencies [3f3dd9c]
+- Updated dependencies [3f3dd9c]
+  - @vite-plugin-vercel/vike@9.0.5
+
 ## 9.0.5
 
 ### Patch Changes

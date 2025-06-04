@@ -1,5 +1,18 @@
 # @vite-plugin-vercel/vike
 
+## 9.0.6
+
+### MINOR BREAKING CHANGES
+
+- Update Vike to `0.4.229` or above.
+
+## 9.0.5
+
+### Patch Changes
+
+- 3f3dd9c: fix(vike): do not show route function warnings for non route function
+- 3f3dd9c: fix(vike): streaming error in \_error pages
+
 ## 9.0.4
 
 ### Patch Changes
