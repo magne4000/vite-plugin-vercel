@@ -37,7 +37,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
 
   return [
     {
-      name: "vite-plugin-vercel:bundle",
+      name: "vite-plugin-vercel:bundle-start",
       apply: "build",
 
       applyToEnvironment(env) {
