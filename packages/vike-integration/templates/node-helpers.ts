@@ -14,8 +14,8 @@ export function getDefaultPageContextInit(request: VercelRequest) {
   const query: Record<string, string | string[]> = request.query ?? {};
   const url = getOriginalUrl(request.headers["x-now-route-matches"], query.__original_path, request.url);
   return {
-    url,
     urlOriginal: url,
+    headersOriginal: request.headers,
     body: request.body,
     cookies: request.cookies,
   };
@@ -37,11 +37,12 @@ export function getDefaultEmptyResponseHandler(response: VercelResponse) {
  * @param httpResponse
  */
 export function getDefaultResponseHandler(response: VercelResponse, httpResponse: HttpResponse) {
-  const { statusCode, body, headers } = httpResponse;
+  const { statusCode, headers } = httpResponse;
 
   response.statusCode = statusCode;
   for (const [name, value] of headers) {
     response.setHeader(name, value);
   }
-  return response.end(body);
+
+  return httpResponse.pipe(response);
 }

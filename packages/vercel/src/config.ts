@@ -33,10 +33,22 @@ export function getConfig(
     ...(rewrites ?? []),
   ];
 
+  const _enforcedRewrites = reorderEnforce(_rewrites).map((r) => {
+    // optional catch-all
+    // :[...optionalCatchAll] -> :catchAll* (global)
+    r.source = r.source.replaceAll(/:\[(\.\.\.)(.*)\]/g, ":$2*");
+
+    // catch-all
+    // :...catchAll -> :catchAll+ (global)
+    r.source = r.source.replaceAll(/:(\.\.\.)(.*)/g, ":$2+");
+
+    return r;
+  });
+
   const { routes, error } = getTransformedRoutes({
     cleanUrls: resolvedConfig.vercel?.cleanUrls ?? true,
     trailingSlash: resolvedConfig.vercel?.trailingSlash,
-    rewrites: reorderEnforce(_rewrites),
+    rewrites: _enforcedRewrites,
     redirects: resolvedConfig.vercel?.redirects ? reorderEnforce(resolvedConfig.vercel?.redirects) : undefined,
     headers,
   });
