@@ -41,7 +41,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "vite": ">=6"
+    "vite": ">=7"
   },
   "devDependencies": {
     "@types/node": "^18.19.86",
@@ -50,12 +50,12 @@
     "rollup": "^4.40.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vite": "^6.3.5"
+    "vite": "^7.0.0-beta.1"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@photonjs/core": "0.0.1-commit-2aa7ff2",
+    "@photonjs/core": "0.0.1-commit-4c79c26",
     "@universal-middleware/vercel": "^0.4.16",
     "@vercel/build-utils": "^10.5.1",
     "@vercel/nft": "^0.29.2",

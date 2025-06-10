@@ -17,10 +17,10 @@
     "cross-env": "^7.0.3",
     "hono": "^4.7.5",
     "typescript": "^5.8.2",
-    "vite": "^6.3.5"
+    "vite": "^7.0.0-beta.1"
   },
   "dependencies": {
-    "@photonjs/core": "0.0.1-commit-2aa7ff2",
+    "@photonjs/core": "0.0.1-commit-4c79c26",
     "vite-plugin-vercel": "workspace:*"
   }
 }

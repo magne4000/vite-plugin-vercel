@@ -10,7 +10,6 @@ import type { ViteVercelConfig, ViteVercelRouteOverrides } from "../types";
 import { resolvePhotonConfig } from "@photonjs/core/api";
 import path from "node:path";
 import { photonEntryDestination } from "../utils/destination";
-import { vercelBuildApp } from "../api";
 import { getConfig } from "../config";
 import { joinAbsolute } from "../helpers";
 import fs from "node:fs/promises";
@@ -71,7 +70,17 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
       return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
     },
 
+    buildApp: {
+      order: "post",
+      async handler(builder) {
+        await builder.build(builder.environments.vercel_client);
+        await builder.build(builder.environments.vercel_edge);
+        await builder.build(builder.environments.vercel_node);
+      },
+    },
+
     config(config, env) {
+      const isDev = env.command === "serve";
       const photon = resolvePhotonConfig(config.photon);
       const outDirOverride: EnvironmentOptions = pluginConfig.outDir
         ? {
@@ -81,17 +90,16 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
           }
         : {};
 
-      // TODO handle photon.server
+      // A handler is either attached to a server, or standalone
       const inputs = Object.values(photon.handlers).reduce(
         (acc, curr) => {
           const destination = photonEntryDestination(curr, ".func/index");
-          if (curr.vercel?.edge) {
-            // .vercel/output/**/*.func/index.js
-            acc.edge[destination] = `${virtualEntry}:${curr.id}`;
-          } else {
-            // .vercel/output/**/*.func/index.mjs
-            acc.node[destination] = `${virtualEntry}:${curr.id}`;
-          }
+          const nodeOrEdge = curr.vercel?.edge ? "edge" : "node";
+          acc[nodeOrEdge][destination] = isDev
+            ? // In dev, all entries are loaded under a unique instance of the server
+              `${virtualEntry}:${curr.id}`
+            : // In prod, each entry is wrapped with the server entry
+              `${virtualEntry}:${photon.server}?photonCondition=${nodeOrEdge}&photonHandlerId=${curr.id}`;
 
           return acc;
         },
@@ -105,12 +113,12 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
         // See https://vercel.com/docs/functions/runtimes/edge#compatible-node.js-modules
         const external = ["async_hooks", "events", "buffer", "assert", "util"];
         // In dev, we're running on node, so we do not apply edge conditions
-        const conditions =
-          env.command === "build"
-            ? {
-                conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
-              }
-            : {};
+        const conditions = !isDev
+          ? {
+              conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
+            }
+          : {};
+
         environments.vercel_edge = createVercelEnvironmentOptions(
           inputs.edge,
           "js",
@@ -162,11 +170,6 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
       };
 
       return {
-        builder: {
-          buildApp: async (builder) => {
-            await vercelBuildApp(builder);
-          },
-        },
         environments,
       };
     },
