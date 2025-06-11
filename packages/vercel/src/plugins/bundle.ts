@@ -47,19 +47,18 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
       buildStart: {
         order: "post",
         handler() {
+          // TODO photon.server
           for (const entry of Object.values(this.environment.config.photon.handlers)) {
-            if (entry.vercel) {
-              if (
-                (this.environment.name === "vercel_edge" && entry.vercel?.edge) ||
-                (this.environment.name === "vercel_node" && !entry.vercel?.edge)
-              ) {
-                this.emitFile({
-                  type: "chunk",
-                  fileName: `${photonEntryDestination(entry, ".func/index")}.${entry.vercel.edge ? "js" : "mjs"}`,
-                  id: `virtual:vite-plugin-vercel:entry:${entry.id}`,
-                  importer: undefined,
-                });
-              }
+            if (
+              (this.environment.name === "vercel_edge" && entry.vercel?.edge) ||
+              (this.environment.name === "vercel_node" && !entry.vercel?.edge)
+            ) {
+              this.emitFile({
+                type: "chunk",
+                fileName: `${photonEntryDestination(entry, ".func/index")}.${entry.vercel?.edge ? "js" : "mjs"}`,
+                id: `virtual:vite-plugin-vercel:entry:${entry.id}`,
+                importer: undefined,
+              });
             }
           }
         },

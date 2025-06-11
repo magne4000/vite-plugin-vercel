@@ -6,7 +6,6 @@ import { getNodeVersion, type NodeVersion } from "@vercel/build-utils";
 import { vercelOutputPrerenderConfigSchema } from "../schemas/config/prerender-config";
 import { assert } from "../assert";
 import path from "node:path";
-import { isPhotonMeta } from "@photonjs/core/api";
 
 const DUMMY = "__DUMMY__";
 const nonEdgeServers = ["express", "fastify"];
@@ -39,14 +38,15 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
           return "export default {};";
         }
 
-        const entries = this.environment.config.photon.handlers;
+        const photonHandlers = this.environment.config.photon.handlers;
+        const photonServer = this.environment.config.photon.server as Photon.EntryServer;
 
         const isEdge = this.environment.name === "vercel_edge";
-        const fn = isEdge ? "createEdgeHandler" : "createNodeHandler";
         const [, , , ..._input] = id.split(":");
         const input = _input.join(":");
 
-        const entry = Object.values(entries).find((e) => e.id === input);
+        const entry =
+          photonServer.id === input ? photonServer : Object.values(photonHandlers).find((e) => e.id === input);
 
         if (!entry) {
           throw new Error(`Unable to find entry for "${input}"`);
@@ -78,6 +78,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         }
 
         // Generate rewrites
+        // TODO entry.route
         if (entry.vercel?.route) {
           pluginConfig.rewrites ??= [];
           const source = typeof entry.vercel.route === "string" ? `(${entry.vercel.route})` : entryToPathtoregex(entry);
@@ -103,48 +104,29 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
           }
         }
 
-        const resolved = await this.resolve(input, undefined, {
-          isEntry: true,
-        });
-        assert(resolved, `Failed to resolve input ${input}`);
+        const fn = isEdge ? "createEdgeHandler" : "createNodeHandler";
+        const isServerEntry = entry.type === "server";
 
-        let appToHandler = (app: string) => app;
-
-        if (isPhotonMeta(resolved.meta)) {
-          // Ensures photon meta is up to date!
-          await this.load({ ...resolved, resolveDependencies: true });
-
-          if (resolved.meta.photon.type === "server") {
-            if (isEdge) {
-              assert(
-                nonEdgeServers.includes(resolved.meta.photon.server),
-                `${resolved.meta.photon.server} is not compatible with Vercel Edge target. Either use another server like Hono or change target to Node`,
-              );
-            }
-            // Convert server to Universal Handler
-
-            switch (resolved.meta.photon.server) {
-              case "hono": {
-                appToHandler = (app) => `${app}.handler`;
-                break;
-              }
-              // TODO implement other compatible servers, and probably move that into UM or Photon
-              default:
-                assert(
-                  false,
-                  `${resolved.meta.photon.server} is not compatible with Vercel. Use a compatible server like Hono`,
-                );
-            }
+        if (isServerEntry) {
+          assert(entry.server, `Could not determine server for entry ${entry.id}`);
+          if (isEdge) {
+            assert(
+              nonEdgeServers.includes(entry.server),
+              `${entry.server} is not compatible with Vercel Edge target. Either use another server like Hono or change target to Node`,
+            );
           }
-          // Otherwise, fallback to Universal Handler
         }
+
+        const importFrom = isServerEntry
+          ? `@universal-middleware/vercel/${entry.server}`
+          : "@universal-middleware/vercel";
 
         //language=javascript
         return `
-          import { ${fn} } from "vite-plugin-vercel/universal-middleware";
-          import handler from "${resolved.id}";
+          import { ${fn} } from "photon:resolve-from-photon:${importFrom}";
+          import handler from "${entry.id}";
 
-          export default ${fn}(() => ${appToHandler("handler")})();
+          export default ${fn}(() => handler)();
         `;
       }
     },

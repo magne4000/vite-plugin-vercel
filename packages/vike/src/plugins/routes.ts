@@ -5,7 +5,7 @@ import { normalizePath, type Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
 import type { ViteVercelRouteOverrides } from "vite-plugin-vercel/types";
 import { assert } from "../utils/assert";
-import { setPhotonEntry } from "@photonjs/core/api";
+import { setPhotonHandler } from "@photonjs/core/api";
 
 type PrerenderContextOutputPage = {
   filePath: string;
@@ -133,8 +133,9 @@ function routesPluginBuild(): Plugin {
           (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
         )) {
           i++;
-          setPhotonEntry(this, `vikeVercelEntry${i}`, {
-            id: `${this.environment.config.photon.entry.index.id}/${i}`,
+          setPhotonHandler(this, `${key}/${page.pageId}`, {
+            id: `${this.environment.config.photon.server.id}?i=${i}`,
+            type: "universal-handler",
             route: page.route ?? undefined,
             vercel: {
               destination: normalizePath(`${key}/${page.pageId}`),
@@ -153,11 +154,12 @@ function routesPluginBuild(): Plugin {
         ) {
           // Catch-all
           i++;
-          setPhotonEntry(this, `vikeVercelEntry${i}`, {
-            id: `${this.environment.config.photon.entry.index.id}/${i}`,
+          setPhotonHandler(this, `${key}/__catch_all`, {
+            id: `${this.environment.config.photon.server.id}?i=${i}`,
+            type: "universal-handler",
             route: "/**",
             vercel: {
-              destination: normalizePath(`${key}/__all`),
+              destination: normalizePath(`${key}/__catch_all`),
               route: ".*",
               edge: isEdge,
               enforce: "post",
