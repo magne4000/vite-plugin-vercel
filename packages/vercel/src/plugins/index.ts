@@ -10,6 +10,14 @@ import { loaderPlugin } from "./loader";
 import { devServerPlugin } from "./devServer";
 
 export function vercel(pluginConfig: ViteVercelConfig): PluginOption[] {
+  const additionalConfig: Record<string, unknown> = {};
+  if (pluginConfig.handlers) {
+    additionalConfig.handlers = pluginConfig.handlers;
+  }
+  if (pluginConfig.server) {
+    additionalConfig.server = pluginConfig.server;
+  }
+
   return [
     vercelCleanupPlugin(),
     wasmPlugin(),
@@ -19,13 +27,18 @@ export function vercel(pluginConfig: ViteVercelConfig): PluginOption[] {
     loaderPlugin(pluginConfig),
     ...bundlePlugin(pluginConfig),
     photon({
-      handlers: pluginConfig.handlers,
-      server: pluginConfig.server,
+      ...additionalConfig,
       devServer: {
         env: "vercel_node",
       },
     }),
-    ...installPhoton("vite-plugin-vercel"),
+    ...installPhoton("vite-plugin-vercel", {
+      resolveMiddlewares(env) {
+        if (env === "dev") {
+          return "vite-plugin-vercel/universal-middleware/dev";
+        }
+      },
+    }),
   ];
 }
 

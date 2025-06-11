@@ -32,8 +32,7 @@ export async function getEntriesFromFs(
     entryPoints[key] = {
       id: filePath,
       type: "universal-handler",
-      // FIXME properly convert to rou3 format
-      route: key,
+      route: path.posix.join("/", key),
       vercel: {
         destination: key,
         route: true,

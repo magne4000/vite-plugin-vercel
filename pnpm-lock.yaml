@@ -6,7 +6,7 @@ settings:
 
 overrides:
   path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
-  '@photonjs/core': 0.0.1-commit-4c79c26
+  '@photonjs/core': 0.0.1-commit-1e738e4
   vite: ^7.0.0-beta.1
 
 importers:
@@ -102,8 +102,8 @@ importers:
         specifier: ^18.3.6
         version: 18.3.6(@types/react@18.3.20)
       '@universal-middleware/core':
-        specifier: ^0.4.7
-        version: 0.4.7(hono@4.7.8)
+        specifier: ^0.4.8
+        version: 0.4.8(hono@4.7.8)
       '@vercel/node':
         specifier: ^5.1.14
         version: 5.1.14(rollup@4.40.1)
@@ -123,8 +123,8 @@ importers:
   examples/hono:
     dependencies:
       '@photonjs/core':
-        specifier: 0.0.1-commit-4c79c26
-        version: 0.0.1-commit-4c79c26(vite@7.0.0-beta.1(@types/node@18.19.86))
+        specifier: 0.0.1-commit-1e738e4
+        version: 0.0.1-commit-1e738e4(vite@7.0.0-beta.1(@types/node@18.19.86))
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vercel
@@ -176,11 +176,14 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       '@photonjs/core':
-        specifier: 0.0.1-commit-4c79c26
-        version: 0.0.1-commit-4c79c26(vite@7.0.0-beta.1(@types/node@18.19.86))
+        specifier: 0.0.1-commit-1e738e4
+        version: 0.0.1-commit-1e738e4(vite@7.0.0-beta.1(@types/node@18.19.86))
+      '@universal-middleware/core':
+        specifier: ^0.4.8
+        version: 0.4.8(hono@4.7.8)
       '@universal-middleware/vercel':
-        specifier: ^0.4.16
-        version: 0.4.16(hono@4.7.8)
+        specifier: ^0.4.17
+        version: 0.4.17
       '@vercel/build-utils':
         specifier: ^10.5.1
         version: 10.5.1
@@ -213,8 +216,8 @@ importers:
         specifier: ^18.19.86
         version: 18.19.86
       '@universal-middleware/express':
-        specifier: ^0.4.16
-        version: 0.4.16(hono@4.7.8)
+        specifier: ^0.4.17
+        version: 0.4.17(hono@4.7.8)
       '@vercel/node':
         specifier: ^5.1.14
         version: 5.1.14(rollup@4.40.1)
@@ -237,21 +240,21 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       '@photonjs/core':
-        specifier: 0.0.1-commit-4c79c26
-        version: 0.0.1-commit-4c79c26(vite@7.0.0-beta.1(@types/node@18.19.86))
+        specifier: 0.0.1-commit-1e738e4
+        version: 0.0.1-commit-1e738e4(vite@7.0.0-beta.1(@types/node@18.19.86))
       vike:
         specifier: ^0.4.228
         version: 0.4.228(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0-beta.1(@types/node@18.19.86))
       vike-server:
         specifier: 1.0.15-commit-3ad9b16
-        version: 1.0.15-commit-3ad9b16(hono@4.7.8)(vike@0.4.228(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0-beta.1(@types/node@18.19.86)))(vite@7.0.0-beta.1(@types/node@18.19.86))
+        version: 1.0.15-commit-3ad9b16(vike@0.4.228(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0-beta.1(@types/node@18.19.86)))(vite@7.0.0-beta.1(@types/node@18.19.86))
     devDependencies:
       '@types/node':
         specifier: ^18.19.86
         version: 18.19.86
       '@universal-middleware/core':
-        specifier: ^0.4.7
-        version: 0.4.7(hono@4.7.8)
+        specifier: ^0.4.8
+        version: 0.4.8(hono@4.7.8)
       tsup:
         specifier: ^8.4.0
         version: 8.4.0(postcss@8.5.4)(typescript@5.8.2)
@@ -975,8 +978,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@photonjs/core@0.0.1-commit-4c79c26':
-    resolution: {integrity: sha512-tmgD1qdIIkRDHkcfFgIwCUEtcEH9q/OWhC/9yY1onFjOUY5DSiH19tFu5SBh5SCm8mt2Y04al8cGKjacmghxUQ==}
+  '@photonjs/core@0.0.1-commit-1e738e4':
+    resolution: {integrity: sha512-CL9yLDkBipj4sVBkoTFPSrAg6TwicHGwq2D49iffey/SBA0cDu/N3E5y6hwFYvPIciua/zmBe8xrSkwSk6pawQ==}
     peerDependencies:
       vite: ^7.0.0-beta.1
     peerDependenciesMeta:
@@ -1199,22 +1202,22 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
 
-  '@universal-middleware/cloudflare@0.4.8':
-    resolution: {integrity: sha512-d6wDQYFdKPCXt+gnuN3eb3chMuY3K8yYvxRVYTDTxOm5kRH1/sxDBAchvoeFaPTg5j8gps53nBQnVsNW6kBdGA==}
+  '@universal-middleware/cloudflare@0.4.9':
+    resolution: {integrity: sha512-a0LJnsk0LEClJvkfBmAPMrbPTEpwnAr7JZcTZ8DCp32xXI/05cXBzJaHVsvh2lQyLCa8yShAGV0RQ3jQb/sVWQ==}
 
   '@universal-middleware/compress@0.2.30':
     resolution: {integrity: sha512-Qk6Yt3DOHxYYlS9QGF+VJQwCLXB4BSKuJZ9/UpDp+x8VOq//j+aJuEg8H2VAo2XEBg/amqPmw+gIesFKTLXEWw==}
 
-  '@universal-middleware/core@0.4.7':
-    resolution: {integrity: sha512-Q+ZwiQAm/yZVmtJCZx6U4yLQF10AQ9URcCGxcIdUgLoEOHAg+uADcxAliKfJv463kVECnLI2ZamsRDDOSjc36A==}
+  '@universal-middleware/core@0.4.8':
+    resolution: {integrity: sha512-sN9CCF7NhTiFy1SfzMjipEOtFkvnB8bKgD04wkQYcGvShgvDUg1PSS0x18n0zdJOVBKE0YKvk9/RGKL6NOGg6Q==}
     peerDependencies:
-      '@cloudflare/workers-types': ^4.20250327.0
+      '@cloudflare/workers-types': ^4.20250607.0
       '@hattip/core': ^0.0.49
       '@webroute/route': ^0.8.0
-      elysia: ^1.2.25
-      fastify: ^5.2.2
-      h3: ^1.15.1
-      hono: ^4.7.5
+      elysia: ^1.3.4
+      fastify: ^5.3.3
+      h3: ^1.15.3
+      hono: ^4.7.11
     peerDependenciesMeta:
       '@cloudflare/workers-types':
         optional: true
@@ -1234,29 +1237,29 @@ packages:
   '@universal-middleware/elysia@0.4.8':
     resolution: {integrity: sha512-6cDEPq96blz5x17rsNJjRmDqD4o0XrGB+6lFElEThtIBAUn1Y38OqMn1+yf7Ycdc5w45mr4T1uimfH9tAdU2Ug==}
 
-  '@universal-middleware/elysia@0.5.1':
-    resolution: {integrity: sha512-rwd+67iZ15zRHcYm+ERCbgJh+ESsTugksvZ3/aONcc0qKbzvcPqK8IBpZBM+3YKmd9r8JOSAKW+ECeVO2oYR6Q==}
+  '@universal-middleware/elysia@0.5.2':
+    resolution: {integrity: sha512-J6sHY7PG24q0chqSJMNNwW2PHbUgpRTuodXI/3dc0Y99TGRrEYa5d4oo+rloaEcWU/0PLWkBwZ/fOrrSRw6T5A==}
 
-  '@universal-middleware/express@0.4.16':
-    resolution: {integrity: sha512-RK8EiY2WJUCPNkk0DqL7A9T/Fn0Mkp7P+fQgWf6Z/Nd7rzih5mVBUNt73w7FtMX8LxOhK43/1CmO8O1JL24V0w==}
+  '@universal-middleware/express@0.4.17':
+    resolution: {integrity: sha512-gAPKbhb793y3Swiw5MfAOXx5ZUOWIs0NxFNN4x0a8q+djIhErI2skHaGr2+lxkTDstaq1oZ3SPUwEAY2f6KCww==}
 
-  '@universal-middleware/fastify@0.5.18':
-    resolution: {integrity: sha512-SaE2d0zOFmAIrC/AK48MRJW0FgohmuplUstUdyfr+BPLSPHZ3cPIwhWjgA8DLVhQXzUmleK02bXByBK3r/xP7g==}
+  '@universal-middleware/fastify@0.5.19':
+    resolution: {integrity: sha512-njRduxckcHnPM8yPx2YAx4Uf06KuDrh8m3RJ/LdEWBmJQqCLxuQsJpwoYUYvb9PeVm319NyYLX3veq1hNDZTnA==}
 
-  '@universal-middleware/h3@0.4.10':
-    resolution: {integrity: sha512-tG+5hfIYrLKrX3kGTMRCWx44Q2mV2DJMda+Rjryk+vgEWWaQVCtUGkAa2IqrM8m0L/sVf9ypQNK/ucQGy7naeA==}
+  '@universal-middleware/h3@0.4.11':
+    resolution: {integrity: sha512-jbRHhQ0TJ3XN0BGRrI8c117fE2QLrmjExOCUh5/qDBjxEx0RdVDUJDXypdQJ+PiD8H+kBAWWFm7y/DEsYpXPAg==}
 
-  '@universal-middleware/hattip@0.4.9':
-    resolution: {integrity: sha512-omPJvUx1mqeWeQa/KH6sz9k6hXa1dK6dguKOsYKjJBXC6wcgEX8dB7wTf7cGqeleFDpXUbPJ+gFg1M0iwlvunQ==}
+  '@universal-middleware/hattip@0.4.10':
+    resolution: {integrity: sha512-uANsOphYNxy0Ed0cL41q86gKYJqaxa83HmRRONfdVDB3v7yFQYgeYVFg9/fdC2oj9vNB9REp1eKlsjPi2Kce9A==}
 
-  '@universal-middleware/hono@0.4.12':
-    resolution: {integrity: sha512-4AVRzhmaEAMiWGnckdmoxsJqOhndILFb5Rma2PczP9D4QjuEWSxWEbXWoxieZVZW5Umer0c12hhlUstnsRZPMg==}
+  '@universal-middleware/hono@0.4.13':
+    resolution: {integrity: sha512-PdvCWKmHlHyhq4rHkD2IjPLdpcK9BflBuNNWKYm4ctUkWLCLtPw/cGc3RQxcFaRJQ2//GCP+OLBOAqhKxSiqEw==}
 
   '@universal-middleware/sirv@0.1.20':
     resolution: {integrity: sha512-ToSuHZPelt2BtNLwJumSqtaQ3KuQVCqeEA9CgDum0cH1qfjZci9fnknNFQ2vhi4CdUkACxPfDne5ddI810+ihg==}
 
-  '@universal-middleware/vercel@0.4.16':
-    resolution: {integrity: sha512-k1tytnp39VVJmpIYrjGJCg3kt6w20hs0F3emYbENFN81XgZ7efTkm/GeItivpfmv6UpDQamAx4u8td5Rflb/Ng==}
+  '@universal-middleware/vercel@0.4.17':
+    resolution: {integrity: sha512-VTKXnACio5HqX927/PpmCT2vrWLb+x6Cd+/FJImtFOaW0HhQSju6NxIlyIIpH/KxC2lW4LJxisqJJktCBgYJaw==}
 
   '@vercel/build-utils@10.5.1':
     resolution: {integrity: sha512-BtqwEmU1AoITpd0KxYrdQOwyKZL8RKba+bWxI8mr3gXPQZWRAE9ok1zF0AXfvMGCstYPHBPNolZGDSfWmY2jqg==}
@@ -3878,19 +3881,19 @@ snapshots:
   '@oxc-transform/binding-win32-x64-msvc@0.64.0':
     optional: true
 
-  '@photonjs/core@0.0.1-commit-4c79c26(vite@7.0.0-beta.1(@types/node@18.19.86))':
+  '@photonjs/core@0.0.1-commit-1e738e4(vite@7.0.0-beta.1(@types/node@18.19.86))':
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.5
-      '@universal-middleware/cloudflare': 0.4.8(hono@4.7.8)
+      '@universal-middleware/cloudflare': 0.4.9(hono@4.7.8)
       '@universal-middleware/compress': 0.2.30
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
-      '@universal-middleware/elysia': 0.5.1(hono@4.7.8)
-      '@universal-middleware/express': 0.4.16(hono@4.7.8)
-      '@universal-middleware/fastify': 0.5.18(hono@4.7.8)
-      '@universal-middleware/h3': 0.4.10(hono@4.7.8)
-      '@universal-middleware/hattip': 0.4.9(hono@4.7.8)
-      '@universal-middleware/hono': 0.4.12(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
+      '@universal-middleware/elysia': 0.5.2(hono@4.7.8)
+      '@universal-middleware/express': 0.4.17(hono@4.7.8)
+      '@universal-middleware/fastify': 0.5.19(hono@4.7.8)
+      '@universal-middleware/h3': 0.4.11(hono@4.7.8)
+      '@universal-middleware/hattip': 0.4.10(hono@4.7.8)
+      '@universal-middleware/hono': 0.4.13(hono@4.7.8)
       '@universal-middleware/sirv': 0.1.20
       arktype: 2.1.20
       estree-walker: 3.0.3
@@ -4085,9 +4088,9 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@universal-middleware/cloudflare@0.4.8(hono@4.7.8)':
+  '@universal-middleware/cloudflare@0.4.9(hono@4.7.8)':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4099,16 +4102,16 @@ snapshots:
 
   '@universal-middleware/compress@0.2.30': {}
 
-  '@universal-middleware/core@0.4.7(hono@4.7.8)':
+  '@universal-middleware/core@0.4.8(hono@4.7.8)':
     dependencies:
       regexparam: 3.0.0
       tough-cookie: 5.1.2
     optionalDependencies:
       hono: 4.7.8
 
-  '@universal-middleware/elysia@0.4.8(hono@4.7.8)':
+  '@universal-middleware/elysia@0.4.8':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4118,9 +4121,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/elysia@0.5.1(hono@4.7.8)':
+  '@universal-middleware/elysia@0.5.2(hono@4.7.8)':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4130,9 +4133,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/express@0.4.16(hono@4.7.8)':
+  '@universal-middleware/express@0.4.17(hono@4.7.8)':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4142,10 +4145,10 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/fastify@0.5.18(hono@4.7.8)':
+  '@universal-middleware/fastify@0.5.19(hono@4.7.8)':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
-      '@universal-middleware/express': 0.4.16(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
+      '@universal-middleware/express': 0.4.17(hono@4.7.8)
       fastify-raw-body: 5.0.0
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
@@ -4156,9 +4159,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/h3@0.4.10(hono@4.7.8)':
+  '@universal-middleware/h3@0.4.11(hono@4.7.8)':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4168,9 +4171,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/hattip@0.4.9(hono@4.7.8)':
+  '@universal-middleware/hattip@0.4.10(hono@4.7.8)':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4180,9 +4183,9 @@ snapshots:
       - h3
       - hono
 
-  '@universal-middleware/hono@0.4.12(hono@4.7.8)':
+  '@universal-middleware/hono@0.4.13(hono@4.7.8)':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -4197,10 +4200,10 @@ snapshots:
       mrmime: 2.0.1
       totalist: 3.0.1
 
-  '@universal-middleware/vercel@0.4.16(hono@4.7.8)':
+  '@universal-middleware/vercel@0.4.17':
     dependencies:
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
-      '@universal-middleware/express': 0.4.16(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
+      '@universal-middleware/express': 0.4.17(hono@4.7.8)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -6217,19 +6220,19 @@ snapshots:
       react-streaming: 0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       vike: 0.4.228(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0-beta.1(@types/node@18.19.86))
 
-  vike-server@1.0.15-commit-3ad9b16(hono@4.7.8)(vike@0.4.228(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0-beta.1(@types/node@18.19.86)))(vite@7.0.0-beta.1(@types/node@18.19.86)):
+  vike-server@1.0.15-commit-3ad9b16(vike@0.4.228(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0-beta.1(@types/node@18.19.86)))(vite@7.0.0-beta.1(@types/node@18.19.86)):
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.5
-      '@photonjs/core': 0.0.1-commit-4c79c26(vite@7.0.0-beta.1(@types/node@18.19.86))
+      '@photonjs/core': 0.0.1-commit-1e738e4(vite@7.0.0-beta.1(@types/node@18.19.86))
       '@universal-middleware/compress': 0.2.30
-      '@universal-middleware/core': 0.4.7(hono@4.7.8)
-      '@universal-middleware/elysia': 0.4.8(hono@4.7.8)
-      '@universal-middleware/express': 0.4.16(hono@4.7.8)
-      '@universal-middleware/fastify': 0.5.18(hono@4.7.8)
-      '@universal-middleware/h3': 0.4.10(hono@4.7.8)
-      '@universal-middleware/hattip': 0.4.9(hono@4.7.8)
-      '@universal-middleware/hono': 0.4.12(hono@4.7.8)
+      '@universal-middleware/core': 0.4.8(hono@4.7.8)
+      '@universal-middleware/elysia': 0.4.8
+      '@universal-middleware/express': 0.4.17(hono@4.7.8)
+      '@universal-middleware/fastify': 0.5.19(hono@4.7.8)
+      '@universal-middleware/h3': 0.4.11(hono@4.7.8)
+      '@universal-middleware/hattip': 0.4.10(hono@4.7.8)
+      '@universal-middleware/hono': 0.4.13(hono@4.7.8)
       '@universal-middleware/sirv': 0.1.20
       arktype: 2.1.20
       esbuild: 0.25.2

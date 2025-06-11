@@ -101,6 +101,8 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
             : // In prod, each entry is wrapped with the server entry
               `${virtualEntry}:${photon.server}?photonCondition=${nodeOrEdge}&photonHandlerId=${curr.id}`;
 
+          curr.env ??= `vercel_${nodeOrEdge}`;
+
           return acc;
         },
         { node: {} as Record<string, string>, edge: {} as Record<string, string> },
