@@ -6,6 +6,7 @@ import { getNodeVersion, type NodeVersion } from "@vercel/build-utils";
 import { vercelOutputPrerenderConfigSchema } from "../schemas/config/prerender-config";
 import { assert } from "../assert";
 import path from "node:path";
+import { isPhotonMeta } from "@photonjs/core/api";
 
 const DUMMY = "__DUMMY__";
 const nonEdgeServers = ["express", "fastify"];
@@ -38,29 +39,25 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
           return "export default {};";
         }
 
-        const photonHandlers = this.environment.config.photon.handlers;
-        const photonServer = this.environment.config.photon.server as Photon.EntryServer;
-
-        const isEdge = this.environment.name === "vercel_edge";
         const [, , , ..._input] = id.split(":");
         const input = _input.join(":");
+        const info = this.getModuleInfo(id);
 
-        const entry =
-          photonServer.id === input ? photonServer : Object.values(photonHandlers).find((e) => e.id === input);
-
-        if (!entry) {
-          throw new Error(`Unable to find entry for "${input}"`);
+        if (!isPhotonMeta(info?.meta)) {
+          throw new Error(`Unable to find Photon metadata for entry "${input}"`);
         }
 
+        const entry = info.meta.photon;
+        const isEdge = Boolean(entry.vercel?.edge);
+
         // Generate .vc-config.json
-        const filename = entry.vercel?.edge ? "index.js" : "index.mjs";
         this.emitFile({
           type: "asset",
           fileName: photonEntryDestination(entry, ".func/.vc-config.json"),
           source: JSON.stringify(
-            getVcConfig(pluginConfig, filename, {
+            getVcConfig(pluginConfig, isEdge ? "index.js" : "index.mjs", {
               nodeVersion,
-              edge: Boolean(entry.vercel?.edge),
+              edge: isEdge,
               streaming: entry.vercel?.streaming,
             }),
             undefined,
@@ -78,15 +75,19 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         }
 
         // Generate rewrites
-        // TODO entry.route
-        if (entry.vercel?.route) {
+        if (entry.route || entry.vercel?.route) {
           pluginConfig.rewrites ??= [];
-          const source = typeof entry.vercel.route === "string" ? `(${entry.vercel.route})` : entryToPathtoregex(entry);
+          const source =
+            typeof entry.vercel?.route === "string"
+              ? `(${entry.vercel.route})`
+              : typeof entry.route === "string"
+                ? rou3ToPathtoregex(entry.route)
+                : entryToPathtoregex(entry);
           pluginConfig.rewrites.push({
             enforce: entry.vercel?.enforce,
             source,
             destination:
-              typeof entry.vercel.route === "string"
+              typeof entry.vercel?.route === "string"
                 ? `/${photonEntryDestinationDefault(entry)}?__original_path=$1`
                 : `/${photonEntryDestinationDefault(entry)}`,
           });
@@ -147,6 +148,19 @@ function entryToPathtoregex(entry: Photon.Entry) {
         .replace(/^\[\[([^/]+)\]\]$/g, ":$1?")
         .replace(/^\[\.\.\.([^/]+)\]$/g, ":$1+")
         .replace(/^\[([^/]+)\]$/g, ":$1"),
+    )
+    .join("/");
+}
+
+function rou3ToPathtoregex(rou3route: string) {
+  return rou3route
+    .split("/")
+    .map((segment) =>
+      segment
+        .replace(/^\*$/g, ":splat?")
+        .replace(/^\*\*$/g, ":splat*")
+        .replace(/^\*\*:([^/]+)$/g, ":$1*")
+        .replace(/^:([^/]+)$/g, ":$1"),
     )
     .join("/");
 }
