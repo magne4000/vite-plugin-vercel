@@ -1,5 +1,3 @@
-import { getTransformedRoutes, type RouteWithSrc } from "@vercel/routing-utils";
-import { match } from "path-to-regexp";
 import type { Environment, Plugin, RunnableDevEnvironment } from "vite";
 import { photonEntryDestinationDefault } from "../utils/destination";
 import { assert } from "../assert";
@@ -17,37 +15,6 @@ export function devServerPlugin(): Plugin {
       order: "post",
       // FIXME most of it is now handled by Photon
       async handler(server) {
-        const entries = server.config.photon.handlers;
-        const transformedRoutes = getTransformedRoutes({
-          rewrites: Object.values(entries).map((entry) => ({
-            source:
-              typeof entry.vercel?.route === "string"
-                ? `(${entry.vercel.route})`
-                : typeof entry.route === "string"
-                  ? rou3ToPathtoregex(entry.route)
-                  : entryToPathtoregex(entry),
-            destination: photonEntryDestinationDefault(entry),
-          })),
-        });
-
-        const routes = (transformedRoutes.routes ?? [])
-          .filter((r): r is RouteWithSrc => Boolean(r.src))
-          .map((r) => {
-            const entry = Object.values(entries).find(
-              (e) => photonEntryDestinationDefault(e) === r.dest?.split("?")[0],
-            );
-            return {
-              src: new RegExp(r.src),
-              dest: r.dest,
-              entry: Object.values(entries).find((e) => photonEntryDestinationDefault(e) === r.dest?.split("?")[0]),
-              re: entry
-                ? typeof entry.vercel?.route === "string"
-                  ? (str: string) => str.match(entry.vercel?.route as string)
-                  : match(entryToPathtoregex(entry))
-                : null,
-            };
-          });
-
         // Inject Post Middleware that executes AFTER Vite's internal middlewares
         return () => {
           // const routesWithAddedHeaders = routes.filter((r) => r.entry?.vercel?.headers);
