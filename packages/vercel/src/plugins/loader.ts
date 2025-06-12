@@ -6,7 +6,7 @@ import { getNodeVersion, type NodeVersion } from "@vercel/build-utils";
 import { vercelOutputPrerenderConfigSchema } from "../schemas/config/prerender-config";
 import { assert } from "../assert";
 import path from "node:path";
-import { isPhotonMeta } from "@photonjs/core/api";
+import { getPhotonMeta } from "@photonjs/core/api";
 import { isVercelLastBuildStep } from "../utils/env";
 
 const DUMMY = "__DUMMY__";
@@ -51,15 +51,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         const [, , , ..._input] = id.split(":");
         const input = _input.join(":");
 
-        const resolved = await this.resolve(input, undefined, { isEntry: true });
-        assert(resolved, `Cannot resolve entry "${input}"`);
-
-        if (!isPhotonMeta(resolved.meta)) {
-          console.log("GNNNN", input, resolved.id, resolved.meta, this.getModuleInfo(resolved.id)?.meta?.photon);
-          throw new Error(`Unable to find Photon metadata for entry "${input}"`);
-        }
-
-        const entry = resolved.meta.photon;
+        const entry = await getPhotonMeta(this, input);
         const isEdge = Boolean(entry.vercel?.edge);
 
         if (isVercelLastBuildStep(this.environment)) {
