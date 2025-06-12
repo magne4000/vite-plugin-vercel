@@ -1,18 +1,15 @@
 import {
   BuildEnvironment,
   createRunnableDevEnvironment,
-  type Environment,
   type EnvironmentOptions,
   mergeConfig,
   type Plugin,
 } from "vite";
-import type { ViteVercelConfig, ViteVercelRouteOverrides } from "../types";
+import type { ViteVercelConfig } from "../types";
 import { resolvePhotonConfig } from "@photonjs/core/api";
 import path from "node:path";
 import { photonEntryDestination } from "../utils/destination";
 import { getConfig } from "../config";
-import { joinAbsolute } from "../helpers";
-import fs from "node:fs/promises";
 
 const outDir = ".vercel/output";
 const DUMMY = "__DUMMY__";
@@ -184,13 +181,6 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
           delete bundle[dummy];
         }
 
-        // Compute overrides for static HTML files
-        const userOverrides = await computeStaticHtmlOverrides(this.environment);
-        // Update overrides with static files paths
-        pluginConfig.config ??= {};
-        pluginConfig.config.overrides ??= {};
-        Object.assign(pluginConfig.config.overrides, userOverrides);
-
         if (this.environment.name === "vercel_node") {
           // Generate config.json
           this.emitFile({
@@ -204,55 +194,4 @@ export function configPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
     sharedDuringBuild: true,
   };
-}
-
-async function computeStaticHtmlOverrides(env: Environment): Promise<NonNullable<ViteVercelRouteOverrides>> {
-  if (env.name === "vercel_client") {
-    const outDir = joinAbsolute(env, env.config.build.outDir);
-    // public files copied by vite by default https://vitejs.dev/guide/assets.html#the-public-directory
-    const copyPublicDir = env.getTopLevelConfig().build.copyPublicDir;
-    if (copyPublicDir) {
-      const publicDir = env.getTopLevelConfig().publicDir;
-      const publicFiles = await getStaticHtmlFiles(publicDir);
-      const files = publicFiles.map((f) => f.replace(publicDir, outDir));
-
-      return files.reduce(
-        (acc, curr) => {
-          const relPath = path.relative(outDir, curr);
-          const parsed = path.parse(relPath);
-          const pathJoined = path.join(parsed.dir, parsed.name);
-          acc[relPath] = {
-            path: pathJoined,
-          };
-          return acc;
-        },
-        {} as NonNullable<ViteVercelRouteOverrides>,
-      );
-    }
-  }
-
-  return {};
-}
-
-async function getStaticHtmlFiles(src: string) {
-  try {
-    await fs.stat(src);
-  } catch (e) {
-    return [];
-  }
-
-  const entries = await fs.readdir(src, { withFileTypes: true });
-  const htmlFiles: string[] = [];
-
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-
-    entry.isDirectory()
-      ? htmlFiles.push(...(await getStaticHtmlFiles(srcPath)))
-      : srcPath.endsWith(".html")
-        ? htmlFiles.push(srcPath)
-        : undefined;
-  }
-
-  return htmlFiles;
 }
