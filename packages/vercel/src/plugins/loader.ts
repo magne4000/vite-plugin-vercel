@@ -7,6 +7,7 @@ import { vercelOutputPrerenderConfigSchema } from "../schemas/config/prerender-c
 import { assert } from "../assert";
 import path from "node:path";
 import { isPhotonMeta } from "@photonjs/core/api";
+import { isVercelLastBuildStep } from "../utils/env";
 
 const DUMMY = "__DUMMY__";
 const nonEdgeServers = ["express", "fastify"];
@@ -27,9 +28,17 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
       return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
     },
 
-    resolveId(id) {
+    async resolveId(id) {
       if (id.startsWith(virtualEntry)) {
-        return `\0${id}`;
+        const [, , , ..._input] = id.split(":");
+        const input = _input.join(":");
+        if (input === DUMMY) {
+          return `${resolvedVirtualEntry}:${DUMMY}`;
+        }
+        const resolved = await this.resolve(input, undefined, { isEntry: true });
+        if (resolved) {
+          return `${resolvedVirtualEntry}:${resolved.id}`;
+        }
       }
     },
 
@@ -41,37 +50,42 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
         const [, , , ..._input] = id.split(":");
         const input = _input.join(":");
-        const info = this.getModuleInfo(id);
 
-        if (!isPhotonMeta(info?.meta)) {
+        const resolved = await this.resolve(input, undefined, { isEntry: true });
+        assert(resolved, `Cannot resolve entry "${input}"`);
+
+        if (!isPhotonMeta(resolved.meta)) {
+          console.log("GNNNN", input, resolved.id, resolved.meta, this.getModuleInfo(resolved.id)?.meta?.photon);
           throw new Error(`Unable to find Photon metadata for entry "${input}"`);
         }
 
-        const entry = info.meta.photon;
+        const entry = resolved.meta.photon;
         const isEdge = Boolean(entry.vercel?.edge);
 
-        // Generate .vc-config.json
-        this.emitFile({
-          type: "asset",
-          fileName: photonEntryDestination(entry, ".func/.vc-config.json"),
-          source: JSON.stringify(
-            getVcConfig(pluginConfig, isEdge ? "index.js" : "index.mjs", {
-              nodeVersion,
-              edge: isEdge,
-              streaming: entry.vercel?.streaming,
-            }),
-            undefined,
-            2,
-          ),
-        });
-
-        // Generate *.prerender-config.json when necessary
-        if (entry.vercel?.isr) {
+        if (isVercelLastBuildStep(this.environment)) {
+          // Generate .vc-config.json
           this.emitFile({
             type: "asset",
-            fileName: photonEntryDestination(entry, ".prerender-config.json"),
-            source: JSON.stringify(vercelOutputPrerenderConfigSchema.parse(entry.vercel.isr), undefined, 2),
+            fileName: photonEntryDestination(entry, ".func/.vc-config.json"),
+            source: JSON.stringify(
+              getVcConfig(pluginConfig, isEdge ? "index.js" : "index.mjs", {
+                nodeVersion,
+                edge: isEdge,
+                streaming: entry.vercel?.streaming,
+              }),
+              undefined,
+              2,
+            ),
           });
+
+          // Generate *.prerender-config.json when necessary
+          if (entry.vercel?.isr) {
+            this.emitFile({
+              type: "asset",
+              fileName: photonEntryDestination(entry, ".prerender-config.json"),
+              source: JSON.stringify(vercelOutputPrerenderConfigSchema.parse(entry.vercel.isr), undefined, 2),
+            });
+          }
         }
 
         // Generate rewrites
@@ -112,7 +126,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
           assert(entry.server, `Could not determine server for entry ${entry.id}`);
           if (isEdge) {
             assert(
-              nonEdgeServers.includes(entry.server),
+              !nonEdgeServers.includes(entry.server),
               `${entry.server} is not compatible with Vercel Edge target. Either use another server like Hono or change target to Node`,
             );
           }
@@ -125,7 +139,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         //language=javascript
         return `
           import { ${fn} } from "photon:resolve-from-photon:${importFrom}";
-          import handler from "${entry.id}";
+          import handler from "${entry.resolvedId ?? entry.id}";
 
           export default ${fn}(() => handler)();
         `;

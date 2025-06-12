@@ -1,0 +1,193 @@
+import {
+  BuildEnvironment,
+  createRunnableDevEnvironment,
+  type EnvironmentOptions,
+  mergeConfig,
+  type Plugin,
+} from "vite";
+import type { ViteVercelConfig } from "../types";
+import path from "node:path";
+import { getConfig } from "../config";
+import type { OutputBundle } from "rollup";
+import { virtualEntry } from "../utils/const";
+import { edgeExternal } from "../utils/external";
+
+const outDir = ".vercel/output";
+const DUMMY = "__DUMMY__";
+
+export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
+  return [
+    {
+      name: "vite-plugin-vercel:setup-envs",
+
+      buildApp: {
+        order: "post",
+        async handler(builder) {
+          await builder.build(builder.environments.vercel_client);
+          await builder.build(builder.environments.vercel_edge);
+          await builder.build(builder.environments.vercel_node);
+        },
+      },
+
+      config() {
+        const outDirOverride: EnvironmentOptions = pluginConfig.outDir
+          ? {
+              build: {
+                outDir: path.posix.join(pluginConfig.outDir, "_tmp"),
+              },
+            }
+          : {};
+
+        // rollup inputs are computed by the bundle plugin dynamically
+        return {
+          environments: {
+            vercel_edge: createVercelEnvironmentOptions("js", outDirOverride),
+            vercel_node: createVercelEnvironmentOptions("mjs", outDirOverride),
+            vercel_client: {
+              build: {
+                outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
+                copyPublicDir: true,
+              },
+              consumer: "client",
+            },
+          },
+          // Required for environments to be taken into account
+          builder: {},
+        };
+      },
+
+      sharedDuringBuild: true,
+    },
+    {
+      name: "vite-plugin-vercel:setup-envs:vercel_edge",
+      applyToEnvironment(env) {
+        return env.name === "vercel_edge";
+      },
+
+      configEnvironment(name, config, env) {
+        if (name !== "vercel_edge") return;
+
+        const isDev = env.command === "serve";
+        // In dev, we're running on node, so we do not apply edge conditions
+        const conditions = !isDev
+          ? {
+              conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
+            }
+          : {};
+
+        return {
+          resolve: {
+            external: edgeExternal,
+            ...conditions,
+          },
+          build: {
+            target: "es2022",
+            rollupOptions: {
+              input: {},
+            },
+          },
+          optimizeDeps: {
+            ...config.optimizeDeps,
+            esbuildOptions: {
+              target: "es2022",
+              format: "esm",
+            },
+          },
+        };
+      },
+
+      generateBundle: {
+        order: "post",
+        async handler(_opts, bundle) {
+          cleanupDummy(bundle);
+        },
+      },
+
+      sharedDuringBuild: true,
+    },
+    {
+      name: "vite-plugin-vercel:setup-envs:vercel_node",
+      applyToEnvironment(env) {
+        return env.name === "vercel_node";
+      },
+
+      configEnvironment(name, config) {
+        if (name !== "vercel_node") return;
+
+        return {
+          optimizeDeps: {
+            ...config.optimizeDeps,
+          },
+        };
+      },
+
+      generateBundle: {
+        order: "post",
+        async handler(_opts, bundle) {
+          cleanupDummy(bundle);
+
+          // Generate config.json
+          this.emitFile({
+            type: "asset",
+            fileName: "config.json",
+            source: JSON.stringify(getConfig(pluginConfig), undefined, 2),
+          });
+        },
+      },
+
+      sharedDuringBuild: true,
+    },
+  ];
+}
+
+function createVercelEnvironmentOptions(extension: "js" | "mjs", overrides?: EnvironmentOptions): EnvironmentOptions {
+  return mergeConfig(
+    {
+      resolve: {
+        noExternal: true,
+      },
+      dev: {
+        async createEnvironment(name, config) {
+          return createRunnableDevEnvironment(name, config);
+        },
+      },
+      build: {
+        createEnvironment(name, config) {
+          return new BuildEnvironment(name, config);
+        },
+        outDir: path.posix.join(outDir, "_tmp"),
+        copyPublicDir: false,
+        rollupOptions: {
+          input: getDummyInput(),
+          output: {
+            entryFileNames() {
+              return `[name].${extension}`;
+            },
+            sanitizeFileName: false,
+            sourcemap: false,
+          },
+        },
+        target: "es2022",
+        emptyOutDir: false,
+      },
+
+      consumer: "server",
+
+      keepProcessEnv: true,
+    } satisfies EnvironmentOptions,
+    overrides ?? {},
+  );
+}
+
+function getDummyInput(): Record<string, string> {
+  // Workaround to be able to have a complete build process even without entries.
+  // __DUMMY__ is deleted from the bundle before being written.
+  return { [DUMMY]: `${virtualEntry}:${DUMMY}` };
+}
+
+function cleanupDummy(bundle: OutputBundle) {
+  const dummy = Object.keys(bundle).find((key) => key.includes(DUMMY));
+  if (dummy) {
+    delete bundle[dummy];
+  }
+}

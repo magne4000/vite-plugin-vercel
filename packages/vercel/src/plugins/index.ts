@@ -5,9 +5,8 @@ import { wasmPlugin } from "./wasm";
 import { apiPlugin } from "./api";
 import { bundlePlugin } from "./bundle";
 import { installPhoton, photon } from "@photonjs/core/vite";
-import { configPlugin } from "./config";
+import { setupEnvs } from "./setupEnvs";
 import { loaderPlugin } from "./loader";
-import { devServerPlugin } from "./devServer";
 
 export function vercel(pluginConfig: ViteVercelConfig): PluginOption[] {
   const additionalConfig: Record<string, unknown> = {};
@@ -19,13 +18,6 @@ export function vercel(pluginConfig: ViteVercelConfig): PluginOption[] {
   }
 
   return [
-    vercelCleanupPlugin(),
-    wasmPlugin(),
-    devServerPlugin(),
-    apiPlugin(pluginConfig),
-    configPlugin(pluginConfig),
-    loaderPlugin(pluginConfig),
-    ...bundlePlugin(pluginConfig),
     photon({
       ...additionalConfig,
       devServer: {
@@ -39,6 +31,12 @@ export function vercel(pluginConfig: ViteVercelConfig): PluginOption[] {
         }
       },
     }),
+    vercelCleanupPlugin(),
+    apiPlugin(pluginConfig),
+    ...setupEnvs(pluginConfig),
+    wasmPlugin(),
+    loaderPlugin(pluginConfig),
+    ...bundlePlugin(pluginConfig),
   ];
 }
 

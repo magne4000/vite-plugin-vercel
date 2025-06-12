@@ -5,6 +5,9 @@ import type { VercelOutputConfig, ViteVercelConfig } from "./types";
 
 export function createAPI(outfiles: ViteVercelOutFile[], pluginConfig: ViteVercelConfig) {
   return {
+    /**
+     * @internal
+     */
     getOutFiles(): ViteVercelOutFile[] {
       assert(outfiles.length > 0, "getOutFiles() must be called after all outputs have been generated");
 
@@ -63,9 +66,9 @@ export function getVercelAPI(pluginContextOrServer: PluginContext | ViteDevServe
   const config =
     "environment" in pluginContextOrServer ? pluginContextOrServer.environment.config : pluginContextOrServer.config;
   const vpv: Plugin<(pluginContext?: PluginContext) => ViteVercelApi> | undefined = config.plugins.find(
-    (p) => p.name === "vite-plugin-vercel",
+    (p) => p.name === "vite-plugin-vercel:api",
   );
-  assert(vpv, "Could not find vite-plugin-vercel plugin");
+  assert(vpv, "Could not find vite-plugin-vercel:api plugin");
   assert(vpv.api, "Missing `api`. Make sure vite-plugin-vercel is up-to-date");
 
   return vpv.api("environment" in pluginContextOrServer ? pluginContextOrServer : undefined);

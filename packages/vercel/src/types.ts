@@ -122,6 +122,7 @@ declare global {
 
     export interface ConfigResolved {
       handlers: Record<string, Photon.EntryUniversalHandler>;
+      server: Photon.EntryServer;
     }
   }
 }
