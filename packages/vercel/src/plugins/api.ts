@@ -2,6 +2,7 @@ import type { Plugin } from "vite";
 import type { ViteVercelConfig } from "../types";
 import { createAPI, type ViteVercelOutFile } from "../api";
 import { photonEntryDestination } from "../utils/destination";
+import type { Photon } from "@photonjs/core";
 
 export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const outfiles: ViteVercelOutFile[] = [];

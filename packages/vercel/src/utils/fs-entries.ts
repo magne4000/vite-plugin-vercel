@@ -1,11 +1,10 @@
-/// <reference types="@photonjs/core/api" />
 import path from "node:path";
 import glob from "fast-glob";
 import "../types";
 import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
 import { type VercelEndpointExports, vercelEndpointExports } from "../schemas/exports";
-import type { Photon } from "@photonjs/core/api";
+import type { Photon } from "@photonjs/core";
 
 export async function getEntriesFromFs(
   dir: string,
@@ -32,6 +31,7 @@ export async function getEntriesFromFs(
     const key = path.posix.join(destination, parsed.dir, parsed.name);
     entryPoints[key] = {
       id: filePath,
+      name: key,
       type: "universal-handler",
       route: path.posix.join("/", key),
       vercel: {

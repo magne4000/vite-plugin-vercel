@@ -1,7 +1,7 @@
 import type { Config } from "vike/types";
 import { plugins } from "./plugins";
 import { vikeServer } from "vike-server/plugin";
-import type { Photon } from "@photonjs/core/api";
+import type { Photon } from "@photonjs/core";
 
 export default {
   name: "vike-vercel",

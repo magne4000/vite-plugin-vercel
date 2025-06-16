@@ -7,6 +7,7 @@ import { vercelOutputPrerenderConfigSchema } from "../schemas/config/prerender-c
 import { assert } from "../assert";
 import path from "node:path";
 import { getPhotonMeta } from "@photonjs/core/api";
+import type { Photon } from "@photonjs/core";
 
 const DUMMY = "__DUMMY__";
 const nonEdgeServers = ["express", "fastify"];

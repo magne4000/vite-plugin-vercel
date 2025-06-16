@@ -1,7 +1,8 @@
 import path from "node:path";
+import type { Photon } from "@photonjs/core";
 
 export function photonEntryDestinationDefault(entry: Photon.Entry) {
-  return entry.vercel?.destination ?? entry.id.replace(/[^a-zA-Z0-9\-_]/g, "-");
+  return entry.vercel?.destination ?? entry.name.replace(/[^a-zA-Z0-9\-_]/g, "-");
 }
 
 export function photonEntryDestination(

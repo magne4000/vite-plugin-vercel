@@ -1,9 +1,8 @@
-/// <reference types="@photonjs/core/api" />
 import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
 import type { VercelOutputConfig } from "./schemas/config/config";
 import type { VercelOutputPrerenderConfig } from "./schemas/config/prerender-config";
 import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
-import type { Photon } from "@photonjs/core/api";
+import type { Photon } from "@photonjs/core";
 
 export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderConfig };
 
@@ -115,7 +114,7 @@ export interface VercelEntryOptions {
 }
 
 // TODO better declaration merging on Photon's side
-declare module "@photonjs/core/api" {
+declare module "@photonjs/core" {
   export namespace Photon {
     export interface EntryBase {
       vercel?: VercelEntryOptions;

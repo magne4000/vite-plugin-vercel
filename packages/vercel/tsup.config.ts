@@ -19,7 +19,7 @@ export default defineConfig([
       compilerOptions: {
         paths: {},
       },
-      banner: `/// <reference types="@photonjs/core/api" />\n`,
+      banner: `/// <reference types="@photonjs/core" />\n`,
     },
   },
 ]);

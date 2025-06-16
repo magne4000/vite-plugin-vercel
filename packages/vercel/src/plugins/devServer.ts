@@ -2,6 +2,7 @@ import type { Environment, Plugin, RunnableDevEnvironment } from "vite";
 import { photonEntryDestinationDefault } from "../utils/destination";
 import { assert } from "../assert";
 import path from "node:path";
+import type { Photon } from "@photonjs/core";
 
 export function isRunnableDevEnvironment(environment: Environment): environment is RunnableDevEnvironment {
   return "runner" in environment;
