@@ -15,6 +15,18 @@ export function overrideConfPlugin(): Plugin {
     name: "vike-vercel:override-conf",
     apply: "build",
 
+    config() {
+      return {
+        builder: {
+          // Override Vike's buildApp, because it exit(0)
+          async buildApp(builder) {
+            await builder.build(builder.environments.client);
+            await builder.build(builder.environments.ssr);
+          },
+        },
+      };
+    },
+
     configEnvironment(name, options) {
       if (name === "vercel_client" || name === "client" || name === "ssr") {
         setTargetAndCssTarget(options);

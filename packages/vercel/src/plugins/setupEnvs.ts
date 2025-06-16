@@ -148,6 +148,12 @@ function createVercelLogger() {
   const loggerInfo = logger.info;
 
   logger.info = (msg, options) => {
+    if (
+      options?.environment &&
+      (msg.includes("building for production") || msg.includes("building SSR bundle for production"))
+    ) {
+      return loggerInfo(`${msg} ${options.environment}`, options);
+    }
     if (msg.includes(".vercel/output/_tmp")) {
       if (stripAnsi(msg).includes(".vercel/output/_tmp/assets")) return;
       return loggerInfo(msg.replace(".vercel/output/_tmp/", ".vercel/output/"), options);

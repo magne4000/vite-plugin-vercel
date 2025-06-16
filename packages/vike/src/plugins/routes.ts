@@ -118,8 +118,10 @@ function routesPluginBuild(): Plugin[] {
             (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
           )) {
             i++;
-            setPhotonHandler(this, `${key}/${page.pageId}`, {
+            const name = `${key}/${page.pageId}`;
+            setPhotonHandler(this, name, {
               id: `${this.environment.config.photon.server.id}?i=${i}`,
+              name,
               type: "universal-handler",
               route: page.route ?? undefined,
               vercel: {
@@ -139,8 +141,10 @@ function routesPluginBuild(): Plugin[] {
           ) {
             // Catch-all
             i++;
-            setPhotonHandler(this, `${key}/__catch_all`, {
+            const name = `${key}/__catch_all`;
+            setPhotonHandler(this, name, {
               id: `${this.environment.config.photon.server.id}?i=${i}`,
+              name,
               type: "universal-handler",
               route: "/**",
               vercel: {
