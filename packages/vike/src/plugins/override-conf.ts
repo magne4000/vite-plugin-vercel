@@ -2,7 +2,7 @@ import type { EnvironmentOptions, Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
 
 /**
- * Ensure same target between all builds
+ * Ensure the same target between all builds
  */
 function setTargetAndCssTarget(env: EnvironmentOptions) {
   env.build ??= {};

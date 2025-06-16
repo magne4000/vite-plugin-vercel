@@ -6,34 +6,17 @@
     "dist",
     "*.d.ts"
   ],
-  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./universal-middleware": {
-      "import": "./dist/universal-middleware.js",
-      "require": "./dist/universal-middleware.cjs"
-    },
-    "./universal-middleware/dev": {
-      "import": "./dist/universal-middleware-dev.js",
-      "require": "./dist/universal-middleware-dev.cjs"
-    },
-    "./utils": {
-      "import": "./dist/utils.js",
-      "require": "./dist/utils.cjs"
-    },
-    "./api": {
-      "import": "./dist/api.js",
-      "require": "./dist/api.cjs"
-    },
+    ".": "./dist/index.js",
+    "./universal-middleware": "./dist/universal-middleware.js",
+    "./universal-middleware/dev": "./dist/universal-middleware-dev.js",
+    "./utils": "./dist/utils.js",
+    "./api": "./dist/api.js",
     "./types": {
       "types": "./index.d.ts"
     }
   },
-  "types": "./index.d.ts",
   "description": "Vercel adapter for vite",
   "author": "Joël Charles <joel.charles91@gmail.com>",
   "repository": "https://github.com/magne4000/vite-plugin-vercel",
@@ -59,7 +42,7 @@
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@photonjs/core": "0.0.1-commit-8e70263",
+    "@photonjs/core": "0.0.1-commit-87e2d23",
     "@universal-middleware/core": "^0.4.8",
     "@universal-middleware/vercel": "^0.4.18",
     "@vercel/build-utils": "^10.5.1",

@@ -6,7 +6,7 @@ settings:
 
 overrides:
   path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
-  '@photonjs/core': 0.0.1-commit-8e70263
+  '@photonjs/core': 0.0.1-commit-87e2d23
   vite: ^7.0.0-beta.1
 
 importers:
@@ -123,8 +123,8 @@ importers:
   examples/hono:
     dependencies:
       '@photonjs/core':
-        specifier: 0.0.1-commit-8e70263
-        version: 0.0.1-commit-8e70263(vite@7.0.0-beta.1(@types/node@18.19.86))
+        specifier: 0.0.1-commit-87e2d23
+        version: 0.0.1-commit-87e2d23(vite@7.0.0-beta.1(@types/node@18.19.86))
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vercel
@@ -176,14 +176,14 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       '@photonjs/core':
-        specifier: 0.0.1-commit-8e70263
-        version: 0.0.1-commit-8e70263(vite@7.0.0-beta.1(@types/node@18.19.86))
+        specifier: 0.0.1-commit-87e2d23
+        version: 0.0.1-commit-87e2d23(vite@7.0.0-beta.1(@types/node@18.19.86))
       '@universal-middleware/core':
         specifier: ^0.4.8
         version: 0.4.8(hono@4.7.8)
       '@universal-middleware/vercel':
         specifier: ^0.4.18
-        version: 0.4.18(@universal-middleware/h3@0.4.11(hono@4.7.8))(hono@4.7.8)
+        version: 0.4.18(@universal-middleware/h3@0.4.11)
       '@vercel/build-utils':
         specifier: ^10.5.1
         version: 10.5.1
@@ -243,8 +243,8 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       '@photonjs/core':
-        specifier: 0.0.1-commit-8e70263
-        version: 0.0.1-commit-8e70263(vite@7.0.0-beta.1(@types/node@18.19.86))
+        specifier: 0.0.1-commit-87e2d23
+        version: 0.0.1-commit-87e2d23(vite@7.0.0-beta.1(@types/node@18.19.86))
       vike:
         specifier: ^0.4.228
         version: 0.4.228(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0-beta.1(@types/node@18.19.86))
@@ -981,8 +981,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@photonjs/core@0.0.1-commit-8e70263':
-    resolution: {integrity: sha512-Lhu2JNW7HVbCCAY14SdZ6D+HepULz6shmFW1Vx+Ot9Ays3OuuDHlNidGaUM0HT/tTBLZZDQUXZNnJtCrwgypig==}
+  '@photonjs/core@0.0.1-commit-87e2d23':
+    resolution: {integrity: sha512-tlYQSFyFFWQRKozl5Pdh/HJU3bpqcxLxoHk4AeDs+j1Tl/DIqmhFKvsGXVNknU4K/P+16yjL+JiVC5iWkWSbLg==}
     peerDependencies:
       vite: ^7.0.0-beta.1
     peerDependenciesMeta:
@@ -3209,6 +3209,9 @@ packages:
   zod@3.24.2:
     resolution: {integrity: sha512-lY7CDW43ECgW9u1TcT3IoXHflywfVqDYze4waEz812jR/bZ8FHDsl7pFQoSZTz5N+2NqRXs8GBwnAwo3ZNxqhQ==}
 
+  zod@3.25.64:
+    resolution: {integrity: sha512-hbP9FpSZf7pkS7hRVUrOjhwKJNyampPgtXKc3AN6DsWtoHsg2Sb4SQaS4Tcay380zSwd2VPo9G9180emBACp5g==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -3907,7 +3910,7 @@ snapshots:
   '@oxc-transform/binding-win32-x64-msvc@0.64.0':
     optional: true
 
-  '@photonjs/core@0.0.1-commit-8e70263(vite@7.0.0-beta.1(@types/node@18.19.86))':
+  '@photonjs/core@0.0.1-commit-87e2d23(vite@7.0.0-beta.1(@types/node@18.19.86))':
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.5
@@ -3921,10 +3924,10 @@ snapshots:
       '@universal-middleware/hattip': 0.4.10(hono@4.7.8)
       '@universal-middleware/hono': 0.4.13(hono@4.7.8)
       '@universal-middleware/sirv': 0.1.20
-      arktype: 2.1.20
       estree-walker: 3.0.3
       hono: 4.7.8
       oxc-transform: 0.64.0
+      zod: 3.25.64
     optionalDependencies:
       vite: 7.0.0-beta.1(@types/node@18.19.86)
     transitivePeerDependencies:
@@ -4226,13 +4229,12 @@ snapshots:
       mrmime: 2.0.1
       totalist: 3.0.1
 
-  '@universal-middleware/vercel@0.4.18(@universal-middleware/h3@0.4.11(hono@4.7.8))(hono@4.7.8)':
+  '@universal-middleware/vercel@0.4.18(@universal-middleware/h3@0.4.11)':
     dependencies:
       '@universal-middleware/core': 0.4.8(hono@4.7.8)
       '@universal-middleware/express': 0.4.17(hono@4.7.8)
     optionalDependencies:
       '@universal-middleware/h3': 0.4.11(hono@4.7.8)
-      hono: 4.7.8
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@webroute/route'
@@ -6248,7 +6250,7 @@ snapshots:
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.5
-      '@photonjs/core': 0.0.1-commit-8e70263(vite@7.0.0-beta.1(@types/node@18.19.86))
+      '@photonjs/core': 0.0.1-commit-87e2d23(vite@7.0.0-beta.1(@types/node@18.19.86))
       '@universal-middleware/compress': 0.2.30
       '@universal-middleware/core': 0.4.8(hono@4.7.8)
       '@universal-middleware/elysia': 0.4.8
@@ -6420,5 +6422,7 @@ snapshots:
   yoga-wasm-web@0.3.3: {}
 
   zod@3.24.2: {}
+
+  zod@3.25.64: {}
 
   zwitch@2.0.4: {}

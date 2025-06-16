@@ -5,6 +5,7 @@ import "../types";
 import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
 import { type VercelEndpointExports, vercelEndpointExports } from "../schemas/exports";
+import type { Photon } from "@photonjs/core/api";
 
 export async function getEntriesFromFs(
   dir: string,

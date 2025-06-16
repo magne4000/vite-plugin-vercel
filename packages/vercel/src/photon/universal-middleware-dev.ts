@@ -1,4 +1,6 @@
+import '../types'
 import { enhance, MiddlewareOrder, type UniversalMiddleware } from "@universal-middleware/core";
+import type { Photon } from "@photonjs/core/api";
 
 export const applyVercelHeaders: UniversalMiddleware<
   // TODO export type from Photon

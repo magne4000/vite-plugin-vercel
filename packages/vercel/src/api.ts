@@ -2,6 +2,7 @@ import type { PluginContext } from "rollup";
 import type { Plugin, ViteDevServer } from "vite";
 import { assert } from "./assert";
 import type { VercelOutputConfig, ViteVercelConfig } from "./types";
+import type { Photon } from "@photonjs/core/api";
 
 export function createAPI(outfiles: ViteVercelOutFile[], pluginConfig: ViteVercelConfig) {
   return {

@@ -25,7 +25,7 @@ export default {
     }),
     plugins,
   ],
-  // We manually add a list of dependencies to be pre-bundled, in order to avoid a page reload at dev start which breaks vike's CI
+  // We manually add a list of dependencies to be pre-bundled to avoid a page reload at dev start which breaks vike's CI
   // Also, react ones are here to fix issues while loading CJS
   optimizeDeps: { include: ["cross-fetch", "react/jsx-runtime", "react/jsx-dev-runtime"] },
 } as UserConfig;

@@ -1,7 +1,7 @@
 import type { Config } from "vike/types";
 import { plugins } from "./plugins";
-import photon from "@photonjs/core/vite";
 import { vikeServer } from "vike-server/plugin";
+import type { Photon } from "@photonjs/core/api";
 
 export default {
   name: "vike-vercel",
@@ -10,7 +10,7 @@ export default {
   },
   vite: {
     // biome-ignore lint/suspicious/noExplicitAny: avoid type mismatch between different Vite versions
-    plugins: [...plugins, photon(), vikeServer()] as any[],
+    plugins: [...plugins, vikeServer()] as any[],
   },
   extends: ["import:vike-server/config"],
   meta: {
@@ -34,12 +34,13 @@ export default {
       env: { server: true, config: true },
       eager: true,
     },
-    server: {
+    photon: {
       env: { config: true },
       global: true,
     },
   },
   prerender: {
+    enable: null,
     partial: true,
     keepDistServer: true,
   },
@@ -51,9 +52,7 @@ declare global {
       isr?: boolean | { expiration: number };
       edge?: boolean;
       headers?: Record<string, string>;
-      server?: {
-        entry: string;
-      };
+      photon?: Photon.Config;
     }
   }
 }

@@ -8,4 +8,7 @@ export default {
   Layout,
   vite6BuilderApp: true,
   extends: [vikeReact, vikeVercel],
+  photon: {
+    server: "",
+  },
 } satisfies Config;

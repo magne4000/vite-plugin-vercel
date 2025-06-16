@@ -11,9 +11,9 @@ export default defineConfig([
     clean: true,
     entry,
     external: ["esbuild", "vike"],
-    format: ["esm", "cjs"],
+    format: "esm",
     platform: "node",
-    target: "node18",
+    target: "node20",
     dts: {
       entry,
       compilerOptions: {

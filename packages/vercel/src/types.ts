@@ -3,6 +3,7 @@ import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
 import type { VercelOutputConfig } from "./schemas/config/config";
 import type { VercelOutputPrerenderConfig } from "./schemas/config/prerender-config";
 import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
+import type { Photon } from "@photonjs/core/api";
 
 export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderConfig };
 
@@ -114,7 +115,7 @@ export interface VercelEntryOptions {
 }
 
 // TODO better declaration merging on Photon's side
-declare global {
+declare module "@photonjs/core/api" {
   export namespace Photon {
     export interface EntryBase {
       vercel?: VercelEntryOptions;
