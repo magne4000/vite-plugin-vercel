@@ -69,6 +69,7 @@
     "fast-glob": "^3.3.3",
     "magicast": "^0.3.5",
     "path-to-regexp": "^8.2.0",
+    "strip-ansi": "^7.1.0",
     "vite-plugin-wasm": "^3.4.1",
     "zod": "^3.24.2"
   }

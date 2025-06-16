@@ -1,5 +1,6 @@
 import {
   BuildEnvironment,
+  createLogger,
   createRunnableDevEnvironment,
   type EnvironmentOptions,
   mergeConfig,
@@ -9,6 +10,7 @@ import type { ViteVercelConfig } from "../types";
 import path from "node:path";
 import { getConfig } from "../config";
 import type { OutputBundle } from "rollup";
+import stripAnsi from "strip-ansi";
 import { virtualEntry } from "../utils/const";
 import { edgeExternal } from "../utils/external";
 
@@ -51,6 +53,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
               consumer: "client",
             },
           },
+          customLogger: createVercelLogger(),
           // Required for environments to be taken into account
           builder: {},
         };
@@ -138,6 +141,22 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
       sharedDuringBuild: true,
     },
   ];
+}
+
+function createVercelLogger() {
+  const logger = createLogger();
+  const loggerInfo = logger.info;
+
+  logger.info = (msg, options) => {
+    if (msg.includes(".vercel/output/_tmp")) {
+      if (stripAnsi(msg).includes(".vercel/output/_tmp/assets")) return;
+      return loggerInfo(msg.replace(".vercel/output/_tmp/", ".vercel/output/"), options);
+    }
+
+    loggerInfo(msg, options);
+  };
+
+  return logger;
 }
 
 function createVercelEnvironmentOptions(extension: "js" | "mjs", overrides?: EnvironmentOptions): EnvironmentOptions {
