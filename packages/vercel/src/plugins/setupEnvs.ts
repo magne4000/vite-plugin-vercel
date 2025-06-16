@@ -169,6 +169,7 @@ function createVercelEnvironmentOptions(extension: "js" | "mjs", overrides?: Env
         },
         target: "es2022",
         emptyOutDir: false,
+        emitAssets: true,
       },
 
       consumer: "server",

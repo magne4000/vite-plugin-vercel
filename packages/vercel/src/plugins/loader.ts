@@ -7,7 +7,6 @@ import { vercelOutputPrerenderConfigSchema } from "../schemas/config/prerender-c
 import { assert } from "../assert";
 import path from "node:path";
 import { getPhotonMeta } from "@photonjs/core/api";
-import { isVercelLastBuildStep } from "../utils/env";
 
 const DUMMY = "__DUMMY__";
 const nonEdgeServers = ["express", "fastify"];
@@ -54,30 +53,28 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         const entry = await getPhotonMeta(this, input);
         const isEdge = Boolean(entry.vercel?.edge);
 
-        if (isVercelLastBuildStep(this.environment)) {
-          // Generate .vc-config.json
+        // Generate .vc-config.json
+        this.emitFile({
+          type: "asset",
+          fileName: photonEntryDestination(entry, ".func/.vc-config.json"),
+          source: JSON.stringify(
+            getVcConfig(pluginConfig, isEdge ? "index.js" : "index.mjs", {
+              nodeVersion,
+              edge: isEdge,
+              streaming: entry.vercel?.streaming,
+            }),
+            undefined,
+            2,
+          ),
+        });
+
+        // Generate *.prerender-config.json when necessary
+        if (entry.vercel?.isr) {
           this.emitFile({
             type: "asset",
-            fileName: photonEntryDestination(entry, ".func/.vc-config.json"),
-            source: JSON.stringify(
-              getVcConfig(pluginConfig, isEdge ? "index.js" : "index.mjs", {
-                nodeVersion,
-                edge: isEdge,
-                streaming: entry.vercel?.streaming,
-              }),
-              undefined,
-              2,
-            ),
+            fileName: photonEntryDestination(entry, ".prerender-config.json"),
+            source: JSON.stringify(vercelOutputPrerenderConfigSchema.parse(entry.vercel.isr), undefined, 2),
           });
-
-          // Generate *.prerender-config.json when necessary
-          if (entry.vercel?.isr) {
-            this.emitFile({
-              type: "asset",
-              fileName: photonEntryDestination(entry, ".prerender-config.json"),
-              source: JSON.stringify(vercelOutputPrerenderConfigSchema.parse(entry.vercel.isr), undefined, 2),
-            });
-          }
         }
 
         // Generate rewrites

@@ -1,5 +1,5 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { copyFile, rm } from "node:fs/promises";
+import { copyFile, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { findRoot } from "@manypkg/find-root";
 import { nodeFileTrace } from "@vercel/nft";
@@ -128,6 +128,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
             if (outfile.type === "asset") {
               const { source, destination } = getAbsoluteOutFileWithout_tmp(outfile);
               // TODO instead move from _tmp to parent folder
+              await mkdir(path.dirname(destination), { recursive: true });
               await copyFile(source, destination);
             } else {
               await bundle(

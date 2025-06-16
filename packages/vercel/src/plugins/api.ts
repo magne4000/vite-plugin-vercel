@@ -18,8 +18,9 @@ export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
       if (this.environment.name !== "vercel_edge" && this.environment.name !== "vercel_node") return;
 
       const entries = this.environment.config.photon.handlers;
-      const entryMapByDestination = new Map(
-        Object.values(entries).map((e) => [photonEntryDestination(e, ".func/index"), e]),
+      const server = this.environment.config.photon.server;
+      const entryMapByDestination = new Map<string, Photon.Entry>(
+        [server, ...Object.values(entries)].map((e) => [photonEntryDestination(e, ".func/index"), e]),
       );
 
       for (const [key, value] of Object.entries(bundle)) {
