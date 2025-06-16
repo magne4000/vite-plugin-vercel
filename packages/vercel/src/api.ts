@@ -9,8 +9,6 @@ export function createAPI(outfiles: ViteVercelOutFile[], pluginConfig: ViteVerce
      * @internal
      */
     getOutFiles(): ViteVercelOutFile[] {
-      assert(outfiles.length > 0, "getOutFiles() must be called after all outputs have been generated");
-
       return outfiles;
     },
     get config(): Partial<Omit<VercelOutputConfig, "version">> {
