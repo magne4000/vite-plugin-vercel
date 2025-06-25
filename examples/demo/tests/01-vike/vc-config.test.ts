@@ -7,7 +7,7 @@ prepareTestJsonFilesContent(
   [
     "/functions/api/page.func/.vc-config.json",
     "/functions/api/isr.func/.vc-config.json",
-    "/functions/__vike_node/__all.func/.vc-config.json",
+    "/functions/__vike_node/__catch_all.func/.vc-config.json",
     "/functions/__vike_node/pages/catch-all.func/.vc-config.json",
     "/functions/__vike_node/pages/isr.func/.vc-config.json",
     "/functions/__vike_node/pages/named.func/.vc-config.json",

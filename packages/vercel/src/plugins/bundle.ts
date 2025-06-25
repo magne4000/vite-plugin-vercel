@@ -55,7 +55,6 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
       buildStart: {
         order: "post",
         handler() {
-          this.environment.logger.info("vite-plugin-vercel:bundle-start");
           const shouldEmit = (entry: Photon.EntryBase) => {
             return (
               !entry.vercel?.disabled &&
@@ -192,7 +191,7 @@ async function bundle(
   const isEdge = Boolean(outfile.relatedEntry.vercel?.edge);
 
   await build({
-    platform: isEdge ? "browser" : "node",
+    platform: isEdge ? "neutral" : "node",
     format: "esm",
     target: "es2022",
     legalComments: "none",

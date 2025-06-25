@@ -87,6 +87,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
             target: "es2022",
             rollupOptions: {
               input: {},
+              treeshake: "smallest",
             },
           },
           optimizeDeps: {
@@ -155,7 +156,19 @@ function createVercelLogger() {
       return loggerInfo(`${msg} ${options.environment}`, options);
     }
     if (msg.includes(".vercel/output/_tmp")) {
-      if (stripAnsi(msg).includes(".vercel/output/_tmp/assets")) return;
+      const strippedMsg = stripAnsi(msg);
+      if (
+        strippedMsg.includes(".vercel/output/_tmp/assets") ||
+        strippedMsg.includes(".vercel/output/_tmp/chunks") ||
+        strippedMsg.includes(".vercel/output/_tmp/entries")
+      )
+        return;
+      if (
+        !strippedMsg.includes(".vercel/output/_tmp/functions/") &&
+        !strippedMsg.includes(".vercel/output/_tmp/config.json")
+      ) {
+        return;
+      }
       return loggerInfo(msg.replace(".vercel/output/_tmp/", ".vercel/output/"), options);
     }
 

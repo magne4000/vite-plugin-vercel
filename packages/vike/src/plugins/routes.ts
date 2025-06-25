@@ -75,7 +75,6 @@ export function routesPlugins(): Plugin[] {
       },
 
       buildStart: {
-        // order: "post",
         handler() {
           // Emit vercel functions
           const isEdge = this.environment.name === "vercel_edge";

@@ -81,7 +81,7 @@ prepareTestJsonFileContent("config.json", (context) => {
         src: "^(/named/[^/]+(?:/index\\.pageContext\\.json)?)$",
         dest: "/__vike_node/pages/named?__original_path=$1",
       },
-      { check: true, dest: "/__vike_node/__all?__original_path=$1", src: "^(.*)$" },
+      { check: true, dest: "/__vike_node/__catch_all?__original_path=$1", src: "^(.*)$" },
     ];
 
     assert.sameDeepMembers(expected, (context.file as any).routes);
