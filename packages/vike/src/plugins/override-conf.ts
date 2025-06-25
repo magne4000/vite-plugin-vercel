@@ -1,5 +1,6 @@
 import type { EnvironmentOptions, Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
+import { getVikeConfig } from "vike/plugin";
 
 /**
  * Ensure the same target between all builds
@@ -15,8 +16,12 @@ export function overrideConfPlugin(): Plugin {
     name: "vike-vercel:override-conf",
     apply: "build",
 
-    config() {
+    config(userConfig) {
+      const vikeConfig = getVikeConfig(userConfig);
+      const photonConfig = vikeConfig.config.photon ? { photon: vikeConfig.config.photon } : {};
+
       return {
+        ...photonConfig,
         builder: {
           // Override Vike's buildApp, because it exit(0)
           async buildApp(builder) {

@@ -10,5 +10,5 @@ export const vikeVercel: Plugin[] = [
   }),
   overrideConfPlugin(),
   ...routesPlugins(),
-  prerenderPlugin(),
+  ...prerenderPlugin(),
 ];
