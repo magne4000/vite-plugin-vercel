@@ -3,11 +3,11 @@ import { photonEntryDestination, photonEntryDestinationDefault } from "../utils/
 import { getVcConfig } from "../build";
 import type { ViteVercelConfig } from "../types";
 import { getNodeVersion, type NodeVersion } from "@vercel/build-utils";
-import { vercelOutputPrerenderConfigSchema } from "../schemas/config/prerender-config";
 import { assert } from "../assert";
 import path from "node:path";
 import { getPhotonMeta } from "@photonjs/core/api";
 import type { Photon } from "@photonjs/core";
+import { vercelOutputPrerenderConfigSchema } from "@vite-plugin-vercel/schemas";
 
 const DUMMY = "__DUMMY__";
 const nonEdgeServers = ["express", "fastify"];

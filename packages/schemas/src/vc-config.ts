@@ -3,7 +3,7 @@
  * @see {@link https://vercel.com/docs/build-output-api/v3/primitives#serverless-function-configuration}
  */
 
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const vercelOutputEdgeVcConfigSchema = z
   .object({
@@ -19,7 +19,7 @@ export const vercelOutputServerlessVcConfigSchema = z
     handler: z.string(),
     memory: z.number().int().min(128).max(3008).optional(),
     maxDuration: z.number().int().positive().optional(),
-    environment: z.record(z.string()).optional(),
+    environment: z.record(z.string(), z.string()).optional(),
     regions: z.array(z.string()).optional(),
     supportsWrapper: z.boolean().optional(),
     supportsResponseStreaming: z.boolean().optional(),

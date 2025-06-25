@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
-import { vercelOutputVcConfigSchema } from "../../../../packages/vercel/src/schemas/config/vc-config";
 import { testSchema } from "../common/helpers";
 import { prepareTestJsonFilesContent } from "./utils";
+import { vercelOutputVcConfigSchema } from "@vite-plugin-vercel/schemas";
 
 prepareTestJsonFilesContent(
   [

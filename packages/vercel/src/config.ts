@@ -1,6 +1,6 @@
 import { getTransformedRoutes, mergeRoutes, normalizeRoutes, type Route } from "@vercel/routing-utils";
-import { type VercelOutputConfig, vercelOutputConfigSchema } from "./schemas/config/config";
 import type { ViteVercelConfig, ViteVercelRewrite } from "./types";
+import { type VercelOutputConfig, vercelOutputConfigSchema } from "@vite-plugin-vercel/schemas";
 
 function reorderEnforce<T extends { enforce?: "pre" | "post" }>(arr: T[]) {
   return [

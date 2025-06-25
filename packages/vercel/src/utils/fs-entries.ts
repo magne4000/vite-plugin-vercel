@@ -3,8 +3,8 @@ import glob from "fast-glob";
 import "../types";
 import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
-import { type VercelEndpointExports, vercelEndpointExports } from "../schemas/exports";
 import type { Photon } from "@photonjs/core";
+import { vercelEndpointExports, type VercelEndpointExports } from "@vite-plugin-vercel/schemas";
 
 export async function getEntriesFromFs(
   dir: string,

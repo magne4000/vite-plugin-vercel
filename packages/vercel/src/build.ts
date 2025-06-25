@@ -1,6 +1,6 @@
 import type { NodeVersion } from "@vercel/build-utils";
-import { vercelOutputVcConfigSchema } from "./schemas/config/vc-config";
 import type { ViteVercelConfig } from "./types";
+import { vercelOutputVcConfigSchema } from "@vite-plugin-vercel/schemas";
 
 export function getVcConfig(
   pluginConfig: ViteVercelConfig,

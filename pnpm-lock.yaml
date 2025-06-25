@@ -107,6 +107,9 @@ importers:
       '@vercel/node':
         specifier: ^5.1.14
         version: 5.1.14(rollup@4.40.1)
+      '@vite-plugin-vercel/schemas':
+        specifier: workspace:^
+        version: link:../../packages/schemas
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -120,8 +123,8 @@ importers:
         specifier: ^3.1.1
         version: 3.1.1(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@18.19.86)
       zod:
-        specifier: ^3.24.2
-        version: 3.25.64
+        specifier: ^3.25.67
+        version: 3.25.67
 
   examples/hono:
     dependencies:
@@ -170,6 +173,22 @@ importers:
         specifier: ^7.0.0-beta.1
         version: 7.0.0-beta.1(@types/node@18.19.86)
 
+  packages/schemas:
+    dependencies:
+      zod:
+        specifier: ^3.25.67
+        version: 3.25.67
+    devDependencies:
+      '@types/node':
+        specifier: ^18.19.86
+        version: 18.19.86
+      tsup:
+        specifier: ^8.4.0
+        version: 8.4.0(postcss@8.5.4)(typescript@5.8.2)
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.2
+
   packages/vercel:
     dependencies:
       '@brillout/libassert':
@@ -194,8 +213,11 @@ importers:
         specifier: ^0.29.2
         version: 0.29.2(rollup@4.40.1)
       '@vercel/routing-utils':
-        specifier: ^5.0.45.0.2
+        specifier: ^5.0.4
         version: 5.0.4
+      '@vite-plugin-vercel/schemas':
+        specifier: workspace:^
+        version: link:../schemas
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
@@ -214,9 +236,6 @@ importers:
       vite-plugin-wasm:
         specifier: ^3.4.1
         version: 3.4.1(vite@7.0.0-beta.1(@types/node@18.19.86))
-      zod:
-        specifier: ^3.24.2
-        version: 3.25.64
     devDependencies:
       '@types/node':
         specifier: ^18.19.86
@@ -3054,8 +3073,8 @@ packages:
   yoga-wasm-web@0.3.3:
     resolution: {integrity: sha512-N+d4UJSJbt/R3wqY7Coqs5pcV0aUj2j9IaQ3rNj9bVCLld8tTGKRa2USARjnvZJWVx1NDmQev8EknoczaOQDOA==}
 
-  zod@3.25.64:
-    resolution: {integrity: sha512-hbP9FpSZf7pkS7hRVUrOjhwKJNyampPgtXKc3AN6DsWtoHsg2Sb4SQaS4Tcay380zSwd2VPo9G9180emBACp5g==}
+  zod@3.25.67:
+    resolution: {integrity: sha512-idA2YXwpCdqUSKRCACDE6ItZD9TZzy3OZMtpfLoh6oPR47lipysRrJfjzMqFxQ3uJuUPyUeWe1r9vLH33xO/Qw==}
 
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
@@ -3697,7 +3716,7 @@ snapshots:
       estree-walker: 3.0.3
       hono: 4.7.8
       oxc-transform: 0.64.0
-      zod: 3.25.64
+      zod: 3.25.67
     optionalDependencies:
       vite: 7.0.0-beta.1(@types/node@18.19.86)
     transitivePeerDependencies:
@@ -6163,6 +6182,6 @@ snapshots:
 
   yoga-wasm-web@0.3.3: {}
 
-  zod@3.25.64: {}
+  zod@3.25.67: {}
 
   zwitch@2.0.4: {}

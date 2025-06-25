@@ -3,7 +3,7 @@
  * @see {@link https://vercel.com/docs/build-output-api/v3#build-output-configuration}
  */
 
-import { z } from "zod";
+import { z } from "zod/v4";
 
 const HasOrMissing = z
   .array(
@@ -49,7 +49,7 @@ export const vercelOutputConfigSchema = z
             .object({
               src: z.string(),
               dest: z.string().optional(),
-              headers: z.record(z.string()).optional(),
+              headers: z.record(z.string(), z.string()).optional(),
               methods: z.array(z.string()).optional(),
               status: z.number().int().positive().optional(),
               continue: z.boolean().optional(),
@@ -58,7 +58,7 @@ export const vercelOutputConfigSchema = z
               has: HasOrMissing,
               locale: z
                 .object({
-                  redirect: z.record(z.string()).optional(),
+                  redirect: z.record(z.string(), z.string()).optional(),
                   cookie: z.string().optional(),
                 })
                 .strict()
@@ -111,6 +111,7 @@ export const vercelOutputConfigSchema = z
       .optional(),
     overrides: z
       .record(
+        z.string(),
         z
           .object({
             path: z.string().optional(),

@@ -1,10 +1,6 @@
 import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
-import type { VercelOutputConfig } from "./schemas/config/config";
-import type { VercelOutputPrerenderConfig } from "./schemas/config/prerender-config";
-import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
 import type { Photon } from "@photonjs/core";
-
-export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderConfig };
+import type { VercelOutputConfig, VercelOutputPrerenderConfig } from "@vite-plugin-vercel/schemas";
 
 export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
 export type ViteVercelRedirect = Redirect & { enforce?: "pre" | "post" };

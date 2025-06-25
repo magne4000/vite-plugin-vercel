@@ -2,7 +2,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import glob from "fast-glob";
 import { beforeAll, describe, expect, it } from "vitest";
-import type { ZodSchema } from "zod";
+import type { ZodSchema } from "zod/v4";
 import { getTmpDir } from "./utils";
 
 export interface TestContext {

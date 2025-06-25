@@ -47,13 +47,13 @@
     "@universal-middleware/vercel": "^0.4.18",
     "@vercel/build-utils": "^10.5.1",
     "@vercel/nft": "^0.29.2",
-    "@vercel/routing-utils": "^5.0.45.0.2",
+    "@vercel/routing-utils": "^5.0.4",
+    "@vite-plugin-vercel/schemas": "workspace:^",
     "esbuild": "^0.25.1",
     "fast-glob": "^3.3.3",
     "magicast": "^0.3.5",
     "path-to-regexp": "^8.2.0",
     "strip-ansi": "^7.1.0",
-    "vite-plugin-wasm": "^3.4.1",
-    "zod": "^3.24.2"
+    "vite-plugin-wasm": "^3.4.1"
   }
 }

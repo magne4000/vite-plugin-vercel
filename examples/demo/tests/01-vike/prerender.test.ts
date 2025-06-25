@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
-import { vercelOutputPrerenderConfigSchema } from "../../../../packages/vercel/src/schemas/config/prerender-config";
 import { testSchema } from "../common/helpers";
 import { prepareTestJsonFileContent } from "./utils";
+import { vercelOutputPrerenderConfigSchema } from "@vite-plugin-vercel/schemas";
 
 prepareTestJsonFileContent("/functions/__vike_node/pages/catch-all.prerender-config.json", (context) => {
   testSchema(context, vercelOutputPrerenderConfigSchema);
