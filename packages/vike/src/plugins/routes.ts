@@ -1,20 +1,9 @@
-import path from "node:path";
 import { getVikeConfig } from "vike/plugin";
-import type { PageContext } from "vike/types";
 import { normalizePath, type Plugin } from "vite";
 import { assert } from "../utils/assert";
 import { addPhotonServerConfig } from "@photonjs/core/api";
 
-type PrerenderContextOutputPage = {
-  filePath: string;
-  fileType: string;
-  fileContent: string;
-  pageContext: PageContext;
-};
-
-function routesPluginBuild(): Plugin[] {
-  let vikeConfig: ReturnType<typeof getVikeConfig> | undefined = undefined;
-  let vikePrerenderOutdir: string | undefined = undefined;
+export function routesPlugins(): Plugin[] {
   const vikePages: {
     pageId: string;
     isr: number | null;
@@ -25,86 +14,69 @@ function routesPluginBuild(): Plugin[] {
 
   return [
     {
-      name: "vike-vercel:routes:build",
+      name: "vike-vercel:routes:read-config",
       apply: "build",
+
+      applyToEnvironment(env) {
+        return env.name === "ssr";
+      },
 
       closeBundle: {
         order: "post",
         async handler() {
-          if (this.environment.name === "client") {
-            vikePrerenderOutdir = normalizePath(
-              path.isAbsolute(this.environment.config.build.outDir)
-                ? this.environment.config.build.outDir
-                : path.posix.join(this.environment.config.root, this.environment.config.build.outDir),
-            );
-          }
-          if (this.environment.name === "ssr") {
-            vikeConfig = getVikeConfig(this.environment.config);
+          const vikeConfig = getVikeConfig(this.environment.config);
 
-            for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
-              const rawIsr = extractIsr(page.config);
-              let isr = assertIsr(page.config);
-              const edge = assertEdge(page.config);
-              const headers = assertHeaders(page.config);
+          for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
+            const rawIsr = extractIsr(page.config);
+            let isr = assertIsr(page.config);
+            const edge = assertEdge(page.config);
+            const headers = assertHeaders(page.config);
 
-              if (typeof page.route === "function" && isr) {
-                this.warn(
-                  `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
-                );
-                isr = null;
-              }
-
-              if (edge && rawIsr !== null && typeof rawIsr === "object") {
-                throw new Error(
-                  `Page ${pageId}: ISR cannot be enabled for edge functions. Remove \`{ isr }\` config or set \`{ edge: false }\`.`,
-                );
-              }
-
-              const route = typeof page.route === "string" ? getParametrizedRoute(page.route) : null;
-
-              if (!route && headers !== null && headers !== undefined) {
-                this.warn(
-                  `Page ${pageId}: { headers } are not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
-                );
-              }
-
-              vikePages.push({
-                pageId,
-                isr,
-                edge,
-                headers,
-                route,
-              });
+            if (typeof page.route === "function" && isr) {
+              this.warn(
+                `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
+              );
+              isr = null;
             }
+
+            if (edge && rawIsr !== null && typeof rawIsr === "object") {
+              throw new Error(
+                `Page ${pageId}: ISR cannot be enabled for edge functions. Remove \`{ isr }\` config or set \`{ edge: false }\`.`,
+              );
+            }
+
+            const route = typeof page.route === "string" ? getParametrizedRoute(page.route) : null;
+
+            if (!route && headers !== null && headers !== undefined) {
+              this.warn(
+                `Page ${pageId}: { headers } are not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
+              );
+            }
+
+            vikePages.push({
+              pageId,
+              isr,
+              edge,
+              headers,
+              route,
+            });
           }
         },
+      },
+
+      sharedDuringBuild: true,
+    },
+    {
+      name: "vike-vercel:routes:build",
+      apply: "build",
+
+      applyToEnvironment(env) {
+        return env.name === "vercel_node" || env.name === "vercel_edge";
       },
 
       buildStart: {
         // order: "post",
         handler() {
-          // TODO split into sperate plugins per env
-          if (this.environment.name === "vercel_client") {
-            // Emit prerendered files
-            const prerenderContext: { output?: PrerenderContextOutputPage[] } | undefined =
-              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-              vikeConfig?.prerenderContext as any;
-            if (prerenderContext?.output && vikePrerenderOutdir) {
-              for (const file of prerenderContext.output) {
-                const is404 = Boolean(file.pageContext.is404);
-
-                const key = is404 ? "404.html" : normalizePath(file.filePath).substring(vikePrerenderOutdir.length + 1);
-                this.emitFile({
-                  type: "asset",
-                  fileName: key,
-                  originalFileName: key,
-                  source: file.fileContent,
-                });
-              }
-            }
-          }
-
-          if (this.environment.name !== "vercel_node" && this.environment.name !== "vercel_edge") return;
           // Emit vercel functions
           const isEdge = this.environment.name === "vercel_edge";
           const key = isEdge ? "__vike_edge" : "__vike_node";
@@ -130,6 +102,8 @@ function routesPluginBuild(): Plugin[] {
             });
           }
 
+          const vikeConfig = getVikeConfig(this.environment.config);
+
           if (
             currentEnvPages.length > 0 &&
             // Only generate one default route
@@ -154,10 +128,6 @@ function routesPluginBuild(): Plugin[] {
       sharedDuringBuild: true,
     },
   ];
-}
-
-export function routesPlugins(): Plugin[] {
-  return [...routesPluginBuild()];
 }
 
 function extractIsr(exports: unknown) {

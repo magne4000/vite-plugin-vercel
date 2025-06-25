@@ -2,6 +2,7 @@ import type { Plugin } from "vite";
 import { overrideConfPlugin } from "./override-conf";
 import { routesPlugins } from "./routes";
 import { installPhoton } from "@photonjs/core/vite";
+import { prerenderPlugin } from "./prerender";
 
 export const vikeVercel: Plugin[] = [
   ...installPhoton("vike-vercel", {
@@ -9,4 +10,5 @@ export const vikeVercel: Plugin[] = [
   }),
   overrideConfPlugin(),
   ...routesPlugins(),
+  prerenderPlugin(),
 ];
