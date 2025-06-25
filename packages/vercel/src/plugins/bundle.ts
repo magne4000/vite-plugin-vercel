@@ -13,6 +13,8 @@ import { virtualEntry } from "../utils/const";
 import { isVercelLastBuildStep } from "../utils/env";
 import { edgeExternal } from "../utils/external";
 import { getPhotonServerIdWithHandler } from "@photonjs/core/api";
+import type { Photon } from "@photonjs/core";
+import { getServersWithConfig } from "../utils/server-with-config";
 
 const edgeWasmPlugin: ESBuildPlugin = {
   name: "edge-wasm-vercel",
@@ -53,28 +55,47 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
       buildStart: {
         order: "post",
         handler() {
-          // Emit server (fallback) entry
-          const serverEntry = this.environment.config.photon.server;
-          const isEdgeServer = Boolean(serverEntry.vercel?.edge);
-          if (
-            (this.environment.name === "vercel_edge" && isEdgeServer) ||
-            (this.environment.name === "vercel_node" && !isEdgeServer)
-          ) {
-            this.emitFile({
-              type: "chunk",
-              fileName: `${photonEntryDestination(serverEntry, ".func/index")}.${isEdgeServer ? "js" : "mjs"}`,
-              id: `${virtualEntry}:${serverEntry.id}`,
-              importer: undefined,
-            });
+          this.environment.logger.info("vite-plugin-vercel:bundle-start");
+          const shouldEmit = (entry: Photon.EntryBase) => {
+            return (
+              !entry.vercel?.disabled &&
+              ((this.environment.name === "vercel_edge" && entry.vercel?.edge) ||
+                (this.environment.name === "vercel_node" && !entry.vercel?.edge))
+            );
+          };
+
+          // Emit server (default) entry
+          {
+            const serverEntry = this.environment.config.photon.server;
+            const isEdge = Boolean(serverEntry.vercel?.edge);
+            if (shouldEmit(serverEntry)) {
+              this.emitFile({
+                type: "chunk",
+                fileName: `${photonEntryDestination(serverEntry, ".func/index")}.${isEdge ? "js" : "mjs"}`,
+                id: `${virtualEntry}:${serverEntry.id}`,
+                importer: undefined,
+              });
+            }
+          }
+
+          // Emit server (additional configs) entries
+          for (const serverEntry of getServersWithConfig(this)) {
+            const isEdge = Boolean(serverEntry.vercel?.edge);
+            if (shouldEmit(serverEntry)) {
+              this.emitFile({
+                type: "chunk",
+                // Different destination than default server
+                fileName: `${photonEntryDestination(serverEntry, ".func/index")}.${isEdge ? "js" : "mjs"}`,
+                id: `${virtualEntry}:${serverEntry.id}`,
+                importer: undefined,
+              });
+            }
           }
 
           // Emit handlers, each wrapped behind the server entry
           for (const [key, entry] of Object.entries(this.environment.config.photon.handlers)) {
             const isEdge = Boolean(entry.vercel?.edge);
-            if (
-              (this.environment.name === "vercel_edge" && isEdge) ||
-              (this.environment.name === "vercel_node" && !isEdge)
-            ) {
+            if (shouldEmit(entry)) {
               this.emitFile({
                 type: "chunk",
                 fileName: `${photonEntryDestination(entry, ".func/index")}.${isEdge ? "js" : "mjs"}`,
@@ -174,7 +195,7 @@ async function bundle(
     platform: isEdge ? "browser" : "node",
     format: "esm",
     target: "es2022",
-
+    legalComments: "none",
     bundle: true,
     external: [...edgeExternal, ...external],
     entryPoints: [source],

@@ -81,6 +81,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         // Generate rewrites
         if (entry.route || entry.vercel?.route) {
           pluginConfig.rewrites ??= [];
+          // TODO create a helper
           const source =
             typeof entry.vercel?.route === "string"
               ? `(${entry.vercel.route})`

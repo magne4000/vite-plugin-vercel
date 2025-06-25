@@ -4,11 +4,11 @@ import { vercelCleanupPlugin } from "./clean-outdir";
 import { wasmPlugin } from "./wasm";
 import { apiPlugin } from "./api";
 import { bundlePlugin } from "./bundle";
-import { installPhoton, photon } from "@photonjs/core/vite";
+import { installPhoton } from "@photonjs/core/vite";
 import { setupEnvs } from "./setupEnvs";
 import { loaderPlugin } from "./loader";
 
-export function vercel(pluginConfig: ViteVercelConfig): PluginOption[] {
+export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
   const additionalConfig: Record<string, unknown> = {};
   if (pluginConfig.handlers) {
     additionalConfig.handlers = pluginConfig.handlers;
@@ -18,13 +18,11 @@ export function vercel(pluginConfig: ViteVercelConfig): PluginOption[] {
   }
 
   return [
-    photon({
+    ...installPhoton("vite-plugin-vercel", {
       ...additionalConfig,
       devServer: {
         env: "vercel_node",
       },
-    }),
-    ...installPhoton("vite-plugin-vercel", {
       resolveMiddlewares(env) {
         if (env === "dev") {
           return "vite-plugin-vercel/universal-middleware/dev";

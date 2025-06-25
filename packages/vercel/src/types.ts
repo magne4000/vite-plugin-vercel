@@ -111,18 +111,16 @@ export interface VercelEntryOptions {
    * When true, the Serverless Function will stream the response to the client
    */
   streaming?: boolean;
+  /**
+   * When true, do not build output files for this entry
+   */
+  disabled?: boolean;
 }
 
-// TODO better declaration merging on Photon's side
 declare module "@photonjs/core" {
   export namespace Photon {
     export interface EntryBase {
       vercel?: VercelEntryOptions;
-    }
-
-    export interface ConfigResolved {
-      handlers: Record<string, Photon.EntryUniversalHandler>;
-      server: Photon.EntryServer;
     }
   }
 }

@@ -1,6 +1,6 @@
 import type { Config } from "vike/types";
-import { plugins } from "./plugins";
-import { vikeServer } from "vike-server/plugin";
+import { vercel } from "vite-plugin-vercel";
+import { vikeVercel } from "./plugins";
 import type { Photon } from "@photonjs/core";
 
 export default {
@@ -10,7 +10,7 @@ export default {
   },
   vite: {
     // biome-ignore lint/suspicious/noExplicitAny: avoid type mismatch between different Vite versions
-    plugins: [...plugins, vikeServer()] as any[],
+    plugins: [vercel(), vikeVercel] as any[],
   },
   extends: ["import:vike-server/config"],
   meta: {

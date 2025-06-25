@@ -32,10 +32,16 @@ export function overrideConfPlugin(): Plugin {
         setTargetAndCssTarget(options);
       }
     },
-    buildStart() {
-      const api = getVercelAPI(this);
-      // Override `vite-plugin-vercel` config
-      api.defaultSupportsResponseStreaming = true;
+    buildStart: {
+      order: "pre",
+      handler() {
+        this.environment.config.photon.server.vercel ??= {};
+        // We will only rely on `additionalServerConfigs` to generate all functions
+        this.environment.config.photon.server.vercel.disabled = true;
+        const api = getVercelAPI(this);
+        // Override `vite-plugin-vercel` config
+        api.defaultSupportsResponseStreaming = true;
+      },
     },
   };
 }

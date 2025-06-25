@@ -3,7 +3,7 @@ import { getVikeConfig } from "vike/plugin";
 import type { PageContext } from "vike/types";
 import { normalizePath, type Plugin } from "vite";
 import { assert } from "../utils/assert";
-import { setPhotonHandler } from "@photonjs/core/api";
+import { addPhotonServerConfig } from "@photonjs/core/api";
 
 type PrerenderContextOutputPage = {
   filePath: string;
@@ -22,7 +22,6 @@ function routesPluginBuild(): Plugin[] {
     headers: Record<string, string> | null;
     route: string | null;
   }[] = [];
-  let i = 0;
 
   return [
     {
@@ -117,15 +116,12 @@ function routesPluginBuild(): Plugin[] {
           for (const page of currentEnvPages.filter(
             (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
           )) {
-            i++;
-            const name = `${key}/${page.pageId}`;
-            setPhotonHandler(this, name, {
-              id: `${this.environment.config.photon.server.id}?i=${i}`,
+            const name = `${key}${page.pageId}`;
+            addPhotonServerConfig(this, {
               name,
-              type: "universal-handler",
               route: page.route ?? undefined,
               vercel: {
-                destination: normalizePath(`${key}/${page.pageId}`),
+                destination: normalizePath(name),
                 isr: page.isr ? { expiration: page.isr } : undefined,
                 headers: page.headers,
                 route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
@@ -140,15 +136,12 @@ function routesPluginBuild(): Plugin[] {
             isEdge === Boolean(vikeConfig?.config.edge)
           ) {
             // Catch-all
-            i++;
             const name = `${key}/__catch_all`;
-            setPhotonHandler(this, name, {
-              id: `${this.environment.config.photon.server.id}?i=${i}`,
+            addPhotonServerConfig(this, {
               name,
-              type: "universal-handler",
               route: "/**",
               vercel: {
-                destination: normalizePath(`${key}/__catch_all`),
+                destination: normalizePath(name),
                 route: ".*",
                 edge: isEdge,
                 enforce: "post",
@@ -225,17 +218,17 @@ function assertHeaders(exports: unknown): Record<string, string> | null {
   return headers as Record<string, string>;
 }
 
-function getSegmentRegex(segment: string): string {
+function getSegmentRou3(segment: string): string {
   if (segment.startsWith("@")) {
-    return "/[^/]+";
+    return `/:${segment.slice(1)}`;
   }
   if (segment === "*") {
-    return "/.+?";
+    return "/**";
   }
   return `/${segment}`;
 }
 
 export function getParametrizedRoute(route: string): string {
   const segments = (route.replace(/\/$/, "") || "/").slice(1).split("/");
-  return segments.map(getSegmentRegex).join("");
+  return segments.map(getSegmentRou3).join("");
 }

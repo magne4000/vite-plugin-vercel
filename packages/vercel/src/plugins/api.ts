@@ -3,6 +3,7 @@ import type { ViteVercelConfig } from "../types";
 import { createAPI, type ViteVercelOutFile } from "../api";
 import { photonEntryDestination } from "../utils/destination";
 import type { Photon } from "@photonjs/core";
+import { getServersWithConfig } from "../utils/server-with-config";
 
 export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const outfiles: ViteVercelOutFile[] = [];
@@ -20,9 +21,14 @@ export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
       const entries = this.environment.config.photon.handlers;
       const server = this.environment.config.photon.server;
+      const serversWithConfigs = getServersWithConfig(this);
       const entryMapByDestination = new Map<string, Photon.Entry>(
         [server, ...Object.values(entries)].map((e) => [photonEntryDestination(e, ".func/index"), e]),
       );
+
+      for (const entry of serversWithConfigs) {
+        entryMapByDestination.set(photonEntryDestination(entry, ".func/index"), entry);
+      }
 
       for (const [key, value] of Object.entries(bundle)) {
         if (value.type === "chunk" && value.isEntry && entryMapByDestination.has(removeExtension(key))) {
