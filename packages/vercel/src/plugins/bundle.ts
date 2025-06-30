@@ -198,8 +198,8 @@ async function bundle(
     bundle: true,
     external: [...edgeExternal, ...external],
     entryPoints: [source],
-    outExtension: isEdge ? {} : { ".js": ".mjs" },
-    outfile: destination,
+    outExtension: { ".js": ".mjs" },
+    outfile: destination.replace(/\.js$/, ".mjs"),
     logOverride: { "ignored-bare-import": "silent" },
     plugins: [edgeWasmPlugin],
   });

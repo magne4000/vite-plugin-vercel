@@ -65,7 +65,7 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
     builds: [
       {
         use: "@vercel/node",
-        entrypoint: "index.js",
+        entrypoint: "index.mjs",
         routes: buildRoutes,
       },
     ],
