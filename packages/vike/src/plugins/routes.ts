@@ -95,7 +95,7 @@ export function routesPlugins(): Plugin[] {
                 destination: normalizePath(name),
                 isr: page.isr ? { expiration: page.isr } : undefined,
                 headers: page.headers,
-                route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
+                route: page.route ? `${routeToRegExp(page.route)}(?:\\/index\\.pageContext\\.json)?` : undefined,
                 edge: isEdge,
               },
             });
@@ -197,7 +197,26 @@ function getSegmentRou3(segment: string): string {
   return `/${segment}`;
 }
 
-export function getParametrizedRoute(route: string): string {
+function getParametrizedRoute(route: string): string {
   const segments = (route.replace(/\/$/, "") || "/").slice(1).split("/");
   return segments.map(getSegmentRou3).join("");
+}
+
+// https://github.com/h3js/rou3/blob/main/src/regexp.ts
+function routeToRegExp(route = "/"): string {
+  const reSegments = [];
+  let idCtr = 0;
+  for (const segment of route.split("/")) {
+    if (!segment) continue;
+    if (segment === "*") {
+      reSegments.push(`(?<_${idCtr++}>[^/]*)`);
+    } else if (segment.startsWith("**")) {
+      reSegments.push(segment === "**" ? "?(?<_>.*)" : `?(?<${segment.slice(3)}>.+)`);
+    } else if (segment.includes(":")) {
+      reSegments.push(segment.replace(/:(\w+)/g, (_, id) => `(?<${id}>[^/]+)`).replace(/\./g, "\\."));
+    } else {
+      reSegments.push(segment);
+    }
+  }
+  return `/${reSegments.join("/")}`;
 }

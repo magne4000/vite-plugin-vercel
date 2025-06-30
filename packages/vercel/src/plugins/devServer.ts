@@ -1,8 +1,4 @@
 import type { Environment, Plugin, RunnableDevEnvironment } from "vite";
-import { photonEntryDestinationDefault } from "../utils/destination";
-import { assert } from "../assert";
-import path from "node:path";
-import type { Photon } from "@photonjs/core";
 
 export function isRunnableDevEnvironment(environment: Environment): environment is RunnableDevEnvironment {
   return "runner" in environment;
@@ -90,33 +86,4 @@ export function devServerPlugin(): Plugin {
 
     sharedDuringBuild: true,
   };
-}
-
-// @vercel/routing-utils respects path-to-regexp v6 syntax
-function entryToPathtoregex(entry: Photon.Entry) {
-  assert(typeof entry.vercel?.route !== "string", "Do not pass entry with route string to entryToPathtoregex");
-  return path.posix
-    .resolve("/", photonEntryDestinationDefault(entry))
-    .split("/")
-    .map((segment) =>
-      segment
-        .replace(/^\[\[\.\.\.([^/]+)\]\]$/g, ":$1*")
-        .replace(/^\[\[([^/]+)\]\]$/g, ":$1?")
-        .replace(/^\[\.\.\.([^/]+)\]$/g, ":$1+")
-        .replace(/^\[([^/]+)\]$/g, ":$1"),
-    )
-    .join("/");
-}
-
-function rou3ToPathtoregex(rou3route: string) {
-  return rou3route
-    .split("/")
-    .map((segment) =>
-      segment
-        .replace(/^\*$/g, ":splat?")
-        .replace(/^\*\*$/g, ":splat*")
-        .replace(/^\*\*:([^/]+)$/g, ":$1*")
-        .replace(/^:([^/]+)$/g, ":$1"),
-    )
-    .join("/");
 }

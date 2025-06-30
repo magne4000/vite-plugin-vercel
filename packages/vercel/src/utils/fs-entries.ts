@@ -5,6 +5,7 @@ import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
 import type { Photon } from "@photonjs/core";
 import { vercelEndpointExports, type VercelEndpointExports } from "@vite-plugin-vercel/schemas";
+import { entryToRou3 } from "./route";
 
 export async function getEntriesFromFs(
   dir: string,
@@ -29,20 +30,21 @@ export async function getEntriesFromFs(
     }
 
     const key = path.posix.join(destination, parsed.dir, parsed.name);
-    entryPoints[key] = {
+    const entry = {
       id: filePath,
       name: key,
       type: "universal-handler",
-      route: path.posix.join("/", key),
       vercel: {
-        destination: key,
         route: true,
+        destination: key,
         edge: xports?.edge,
         isr: xports?.isr,
         headers: xports?.headers,
         streaming: xports?.streaming,
       },
-    };
+    } satisfies Photon.EntryUniversalHandler;
+    (entry as Photon.EntryUniversalHandler).route = entryToRou3(entry);
+    entryPoints[key] = entry;
   }
 
   return entryPoints;
