@@ -42,7 +42,7 @@
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@photonjs/core": "0.0.1-commit-cb283b0",
+    "@photonjs/core": "0.0.1-commit-b80ebde",
     "@universal-middleware/core": "^0.4.8",
     "@universal-middleware/vercel": "^0.4.18",
     "@vercel/build-utils": "^10.5.1",

@@ -8,7 +8,7 @@ export const vikeVercel: Plugin[] = [
   ...installPhoton("vike-vercel", {
     fullInstall: true,
   }),
-  overrideConfPlugin(),
+  ...overrideConfPlugin(),
   ...routesPlugins(),
   ...prerenderPlugin(),
 ];

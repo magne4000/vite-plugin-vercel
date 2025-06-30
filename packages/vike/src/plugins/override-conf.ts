@@ -1,6 +1,7 @@
 import type { EnvironmentOptions, Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
 import { getVikeConfig } from "vike/plugin";
+import { resolvePhotonConfig } from "@photonjs/core/api";
 
 /**
  * Ensure the same target between all builds
@@ -11,42 +12,50 @@ function setTargetAndCssTarget(env: EnvironmentOptions) {
   env.build.cssTarget = "es2022";
 }
 
-export function overrideConfPlugin(): Plugin {
-  return {
-    name: "vike-vercel:override-conf",
-    apply: "build",
+export function overrideConfPlugin(): Plugin[] {
+  return [
+    {
+      name: "vike-vercel:photon-config",
 
-    config(userConfig) {
-      const vikeConfig = getVikeConfig(userConfig);
-      const photonConfig = vikeConfig.config.photon ? { photon: vikeConfig.config.photon } : {};
-
-      return {
-        ...photonConfig,
-        builder: {
-          // Override Vike's buildApp, because it exit(0)
-          async buildApp(builder) {
-            await builder.build(builder.environments.client);
-            await builder.build(builder.environments.ssr);
-          },
-        },
-      };
-    },
-
-    configEnvironment(name, options) {
-      if (name === "vercel_client" || name === "client" || name === "ssr") {
-        setTargetAndCssTarget(options);
-      }
-    },
-    buildStart: {
-      order: "pre",
-      handler() {
-        this.environment.config.photon.server.vercel ??= {};
-        // We will only rely on `additionalServerConfigs` to generate all functions
-        this.environment.config.photon.server.vercel.disabled = true;
-        const api = getVercelAPI(this);
-        // Override `vite-plugin-vercel` config
-        api.defaultSupportsResponseStreaming = true;
+      config(userConfig) {
+        const vikeConfig = getVikeConfig(userConfig);
+        if (vikeConfig.config.photon) {
+          return { photon: resolvePhotonConfig(vikeConfig.config.photon) };
+        }
       },
     },
-  };
+    {
+      name: "vike-vercel:override-conf",
+      apply: "build",
+
+      config() {
+        return {
+          builder: {
+            // Override Vike's buildApp, because it exit(0)
+            async buildApp(builder) {
+              await builder.build(builder.environments.client);
+              await builder.build(builder.environments.ssr);
+            },
+          },
+        };
+      },
+
+      configEnvironment(name, options) {
+        if (name === "vercel_client" || name === "client" || name === "ssr") {
+          setTargetAndCssTarget(options);
+        }
+      },
+      buildStart: {
+        order: "pre",
+        handler() {
+          this.environment.config.photon.server.vercel ??= {};
+          // We will only rely on `additionalServerConfigs` to generate all functions
+          this.environment.config.photon.server.vercel.disabled = true;
+          const api = getVercelAPI(this);
+          // Override `vite-plugin-vercel` config
+          api.defaultSupportsResponseStreaming = true;
+        },
+      },
+    },
+  ];
 }
