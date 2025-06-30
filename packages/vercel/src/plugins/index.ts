@@ -20,6 +20,7 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
   return [
     ...installPhoton("vite-plugin-vercel", {
       ...additionalConfig,
+      defaultBuildEnv: "vercel_node",
       devServer: {
         env: "vercel_node",
       },

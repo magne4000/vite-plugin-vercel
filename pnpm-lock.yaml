@@ -6,7 +6,7 @@ settings:
 
 overrides:
   path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
-  '@photonjs/core': 0.0.1-commit-7c37631
+  '@photonjs/core': 0.0.1-commit-cb283b0
   vite: ^7.0.0
 
 importers:
@@ -129,8 +129,8 @@ importers:
   examples/hono:
     dependencies:
       '@photonjs/core':
-        specifier: 0.0.1-commit-7c37631
-        version: 0.0.1-commit-7c37631(vite@7.0.0(@types/node@18.19.86))
+        specifier: 0.0.1-commit-cb283b0
+        version: 0.0.1-commit-cb283b0(vite@7.0.0(@types/node@18.19.86))
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vercel
@@ -198,8 +198,8 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       '@photonjs/core':
-        specifier: 0.0.1-commit-7c37631
-        version: 0.0.1-commit-7c37631(vite@7.0.0(@types/node@18.19.86))
+        specifier: 0.0.1-commit-cb283b0
+        version: 0.0.1-commit-cb283b0(vite@7.0.0(@types/node@18.19.86))
       '@universal-middleware/core':
         specifier: ^0.4.8
         version: 0.4.8(hono@4.7.8)
@@ -265,8 +265,8 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       '@photonjs/core':
-        specifier: 0.0.1-commit-7c37631
-        version: 0.0.1-commit-7c37631(vite@7.0.0(@types/node@18.19.86))
+        specifier: 0.0.1-commit-cb283b0
+        version: 0.0.1-commit-cb283b0(vite@7.0.0(@types/node@18.19.86))
       vike:
         specifier: ^0.4.235
         version: 0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
@@ -853,8 +853,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@photonjs/core@0.0.1-commit-7c37631':
-    resolution: {integrity: sha512-WfBVd/znfBkwucRtu223IDFsrlJw6heKXc+ttUeOruIuFGHatoQG05Qn5dtSBYJZygjNLtHlmsHUG+bI2NKu5g==}
+  '@photonjs/core@0.0.1-commit-cb283b0':
+    resolution: {integrity: sha512-uTj1A1SyyxZK0i0sMdeKEu2EATFlGlyoCkMABxNlq2ghV8eoEcifCXgTVAnCmtT8BD0oQqAHnIIM/JebdwZaRg==}
     peerDependencies:
       vite: ^7.0.0
     peerDependenciesMeta:
@@ -3711,7 +3711,7 @@ snapshots:
   '@oxc-transform/binding-win32-x64-msvc@0.64.0':
     optional: true
 
-  '@photonjs/core@0.0.1-commit-7c37631(vite@7.0.0(@types/node@18.19.86))':
+  '@photonjs/core@0.0.1-commit-cb283b0(vite@7.0.0(@types/node@18.19.86))':
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.9
@@ -6037,7 +6037,7 @@ snapshots:
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.9
-      '@photonjs/core': 0.0.1-commit-7c37631(vite@7.0.0(@types/node@18.19.86))
+      '@photonjs/core': 0.0.1-commit-cb283b0(vite@7.0.0(@types/node@18.19.86))
       '@universal-middleware/compress': 0.2.30
       '@universal-middleware/core': 0.4.8(hono@4.7.8)
       '@universal-middleware/elysia': 0.4.8

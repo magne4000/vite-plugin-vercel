@@ -4,8 +4,6 @@ import { fileURLToPath } from "node:url";
 import { ImageResponse } from "@vercel/og";
 import React from "react";
 
-// FIXME all handlers are included in all targets
-
 // isomorphic __dirname
 const _dirname = typeof __dirname !== "undefined" ? __dirname : dirname(fileURLToPath(import.meta.url));
 const font = readFileSync(join(_dirname, "./Roboto-Regular.ttf"));
