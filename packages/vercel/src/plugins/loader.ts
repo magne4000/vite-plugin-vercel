@@ -54,6 +54,13 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         const entry = await getPhotonMeta(this, input);
         const isEdge = Boolean(entry.vercel?.edge);
 
+        // Generate package.json to enforce type: module
+        this.emitFile({
+          type: "asset",
+          fileName: photonEntryDestination(entry, ".func/package.json"),
+          source: JSON.stringify({ type: "module" }),
+        });
+
         // Generate .vc-config.json
         this.emitFile({
           type: "asset",

@@ -7,7 +7,7 @@ export function photonEntryDestinationDefault(entry: Photon.Entry) {
 
 export function photonEntryDestination(
   entry: Photon.Entry,
-  postfix: `.func/index` | `.func/.vc-config.json` | `.prerender-config.json`,
+  postfix: `.func/index` | `.func/.vc-config.json` | `.func/package.json` | `.prerender-config.json`,
 ) {
   return `${path.posix.join("functions/", photonEntryDestinationDefault(entry))}${postfix}`;
 }
