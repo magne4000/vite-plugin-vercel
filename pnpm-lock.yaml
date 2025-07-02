@@ -8,6 +8,7 @@ overrides:
   path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
   '@photonjs/core': 0.0.1-commit-a85dffb
   vite: ^7.0.0
+  vike: 0.4.235-commit-16164c3
 
 importers:
 
@@ -68,11 +69,11 @@ importers:
         specifier: ^5.8.2
         version: 5.8.2
       vike:
-        specifier: ^0.4.235
-        version: 0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
+        specifier: 0.4.235-commit-16164c3
+        version: 0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
       vike-react:
         specifier: ^0.5.13
-        version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)))
+        version: 0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)))
       vike-vercel:
         specifier: workspace:^
         version: link:../../packages/vike
@@ -118,7 +119,7 @@ importers:
         version: 1.51.1
       vike-server:
         specifier: 1.0.16-commit-6104db2
-        version: 1.0.16-commit-6104db2(vike@0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)))(vite@7.0.0(@types/node@18.19.86))
+        version: 1.0.16-commit-6104db2(vike@0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)))(vite@7.0.0(@types/node@18.19.86))
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@18.19.86)
@@ -268,11 +269,11 @@ importers:
         specifier: 0.0.1-commit-a85dffb
         version: 0.0.1-commit-a85dffb(vite@7.0.0(@types/node@18.19.86))
       vike:
-        specifier: ^0.4.235
-        version: 0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
+        specifier: 0.4.235-commit-16164c3
+        version: 0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
       vike-server:
         specifier: 1.0.16-commit-6104db2
-        version: 1.0.16-commit-6104db2(vike@0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)))(vite@7.0.0(@types/node@18.19.86))
+        version: 1.0.16-commit-6104db2(vike@0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)))(vite@7.0.0(@types/node@18.19.86))
     devDependencies:
       '@types/node':
         specifier: ^18.19.86
@@ -2929,7 +2930,7 @@ packages:
     peerDependencies:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
-      vike: '>=0.4.182'
+      vike: 0.4.235-commit-16164c3
 
   vike-server@1.0.16-commit-6104db2:
     resolution: {integrity: sha512-y1+dW6PX66DyNLCsSPkkvlUF/qSZ2R+mpbdzPuP6LFHqgNqBqq6Zzu0NQF/RW7afpHeJfZGmDV5I1SJFpBZkSw==}
@@ -2940,8 +2941,8 @@ packages:
       vite:
         optional: true
 
-  vike@0.4.235:
-    resolution: {integrity: sha512-wbx9wCF7E8IpaDhyhrsIOiLUl7hE/7e8vJy2bmFMjKjhIs7BhHiLLymTHe0i5qmbATmMhMLE0ur+vK4QH+nesw==}
+  vike@0.4.235-commit-16164c3:
+    resolution: {integrity: sha512-g3iEER8ZoEX2e87o6GzkO0ER/VGyFitsrZEp37AFii01Qlw9aLnSTVPN8pcDrlGx1G+P7TBcHygaIvSt58ykUw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -6011,14 +6012,14 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.2
 
-  vike-react@0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))):
+  vike-react@0.5.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(vike@0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))):
     dependencies:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       react-streaming: 0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      vike: 0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
+      vike: 0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
 
-  vike-server@1.0.16-commit-6104db2(vike@0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)))(vite@7.0.0(@types/node@18.19.86)):
+  vike-server@1.0.16-commit-6104db2(vike@0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)))(vite@7.0.0(@types/node@18.19.86)):
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.9
@@ -6034,7 +6035,7 @@ snapshots:
       '@universal-middleware/sirv': 0.1.20
       arktype: 2.1.20
       esbuild: 0.25.2
-      vike: 0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
+      vike: 0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
     optionalDependencies:
       vite: 7.0.0(@types/node@18.19.86)
     transitivePeerDependencies:
@@ -6046,7 +6047,7 @@ snapshots:
       - h3
       - hono
 
-  vike@0.4.235(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)):
+  vike@0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86)):
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.15

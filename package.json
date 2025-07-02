@@ -31,7 +31,8 @@
     "overrides": {
       "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
       "@photonjs/core": "0.0.1-commit-a85dffb",
-      "vite": "^7.0.0"
+      "vite": "^7.0.0",
+      "vike": "0.4.235-commit-16164c3"
     }
   }
 }
