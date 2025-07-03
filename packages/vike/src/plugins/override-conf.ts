@@ -1,7 +1,7 @@
-import { resolvePhotonConfig } from '@photonjs/core/api';
-import { getVikeConfig } from 'vike/plugin';
-import type { EnvironmentOptions, Plugin } from 'vite';
-import { getVercelAPI } from 'vite-plugin-vercel/api';
+import { resolvePhotonConfig } from "@photonjs/core/api";
+import { getVikeConfig } from "vike/plugin";
+import type { EnvironmentOptions, Plugin } from "vite";
+import { getVercelAPI } from "vite-plugin-vercel/api";
 
 /**
  * Ensure the same target between all builds

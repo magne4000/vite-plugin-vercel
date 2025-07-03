@@ -1,20 +1,20 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { copyFile, mkdir, rm } from 'node:fs/promises';
-import path from 'node:path';
-import { findRoot } from '@manypkg/find-root';
-import type { Photon } from '@photonjs/core';
-import { getPhotonServerIdWithHandler } from '@photonjs/core/api';
-import { nodeFileTrace } from '@vercel/nft';
-import { build, type Plugin as ESBuildPlugin } from 'esbuild';
-import type { Environment, Plugin } from 'vite';
-import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from '../api';
-import { joinAbsolute, joinAbsolutePosix } from '../helpers';
-import type { ViteVercelConfig } from '../types';
-import { virtualEntry } from '../utils/const';
-import { photonEntryDestination } from '../utils/destination';
-import { isVercelLastBuildStep } from '../utils/env';
-import { edgeExternal } from '../utils/external';
-import { getServersWithConfig } from '../utils/server-with-config';
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFile, mkdir, rm } from "node:fs/promises";
+import path from "node:path";
+import { findRoot } from "@manypkg/find-root";
+import type { Photon } from "@photonjs/core";
+import { getPhotonServerIdWithHandler } from "@photonjs/core/api";
+import { nodeFileTrace } from "@vercel/nft";
+import { build, type Plugin as ESBuildPlugin } from "esbuild";
+import type { Environment, Plugin } from "vite";
+import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../api";
+import { joinAbsolute, joinAbsolutePosix } from "../helpers";
+import type { ViteVercelConfig } from "../types";
+import { virtualEntry } from "../utils/const";
+import { photonEntryDestination } from "../utils/destination";
+import { isVercelLastBuildStep } from "../utils/env";
+import { edgeExternal } from "../utils/external";
+import { getServersWithConfig } from "../utils/server-with-config";
 
 const edgeWasmPlugin: ESBuildPlugin = {
   name: "edge-wasm-vercel",

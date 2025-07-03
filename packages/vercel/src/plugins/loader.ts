@@ -1,13 +1,13 @@
-import path from 'node:path';
-import type { Photon } from '@photonjs/core';
-import { getPhotonMeta } from '@photonjs/core/api';
-import { getNodeVersion, type NodeVersion } from '@vercel/build-utils';
-import { vercelOutputPrerenderConfigSchema } from '@vite-plugin-vercel/schemas';
-import type { Plugin } from 'vite';
-import { assert } from '../assert';
-import { getVcConfig } from '../build';
-import type { ViteVercelConfig } from '../types';
-import { photonEntryDestination, photonEntryDestinationDefault } from '../utils/destination';
+import path from "node:path";
+import type { Photon } from "@photonjs/core";
+import { getPhotonMeta } from "@photonjs/core/api";
+import { getNodeVersion, type NodeVersion } from "@vercel/build-utils";
+import { vercelOutputPrerenderConfigSchema } from "@vite-plugin-vercel/schemas";
+import type { Plugin } from "vite";
+import { assert } from "../assert";
+import { getVcConfig } from "../build";
+import type { ViteVercelConfig } from "../types";
+import { photonEntryDestination, photonEntryDestinationDefault } from "../utils/destination";
 
 const DUMMY = "__DUMMY__";
 const nonEdgeServers = ["express", "fastify"];
