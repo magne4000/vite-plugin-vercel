@@ -206,7 +206,7 @@ importers:
         version: 0.4.8(hono@4.7.8)
       '@universal-middleware/vercel':
         specifier: ^0.4.18
-        version: 0.4.18(@universal-middleware/h3@0.4.11)
+        version: 0.4.18(@universal-middleware/h3@0.4.11(hono@4.7.8))(hono@4.7.8)
       '@vercel/build-utils':
         specifier: ^10.5.1
         version: 10.5.1
@@ -4022,12 +4022,13 @@ snapshots:
       mrmime: 2.0.1
       totalist: 3.0.1
 
-  '@universal-middleware/vercel@0.4.18(@universal-middleware/h3@0.4.11)':
+  '@universal-middleware/vercel@0.4.18(@universal-middleware/h3@0.4.11(hono@4.7.8))(hono@4.7.8)':
     dependencies:
       '@universal-middleware/core': 0.4.8(hono@4.7.8)
       '@universal-middleware/express': 0.4.17(hono@4.7.8)
     optionalDependencies:
       '@universal-middleware/h3': 0.4.11(hono@4.7.8)
+      hono: 4.7.8
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@webroute/route'
