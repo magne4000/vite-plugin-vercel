@@ -135,12 +135,16 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
           ? `@universal-middleware/vercel/${entry.server}`
           : "@universal-middleware/vercel";
 
+        const exportDefault = isServerEntry
+          ? `export default ${fn}(handlerOrApp)`
+          : `export default ${fn}(() => handlerOrApp)()`;
+
         //language=javascript
         return `
           import { ${fn} } from "photon:resolve-from-photon:${importFrom}";
-          import handler from "${entry.resolvedId ?? entry.id}";
+          import handlerOrApp from "${entry.resolvedId ?? entry.id}";
 
-          export default ${fn}(() => handler)();
+          ${exportDefault};
         `;
       }
     },

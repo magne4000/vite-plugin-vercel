@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm run -C ./packages/vercel dev",
-    "vercel-build": "pnpm run build",
+    "vercel-build": "pnpm run build && pnpm run build:demo",
     "build": "pnpm --recursive --filter {packages/*} run build",
     "build:simple": "pnpm run -C ./examples/simple build",
     "build:hono": "pnpm run -C ./examples/hono build",
