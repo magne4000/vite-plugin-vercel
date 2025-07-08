@@ -155,7 +155,9 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
                 this.environment,
                 bundledAssets,
                 outfile,
-                Array.isArray(this.environment.config.resolve.external) ? this.environment.config.resolve.external : [],
+                // FIXME should be a dedicated option if needed
+                // Array.isArray(this.environment.config.resolve.external) ? this.environment.config.resolve.external : [],
+                [],
               );
             }
           }
