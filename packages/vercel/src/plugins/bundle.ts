@@ -160,6 +160,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
                   ? this.environment.config.resolve.external
                       // FIXME use a better combination of resolve.external and esbuild.external (and their negation)
                       .filter((x) => x !== "vike" && x !== "vike/__internal")
+                      .concat("@brillout/require-shim")
                   : [],
               );
             }
