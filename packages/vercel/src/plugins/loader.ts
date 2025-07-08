@@ -67,7 +67,8 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
           type: "asset",
           fileName: photonEntryDestination(entry, ".func/.vc-config.json"),
           source: JSON.stringify(
-            getVcConfig(pluginConfig, "index.mjs", {
+            // Unpredictable things happen when the extension is .mjs on edge
+            getVcConfig(pluginConfig, isEdge ? "index.js" : "index.mjs", {
               nodeVersion,
               edge: isEdge,
               streaming: entry.vercel?.streaming,
