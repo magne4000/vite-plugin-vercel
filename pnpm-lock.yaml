@@ -6,7 +6,7 @@ settings:
 
 overrides:
   path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
-  '@photonjs/core': 0.0.1-commit-8c23b3e
+  '@photonjs/core': 0.0.1-commit-af62306
   vite: ^7.0.0
   vike: 0.4.235-commit-16164c3
 
@@ -130,8 +130,8 @@ importers:
   examples/hono:
     dependencies:
       '@photonjs/core':
-        specifier: 0.0.1-commit-8c23b3e
-        version: 0.0.1-commit-8c23b3e(vite@7.0.0(@types/node@18.19.86))
+        specifier: 0.0.1-commit-af62306
+        version: 0.0.1-commit-af62306(vite@7.0.0(@types/node@18.19.86))
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vercel
@@ -199,8 +199,8 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       '@photonjs/core':
-        specifier: 0.0.1-commit-8c23b3e
-        version: 0.0.1-commit-8c23b3e(vite@7.0.0(@types/node@18.19.86))
+        specifier: 0.0.1-commit-af62306
+        version: 0.0.1-commit-af62306(vite@7.0.0(@types/node@18.19.86))
       '@universal-middleware/core':
         specifier: ^0.4.8
         version: 0.4.8(hono@4.7.8)
@@ -266,8 +266,8 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       '@photonjs/core':
-        specifier: 0.0.1-commit-8c23b3e
-        version: 0.0.1-commit-8c23b3e(vite@7.0.0(@types/node@18.19.86))
+        specifier: 0.0.1-commit-af62306
+        version: 0.0.1-commit-af62306(vite@7.0.0(@types/node@18.19.86))
       vike:
         specifier: 0.4.235-commit-16164c3
         version: 0.4.235-commit-16164c3(react-streaming@0.3.50(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(vite@7.0.0(@types/node@18.19.86))
@@ -783,8 +783,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@photonjs/core@0.0.1-commit-8c23b3e':
-    resolution: {integrity: sha512-CfIXbieEkbWMNTX59/1/4BnzXfa6d3QuFbnQ81oL0jFm32B1cAlsZp7bYczp4REFk92jkV/Ugz8TdVhypxozvg==}
+  '@photonjs/core@0.0.1-commit-af62306':
+    resolution: {integrity: sha512-O5gDNgzkEIqgfu5QqWRviWwA5YfRwPrt/WHgtvOggU1bO45hT0cv6V0sKIgf3+HzkWIRTcgdW4L1u8EHaH2OWw==}
     peerDependencies:
       vite: ^7.0.0
     peerDependenciesMeta:
@@ -3573,7 +3573,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@photonjs/core@0.0.1-commit-8c23b3e(vite@7.0.0(@types/node@18.19.86))':
+  '@photonjs/core@0.0.1-commit-af62306(vite@7.0.0(@types/node@18.19.86))':
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.9
@@ -5865,7 +5865,7 @@ snapshots:
     dependencies:
       '@brillout/picocolors': 1.0.26
       '@brillout/vite-plugin-server-entry': 0.7.9
-      '@photonjs/core': 0.0.1-commit-8c23b3e(vite@7.0.0(@types/node@18.19.86))
+      '@photonjs/core': 0.0.1-commit-af62306(vite@7.0.0(@types/node@18.19.86))
       '@universal-middleware/compress': 0.2.30
       '@universal-middleware/core': 0.4.8(hono@4.7.8)
       '@universal-middleware/elysia': 0.5.2(hono@4.7.8)
