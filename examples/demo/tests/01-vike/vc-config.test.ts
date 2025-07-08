@@ -35,7 +35,7 @@ prepareTestJsonFilesContent(
     it("should have only necessary properties", () => {
       expect(context.file).toStrictEqual({
         runtime: "edge",
-        entrypoint: "index.mjs",
+        entrypoint: "index.js",
       });
     });
   },

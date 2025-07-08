@@ -19,7 +19,7 @@ describe("fs", () => {
     "/config.json",
     // functions: edge
     "/functions/__vike_edge/pages/vike-edge.func/.vc-config.json",
-    "/functions/__vike_edge/pages/vike-edge.func/index.mjs",
+    "/functions/__vike_edge/pages/vike-edge.func/index.js",
     // functions: node
     "/functions/__vike_node/pages/catch-all.prerender-config.json",
     "/functions/__vike_node/pages/catch-all.func/index.mjs",
@@ -40,7 +40,7 @@ describe("fs", () => {
     "/functions/api/name/[name].func/index.mjs",
     "/functions/api/page.func/index.mjs",
     "/functions/api/page.func/.vc-config.json",
-    "/functions/edge.func/index.mjs",
+    "/functions/edge.func/index.js",
     "/functions/edge.func/.vc-config.json",
     "/functions/og-node.func/index.mjs",
     "/functions/og-node.func/.vc-config.json",
@@ -48,7 +48,7 @@ describe("fs", () => {
     "/functions/og-node.func/Roboto-Regular.ttf",
     "/functions/og-node.func/resvg.wasm",
     "/functions/og-node.func/yoga.wasm",
-    "/functions/og-edge.func/index.mjs",
+    "/functions/og-edge.func/index.js",
     "/functions/og-edge.func/.vc-config.json",
     "/functions/og-edge.func/noto-sans-v27-latin-regular.ttf",
     "/functions/og-edge.func/resvg.wasm",
