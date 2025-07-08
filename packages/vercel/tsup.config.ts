@@ -5,6 +5,7 @@ const entry = {
   utils: "./src/utils/index.ts",
   api: "./src/api.ts",
   "universal-middleware-dev": "./src/photon/universal-middleware-dev.ts",
+  "universal-middleware-prod": "./src/photon/universal-middleware-prod.ts",
 };
 
 export default defineConfig([

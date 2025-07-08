@@ -30,6 +30,7 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
         if (env === "dev") {
           return "vite-plugin-vercel/universal-middleware/dev";
         }
+        return "vite-plugin-vercel/universal-middleware";
       },
     }),
     vercelCleanupPlugin(),

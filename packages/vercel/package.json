@@ -9,7 +9,7 @@
   "module": "./dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./universal-middleware": "./dist/universal-middleware.js",
+    "./universal-middleware": "./dist/universal-middleware-prod.js",
     "./universal-middleware/dev": "./dist/universal-middleware-dev.js",
     "./utils": "./dist/utils.js",
     "./api": "./dist/api.js",
