@@ -37,7 +37,7 @@
     "rollup": "^4.40.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vite": "^7.0.0"
+    "vite": "^7.0.5"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",

@@ -25,7 +25,6 @@ export function overrideConfPlugin(): Plugin[] {
             resolve: {
               // TODO should be set by vike-server itself
               noExternal: ["vike-server"],
-              external: ["vike/__internal", "vike"],
             },
           };
         }

@@ -5,7 +5,7 @@ import { findRoot } from "@manypkg/find-root";
 import type { Photon } from "@photonjs/core";
 import { getPhotonServerIdWithHandler } from "@photonjs/core/api";
 import { nodeFileTrace } from "@vercel/nft";
-import { build, type Plugin as ESBuildPlugin } from "esbuild";
+import { build, type BuildOptions, type Plugin as ESBuildPlugin } from "esbuild";
 import type { Environment, Plugin } from "vite";
 import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../api";
 import { joinAbsolute, joinAbsolutePosix } from "../helpers";
@@ -70,7 +70,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
             if (shouldEmit(serverEntry)) {
               this.emitFile({
                 type: "chunk",
-                fileName: `${photonEntryDestination(serverEntry, ".func/index")}.${isEdge ? "js" : "mjs"}`,
+                fileName: `${photonEntryDestination(serverEntry, ".func/index")}.js`,
                 id: `${virtualEntry}:${serverEntry.id}`,
                 importer: undefined,
               });
@@ -84,7 +84,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
               this.emitFile({
                 type: "chunk",
                 // Different destination than default server
-                fileName: `${photonEntryDestination(serverEntry, ".func/index")}.${isEdge ? "js" : "mjs"}`,
+                fileName: `${photonEntryDestination(serverEntry, ".func/index")}.js`,
                 id: `${virtualEntry}:${serverEntry.id}`,
                 importer: undefined,
               });
@@ -97,7 +97,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
             if (shouldEmit(entry)) {
               this.emitFile({
                 type: "chunk",
-                fileName: `${photonEntryDestination(entry, ".func/index")}.${isEdge ? "js" : "mjs"}`,
+                fileName: `${photonEntryDestination(entry, ".func/index")}.js`,
                 id: `${virtualEntry}:${getPhotonServerIdWithHandler(isEdge ? "edge" : "node", `photon:handler-entry:${key}`)}`,
                 importer: undefined,
               });
@@ -140,6 +140,8 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
         async handler() {
           if (!isVercelLastBuildStep(this.environment)) return;
 
+          this.environment.logger.info("Creating Vercel bundles...");
+
           const api = getVercelAPI(this);
           const outfiles = api.getOutFiles();
 
@@ -151,16 +153,11 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
               await mkdir(path.dirname(destination), { recursive: true });
               await copyFile(source, destination);
             } else {
-              this.environment.config.esbuild;
               await bundle(
                 this.environment,
                 bundledAssets,
                 outfile,
-                Array.isArray(this.environment.config.resolve.external)
-                  ? this.environment.config.resolve.external
-                      // FIXME use a better combination of resolve.external and esbuild.external (and their negation)
-                      .filter((x) => x !== "vike/__internal")
-                  : [],
+                Array.isArray(this.environment.config.resolve.external) ? this.environment.config.resolve.external : [],
               );
             }
           }
@@ -195,19 +192,36 @@ async function bundle(
   const { source, destination } = getAbsoluteOutFileWithout_tmp(outfile);
   const isEdge = Boolean(outfile.relatedEntry.vercel?.edge);
 
-  await build({
-    platform: isEdge ? "neutral" : "node",
+  const buildOptions: BuildOptions = {
     format: "esm",
     target: "es2022",
     legalComments: "none",
     bundle: true,
-    external: [...edgeExternal, ...external],
+    external: [...external],
     entryPoints: [source],
-    outExtension: isEdge ? {} : { ".js": ".mjs" },
-    outfile: isEdge ? destination.replace(/\.mjs$/, ".js") : destination.replace(/\.js$/, ".mjs"),
+    treeShaking: true,
     logOverride: { "ignored-bare-import": "silent" },
-    plugins: [edgeWasmPlugin],
-  });
+  };
+
+  if (isEdge) {
+    buildOptions.platform = "browser";
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
+    buildOptions.external!.push(...edgeExternal);
+    buildOptions.conditions = ["edge-light", "worker", "browser", "module", "import", "require"];
+    buildOptions.outExtension = { ".js": ".mjs" };
+    buildOptions.outfile = destination.replace(/\.mjs$/, ".js");
+    buildOptions.plugins = [edgeWasmPlugin];
+  } else {
+    buildOptions.platform = "node";
+    buildOptions.outfile = destination.replace(/\.js$/, ".mjs");
+  }
+
+  try {
+    await build(buildOptions);
+  } catch (e) {
+    // @ts-ignore
+    throw new Error(`Error while bundling ${destination}`, { cause: e });
+  }
 
   let base = environment.config.root;
   try {
