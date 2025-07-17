@@ -221,7 +221,7 @@ import { dirname as topLevelDirname } from 'path';
 import { fileURLToPath as topLevelFileURLToPath } from 'url';
 const require = topLevelCreateRequire(import.meta.url);
 const __filename = topLevelFileURLToPath(import.meta.url);
-const __dirname = topLevelDirname(__bundleFilename);
+const __dirname = topLevelDirname(__filename);
 `,
     };
   }
