@@ -14,7 +14,6 @@ const nonEdgeServers = ["express", "fastify"];
 
 export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const virtualEntry = "virtual:vite-plugin-vercel:entry";
-  const resolvedVirtualEntry = "\0virtual:vite-plugin-vercel:entry";
   let nodeVersion: NodeVersion;
 
   return {
@@ -33,12 +32,13 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
         const [, , , ..._input] = id.split(":");
         const input = _input.join(":");
         if (input === DUMMY) {
-          return `${resolvedVirtualEntry}:${DUMMY}`;
+          return `${virtualEntry}:${DUMMY}`;
         }
         const resolved = await this.resolve(input, undefined, { isEntry: true });
         if (resolved) {
+          console.log("   TARGET ENTRY", resolved.id);
           return {
-            id: `${resolvedVirtualEntry}:${resolved.id}`,
+            id: `${virtualEntry}:${resolved.id}`,
             meta: {
               // tag module as target entry for other plugins to use
               photonConfig: {
@@ -51,7 +51,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     async load(id) {
-      if (id.startsWith(resolvedVirtualEntry)) {
+      if (id.startsWith(virtualEntry)) {
         if (id.includes(DUMMY)) {
           return "export default {};";
         }
@@ -124,6 +124,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
         if (isServerEntry) {
           assert(entry.server, `Could not determine server for entry ${entry.id}`);
+          // TODO dynamically import the potential module and check if it exports expected function
           if (isEdge) {
             assert(
               !nonEdgeServers.includes(entry.server),
