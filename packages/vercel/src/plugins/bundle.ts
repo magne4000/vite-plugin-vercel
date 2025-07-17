@@ -215,6 +215,9 @@ async function bundle(
   } else {
     buildOptions.platform = "node";
     buildOptions.outfile = destination.replace(/\.js$/, ".mjs");
+    buildOptions.banner = {
+      js: `import { createRequire as topLevelCreateRequire } from "module"; const require = topLevelCreateRequire(import.meta.url);\n`,
+    };
   }
 
   try {
