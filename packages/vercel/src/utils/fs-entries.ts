@@ -44,7 +44,7 @@ export async function getEntriesFromFs(
         streaming: xports?.streaming,
       },
     } satisfies Photon.EntryUniversalHandler;
-    // TODO handle route[]
+    // next-fs patterns cannot generate more than one rou3 pattern, so [0] is fine
     (entry as Photon.EntryUniversalHandler).route = entryToRou3(entry)[0];
     entryPoints[key] = entry;
   }
