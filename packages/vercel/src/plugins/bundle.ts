@@ -216,7 +216,13 @@ async function bundle(
     buildOptions.platform = "node";
     buildOptions.outfile = destination.replace(/\.js$/, ".mjs");
     buildOptions.banner = {
-      js: `import { createRequire as topLevelCreateRequire } from "module"; const require = topLevelCreateRequire(import.meta.url);\n`,
+      js: `import { createRequire as topLevelCreateRequire } from 'module';
+import { dirname as topLevelDirname } from 'path';
+import { fileURLToPath as topLevelFileURLToPath } from 'url';
+const require = topLevelCreateRequire(import.meta.url);
+const __filename = topLevelFileURLToPath(import.meta.url);
+const __dirname = topLevelDirname(__bundleFilename);
+`,
     };
   }
 
