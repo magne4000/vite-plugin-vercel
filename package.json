@@ -32,7 +32,7 @@
       "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
       "@photonjs/core": "0.0.1-commit-af62306",
       "vite": "^7.0.5",
-      "vike": "0.4.235-commit-16164c3"
+      "vike": "0.4.235-commit-9b9289b"
     }
   }
 }

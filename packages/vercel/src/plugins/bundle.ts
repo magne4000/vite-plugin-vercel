@@ -154,12 +154,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
               await mkdir(path.dirname(destination), { recursive: true });
               await copyFile(source, destination);
             } else {
-              await bundle(
-                this.environment,
-                bundledAssets,
-                outfile,
-                Array.isArray(this.environment.config.resolve.external) ? this.environment.config.resolve.external : [],
-              );
+              await bundle(this.environment, bundledAssets, outfile);
             }
           }
 
@@ -188,7 +183,6 @@ async function bundle(
   environment: Environment,
   bundledAssets: Map<string, BundleAsset>,
   outfile: ViteVercelOutFileChunk,
-  external: string[] = [],
 ) {
   const { source, destination } = getAbsoluteOutFileWithout_tmp(outfile);
   const isEdge = Boolean(outfile.relatedEntry.vercel?.edge);
@@ -198,7 +192,6 @@ async function bundle(
     target: "es2022",
     legalComments: "none",
     bundle: true,
-    external: [...external],
     entryPoints: [source],
     treeShaking: true,
     logOverride: { "ignored-bare-import": "silent" },
@@ -206,8 +199,7 @@ async function bundle(
 
   if (isEdge) {
     buildOptions.platform = "browser";
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    buildOptions.external!.push(...edgeExternal);
+    buildOptions.external = edgeExternal;
     buildOptions.conditions = edgeConditions;
     buildOptions.outExtension = { ".js": ".mjs" };
     buildOptions.outfile = destination.replace(/\.mjs$/, ".js");
