@@ -15,6 +15,7 @@ import { photonEntryDestination } from "../utils/destination";
 import { isVercelLastBuildStep } from "../utils/env";
 import { edgeExternal } from "../utils/external";
 import { getServersWithConfig } from "../utils/server-with-config";
+import { edgeConditions } from "../utils/edge";
 
 const edgeWasmPlugin: ESBuildPlugin = {
   name: "edge-wasm-vercel",
@@ -207,7 +208,7 @@ async function bundle(
     buildOptions.platform = "browser";
     // biome-ignore lint/style/noNonNullAssertion: <explanation>
     buildOptions.external!.push(...edgeExternal);
-    buildOptions.conditions = ["edge-light", "worker", "browser", "module", "import", "require"];
+    buildOptions.conditions = edgeConditions;
     buildOptions.outExtension = { ".js": ".mjs" };
     buildOptions.outfile = destination.replace(/\.mjs$/, ".js");
     buildOptions.plugins = [edgeWasmPlugin];

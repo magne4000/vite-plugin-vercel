@@ -13,6 +13,7 @@ import type { OutputBundle } from "rollup";
 import stripAnsi from "strip-ansi";
 import { virtualEntry } from "../utils/const";
 import { edgeExternal } from "../utils/external";
+import { edgeConditions } from "../utils/edge";
 
 const outDir = ".vercel/output";
 const DUMMY = "__DUMMY__";
@@ -74,7 +75,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
         // In dev, we're running on node, so we do not apply edge conditions
         const conditions = !isDev
           ? {
-              conditions: ["edge-light", "worker", "browser", "module", "import", "require"],
+              conditions: edgeConditions,
             }
           : {};
 
