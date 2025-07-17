@@ -44,7 +44,8 @@ export async function getEntriesFromFs(
         streaming: xports?.streaming,
       },
     } satisfies Photon.EntryUniversalHandler;
-    (entry as Photon.EntryUniversalHandler).route = entryToRou3(entry);
+    // TODO handle route[]
+    (entry as Photon.EntryUniversalHandler).route = entryToRou3(entry)[0];
     entryPoints[key] = entry;
   }
 

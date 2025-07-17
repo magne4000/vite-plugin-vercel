@@ -206,7 +206,7 @@ importers:
         version: 0.4.8(hono@4.7.8)
       '@universal-middleware/vercel':
         specifier: ^0.4.18
-        version: 0.4.18(@universal-middleware/h3@0.4.11)
+        version: 0.4.18(@universal-middleware/h3@0.4.11(hono@4.7.8))(hono@4.7.8)
       '@vercel/build-utils':
         specifier: ^10.5.1
         version: 10.5.1
@@ -219,6 +219,9 @@ importers:
       '@vite-plugin-vercel/schemas':
         specifier: workspace:^
         version: link:../schemas
+      convert-route:
+        specifier: ^0.1.1
+        version: 0.1.1
       esbuild:
         specifier: ^0.25.1
         version: 0.25.2
@@ -1398,6 +1401,9 @@ packages:
   convert-hrtime@3.0.0:
     resolution: {integrity: sha512-7V+KqSvMiHp8yWDuwfww06XleMWVVB9b9tURBx+G7UTADuo5hYPuowKloz4OzOqbPezxgo+fdQ1522WzPG4OeA==}
     engines: {node: '>=8'}
+
+  convert-route@0.1.1:
+    resolution: {integrity: sha512-ubQE0pdEKa+qqcgsBDiMUf+GmCnhp5cBVzU+37OErIJWVneJv/AaXqZYGJUV/dTu66PXbeI27O96xX97lfZhFQ==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -3884,12 +3890,13 @@ snapshots:
       mrmime: 2.0.1
       totalist: 3.0.1
 
-  '@universal-middleware/vercel@0.4.18(@universal-middleware/h3@0.4.11)':
+  '@universal-middleware/vercel@0.4.18(@universal-middleware/h3@0.4.11(hono@4.7.8))(hono@4.7.8)':
     dependencies:
       '@universal-middleware/core': 0.4.8(hono@4.7.8)
       '@universal-middleware/express': 0.4.17(hono@4.7.8)
     optionalDependencies:
       '@universal-middleware/h3': 0.4.11(hono@4.7.8)
+      hono: 4.7.8
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@webroute/route'
@@ -4228,6 +4235,8 @@ snapshots:
   consola@3.4.2: {}
 
   convert-hrtime@3.0.0: {}
+
+  convert-route@0.1.1: {}
 
   convert-source-map@2.0.0: {}
 

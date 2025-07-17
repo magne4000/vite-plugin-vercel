@@ -1,5 +1,3 @@
-import path from "node:path";
-import type { Photon } from "@photonjs/core";
 import { getPhotonMeta } from "@photonjs/core/api";
 import { getNodeVersion, type NodeVersion } from "@vercel/build-utils";
 import { vercelOutputPrerenderConfigSchema } from "@vite-plugin-vercel/schemas";
@@ -8,6 +6,9 @@ import { assert } from "../assert";
 import { getVcConfig } from "../build";
 import type { ViteVercelConfig } from "../types";
 import { photonEntryDestination, photonEntryDestinationDefault } from "../utils/destination";
+import { fromRou3 } from "convert-route/rou3";
+import { toPathToRegexpV6 } from "convert-route/path-to-regexp-v6";
+import { entryToPathtoregex } from "../utils/route";
 
 const DUMMY = "__DUMMY__";
 const nonEdgeServers = ["express", "fastify"];
@@ -95,7 +96,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
             typeof entry.vercel?.route === "string"
               ? `(${entry.vercel.route})`
               : typeof entry.route === "string"
-                ? rou3ToPathtoregex(entry.route)
+                ? toPathToRegexpV6(fromRou3(entry.route))
                 : entryToPathtoregex(entry);
           pluginConfig.rewrites.push({
             enforce: entry.vercel?.enforce,
@@ -153,33 +154,4 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
     sharedDuringBuild: true,
   };
-}
-
-// @vercel/routing-utils respects path-to-regexp syntax
-function entryToPathtoregex(entry: Photon.Entry) {
-  assert(typeof entry.vercel?.route !== "string", "Do not pass entry with route string to entryToPathtoregex");
-  return path.posix
-    .resolve("/", photonEntryDestinationDefault(entry))
-    .split("/")
-    .map((segment) =>
-      segment
-        .replace(/^\[\[\.\.\.([^/]+)\]\]$/g, ":$1*")
-        .replace(/^\[\[([^/]+)\]\]$/g, ":$1?")
-        .replace(/^\[\.\.\.([^/]+)\]$/g, ":$1+")
-        .replace(/^\[([^/]+)\]$/g, ":$1"),
-    )
-    .join("/");
-}
-
-function rou3ToPathtoregex(rou3route: string) {
-  return rou3route
-    .split("/")
-    .map((segment) =>
-      segment
-        .replace(/^\*$/g, ":splat?")
-        .replace(/^\*\*$/g, ":splat*")
-        .replace(/^\*\*:([^/]+)$/g, ":$1*")
-        .replace(/^:([^/]+)$/g, ":$1"),
-    )
-    .join("/");
 }
