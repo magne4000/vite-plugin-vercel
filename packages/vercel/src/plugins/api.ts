@@ -3,7 +3,6 @@ import type { ViteVercelConfig } from "../types";
 import { createAPI, type ViteVercelOutFile } from "../api";
 import { photonEntryDestination } from "../utils/destination";
 import type { Photon } from "@photonjs/core";
-import { getServersWithConfig } from "../utils/server-with-config";
 
 export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const outfiles: ViteVercelOutFile[] = [];
@@ -19,14 +18,13 @@ export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
     writeBundle(_opts, bundle) {
       if (this.environment.name !== "vercel_edge" && this.environment.name !== "vercel_node") return;
 
-      const entries = this.environment.config.photon.handlers;
+      const entries = this.environment.config.photon.entries;
       const server = this.environment.config.photon.server;
-      const serversWithConfigs = getServersWithConfig(this);
       const entryMapByDestination = new Map<string, Photon.Entry>(
         [server, ...Object.values(entries)].map((e) => [photonEntryDestination(e, ".func/index"), e]),
       );
 
-      for (const entry of serversWithConfigs) {
+      for (const entry of this.environment.config.photon.entries.filter((e) => e.type === "server-config")) {
         entryMapByDestination.set(photonEntryDestination(entry, ".func/index"), entry);
       }
 

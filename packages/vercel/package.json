@@ -42,9 +42,9 @@
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@photonjs/core": "0.0.1-commit-af62306",
-    "@universal-middleware/core": "^0.4.8",
-    "@universal-middleware/vercel": "^0.4.18",
+    "@photonjs/core": "0.0.1-commit-ed36e70",
+    "@universal-middleware/core": "^0.4.9",
+    "@universal-middleware/vercel": "^0.4.19",
     "@vercel/build-utils": "^10.5.1",
     "@vercel/nft": "^0.29.2",
     "@vercel/routing-utils": "^5.0.4",

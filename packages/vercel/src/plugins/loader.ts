@@ -1,4 +1,3 @@
-import { getPhotonMeta } from "@photonjs/core/api";
 import { getNodeVersion, type NodeVersion } from "@vercel/build-utils";
 import { vercelOutputPrerenderConfigSchema } from "@vite-plugin-vercel/schemas";
 import type { Plugin } from "vite";
@@ -9,58 +8,71 @@ import { photonEntryDestination, photonEntryDestinationDefault } from "../utils/
 import { fromRou3 } from "convert-route/rou3";
 import { toPathToRegexpV6 } from "convert-route/path-to-regexp-v6";
 import { entryToPathtoregex } from "../utils/route";
+import { targetLoader } from "@photonjs/core/vite";
 
 const DUMMY = "__DUMMY__";
+const re_DUMMY = new RegExp(`${DUMMY}$`);
 const nonEdgeServers = ["express", "fastify"];
 
-export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
-  const virtualEntry = "virtual:vite-plugin-vercel:entry";
+export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
   let nodeVersion: NodeVersion;
 
-  return {
-    name: "vite-plugin-vercel:loader",
+  return [
+    {
+      name: "vite-plugin-vercel:update-entries",
+      apply: "build",
 
-    async buildStart() {
-      nodeVersion = await getNodeVersion(process.cwd());
+      buildStart: {
+        order: "post",
+        handler() {
+          for (const entry of [this.environment.config.photon.server, ...this.environment.config.photon.entries]) {
+            if (!entry.env) {
+              entry.env = entry.vercel?.edge ? "vercel_edge" : "vercel_node";
+            }
+            if (entry.env === "vercel_edge" || entry.env === "vercel_node") {
+              entry.target = `${photonEntryDestination(entry, ".func/index")}.js`;
+            }
+          }
+        },
+      },
+
+      sharedDuringBuild: true,
     },
+    {
+      name: "vite-plugin-vercel:dummy",
+      enforce: "pre",
 
-    applyToEnvironment(env) {
-      return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
-    },
+      resolveId: {
+        filter: {
+          id: re_DUMMY,
+        },
 
-    async resolveId(id) {
-      if (id.startsWith(virtualEntry)) {
-        const [, , , ..._input] = id.split(":");
-        const input = _input.join(":");
-        if (input === DUMMY) {
-          return `${virtualEntry}:${DUMMY}`;
-        }
-        const resolved = await this.resolve(input, undefined, { isEntry: true });
-        if (resolved) {
-          console.log("   TARGET ENTRY", resolved.id);
-          return {
-            id: `${virtualEntry}:${resolved.id}`,
-            meta: {
-              // tag module as target entry for other plugins to use
-              photonConfig: {
-                isTargetEntry: true,
-              },
-            },
-          };
-        }
-      }
-    },
+        handler(id) {
+          return id;
+        },
+      },
 
-    async load(id) {
-      if (id.startsWith(virtualEntry)) {
-        if (id.includes(DUMMY)) {
+      load: {
+        filter: {
+          id: re_DUMMY,
+        },
+
+        handler() {
           return "export default {};";
-        }
+        },
+      },
+    },
+    ...targetLoader("vercel", {
+      async buildStart() {
+        nodeVersion = await getNodeVersion(process.cwd());
+      },
 
-        const [, , , ..._input] = id.split(":");
-        const input = _input.join(":");
+      applyToEnvironment(env) {
+        return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
+      },
 
-        const entry = await getPhotonMeta(this, input);
+      async load(_id, { meta }) {
+        const entry = meta;
         const isEdge = Boolean(entry.vercel?.edge);
 
         // Generate .vc-config.json
@@ -144,14 +156,12 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
         //language=javascript
         return `
-          import { ${fn} } from "photon:resolve-from-photon:${importFrom}";
-          import handlerOrApp from "${entry.resolvedId ?? entry.id}";
+import { ${fn} } from "photon:resolve-from-photon:${importFrom}";
+import handlerOrApp from "${entry.resolvedId ?? entry.id}";
 
-          ${exportDefault};
-        `;
-      }
-    },
-
-    sharedDuringBuild: true,
-  };
+${exportDefault};
+`;
+      },
+    }),
+  ];
 }

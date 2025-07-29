@@ -11,7 +11,7 @@ export default {
   extends: [vikeReact, vikeVercel],
   photon: {
     expiration: 25,
-    handlers: {
+    entries: {
       ...(await getEntriesFromFs("endpoints", {
         // Auto mapping:
         //   endpoints/edge.ts -> /edge

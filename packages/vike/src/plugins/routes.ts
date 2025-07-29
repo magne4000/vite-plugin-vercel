@@ -1,7 +1,7 @@
 import { getVikeConfig } from "vike/plugin";
 import { normalizePath, type Plugin } from "vite";
 import { assert } from "../utils/assert";
-import { addPhotonServerConfig } from "@photonjs/core/api";
+import { addPhotonEntry } from "@photonjs/core/api";
 
 export function routesPlugins(): Plugin[] {
   const vikePages: {
@@ -88,9 +88,11 @@ export function routesPlugins(): Plugin[] {
             (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
           )) {
             const name = `${key}${page.pageId}`;
-            addPhotonServerConfig(this, {
-              name,
+            // TODO add all vike routes this way
+            //  and dedupe them in vpv core
+            addPhotonEntry(this, name, {
               route: page.route ?? undefined,
+              type: "server-config",
               vercel: {
                 destination: normalizePath(name),
                 isr: page.isr ? { expiration: page.isr } : undefined,
@@ -110,9 +112,9 @@ export function routesPlugins(): Plugin[] {
           ) {
             // Catch-all
             const name = `${key}/__catch_all`;
-            addPhotonServerConfig(this, {
-              name,
+            addPhotonEntry(this, name, {
               route: "/**",
+              type: "server-config",
               vercel: {
                 destination: normalizePath(name),
                 route: ".*",

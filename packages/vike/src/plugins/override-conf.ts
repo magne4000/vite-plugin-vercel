@@ -1,4 +1,3 @@
-import { resolvePhotonConfig } from "@photonjs/core/api";
 import { getVikeConfig } from "vike/plugin";
 import type { EnvironmentOptions, Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
@@ -19,15 +18,17 @@ export function overrideConfPlugin(): Plugin[] {
 
       config(userConfig) {
         const vikeConfig = getVikeConfig(userConfig);
-        if (vikeConfig.config.photon) {
-          return {
-            photon: resolvePhotonConfig(vikeConfig.config.photon),
-            resolve: {
-              // TODO should be set by vike-server itself
-              noExternal: ["vike-server"],
-            },
-          };
-        }
+
+        return {
+          photon: {
+            ...vikeConfig.config.photon,
+            codeSplitting: false,
+          },
+          resolve: {
+            // TODO should be set by vike-server itself
+            noExternal: ["vike-server"],
+          },
+        };
       },
     },
     {

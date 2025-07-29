@@ -6,6 +6,7 @@ export const applyVercelHeaders: UniversalMiddleware<
   // TODO export type from Photon
   Universal.Context & { photon?: { handler?: Photon.EntryUniversalHandler; server?: Photon.EntryServer } }
 > = (_request, context) => {
+  console.log(_request.url, context);
   const headers = context.photon?.handler?.vercel?.headers ?? context.photon?.server?.vercel?.headers;
   if (!headers) return;
 

@@ -1,5 +1,5 @@
-import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
 import type { Photon } from "@photonjs/core";
+import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
 import type { VercelOutputConfig, VercelOutputPrerenderConfig } from "@vite-plugin-vercel/schemas";
 
 export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
@@ -48,7 +48,7 @@ export interface ViteVercelConfig {
    * Use `getEntriesFromFs` for mapping your filesystem routes to entries.
    * If you are interfacing this plugin with a framework, entries can also be added through the Photon API
    */
-  handlers?: Record<string, Photon.EntryUniversalHandler>;
+  entries?: Record<string, Photon.EntryUniversalHandler>;
   /**
    * TODO
    */
@@ -80,6 +80,7 @@ export interface VercelEntryOptions {
   /**
    * Relative to `.vercel/output/functions`, without extension
    */
+  // TODO remove. Replaced by Photon.EntryBase['target']
   destination?: string;
   /**
    * If `true`, guesses route for the function, and adds it to config.json (mimics defaults Vercel behavior).

@@ -2,19 +2,14 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { copyFile, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { findRoot } from "@manypkg/find-root";
-import type { Photon } from "@photonjs/core";
-import { getPhotonServerIdWithHandler } from "@photonjs/core/api";
 import { nodeFileTrace } from "@vercel/nft";
 import { build, type BuildOptions, type Plugin as ESBuildPlugin } from "esbuild";
 import type { Environment, Plugin } from "vite";
 import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../api";
 import { joinAbsolute, joinAbsolutePosix } from "../helpers";
 import type { ViteVercelConfig } from "../types";
-import { virtualEntry } from "../utils/const";
-import { photonEntryDestination } from "../utils/destination";
 import { isVercelLastBuildStep } from "../utils/env";
 import { edgeExternal } from "../utils/external";
-import { getServersWithConfig } from "../utils/server-with-config";
 import { edgeConditions } from "../utils/edge";
 
 const edgeWasmPlugin: ESBuildPlugin = {
@@ -43,72 +38,6 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
   const bundledAssets = new Map<string, BundleAsset>();
 
   return [
-    {
-      name: "vite-plugin-vercel:bundle-start",
-      apply: "build",
-
-      applyToEnvironment(env) {
-        return env.name === "vercel_node" || env.name === "vercel_edge";
-      },
-
-      // `buildStart` is the last hook in which we can serenely emit chunks.
-      // By the time, photon config should be set in stone, as other environments should have run before.
-      buildStart: {
-        order: "post",
-        handler() {
-          const shouldEmit = (entry: Photon.EntryBase) => {
-            return (
-              !entry.vercel?.disabled &&
-              ((this.environment.name === "vercel_edge" && entry.vercel?.edge) ||
-                (this.environment.name === "vercel_node" && !entry.vercel?.edge))
-            );
-          };
-
-          // Emit server (default) entry
-          {
-            const serverEntry = this.environment.config.photon.server;
-            const isEdge = Boolean(serverEntry.vercel?.edge);
-            if (shouldEmit(serverEntry)) {
-              this.emitFile({
-                type: "chunk",
-                fileName: `${photonEntryDestination(serverEntry, ".func/index")}.js`,
-                id: `${virtualEntry}:${serverEntry.id}`,
-                importer: undefined,
-              });
-            }
-          }
-
-          // Emit server (additional configs) entries
-          for (const serverEntry of getServersWithConfig(this)) {
-            const isEdge = Boolean(serverEntry.vercel?.edge);
-            if (shouldEmit(serverEntry)) {
-              this.emitFile({
-                type: "chunk",
-                // Different destination than default server
-                fileName: `${photonEntryDestination(serverEntry, ".func/index")}.js`,
-                id: `${virtualEntry}:${serverEntry.id}`,
-                importer: undefined,
-              });
-            }
-          }
-
-          // Emit handlers, each wrapped behind the server entry
-          for (const [key, entry] of Object.entries(this.environment.config.photon.handlers)) {
-            const isEdge = Boolean(entry.vercel?.edge);
-            if (shouldEmit(entry)) {
-              this.emitFile({
-                type: "chunk",
-                fileName: `${photonEntryDestination(entry, ".func/index")}.js`,
-                id: `${virtualEntry}:${getPhotonServerIdWithHandler(isEdge ? "edge" : "node", `photon:handler-entry:${key}`)}`,
-                importer: undefined,
-              });
-            }
-          }
-        },
-      },
-
-      sharedDuringBuild: true,
-    },
     {
       name: "vite-plugin-vercel:bundle",
       enforce: "post",

@@ -6,7 +6,7 @@ import type { Photon } from "@photonjs/core";
 export default {
   name: "vike-vercel",
   require: {
-    vike: ">=0.4.227",
+    vike: ">=0.4.236",
   },
   vite: {
     // biome-ignore lint/suspicious/noExplicitAny: avoid type mismatch between different Vite versions
@@ -17,7 +17,7 @@ export default {
     isr: {
       env: { server: true, config: true },
       eager: true,
-      effect({ configValue, configDefinedAt }) {
+      effect({ configValue }) {
         // an actual ISR value exists for a Page
         if (configValue) {
           return {

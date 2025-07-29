@@ -10,8 +10,8 @@ import { loaderPlugin } from "./loader";
 
 export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
   const additionalConfig: Record<string, unknown> = {};
-  if (pluginConfig.handlers) {
-    additionalConfig.handlers = pluginConfig.handlers;
+  if (pluginConfig.entries) {
+    additionalConfig.entries = pluginConfig.entries;
   }
   if (pluginConfig.server) {
     additionalConfig.server = pluginConfig.server;
@@ -22,6 +22,7 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
       ...additionalConfig,
       fullInstall: true,
       defaultBuildEnv: "vercel_node",
+      codeSplitting: true,
       devServer: {
         env: "vercel_node",
       },
@@ -36,7 +37,7 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
     apiPlugin(pluginConfig),
     ...setupEnvs(pluginConfig),
     wasmPlugin(),
-    loaderPlugin(pluginConfig),
+    ...loaderPlugin(pluginConfig),
     ...bundlePlugin(pluginConfig),
   ];
 }
