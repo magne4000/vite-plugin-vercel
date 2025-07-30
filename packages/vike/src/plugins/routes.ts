@@ -112,16 +112,13 @@ export function routesPlugins(): Plugin[] {
           ) {
             // Catch-all
             const name = `${key}/__catch_all`;
-            addPhotonEntry(this, name, {
-              route: "/**",
-              type: "server-config",
-              vercel: {
-                destination: normalizePath(name),
-                route: ".*",
-                edge: isEdge,
-                enforce: "post",
-              },
-            });
+            this.environment.config.photon.server.route = "/**";
+            this.environment.config.photon.server.vercel = {
+              destination: normalizePath(name),
+              route: ".*",
+              edge: isEdge,
+              enforce: "post",
+            };
           }
         },
       },
