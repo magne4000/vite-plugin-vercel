@@ -11,6 +11,9 @@ import type { ViteVercelConfig } from "../types";
 import { isVercelLastBuildStep } from "../utils/env";
 import { edgeExternal } from "../utils/external";
 import { edgeConditions } from "../utils/edge";
+import { builtinModules } from "node:module";
+
+const builtIns = new Set(builtinModules.flatMap((m) => [m, `node:${m}`]));
 
 const edgeWasmPlugin: ESBuildPlugin = {
   name: "edge-wasm-vercel",
@@ -20,6 +23,18 @@ const edgeWasmPlugin: ESBuildPlugin = {
         path: args.path.replace(/\.wasm\?module$/i, ".wasm"),
         external: true,
       };
+    });
+  },
+};
+
+// Treat dynamic imports of native modules as external
+const dynamicNativeImportPlugin: ESBuildPlugin = {
+  name: "edge-dynamic-import-native",
+  setup(build) {
+    build.onResolve({ filter: /.*/ }, (args) => {
+      if (args.kind === "dynamic-import" && builtIns.has(args.path)) {
+        return { path: args.path, external: true };
+      }
     });
   },
 };
@@ -127,12 +142,13 @@ async function bundle(
   };
 
   if (isEdge) {
+    // TODO unenv behind an opt-out option
     buildOptions.platform = "browser";
     buildOptions.external = edgeExternal;
     buildOptions.conditions = edgeConditions;
     buildOptions.outExtension = { ".js": ".mjs" };
     buildOptions.outfile = destination.replace(/\.mjs$/, ".js");
-    buildOptions.plugins = [edgeWasmPlugin];
+    buildOptions.plugins = [edgeWasmPlugin, dynamicNativeImportPlugin];
   } else {
     buildOptions.platform = "node";
     buildOptions.outfile = destination.replace(/\.js$/, ".mjs");

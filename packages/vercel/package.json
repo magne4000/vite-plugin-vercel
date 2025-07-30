@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.19.9",
-    "@universal-middleware/express": "^0.4.17",
+    "@universal-middleware/express": "^0.4.19",
     "@vercel/node": "^5.1.14",
     "rollup": "^4.40.1",
     "tsup": "^8.4.0",
@@ -42,9 +42,9 @@
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@photonjs/core": "0.0.1-commit-ed36e70",
+    "@photonjs/core": "0.0.1-commit-a27932b",
     "@universal-middleware/core": "^0.4.9",
-    "@universal-middleware/vercel": "^0.4.19",
+    "@universal-middleware/vercel": "^0.4.20",
     "@vercel/build-utils": "^10.5.1",
     "@vercel/nft": "^0.29.2",
     "@vercel/routing-utils": "^5.0.4",
