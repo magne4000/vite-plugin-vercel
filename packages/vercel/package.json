@@ -31,7 +31,7 @@
     "vite": ">=7"
   },
   "devDependencies": {
-    "@types/node": "^18.19.86",
+    "@types/node": "^20.19.9",
     "@universal-middleware/express": "^0.4.17",
     "@vercel/node": "^5.1.14",
     "rollup": "^4.40.1",

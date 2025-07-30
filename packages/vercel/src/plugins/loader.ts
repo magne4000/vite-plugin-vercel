@@ -18,6 +18,8 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
   let nodeVersion: NodeVersion;
 
   return [
+    // TODO create another plugin for "smart mode",
+    // where handlers are grouped by configuration
     {
       name: "vite-plugin-vercel:update-entries",
       apply: "build",

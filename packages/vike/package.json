@@ -27,7 +27,7 @@
     "vite-plugin-vercel": "workspace:^"
   },
   "devDependencies": {
-    "@types/node": "^18.19.86",
+    "@types/node": "^20.19.9",
     "@universal-middleware/core": "^0.4.9",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",

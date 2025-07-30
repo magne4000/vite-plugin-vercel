@@ -33,7 +33,7 @@
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.25.9",
     "@playwright/test": "^1.51.1",
-    "@types/node": "^18.19.86",
+    "@types/node": "^20.19.9",
     "@types/node-fetch": "^2.6.12",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
