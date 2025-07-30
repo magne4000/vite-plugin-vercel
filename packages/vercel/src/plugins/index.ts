@@ -22,7 +22,9 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
       ...additionalConfig,
       fullInstall: true,
       defaultBuildEnv: "vercel_node",
-      codeSplitting: true,
+      codeSplitting: {
+        target: true,
+      },
       devServer: {
         env: "vercel_node",
       },

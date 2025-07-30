@@ -30,7 +30,7 @@
   "pnpm": {
     "overrides": {
       "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
-      "@photonjs/core": "0.0.1-commit-a27932b",
+      "@photonjs/core": "0.0.1-commit-c7d7ab1",
       "vite": "^7.0.5",
       "vike": "^0.4.236"
     }

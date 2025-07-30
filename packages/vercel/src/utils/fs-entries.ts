@@ -34,7 +34,7 @@ export async function getEntriesFromFs(
       id: filePath,
       name: key,
       type: "universal-handler",
-      standalone: true,
+      compositionMode: "isolated",
       vercel: {
         route: true,
         destination: key,

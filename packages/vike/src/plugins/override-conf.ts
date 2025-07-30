@@ -22,7 +22,9 @@ export function overrideConfPlugin(): Plugin[] {
         return {
           photon: {
             ...vikeConfig.config.photon,
-            codeSplitting: false,
+            codeSplitting: {
+              framework: false,
+            },
           },
           resolve: {
             // TODO should be set by vike-server itself
