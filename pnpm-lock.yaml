@@ -40,7 +40,7 @@ importers:
         version: 3.1.0(acorn@8.15.0)
       '@mdx-js/react':
         specifier: ^3.1.0
-        version: 3.1.0(@types/react@18.3.23)(react@19.1.1)
+        version: 3.1.0(@types/react@19.1.9)(react@19.1.1)
       '@mdx-js/rollup':
         specifier: ^3.1.0
         version: 3.1.0(acorn@8.15.0)(rollup@4.46.2)
@@ -97,11 +97,11 @@ importers:
         specifier: ^2.6.13
         version: 2.6.13
       '@types/react':
-        specifier: ^18.3.23
-        version: 18.3.23
+        specifier: ^19.1.9
+        version: 19.1.9
       '@types/react-dom':
-        specifier: ^18.3.7
-        version: 18.3.7(@types/react@18.3.23)
+        specifier: ^19.1.7
+        version: 19.1.7(@types/react@19.1.9)
       '@universal-middleware/core':
         specifier: ^0.4.9
         version: 0.4.9(hono@4.8.10)
@@ -124,8 +124,8 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@20.19.9)
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.0.14
+        version: 4.0.14
 
   examples/hono:
     dependencies:
@@ -177,8 +177,8 @@ importers:
   packages/schemas:
     dependencies:
       zod:
-        specifier: ^3.25.76
-        version: 3.25.76
+        specifier: ^4.0.14
+        version: 4.0.14
     devDependencies:
       '@types/node':
         specifier: ^20.19.9
@@ -208,11 +208,11 @@ importers:
         specifier: ^0.4.20
         version: 0.4.20(@universal-middleware/h3@0.4.12(hono@4.8.10))(hono@4.8.10)
       '@vercel/build-utils':
-        specifier: ^10.6.7
-        version: 10.6.7
+        specifier: ^11.0.0
+        version: 11.0.0
       '@vercel/nft':
-        specifier: ^0.29.4
-        version: 0.29.4(rollup@4.46.2)
+        specifier: ^0.30.0
+        version: 0.30.0(rollup@4.46.2)
       '@vercel/routing-utils':
         specifier: ^5.1.1
         version: 5.1.1
@@ -480,8 +480,8 @@ packages:
   '@brillout/require-shim@0.1.2':
     resolution: {integrity: sha512-3I4LRHnVZXoSAsEoni5mosq9l6eiJED58d9V954W4CIZ88AUfYBanWGBGbJG3NztaRTpFHEA6wB3Hn93BmmJdg==}
 
-  '@brillout/vite-plugin-server-entry@0.7.10':
-    resolution: {integrity: sha512-TgFQbFcvzTkfXcT4wquYtLN4SRFyziVCZV/0Gvs2jBPixJ2g0skVOb4L8x/zRgrqOT5/nqPeg9HRuhmFXWubLQ==}
+  '@brillout/vite-plugin-server-entry@0.7.12':
+    resolution: {integrity: sha512-yh+tsIl2qpStgj1JofxC6tb1WoDYHGnth7XZtHou5baRkBE7DgmoCRIE+kw6S3511KwCMOcuBQSUszrYg5dLUw==}
 
   '@changesets/apply-release-plan@7.0.12':
     resolution: {integrity: sha512-EaET7As5CeuhTzvXTQCRZeBUcisoYPDDcXvgTE/2jmmypKp0RC7LxKj/yzqeh/1qFTZI7oDGFcL1PHRuQuketQ==}
@@ -1004,16 +1004,13 @@ packages:
   '@types/node@20.19.9':
     resolution: {integrity: sha512-cuVNgarYWZqxRJDQHEB58GEONhOK79QVR/qYx4S7kcUObQvUwvFnYxJuuHUKm2aieN9X3yZB4LZsuYNU1Qphsw==}
 
-  '@types/prop-types@15.7.15':
-    resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
-
-  '@types/react-dom@18.3.7':
-    resolution: {integrity: sha512-MEe3UeoENYVFXzoXEWsvcpg6ZvlrFNlOQ7EOsvhI3CfAXwzPfO8Qwuxd40nepsYKqyyVQnTdEfv68q91yLcKrQ==}
+  '@types/react-dom@19.1.7':
+    resolution: {integrity: sha512-i5ZzwYpqjmrKenzkoLM2Ibzt6mAsM7pxB6BCIouEVVmgiqaMj1TjaK7hnA36hbW5aZv20kx7Lw6hWzPWg0Rurw==}
     peerDependencies:
-      '@types/react': ^18.0.0
+      '@types/react': ^19.0.0
 
-  '@types/react@18.3.23':
-    resolution: {integrity: sha512-/LDXMQh55EzZQ0uVAZmKKhfENivEvWz6E+EYzh+/MCjMhNsotd+ZHhBGIjFDTi6+fz0OhQQQLbTgdQIxxCsC0w==}
+  '@types/react@19.1.9':
+    resolution: {integrity: sha512-WmdoynAX8Stew/36uTSVMcLJJ1KRh6L3IZRx1PZ7qJtBqT3dYTgyDTx8H1qoRghErydW7xw9mSJ3wS//tCRpFA==}
 
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
@@ -1103,9 +1100,6 @@ packages:
       hono:
         optional: true
 
-  '@vercel/build-utils@10.6.7':
-    resolution: {integrity: sha512-DVV7zLsHvG/7NgWuo7DAZ6Gnrfd08hKEeQ0URkgv+4g0YXmv+JW4cZkJ7pW0fwoszuoqUfGRwIjTG6LT4TDEOg==}
-
   '@vercel/build-utils@11.0.0':
     resolution: {integrity: sha512-jeBQHHOVqTgIMynVLtGUhf+Qf2Q0K1C/luZP7wuUM9veTeTMUSjju6HtpuJE5yuxre0rIogKRbKjvRXrAsbOIg==}
 
@@ -1129,8 +1123,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  '@vercel/nft@0.29.4':
-    resolution: {integrity: sha512-6lLqMNX3TuycBPABycx7A9F1bHQR7kiQln6abjFbPrf5C/05qHM9M5E4PeTE59c7z8g6vHnx1Ioihb2AQl7BTA==}
+  '@vercel/nft@0.30.0':
+    resolution: {integrity: sha512-xVye7Z0riD9czsMuEJYpFqm2FR33r3euYaFzuEPCoUtYuDwmus3rJfKtcFU7Df+pgj8p4zs78x5lOWYoLNr+7Q==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -1518,8 +1512,8 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
-  electron-to-chromium@1.5.192:
-    resolution: {integrity: sha512-rP8Ez0w7UNw/9j5eSXCe10o1g/8B1P5SM90PCCMVkIRQn2R0LEHWz4Eh9RnxkniuDe1W0cTSOB3MLlkTGDcuCg==}
+  electron-to-chromium@1.5.193:
+    resolution: {integrity: sha512-eePuBZXM9OVCwfYUhd2OzESeNGnWmLyeu0XAEjf7xjijNjHFdeJSzuRUGN4ueT2tEYo5YqjHramKEFxz67p3XA==}
 
   emoji-regex-xs@2.0.1:
     resolution: {integrity: sha512-1QFuh8l7LqUcKe24LsPUNzjrzJQ7pgRwp1QMcZ5MX6mFplk2zQ08NVCM84++1cveaUUYtcCYHmeFEuNg16sU4g==}
@@ -3016,6 +3010,9 @@ packages:
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
 
+  zod@4.0.14:
+    resolution: {integrity: sha512-nGFJTnJN6cM2v9kXL+SOBq3AtjQby3Mv5ySGFof5UGRHrRioSJ5iG680cYNjE/yWk671nROcpPj4hAS8nyLhSw==}
+
   zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
 
@@ -3211,7 +3208,7 @@ snapshots:
 
   '@brillout/require-shim@0.1.2': {}
 
-  '@brillout/vite-plugin-server-entry@0.7.10':
+  '@brillout/vite-plugin-server-entry@0.7.12':
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/picocolors': 1.0.28
@@ -3557,10 +3554,10 @@ snapshots:
       - acorn
       - supports-color
 
-  '@mdx-js/react@3.1.0(@types/react@18.3.23)(react@19.1.1)':
+  '@mdx-js/react@3.1.0(@types/react@19.1.9)(react@19.1.1)':
     dependencies:
       '@types/mdx': 2.0.13
-      '@types/react': 18.3.23
+      '@types/react': 19.1.9
       react: 19.1.1
 
   '@mdx-js/rollup@3.1.0(acorn@8.15.0)(rollup@4.46.2)':
@@ -3589,7 +3586,7 @@ snapshots:
   '@photonjs/core@0.0.1-commit-877032a(vite@7.0.6(@types/node@20.19.9))':
     dependencies:
       '@brillout/picocolors': 1.0.28
-      '@brillout/vite-plugin-server-entry': 0.7.10
+      '@brillout/vite-plugin-server-entry': 0.7.12
       '@universal-middleware/cloudflare': 0.4.10(hono@4.8.10)
       '@universal-middleware/compress': 0.2.30
       '@universal-middleware/core': 0.4.9(hono@4.8.10)
@@ -3779,15 +3776,12 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
-  '@types/prop-types@15.7.15': {}
-
-  '@types/react-dom@18.3.7(@types/react@18.3.23)':
+  '@types/react-dom@19.1.7(@types/react@19.1.9)':
     dependencies:
-      '@types/react': 18.3.23
+      '@types/react': 19.1.9
 
-  '@types/react@18.3.23':
+  '@types/react@19.1.9':
     dependencies:
-      '@types/prop-types': 15.7.15
       csstype: 3.1.3
 
   '@types/unist@2.0.11': {}
@@ -3907,8 +3901,6 @@ snapshots:
       - '@cloudflare/workers-types'
       - '@webroute/route'
 
-  '@vercel/build-utils@10.6.7': {}
-
   '@vercel/build-utils@11.0.0': {}
 
   '@vercel/edge-config-fs@0.1.0': {}
@@ -3938,7 +3930,7 @@ snapshots:
       - rollup
       - supports-color
 
-  '@vercel/nft@0.29.4(rollup@4.46.2)':
+  '@vercel/nft@0.30.0(rollup@4.46.2)':
     dependencies:
       '@mapbox/node-pre-gyp': 2.0.0
       '@rollup/pluginutils': 5.2.0(rollup@4.46.2)
@@ -4163,7 +4155,7 @@ snapshots:
   browserslist@4.25.1:
     dependencies:
       caniuse-lite: 1.0.30001731
-      electron-to-chromium: 1.5.192
+      electron-to-chromium: 1.5.193
       node-releases: 2.0.19
       update-browserslist-db: 1.1.3(browserslist@4.25.1)
 
@@ -4336,7 +4328,7 @@ snapshots:
       signal-exit: 4.0.2
       time-span: 4.0.0
 
-  electron-to-chromium@1.5.192: {}
+  electron-to-chromium@1.5.193: {}
 
   emoji-regex-xs@2.0.1: {}
 
@@ -5878,7 +5870,7 @@ snapshots:
   vike-server@1.0.16-commit-91ea469(hono@4.8.10)(vike@0.4.236(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.0.6(@types/node@20.19.9)))(vite@7.0.6(@types/node@20.19.9)):
     dependencies:
       '@brillout/picocolors': 1.0.28
-      '@brillout/vite-plugin-server-entry': 0.7.10
+      '@brillout/vite-plugin-server-entry': 0.7.12
       '@photonjs/core': 0.0.1-commit-877032a(vite@7.0.6(@types/node@20.19.9))
       '@universal-middleware/compress': 0.2.30
       '@universal-middleware/core': 0.4.9(hono@4.8.10)
@@ -5909,7 +5901,7 @@ snapshots:
       '@brillout/json-serializer': 0.5.16
       '@brillout/picocolors': 1.0.28
       '@brillout/require-shim': 0.1.2
-      '@brillout/vite-plugin-server-entry': 0.7.10
+      '@brillout/vite-plugin-server-entry': 0.7.12
       acorn: 8.15.0
       cac: 6.7.14
       es-module-lexer: 1.7.0
@@ -6052,5 +6044,7 @@ snapshots:
   yoga-layout@3.2.1: {}
 
   zod@3.25.76: {}
+
+  zod@4.0.14: {}
 
   zwitch@2.0.4: {}
