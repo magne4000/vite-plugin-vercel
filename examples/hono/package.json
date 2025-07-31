@@ -14,10 +14,10 @@
   "author": "",
   "devDependencies": {
     "@types/node": "^20.19.9",
-    "cross-env": "^7.0.3",
-    "hono": "^4.7.5",
-    "typescript": "^5.8.2",
-    "vite": "^7.0.5"
+    "cross-env": "^10.0.0",
+    "hono": "^4.8.10",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.6"
   },
   "dependencies": {
     "@photonjs/core": "0.0.1-commit-877032a",

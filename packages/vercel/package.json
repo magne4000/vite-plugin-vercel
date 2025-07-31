@@ -33,28 +33,28 @@
   "devDependencies": {
     "@types/node": "^20.19.9",
     "@universal-middleware/express": "^0.4.19",
-    "@vercel/node": "^5.1.14",
-    "rollup": "^4.40.1",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.2",
-    "vite": "^7.0.5"
+    "@vercel/node": "^5.3.7",
+    "rollup": "^4.46.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.6"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@manypkg/find-root": "^2.2.3",
+    "@manypkg/find-root": "^3.1.0",
     "@photonjs/core": "0.0.1-commit-877032a",
     "@universal-middleware/core": "^0.4.9",
     "@universal-middleware/vercel": "^0.4.20",
-    "@vercel/build-utils": "^10.5.1",
-    "@vercel/nft": "^0.29.2",
-    "@vercel/routing-utils": "^5.0.4",
+    "@vercel/build-utils": "^10.6.7",
+    "@vercel/nft": "^0.29.4",
+    "@vercel/routing-utils": "^5.1.1",
     "@vite-plugin-vercel/schemas": "workspace:^",
     "convert-route": "^0.1.1",
-    "esbuild": "^0.25.1",
+    "esbuild": "^0.25.8",
     "fast-glob": "^3.3.3",
     "magicast": "^0.3.5",
     "path-to-regexp": "^8.2.0",
     "strip-ansi": "^7.1.0",
-    "vite-plugin-wasm": "^3.4.1"
+    "vite-plugin-wasm": "^3.5.0"
   }
 }

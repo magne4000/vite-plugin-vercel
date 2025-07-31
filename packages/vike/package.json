@@ -29,9 +29,9 @@
   "devDependencies": {
     "@types/node": "^20.19.9",
     "@universal-middleware/core": "^0.4.9",
-    "tsup": "^8.4.0",
-    "typescript": "^5.8.2",
-    "vite": "^7.0.5",
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.6",
     "vite-plugin-vercel": "workspace:^"
   },
   "dependencies": {
