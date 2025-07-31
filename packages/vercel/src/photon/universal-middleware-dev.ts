@@ -2,6 +2,8 @@ import "../types";
 import { enhance, MiddlewareOrder, type UniversalMiddleware } from "@universal-middleware/core";
 import type { Photon } from "@photonjs/core";
 
+// FIXME during dev, we cannot add dynamic entries through this.emitFile.
+//  So for headers to be available in dev, we must create a middleware that will do that for us.
 export const applyVercelHeaders: UniversalMiddleware<
   // TODO export type from Photon
   Universal.Context & { photon?: { handler?: Photon.EntryUniversalHandler; server?: Photon.EntryServer } }
