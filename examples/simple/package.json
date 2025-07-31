@@ -13,12 +13,12 @@
   "author": "",
   "devDependencies": {
     "@types/node": "^20.19.9",
-    "@vercel/node": "^5.1.14",
-    "typescript": "^5.8.2",
-    "vite": "^7.0.5"
+    "@vercel/node": "^5.3.7",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.6"
   },
   "dependencies": {
-    "hono": "^4.7.8",
+    "hono": "^4.8.10",
     "vite-plugin-vercel": "workspace:*"
   }
 }

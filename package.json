@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vercel-workspace-root",
-  "packageManager": "pnpm@9.15.5",
+  "packageManager": "pnpm@9.15.9",
   "private": "true",
   "type": "module",
   "scripts": {
@@ -21,18 +21,18 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
-    "@changesets/cli": "^2.28.1",
+    "@changesets/cli": "^2.29.5",
     "@types/node": "^20.19.9",
-    "cross-env": "^7.0.3",
-    "playwright": "^1.51.1",
-    "typescript": "^5.8.2"
+    "cross-env": "^10.0.0",
+    "playwright": "^1.54.1",
+    "typescript": "^5.8.3"
   },
   "pnpm": {
     "overrides": {
-      "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
       "@photonjs/core": "0.0.1-commit-877032a",
-      "vite": "^7.0.5",
-      "vike": "^0.4.236"
+      "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
+      "vike": "^0.4.236",
+      "vite": "^7.0.6"
     }
   }
 }
