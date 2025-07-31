@@ -3,7 +3,7 @@ import { getVikeConfig } from "vike/plugin";
 import path from "node:path";
 
 export function prerenderPlugin(): Plugin[] {
-  let vikePrerenderOutdir: string | undefined = undefined;
+  let vikePrerenderOutdir: string | undefined;
 
   return [
     {

@@ -23,7 +23,7 @@ export async function getEntriesFromFs(
   for (const filePath of apiEntries) {
     const outFilePath = pathRelativeTo(filePath, normalizedDir);
     const parsed = path.posix.parse(outFilePath);
-    let xports: VercelEndpointExports | undefined | null = undefined;
+    let xports: VercelEndpointExports | undefined | null;
 
     if (tryParseExports) {
       xports = await extractExports(filePath);

@@ -1,11 +1,7 @@
 import React from "react";
 import { Link } from "./Link";
 
-export function Layout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <React.StrictMode>
       <div

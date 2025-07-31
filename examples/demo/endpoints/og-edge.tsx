@@ -1,11 +1,10 @@
-import React from "react";
 import { ImageResponse } from "@vercel/og";
 
 export const edge = true;
 
 // This is a Universal Handler
 // See https://universal-middleware.dev/definitions#handler
-export default async function handler(request: Request) {
+export default async function handler(_request: Request) {
   return new ImageResponse(
     <div
       style={{
