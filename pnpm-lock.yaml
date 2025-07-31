@@ -208,8 +208,8 @@ importers:
         specifier: ^0.4.20
         version: 0.4.20(@universal-middleware/h3@0.4.12(hono@4.8.10))(hono@4.8.10)
       '@vercel/build-utils':
-        specifier: ^10.5.1
-        version: 10.6.7
+        specifier: ^11.0.0
+        version: 11.0.0
       '@vercel/nft':
         specifier: ^0.29.2
         version: 0.29.4(rollup@4.46.2)
@@ -1099,9 +1099,6 @@ packages:
         optional: true
       hono:
         optional: true
-
-  '@vercel/build-utils@10.6.7':
-    resolution: {integrity: sha512-DVV7zLsHvG/7NgWuo7DAZ6Gnrfd08hKEeQ0URkgv+4g0YXmv+JW4cZkJ7pW0fwoszuoqUfGRwIjTG6LT4TDEOg==}
 
   '@vercel/build-utils@11.0.0':
     resolution: {integrity: sha512-jeBQHHOVqTgIMynVLtGUhf+Qf2Q0K1C/luZP7wuUM9veTeTMUSjju6HtpuJE5yuxre0rIogKRbKjvRXrAsbOIg==}
@@ -3904,8 +3901,6 @@ snapshots:
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@webroute/route'
-
-  '@vercel/build-utils@10.6.7': {}
 
   '@vercel/build-utils@11.0.0': {}
 
