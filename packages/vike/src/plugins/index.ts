@@ -1,7 +1,14 @@
 import type { Plugin } from "vite";
-import { buildAppPlugins } from "./build-app";
 import { overrideConfPlugin } from "./override-conf";
 import { routesPlugins } from "./routes";
-import { resolvePlugin } from "./resolve";
+import { installPhoton } from "@photonjs/core/vite";
+import { prerenderPlugin } from "./prerender";
 
-export const plugins: Plugin[] = [overrideConfPlugin(), resolvePlugin(), ...routesPlugins(), buildAppPlugins()];
+export const vikeVercel: Plugin[] = [
+  ...installPhoton("vike-vercel", {
+    fullInstall: true,
+  }),
+  ...overrideConfPlugin(),
+  ...routesPlugins(),
+  ...prerenderPlugin(),
+];

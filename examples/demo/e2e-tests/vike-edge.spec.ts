@@ -6,7 +6,7 @@ test("has interactive counter", async ({ page }) => {
   const response = await goto(page, "/vike-edge");
 
   if (isDeployed) {
-    // TODO: Not yet implemented in dev, needs Vike to pass full ESM to activate vite dev plugin
+    // TODO also test in dev. Requires fixing `applyVercelHeaders`
     expect(await response?.headerValue("x-vitepluginvercel-test")).toBe("test");
   }
 

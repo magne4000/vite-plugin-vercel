@@ -1,13 +1,19 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
-import { copyFile, rm } from "node:fs/promises";
+import { copyFile, mkdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { findRoot } from "@manypkg/find-root";
 import { nodeFileTrace } from "@vercel/nft";
-import { build, type Plugin as ESBuildPlugin } from "esbuild";
+import { build, type BuildOptions, type Plugin as ESBuildPlugin } from "esbuild";
 import type { Environment, Plugin } from "vite";
 import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../api";
 import { joinAbsolute, joinAbsolutePosix } from "../helpers";
 import type { ViteVercelConfig } from "../types";
+import { isVercelLastBuildStep } from "../utils/env";
+import { edgeExternal } from "../utils/external";
+import { edgeConditions } from "../utils/edge";
+import { builtinModules } from "node:module";
+
+const builtIns = new Set(builtinModules.flatMap((m) => [m, `node:${m}`]));
 
 const edgeWasmPlugin: ESBuildPlugin = {
   name: "edge-wasm-vercel",
@@ -21,6 +27,18 @@ const edgeWasmPlugin: ESBuildPlugin = {
   },
 };
 
+// Treat dynamic imports of native modules as external
+const dynamicNativeImportPlugin: ESBuildPlugin = {
+  name: "edge-dynamic-import-native",
+  setup(build) {
+    build.onResolve({ filter: /.*/ }, (args) => {
+      if (args.kind === "dynamic-import" && builtIns.has(args.path)) {
+        return { path: args.path, external: true };
+      }
+    });
+  },
+};
+
 interface BundleAsset {
   env: string;
   root: string;
@@ -30,68 +48,69 @@ interface BundleAsset {
 }
 
 // We cannot disable code-splitting with Vite/Rollup,
-// so we use esbuild when all files are written on the filesystem to bundle each functions.
-export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin {
+// so we use esbuild when all files are written on the filesystem to bundle each function.
+export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
   const bundledAssets = new Map<string, BundleAsset>();
 
-  return {
-    name: "vite-plugin-vercel:bundle",
-    enforce: "post",
-    apply: "build",
+  return [
+    {
+      name: "vite-plugin-vercel:bundle",
+      enforce: "post",
+      apply: "build",
 
-    generateBundle(_opts, bundle) {
-      for (const b of Object.values(bundle)) {
-        if (b.type === "asset") {
-          const originalFileNames = b.originalFileNames.map((relativePath) =>
-            path.resolve(this.environment.config.root, relativePath),
-          );
-
-          const asset: BundleAsset = {
-            env: this.environment.name,
-            root: this.environment.config.root,
-            outDir: this.environment.config.build.outDir,
-            outFile: joinAbsolute(this.environment, this.environment.config.build.outDir, b.fileName),
-            fileName: b.fileName,
-          };
-
-          for (const originalFileName of originalFileNames) {
-            bundledAssets.set(originalFileName, asset);
-          }
-        }
-      }
-    },
-
-    closeBundle: {
-      order: "post",
-      async handler() {
-        // We assume that vercel_node always runs last
-        if (this.environment.name !== "vercel_node") return;
-
-        const api = getVercelAPI(this);
-        const outfiles = api.getOutFiles();
-
-        for (const outfile of outfiles) {
-          if (outfile.type === "asset") {
-            const { source, destination } = getAbsoluteOutFileWithout_tmp(outfile);
-            await copyFile(source, destination);
-          } else {
-            await bundle(
-              this.environment,
-              bundledAssets,
-              outfile,
-              Array.isArray(this.environment.config.resolve.external) ? this.environment.config.resolve.external : [],
+      generateBundle(_opts, bundle) {
+        for (const b of Object.values(bundle)) {
+          if (b.type === "asset") {
+            const originalFileNames = b.originalFileNames.map((relativePath) =>
+              path.resolve(this.environment.config.root, relativePath),
             );
+
+            const asset: BundleAsset = {
+              env: this.environment.name,
+              root: this.environment.config.root,
+              outDir: this.environment.config.build.outDir,
+              outFile: joinAbsolute(this.environment, this.environment.config.build.outDir, b.fileName),
+              fileName: b.fileName,
+            };
+
+            for (const originalFileName of originalFileNames) {
+              bundledAssets.set(originalFileName, asset);
+            }
           }
         }
-
-        const tmpDir = pluginConfig.outDir ? path.posix.join(pluginConfig.outDir, "_tmp") : ".vercel/output/_tmp";
-
-        await rm(tmpDir, { recursive: true });
       },
-    },
 
-    sharedDuringBuild: true,
-  };
+      closeBundle: {
+        order: "post",
+        async handler() {
+          if (!isVercelLastBuildStep(this.environment)) return;
+
+          this.environment.logger.info("Creating Vercel bundles...");
+
+          const api = getVercelAPI(this);
+          const outfiles = api.getOutFiles();
+
+          // TODO concurrency
+          for (const outfile of outfiles) {
+            if (outfile.type === "asset") {
+              const { source, destination } = getAbsoluteOutFileWithout_tmp(outfile);
+              // TODO instead move from _tmp to parent folder
+              await mkdir(path.dirname(destination), { recursive: true });
+              await copyFile(source, destination);
+            } else {
+              await bundle(this.environment, bundledAssets, outfile);
+            }
+          }
+
+          const tmpDir = pluginConfig.outDir ? path.posix.join(pluginConfig.outDir, "_tmp") : ".vercel/output/_tmp";
+
+          await rm(tmpDir, { recursive: true });
+        },
+      },
+
+      sharedDuringBuild: true,
+    },
+  ];
 }
 
 function getAbsoluteOutFileWithout_tmp(outfile: ViteVercelOutFile) {
@@ -108,23 +127,48 @@ async function bundle(
   environment: Environment,
   bundledAssets: Map<string, BundleAsset>,
   outfile: ViteVercelOutFileChunk,
-  external: string[] = [],
 ) {
   const { source, destination } = getAbsoluteOutFileWithout_tmp(outfile);
+  const isEdge = Boolean(outfile.relatedEntry.vercel?.edge);
 
-  await build({
-    platform: outfile.relatedEntry.edge ? "browser" : "node",
+  const buildOptions: BuildOptions = {
     format: "esm",
     target: "es2022",
-
+    legalComments: "none",
     bundle: true,
-    external,
     entryPoints: [source],
-    outExtension: outfile.relatedEntry.edge ? {} : { ".js": ".mjs" },
-    outfile: destination,
+    treeShaking: true,
     logOverride: { "ignored-bare-import": "silent" },
-    plugins: [edgeWasmPlugin],
-  });
+  };
+
+  if (isEdge) {
+    // TODO unenv behind an opt-out option
+    buildOptions.platform = "browser";
+    buildOptions.external = edgeExternal;
+    buildOptions.conditions = edgeConditions;
+    buildOptions.outExtension = { ".js": ".mjs" };
+    buildOptions.outfile = destination.replace(/\.mjs$/, ".js");
+    buildOptions.plugins = [edgeWasmPlugin, dynamicNativeImportPlugin];
+  } else {
+    buildOptions.platform = "node";
+    buildOptions.outfile = destination.replace(/\.js$/, ".mjs");
+    buildOptions.banner = {
+      js: `import { createRequire as topLevelCreateRequire } from 'module';
+import { dirname as topLevelDirname } from 'path';
+import { fileURLToPath as topLevelFileURLToPath } from 'url';
+const require = topLevelCreateRequire(import.meta.url);
+const __filename = topLevelFileURLToPath(import.meta.url);
+const __dirname = topLevelDirname(__filename);
+`,
+    };
+  }
+
+  try {
+    await build(buildOptions);
+  } catch (e) {
+    // @ts-ignore
+    throw new Error(`Error while bundling ${destination}`, { cause: e });
+  }
 
   let base = environment.config.root;
   try {
@@ -134,12 +178,17 @@ async function bundle(
     // ignore error
   }
 
-  if (!existsSync(outfile.relatedEntry.input)) {
-    // TODO virtual imports? modules from node_modules?
+  const entryFilePath = existsSync(outfile.relatedEntry.id)
+    ? outfile.relatedEntry.id
+    : outfile.relatedEntry.resolvedId && existsSync(outfile.relatedEntry.resolvedId)
+      ? outfile.relatedEntry.resolvedId
+      : null;
+
+  if (entryFilePath === null) {
     return;
   }
 
-  const { fileList, reasons } = await nodeFileTrace([outfile.relatedEntry.input], {
+  const { fileList, reasons } = await nodeFileTrace([entryFilePath], {
     base,
     processCwd: environment.config.root,
     mixedModules: true,
@@ -167,7 +216,7 @@ async function bundle(
             "process.env.NODE_ENV": '"production"',
             "import.meta.env.NODE_ENV": '"production"',
           },
-          entryPoints: [outfile.relatedEntry.input],
+          entryPoints: [entryFilePath],
           bundle: false,
           write: false,
         });

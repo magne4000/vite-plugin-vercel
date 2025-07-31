@@ -1,5 +1,5 @@
 {
-  "name": "vike-vercel",
+  "name": "@vite-plugin-vercel/schemas",
   "version": "1.0.0",
   "type": "module",
   "files": [
@@ -8,11 +8,9 @@
   ],
   "module": "./dist/index.js",
   "exports": {
-    ".": "./dist/index.js",
-    "./plugins": "./dist/plugins.js",
-    "./config": "./dist/config.js"
+    ".": "./dist/index.js"
   },
-  "description": "Vercel extension for Vike",
+  "description": "Zod schemas for Vercel Output API",
   "author": "Joël Charles <joel.charles91@gmail.com>",
   "repository": "https://github.com/magne4000/vite-plugin-vercel",
   "license": "MIT",
@@ -22,22 +20,13 @@
     "prepack": "rm -rf dist && pnpm build",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "peerDependencies": {
-    "vite": ">=7",
-    "vite-plugin-vercel": "workspace:^"
-  },
+
   "devDependencies": {
     "@types/node": "^20.19.9",
-    "@universal-middleware/core": "^0.4.9",
     "tsup": "^8.4.0",
-    "typescript": "^5.8.2",
-    "vite": "^7.0.5",
-    "vite-plugin-vercel": "workspace:^"
+    "typescript": "^5.8.2"
   },
   "dependencies": {
-    "@brillout/libassert": "^0.5.8",
-    "@photonjs/core": "0.0.1-commit-877032a",
-    "vike": "^0.4.236",
-    "vike-server": "1.0.16-commit-91ea469"
+    "zod": "^3.25.67"
   }
 }

@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const vercelEndpointExports = z.object({
   edge: z.boolean().optional(),
-  headers: z.record(z.string()).optional(),
+  headers: z.record(z.string(), z.string()).optional(),
   streaming: z.boolean().optional(),
   isr: z
     .object({

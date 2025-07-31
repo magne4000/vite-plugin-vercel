@@ -1,22 +1,9 @@
-import path from "node:path";
 import { getVikeConfig } from "vike/plugin";
-import type { PageContext } from "vike/types";
 import { normalizePath, type Plugin } from "vite";
-import { getVercelAPI } from "vite-plugin-vercel/api";
-import type { ViteVercelRouteOverrides } from "vite-plugin-vercel/types";
 import { assert } from "../utils/assert";
-import { resolvedModuleId } from "./resolve";
+import { addPhotonEntry } from "@photonjs/core/api";
 
-type PrerenderContextOutputPage = {
-  filePath: string;
-  fileType: string;
-  fileContent: string;
-  pageContext: PageContext;
-};
-
-function routesPluginBuild(): Plugin {
-  let vikeConfig: ReturnType<typeof getVikeConfig> | undefined = undefined;
-  let vikePrerenderOutdir: string | undefined = undefined;
+export function routesPlugins(): Plugin[] {
   const vikePages: {
     pageId: string;
     isr: number | null;
@@ -24,24 +11,20 @@ function routesPluginBuild(): Plugin {
     headers: Record<string, string> | null;
     route: string | null;
   }[] = [];
-  let i = 0;
 
-  return {
-    name: "vike-vercel:routes:build",
-    apply: "build",
+  return [
+    {
+      name: "vike-vercel:routes:read-config",
+      apply: "build",
 
-    closeBundle: {
-      order: "post",
-      async handler() {
-        if (this.environment.name === "client") {
-          vikePrerenderOutdir = normalizePath(
-            path.isAbsolute(this.environment.config.build.outDir)
-              ? this.environment.config.build.outDir
-              : path.posix.join(this.environment.config.root, this.environment.config.build.outDir),
-          );
-        }
-        if (this.environment.name === "ssr") {
-          vikeConfig = getVikeConfig(this.environment.config);
+      applyToEnvironment(env) {
+        return env.name === "ssr";
+      },
+
+      closeBundle: {
+        order: "post",
+        async handler() {
+          const vikeConfig = getVikeConfig(this.environment.config);
 
           for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
             const rawIsr = extractIsr(page.config);
@@ -78,178 +61,70 @@ function routesPluginBuild(): Plugin {
               route,
             });
           }
-        }
+        },
       },
+
+      sharedDuringBuild: true,
     },
+    {
+      name: "vike-vercel:routes:build",
+      apply: "build",
 
-    buildStart: {
-      order: "post",
-      handler() {
-        if (this.environment.name === "vercel_client") {
-          // Emit prerendered files
-          const prerenderContext: { output?: PrerenderContextOutputPage[] } | undefined =
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-            vikeConfig?.prerenderContext as any;
-          if (prerenderContext?.output && vikePrerenderOutdir) {
-            // With overrides, HTML file can be accessed without the .html file extension
-            const overrides: ViteVercelRouteOverrides = {};
+      applyToEnvironment(env) {
+        return env.name === "vercel_node" || env.name === "vercel_edge";
+      },
 
-            for (const file of prerenderContext.output) {
-              const is404 = Boolean(file.pageContext.is404);
+      buildStart: {
+        handler() {
+          // Emit vercel functions
+          const isEdge = this.environment.name === "vercel_edge";
+          const key = isEdge ? "__vike_edge" : "__vike_node";
 
-              const key = is404 ? "404.html" : normalizePath(file.filePath).substring(vikePrerenderOutdir.length + 1);
-              if (!is404 && key.endsWith(".html")) {
-                overrides[key] = {
-                  path:
-                    file.pageContext.urlOriginal[0] === "/"
-                      ? file.pageContext.urlOriginal.substring(1)
-                      : file.pageContext.urlOriginal,
-                };
-              }
-              this.emitFile({
-                type: "asset",
-                fileName: key,
-                originalFileName: key,
-                source: file.fileContent,
-              });
-            }
-
-            const { config } = getVercelAPI(this);
-            config.overrides ??= {};
-            Object.assign(config.overrides, overrides);
+          // By default, a unique Vike function is necessary per env (node, edge)
+          // We only need to create a new function when either `isr` or `headers` is provided
+          const currentEnvPages = vikePages.filter((p) => Boolean(p.edge) === isEdge);
+          // Specific routes
+          for (const page of currentEnvPages.filter(
+            (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
+          )) {
+            const name = `${key}${page.pageId}`;
+            // TODO add all vike routes this way
+            //  and dedupe them in vpv core
+            addPhotonEntry(this, name, {
+              route: page.route ?? undefined,
+              type: "server-config",
+              vercel: {
+                destination: normalizePath(name),
+                isr: page.isr ? { expiration: page.isr } : undefined,
+                headers: page.headers,
+                route: page.route ? `${routeToRegExp(page.route)}(?:\\/index\\.pageContext\\.json)?` : undefined,
+                edge: isEdge,
+              },
+            });
           }
-        }
 
-        if (this.environment.name !== "vercel_node" && this.environment.name !== "vercel_edge") return;
-        // Emit vercel functions
-        const isEdge = this.environment.name === "vercel_edge";
-        const key = isEdge ? "__vike_edge" : "__vike_node";
+          const vikeConfig = getVikeConfig(this.environment.config);
 
-        const { addVercelEntry } = getVercelAPI(this);
-        // By default, a unique Vike function is necessary per env (node, edge)
-        // We only need to create a new function when either `isr` or `headers` is provided
-        const currentEnvPages = vikePages.filter((p) => Boolean(p.edge) === isEdge);
-        // Specific routes
-        for (const page of currentEnvPages.filter(
-          (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
-        )) {
-          addVercelEntry({
-            input: `${resolvedModuleId}/${i++}`,
-            destination: normalizePath(`${key}/${page.pageId}`),
-            isr: page.isr ? { expiration: page.isr } : undefined,
-            headers: page.headers,
-            route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
-            edge: isEdge,
-          });
-        }
-
-        if (
-          currentEnvPages.length > 0 &&
-          // Only generate one default route
-          isEdge === Boolean(vikeConfig?.config.edge)
-        ) {
-          // Catch-all
-          addVercelEntry({
-            input: `${resolvedModuleId}/${i++}`,
-            destination: normalizePath(`${key}/__all`),
-            route: ".*",
-            edge: isEdge,
-            enforce: "post",
-          });
-        }
+          if (
+            currentEnvPages.length > 0 &&
+            // Only generate one default route
+            isEdge === Boolean(vikeConfig?.config.edge)
+          ) {
+            // Catch-all
+            const name = `${key}/__catch_all`;
+            this.environment.config.photon.server.route = "/**";
+            this.environment.config.photon.server.vercel = {
+              destination: normalizePath(name),
+              route: ".*",
+              edge: isEdge,
+              enforce: "post",
+            };
+          }
+        },
       },
+
+      sharedDuringBuild: true,
     },
-
-    sharedDuringBuild: true,
-  };
-}
-
-// TODO refactor share code with build plugin above
-function routesPluginDev(): Plugin {
-  return {
-    name: "vike-vercel:routes:serve",
-    apply: "serve",
-
-    configureServer(server) {
-      const { addVercelEntry } = getVercelAPI(server);
-      const vikeConfig = getVikeConfig(server.config);
-
-      const vikePages: {
-        pageId: string;
-        isr: number | null;
-        edge: null | boolean;
-        headers: Record<string, string> | null;
-        route: string | null;
-      }[] = [];
-
-      for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
-        const rawIsr = extractIsr(page.config);
-        let isr = assertIsr(page.config);
-        const edge = assertEdge(page.config);
-        const headers = assertHeaders(page.config);
-
-        if (typeof page.config.route === "function" && isr) {
-          server.config.logger.warn(
-            `Page ${pageId}: ISR is not supported when using route function. Remove \`{ isr }\` config or use a route string if possible.`,
-          );
-          isr = null;
-        }
-
-        if (edge && rawIsr !== null && typeof rawIsr === "object") {
-          throw new Error(
-            `Page ${pageId}: ISR cannot be enabled for edge functions. Remove \`{ isr }\` config or set \`{ edge: false }\`.`,
-          );
-        }
-
-        const route = typeof page.config.route === "string" ? getParametrizedRoute(page.config.route) : null;
-
-        if (!route && headers !== null && headers !== undefined) {
-          server.config.logger.warn(
-            `Page ${pageId}: { headers } are not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
-          );
-        }
-
-        vikePages.push({
-          pageId,
-          isr,
-          edge,
-          headers,
-          route,
-        });
-      }
-
-      let i = 0;
-      // Specific routes
-      for (const page of vikePages.filter((p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined))) {
-        // FIXME: is this necessary in dev? Or catch-all is enough?
-        const key = page.edge ? "__vike_edge" : "__vike_node";
-        addVercelEntry({
-          input: `vike/universal-middleware?i=${i++}`,
-          destination: normalizePath(`${key}/${page.pageId}`),
-          isr: page.isr ? { expiration: page.isr } : undefined,
-          headers: page.headers,
-          route: page.route ? `${page.route}(?:\\/index\\.pageContext\\.json)?` : undefined,
-          edge: Boolean(page.edge),
-        });
-      }
-
-      // Catch-all
-      addVercelEntry({
-        input: `vike/universal-middleware?i=${i++}`,
-        destination: normalizePath("__vike_node/__all"),
-        route: ".*",
-        edge: false,
-        enforce: "post",
-      });
-    },
-  };
-}
-
-export function routesPlugins(): Plugin[] {
-  return [
-    routesPluginBuild(),
-    // TODO Once Vike have no more CJS at runtime, we should be able to activate this plugin
-    // routesPluginDev(),
   ];
 }
 
@@ -311,17 +186,36 @@ function assertHeaders(exports: unknown): Record<string, string> | null {
   return headers as Record<string, string>;
 }
 
-function getSegmentRegex(segment: string): string {
+function getSegmentRou3(segment: string): string {
   if (segment.startsWith("@")) {
-    return "/[^/]+";
+    return `/:${segment.slice(1)}`;
   }
   if (segment === "*") {
-    return "/.+?";
+    return "/**";
   }
   return `/${segment}`;
 }
 
-export function getParametrizedRoute(route: string): string {
+function getParametrizedRoute(route: string): string {
   const segments = (route.replace(/\/$/, "") || "/").slice(1).split("/");
-  return segments.map(getSegmentRegex).join("");
+  return segments.map(getSegmentRou3).join("");
+}
+
+// https://github.com/h3js/rou3/blob/main/src/regexp.ts
+function routeToRegExp(route = "/"): string {
+  const reSegments = [];
+  let idCtr = 0;
+  for (const segment of route.split("/")) {
+    if (!segment) continue;
+    if (segment === "*") {
+      reSegments.push(`(?<_${idCtr++}>[^/]*)`);
+    } else if (segment.startsWith("**")) {
+      reSegments.push(segment === "**" ? "?(?<_>.*)" : `?(?<${segment.slice(3)}>.+)`);
+    } else if (segment.includes(":")) {
+      reSegments.push(segment.replace(/:(\w+)/g, (_, id) => `(?<${id}>[^/]+)`).replace(/\./g, "\\."));
+    } else {
+      reSegments.push(segment);
+    }
+  }
+  return `/${reSegments.join("/")}`;
 }

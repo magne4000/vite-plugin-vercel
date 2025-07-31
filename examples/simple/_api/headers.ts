@@ -1,5 +1,5 @@
 export const headers = { "X-VitePluginVercel-Test": "test" };
 
-export default async function handler(request: Request) {
+export default function handler() {
   return new Response("HEADERS");
 }

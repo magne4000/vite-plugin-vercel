@@ -1,5 +1,5 @@
 export const edge = true;
 
-export default async function handler(request: Request) {
+export default function handler() {
   return new Response("EDGE");
 }

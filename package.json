@@ -5,14 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm run -C ./packages/vercel dev",
-    "vercel-build": "pnpm run build",
-    "build": "pnpm run -C ./packages/vercel build && pnpm run -C ./packages/vike build",
-    "build:simple": "pnpm run build && pnpm run -C ./examples/simple build",
-    "build:hono": "pnpm run build && pnpm run -C ./examples/hono build",
-    "build:hono-edge": "pnpm run build && pnpm run -C ./examples/hono build:edge",
-    "build:demo": "pnpm run build && pnpm run -C ./examples/demo build && cp -rf examples/demo/public examples/demo/.vercel .",
+    "vercel-build": "pnpm run build && pnpm run build:demo",
+    "build": "pnpm --recursive --filter {packages/*} run build",
+    "build:simple": "pnpm run -C ./examples/simple build",
+    "build:hono": "pnpm run -C ./examples/hono build",
+    "build:hono-edge": "pnpm run -C ./examples/hono build:edge",
+    "build:demo": " pnpm run -C ./examples/demo build && cp -rf examples/demo/public examples/demo/.vercel .",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm run build && pnpm run -r test",
+    "test": "pnpm run -r test",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "prepublishOnly": "pnpm run test && changeset version",
@@ -22,14 +22,17 @@
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
     "@changesets/cli": "^2.28.1",
-    "@types/node": "^18.19.86",
+    "@types/node": "^20.19.9",
     "cross-env": "^7.0.3",
     "playwright": "^1.51.1",
     "typescript": "^5.8.2"
   },
   "pnpm": {
     "overrides": {
-      "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0"
+      "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
+      "@photonjs/core": "0.0.1-commit-877032a",
+      "vite": "^7.0.5",
+      "vike": "^0.4.236"
     }
   }
 }

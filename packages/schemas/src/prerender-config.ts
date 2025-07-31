@@ -3,7 +3,7 @@
  * @see {@link https://vercel.com/docs/build-output-api/v3#build-output-configuration}
  */
 
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const vercelOutputPrerenderConfigSchema = z
   .object({

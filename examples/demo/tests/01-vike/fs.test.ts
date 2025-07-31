@@ -15,9 +15,24 @@ describe("fs", () => {
   );
 
   const expected = [
+    // config
     "/config.json",
+    // functions: edge
     "/functions/__vike_edge/pages/vike-edge.func/.vc-config.json",
     "/functions/__vike_edge/pages/vike-edge.func/index.js",
+    // functions: node
+    "/functions/__vike_node/pages/catch-all.prerender-config.json",
+    "/functions/__vike_node/pages/catch-all.func/index.mjs",
+    "/functions/__vike_node/pages/catch-all.func/.vc-config.json",
+    "/functions/__vike_node/pages/isr.prerender-config.json",
+    "/functions/__vike_node/pages/isr.func/index.mjs",
+    "/functions/__vike_node/pages/isr.func/.vc-config.json",
+    "/functions/__vike_node/pages/named.prerender-config.json",
+    "/functions/__vike_node/pages/named.func/index.mjs",
+    "/functions/__vike_node/pages/named.func/.vc-config.json",
+    "/functions/__vike_node/__catch_all.func/index.mjs",
+    "/functions/__vike_node/__catch_all.func/.vc-config.json",
+    // handlers endpoints
     "/functions/api/isr.func/.vc-config.json",
     "/functions/api/isr.func/index.mjs",
     "/functions/api/isr.prerender-config.json",
@@ -38,23 +53,13 @@ describe("fs", () => {
     "/functions/og-edge.func/noto-sans-v27-latin-regular.ttf",
     "/functions/og-edge.func/resvg.wasm",
     "/functions/og-edge.func/yoga.wasm",
+    // static
     "/static/404.html",
     "/static/index.html",
     "/static/index.pageContext.json",
     "/static/static/index.html",
     "/static/static/index.pageContext.json",
     "/static/test.html",
-    "/functions/__vike_node/pages/catch-all.prerender-config.json",
-    "/functions/__vike_node/pages/catch-all.func/index.mjs",
-    "/functions/__vike_node/pages/catch-all.func/.vc-config.json",
-    "/functions/__vike_node/pages/isr.prerender-config.json",
-    "/functions/__vike_node/pages/isr.func/index.mjs",
-    "/functions/__vike_node/pages/isr.func/.vc-config.json",
-    "/functions/__vike_node/pages/named.prerender-config.json",
-    "/functions/__vike_node/pages/named.func/index.mjs",
-    "/functions/__vike_node/pages/named.func/.vc-config.json",
-    "/functions/__vike_node/__all.func/index.mjs",
-    "/functions/__vike_node/__all.func/.vc-config.json",
     ...generatedFiles.map((f) => `/static/${f}`),
     "/static/_temp_manifest.json",
   ];
@@ -66,6 +71,6 @@ describe("fs", () => {
 
     mappedEntries = Array.from(new Set(mappedEntries));
 
-    assert.sameMembers(expected.sort(), mappedEntries.sort());
+    assert.sameMembers(mappedEntries.sort(), expected.sort());
   });
 });

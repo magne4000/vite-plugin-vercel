@@ -2,18 +2,14 @@ import { defineConfig } from "tsup";
 
 const entry = {
   index: "./src/index.ts",
-  plugins: "./src/plugins/index.ts",
-  config: "./src/config.ts",
 };
 
 export default defineConfig([
   {
-    clean: true,
     entry,
-    external: ["esbuild", "vike"],
     format: "esm",
-    platform: "node",
-    target: "node20",
+    platform: "neutral",
+    target: "es2022",
     dts: {
       entry,
       compilerOptions: {

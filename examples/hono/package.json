@@ -13,15 +13,14 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@types/node": "^18.19.86",
-    "@universal-middleware/core": "^0.4.6",
-    "@universal-middleware/hono": "^0.4.8",
+    "@types/node": "^20.19.9",
     "cross-env": "^7.0.3",
     "hono": "^4.7.5",
     "typescript": "^5.8.2",
-    "vite": "^6.2.4"
+    "vite": "^7.0.5"
   },
   "dependencies": {
+    "@photonjs/core": "0.0.1-commit-877032a",
     "vite-plugin-vercel": "workspace:*"
   }
 }

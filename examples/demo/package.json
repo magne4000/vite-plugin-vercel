@@ -4,11 +4,10 @@
   "scripts": {
     "dev": "vike dev",
     "build": "vike build",
-    "preview": "vite build && vite preview",
+    "preview": "vike preview",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "pnpm run test:01 && pnpm run test:02",
-    "test:01": "vitest run --dir tests/01-base --config tests/01-base/vitest.config.ts",
-    "test:02": "vite build && vitest run --dir tests/02-vike --config tests/02-vike/vitest.config.ts",
+    "test": "pnpm run test:01",
+    "test:01": "vike build && vitest run --dir tests/01-vike --config tests/01-vike/vitest.config.ts",
     "test:e2e": "playwright test"
   },
   "dependencies": {
@@ -17,16 +16,16 @@
     "@mdx-js/rollup": "^3.1.0",
     "@vercel/edge-config": "^1.4.0",
     "@vercel/og": "^0.6.8",
-    "@vitejs/plugin-react": "^4.3.4",
+    "@vitejs/plugin-react": "^4.6.0",
     "cross-fetch": "^4.1.0",
     "node-fetch": "^3.3.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "typescript": "^5.8.2",
-    "vike": "^0.4.227",
+    "vike": "^0.4.236",
     "vike-react": "^0.5.13",
     "vike-vercel": "workspace:^",
-    "vite": "^6.2.4",
+    "vite": "^7.0.5",
     "vite-plugin-vercel": "workspace:^"
   },
   "type": "module",
@@ -34,15 +33,17 @@
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.25.9",
     "@playwright/test": "^1.51.1",
-    "@types/node": "^18.19.86",
+    "@types/node": "^20.19.9",
     "@types/node-fetch": "^2.6.12",
     "@types/react": "^18.3.20",
     "@types/react-dom": "^18.3.6",
-    "@universal-middleware/core": "^0.4.6",
+    "@universal-middleware/core": "^0.4.9",
     "@vercel/node": "^5.1.14",
+    "@vite-plugin-vercel/schemas": "workspace:^",
     "fast-glob": "^3.3.3",
     "playwright": "^1.51.1",
-    "vitest": "^3.1.1",
-    "zod": "^3.24.2"
+    "vike-server": "1.0.16-commit-91ea469",
+    "vitest": "^3.2.4",
+    "zod": "^3.25.67"
   }
 }

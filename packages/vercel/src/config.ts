@@ -1,6 +1,6 @@
 import { getTransformedRoutes, mergeRoutes, normalizeRoutes, type Route } from "@vercel/routing-utils";
-import { type VercelOutputConfig, vercelOutputConfigSchema } from "./schemas/config/config";
 import type { ViteVercelConfig, ViteVercelRewrite } from "./types";
+import { type VercelOutputConfig, vercelOutputConfigSchema } from "@vite-plugin-vercel/schemas";
 
 function reorderEnforce<T extends { enforce?: "pre" | "post" }>(arr: T[]) {
   return [
@@ -65,7 +65,7 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
     builds: [
       {
         use: "@vercel/node",
-        entrypoint: "index.js",
+        entrypoint: "index.mjs",
         routes: buildRoutes,
       },
     ],
@@ -80,21 +80,3 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
     },
   });
 }
-
-// export function getConfigDestination(resolvedConfig: ResolvedConfig) {
-//   return path.join(getOutput(resolvedConfig), "config.json");
-// }
-
-// export async function writeConfig(
-//   resolvedConfig: ResolvedConfig,
-//   rewrites?: Rewrite[],
-//   overrides?: VercelOutputConfig["overrides"],
-//   headers?: Header[],
-// ): Promise<void> {
-//   await fs.writeFile(
-//     getConfigDestination(resolvedConfig),
-//     // biome-ignore lint/style/noNonNullAssertion: <explanation>
-//     JSON.stringify(getConfig(resolvedConfig.vercel!, rewrites, overrides, headers), undefined, 2),
-//     "utf-8",
-//   );
-// }

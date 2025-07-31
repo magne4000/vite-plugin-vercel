@@ -6,30 +6,17 @@
     "dist",
     "*.d.ts"
   ],
-  "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.cjs"
-    },
-    "./universal-middleware": {
-      "import": "./dist/universal-middleware.js",
-      "require": "./dist/universal-middleware.cjs"
-    },
-    "./utils": {
-      "import": "./dist/utils.js",
-      "require": "./dist/utils.cjs"
-    },
-    "./api": {
-      "import": "./dist/api.js",
-      "require": "./dist/api.cjs"
-    },
+    ".": "./dist/index.js",
+    "./universal-middleware": "./dist/universal-middleware-prod.js",
+    "./universal-middleware/dev": "./dist/universal-middleware-dev.js",
+    "./utils": "./dist/utils.js",
+    "./api": "./dist/api.js",
     "./types": {
       "types": "./index.d.ts"
     }
   },
-  "types": "./index.d.ts",
   "description": "Vercel adapter for vite",
   "author": "Joël Charles <joel.charles91@gmail.com>",
   "repository": "https://github.com/magne4000/vite-plugin-vercel",
@@ -41,29 +28,33 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "vite": ">=6"
+    "vite": ">=7"
   },
   "devDependencies": {
-    "@types/node": "^18.19.86",
-    "@universal-middleware/express": "^0.4.12",
+    "@types/node": "^20.19.9",
+    "@universal-middleware/express": "^0.4.19",
     "@vercel/node": "^5.1.14",
-    "rollup": "^4.39.0",
+    "rollup": "^4.40.1",
     "tsup": "^8.4.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.4"
+    "vite": "^7.0.5"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^2.2.3",
-    "@universal-middleware/vercel": "^0.4.12",
+    "@photonjs/core": "0.0.1-commit-877032a",
+    "@universal-middleware/core": "^0.4.9",
+    "@universal-middleware/vercel": "^0.4.20",
     "@vercel/build-utils": "^10.5.1",
     "@vercel/nft": "^0.29.2",
-    "@vercel/routing-utils": "^5.0.45.0.2",
+    "@vercel/routing-utils": "^5.0.4",
+    "@vite-plugin-vercel/schemas": "workspace:^",
+    "convert-route": "^0.1.1",
     "esbuild": "^0.25.1",
     "fast-glob": "^3.3.3",
     "magicast": "^0.3.5",
     "path-to-regexp": "^8.2.0",
-    "vite-plugin-wasm": "^3.4.1",
-    "zod": "^3.24.2"
+    "strip-ansi": "^7.1.0",
+    "vite-plugin-wasm": "^3.4.1"
   }
 }

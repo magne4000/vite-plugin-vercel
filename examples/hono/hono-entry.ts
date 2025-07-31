@@ -1,24 +1,10 @@
-import { createHandler } from "@universal-middleware/hono";
 import { Hono } from "hono";
-import type { UniversalHandler } from "@universal-middleware/core";
+import { apply, serve } from "@photonjs/core/hono";
 
 const app = new Hono();
 
-app.get(
-  "/hello",
-  createHandler(() => () => {
-    return new Response("hello");
-  })(),
-);
+apply(app);
+app.get("/hello", () => new Response("hello"));
+app.get("/*", () => new Response("OK"));
 
-app.get(
-  "/*",
-  createHandler(() => () => {
-    return new Response("OK");
-  })(),
-);
-
-// All entries MUST be respect UniversalHandler interface
-export default ((request: Request) => {
-  return app.fetch(request, {});
-}) satisfies UniversalHandler;
+export default serve(app, {});

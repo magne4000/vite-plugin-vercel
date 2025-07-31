@@ -1,7 +1,7 @@
 import { assert, expect, it } from "vitest";
-import { vercelOutputConfigSchema } from "../../../../packages/vercel/src/schemas/config/config";
 import { testSchema } from "../common/helpers";
 import { prepareTestJsonFileContent } from "./utils";
+import { vercelOutputConfigSchema } from "@vite-plugin-vercel/schemas";
 
 prepareTestJsonFileContent("config.json", (context) => {
   testSchema(context, vercelOutputConfigSchema);
@@ -32,13 +32,13 @@ prepareTestJsonFileContent("config.json", (context) => {
       },
       { handle: "filesystem" },
       {
-        src: "^/edge$",
-        dest: "/edge",
+        src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
+        dest: "/__vike_edge/pages/vike-edge?__original_path=$1",
         check: true,
       },
       {
-        src: "^/og-node$",
-        dest: "/og-node",
+        src: "^/edge$",
+        dest: "/edge",
         check: true,
       },
       {
@@ -47,9 +47,24 @@ prepareTestJsonFileContent("config.json", (context) => {
         check: true,
       },
       {
-        src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_edge/pages/vike-edge?__original_path=$1",
         check: true,
+        src: "^(/catch-all/?(?<_>.*)(?:/index\\.pageContext\\.json)?)$",
+        dest: "/__vike_node/pages/catch-all?__original_path=$1",
+      },
+      {
+        check: true,
+        src: "^(/named/(?<someId>[^/]+)(?:/index\\.pageContext\\.json)?)$",
+        dest: "/__vike_node/pages/named?__original_path=$1",
+      },
+      {
+        check: true,
+        src: "^(/isr(?:/index\\.pageContext\\.json)?)$",
+        dest: "/__vike_node/pages/isr?__original_path=$1",
+      },
+      {
+        check: true,
+        src: "^/api/name(?:/([^/]+?))$",
+        dest: "/api/name/[name]?name=$1",
       },
       {
         check: true,
@@ -62,43 +77,16 @@ prepareTestJsonFileContent("config.json", (context) => {
         dest: "/api/isr",
       },
       {
+        src: "^/og-node$",
+        dest: "/og-node",
         check: true,
-        src: "^/api/name(?:/([^/]+?))$",
-        dest: "/api/name/[name]?name=$1",
       },
-      {
-        check: true,
-        src: "^(/catch-all/.+?(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/catch-all?__original_path=$1",
-      },
-      {
-        check: true,
-        src: "^(/isr(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/isr?__original_path=$1",
-      },
-      {
-        check: true,
-        src: "^(/named/[^/]+(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/named?__original_path=$1",
-      },
-      { check: true, dest: "/__vike_node/__all?__original_path=$1", src: "^(.*)$" },
+      { check: true, dest: "/__vike_node/__catch_all?__original_path=$1", src: "^(.*)$" },
     ];
 
-    assert.sameDeepMembers(expected, (context.file as any).routes);
+    assert.sameDeepMembers((context.file as any).routes, expected);
 
-    expect((context.file as any).overrides).toMatchInlineSnapshot(`
-      {
-        "index.html": {
-          "path": "",
-        },
-        "static/index.html": {
-          "path": "static",
-        },
-        "test.html": {
-          "path": "test",
-        },
-      }
-    `);
+    expect((context.file as any).overrides).toEqual({});
     expect(Object.keys(context.file as any).sort()).toEqual(["version", "overrides", "routes"].sort());
   });
 });

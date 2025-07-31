@@ -1,10 +1,6 @@
+import type { Photon } from "@photonjs/core";
 import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
-import type { BuildOptions, StdinOptions } from "esbuild";
-import type { VercelOutputConfig } from "./schemas/config/config";
-import type { VercelOutputPrerenderConfig } from "./schemas/config/prerender-config";
-import type { VercelOutputVcConfig } from "./schemas/config/vc-config";
-
-export type { VercelOutputConfig, VercelOutputVcConfig, VercelOutputPrerenderConfig };
+import type { VercelOutputConfig, VercelOutputPrerenderConfig } from "@vite-plugin-vercel/schemas";
 
 export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
 export type ViteVercelRedirect = Redirect & { enforce?: "pre" | "post" };
@@ -50,10 +46,13 @@ export interface ViteVercelConfig {
   defaultSupportsResponseStreaming?: boolean;
   /**
    * Use `getEntriesFromFs` for mapping your filesystem routes to entries.
-   * If you are interfacing this plugin with a framework, entries can also be added through the api
-   * @todo API example
+   * If you are interfacing this plugin with a framework, entries can also be added through the Photon API
    */
-  entries?: ViteVercelEntry[];
+  entries?: Record<string, Photon.EntryUniversalHandler>;
+  /**
+   * TODO
+   */
+  server?: Photon.EntryServer;
   /**
    * Advanced configuration to override .vercel/output/config.json
    * @see {@link https://vercel.com/docs/build-output-api/v3/configuration#configuration}
@@ -77,15 +76,12 @@ export interface VercelOutputIsr extends VercelOutputPrerenderConfig {
  */
 export type ViteVercelRouteOverrides = VercelOutputConfig["overrides"];
 
-export interface ViteVercelEntry {
-  /**
-   * Path to input file
-   */
-  input: string;
+export interface VercelEntryOptions {
   /**
    * Relative to `.vercel/output/functions`, without extension
    */
-  destination: string;
+  // TODO remove. Replaced by Photon.EntryBase['target']
+  destination?: string;
   /**
    * If `true`, guesses route for the function, and adds it to config.json (mimics defaults Vercel behavior).
    * If a string is provided, it will be equivalent to a `rewrites` rule.
@@ -112,48 +108,16 @@ export interface ViteVercelEntry {
    * When true, the Serverless Function will stream the response to the client
    */
   streaming?: boolean;
+  /**
+   * When true, do not build output files for this entry
+   */
+  disabled?: boolean;
 }
 
-/**
- * @deprecated use ViteVercelEntry
- */
-export interface ViteVercelApiEntry {
-  /**
-   * Path to entry file, or stdin config
-   */
-  source: string | StdinOptions;
-  /**
-   * Relative to `.vercel/output/functions`, without extension
-   */
-  destination: string;
-  /**
-   * Override esbuild options
-   */
-  buildOptions?: BuildOptions;
-  /**
-   * @deprecated use `route` instead
-   */
-  addRoute?: boolean;
-  /**
-   * If `true`, guesses route for the function, and adds it to config.json (mimics defaults Vercel behavior).
-   * If a string is provided, it will be equivalent to a `rewrites` rule.
-   * Set to `false` to disable
-   */
-  route?: string | boolean;
-  /**
-   * Set to `true` to mark this function as an Edge Function
-   */
-  edge?: boolean;
-  /**
-   * Additional headers
-   */
-  headers?: Record<string, string> | null;
-  /**
-   * ISR config
-   */
-  isr?: VercelOutputIsr;
-  /**
-   * When true, the Serverless Function will stream the response to the client
-   */
-  streaming?: boolean;
+declare module "@photonjs/core" {
+  export namespace Photon {
+    export interface EntryBase {
+      vercel?: VercelEntryOptions;
+    }
+  }
 }

@@ -1,25 +1,23 @@
 import type { Config } from "vike/types";
-
-declare global {
-  namespace Vike {
-    export interface Config {
-      isr?: boolean | { expiration: number };
-      edge?: boolean;
-      headers?: Record<string, string>;
-    }
-  }
-}
+import { vercel } from "vite-plugin-vercel";
+import { vikeVercel } from "./plugins";
+import type { Photon } from "@photonjs/core";
 
 export default {
   name: "vike-vercel",
   require: {
-    vike: ">=0.4.224",
+    vike: ">=0.4.236",
   },
+  vite: {
+    // biome-ignore lint/suspicious/noExplicitAny: avoid type mismatch between different Vite versions
+    plugins: [vercel(), vikeVercel] as any[],
+  },
+  extends: ["import:vike-server/config"],
   meta: {
     isr: {
       env: { server: true, config: true },
       eager: true,
-      effect({ configValue, configDefinedAt }) {
+      effect({ configValue }) {
         // an actual ISR value exists for a Page
         if (configValue) {
           return {
@@ -36,8 +34,25 @@ export default {
       env: { server: true, config: true },
       eager: true,
     },
+    photon: {
+      env: { config: true },
+      global: true,
+    },
   },
   prerender: {
+    enable: null,
     partial: true,
+    keepDistServer: true,
   },
 } satisfies Config;
+
+declare global {
+  namespace Vike {
+    export interface Config {
+      isr?: boolean | { expiration: number };
+      edge?: boolean;
+      headers?: Record<string, string>;
+      photon?: Photon.Config;
+    }
+  }
+}
