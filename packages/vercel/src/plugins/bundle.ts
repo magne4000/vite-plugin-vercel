@@ -39,6 +39,16 @@ const dynamicNativeImportPlugin: ESBuildPlugin = {
   },
 };
 
+const reactEdgePlugin: ESBuildPlugin = {
+  name: "react-edge-plugin",
+  setup(build) {
+    build.onResolve({ filter: /^react-dom\/server$/ }, (args) => {
+      const { path, ...rest } = args;
+      return build.resolve("react-dom/server.edge", rest);
+    });
+  },
+};
+
 interface BundleAsset {
   env: string;
   root: string;
@@ -146,9 +156,12 @@ async function bundle(
     buildOptions.platform = "browser";
     buildOptions.external = edgeExternal;
     buildOptions.conditions = edgeConditions;
+    buildOptions.define = {
+      "process.env.NODE_ENV": JSON.stringify("production"),
+    };
     buildOptions.outExtension = { ".js": ".mjs" };
     buildOptions.outfile = destination.replace(/\.mjs$/, ".js");
-    buildOptions.plugins = [edgeWasmPlugin, dynamicNativeImportPlugin];
+    buildOptions.plugins = [edgeWasmPlugin, dynamicNativeImportPlugin, reactEdgePlugin];
   } else {
     buildOptions.platform = "node";
     buildOptions.outfile = destination.replace(/\.js$/, ".mjs");
