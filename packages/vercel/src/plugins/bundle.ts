@@ -43,7 +43,7 @@ const reactEdgePlugin: ESBuildPlugin = {
   name: "react-edge-plugin",
   setup(build) {
     build.onResolve({ filter: /^react-dom\/server$/ }, (args) => {
-      const { path, ...rest } = args;
+      const { path: _, ...rest } = args;
       return build.resolve("react-dom/server.edge", rest);
     });
   },
@@ -187,7 +187,7 @@ const __dirname = topLevelDirname(__filename);
   try {
     const dir = await findRoot(environment.config.root);
     base = dir.rootDir;
-  } catch (e) {
+  } catch (_e) {
     // ignore error
   }
 

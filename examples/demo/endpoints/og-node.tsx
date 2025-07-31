@@ -2,7 +2,6 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ImageResponse } from "@vercel/og";
-import React from "react";
 
 // isomorphic __dirname
 const _dirname = typeof __dirname !== "undefined" ? __dirname : dirname(fileURLToPath(import.meta.url));
@@ -10,7 +9,7 @@ const font = readFileSync(join(_dirname, "./Roboto-Regular.ttf"));
 
 // This is a Universal Handler
 // See https://universal-middleware.dev/definitions#handler
-export default async function handler(request: Request) {
+export default async function handler(_request: Request) {
   return new ImageResponse(
     <div
       style={{
