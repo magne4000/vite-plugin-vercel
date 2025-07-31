@@ -42,7 +42,7 @@
     "@vite-plugin-vercel/schemas": "workspace:^",
     "fast-glob": "^3.3.3",
     "playwright": "^1.51.1",
-    "vike-server": "1.0.16-commit-1266596",
+    "vike-server": "1.0.16-commit-91ea469",
     "vitest": "^3.2.4",
     "zod": "^3.25.67"
   }
