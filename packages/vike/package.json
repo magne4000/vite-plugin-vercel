@@ -38,6 +38,6 @@
     "@brillout/libassert": "^0.5.8",
     "@photonjs/core": "^0.0.3",
     "vike": "^0.4.236",
-    "vike-server": "1.0.23-commit-79e7a14"
+    "vike-server": "1.0.23-commit-52c7d04"
   }
 }
