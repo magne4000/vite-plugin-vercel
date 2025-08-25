@@ -125,8 +125,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
 
 function getAbsoluteOutFileWithout_tmp(outfile: ViteVercelOutFile) {
   const source = joinAbsolutePosix(outfile.root, outfile.outdir, outfile.filepath);
-  // effectively removes appended _tmp folder
-  const destination = source.replace(outfile.outdir, path.dirname(outfile.outdir));
+  const destination = source.replace(outfile.outdir, outfile.outdir.replace(/_tmp(\/|\\|$)/, ""));
   return {
     source,
     destination,
