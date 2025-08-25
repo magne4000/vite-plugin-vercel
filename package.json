@@ -29,10 +29,9 @@
   },
   "pnpm": {
     "overrides": {
-      "@photonjs/core": "0.0.1-commit-877032a",
       "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
-      "vike": "^0.4.236",
-      "vite": "^7.0.6"
+      "vike": "0.4.237-commit-e549c30",
+      "vite": "^7.1.3"
     }
   }
 }
