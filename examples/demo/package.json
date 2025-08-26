@@ -15,7 +15,7 @@
     "@mdx-js/react": "^3.1.0",
     "@mdx-js/rollup": "^3.1.0",
     "@vercel/edge-config": "^1.4.0",
-    "@vercel/og": "^0.7.2",
+    "@vercel/og": "^0.8.5",
     "@vitejs/plugin-react": "^5.0.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
