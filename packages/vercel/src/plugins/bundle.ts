@@ -1,5 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { copyFile, mkdir, rm } from "node:fs/promises";
+import { builtinModules } from "node:module";
 import path from "node:path";
 import { findRoot } from "@manypkg/find-root";
 import { nodeFileTrace } from "@vercel/nft";
@@ -8,10 +9,9 @@ import type { Environment, Plugin } from "vite";
 import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../api";
 import { joinAbsolute, joinAbsolutePosix } from "../helpers";
 import type { ViteVercelConfig } from "../types";
+import { edgeConditions } from "../utils/edge";
 import { isVercelLastBuildStep } from "../utils/env";
 import { edgeExternal } from "../utils/external";
-import { edgeConditions } from "../utils/edge";
-import { builtinModules } from "node:module";
 
 const builtIns = new Set(builtinModules.flatMap((m) => [m, `node:${m}`]));
 
@@ -125,8 +125,7 @@ export function bundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
 
 function getAbsoluteOutFileWithout_tmp(outfile: ViteVercelOutFile) {
   const source = joinAbsolutePosix(outfile.root, outfile.outdir, outfile.filepath);
-  // effectively removes appended _tmp folder
-  const destination = source.replace(outfile.outdir, path.dirname(outfile.outdir));
+  const destination = source.replace(outfile.outdir, outfile.outdir.replace(/_tmp(\/|\\|$)/, ""));
   return {
     source,
     destination,

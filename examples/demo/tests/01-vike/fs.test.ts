@@ -61,7 +61,7 @@ describe("fs", () => {
     "/static/static/index.pageContext.json",
     "/static/test.html",
     ...generatedFiles.map((f) => `/static/${f}`),
-    "/static/_temp_manifest.json",
+    "/static/.vite/manifest.json",
   ];
 
   it("should generate the right files", async () => {

@@ -31,13 +31,16 @@
     "@universal-middleware/core": "^0.4.9",
     "tsup": "^8.5.0",
     "typescript": "^5.8.3",
-    "vite": "^7.0.6",
+    "vite": "^7.1.3",
     "vite-plugin-vercel": "workspace:^"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@photonjs/core": "0.0.1-commit-877032a",
+    "@photonjs/core": "^0.0.3",
     "vike": "^0.4.236",
-    "vike-server": "1.0.16-commit-91ea469"
+    "vike-server": "1.0.23-commit-52c7d04"
+  },
+  "engines": {
+    "node": ">=20.19.0 || >=22.12.0"
   }
 }
