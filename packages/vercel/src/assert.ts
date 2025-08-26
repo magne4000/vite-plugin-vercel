@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error no type definition
 import { newError } from "@brillout/libassert";
 
 export function assert(condition: unknown, errorMessage: string): asserts condition {

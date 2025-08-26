@@ -178,6 +178,7 @@ const __dirname = topLevelDirname(__filename);
   try {
     await build(buildOptions);
   } catch (e) {
+    // biome-ignore lint/suspicious/noTsIgnore: cause is not always defined
     // @ts-ignore
     throw new Error(`Error while bundling ${destination}`, { cause: e });
   }
