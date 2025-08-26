@@ -31,12 +31,12 @@
     "vite": ">=7"
   },
   "devDependencies": {
-    "@types/node": "^20.19.9",
+    "@types/node": "^20.19.11",
     "@universal-middleware/express": "^0.4.19",
-    "@vercel/node": "^5.3.7",
-    "rollup": "^4.46.2",
+    "@vercel/node": "^5.3.14",
+    "rollup": "^4.48.1",
     "tsup": "^8.5.0",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "vite": "^7.1.3"
   },
   "dependencies": {
@@ -45,12 +45,12 @@
     "@photonjs/core": "^0.0.3",
     "@universal-middleware/core": "^0.4.9",
     "@universal-middleware/vercel": "^0.4.20",
-    "@vercel/build-utils": "^11.0.0",
-    "@vercel/nft": "^0.30.0",
+    "@vercel/build-utils": "^11.0.2",
+    "@vercel/nft": "^0.30.1",
     "@vercel/routing-utils": "^5.1.1",
     "@vite-plugin-vercel/schemas": "workspace:^",
     "convert-route": "^0.1.1",
-    "esbuild": "^0.25.8",
+    "esbuild": "^0.25.9",
     "fast-glob": "^3.3.3",
     "magicast": "^0.3.5",
     "path-to-regexp": "^8.2.0",

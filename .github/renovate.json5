@@ -24,4 +24,12 @@
   postUpdateOptions: [
     'pnpmDedupe'
   ],
+  "packageRules": [
+    // Stick to latest version used by Next.js https://github.com/vercel/next.js/blob/canary/packages/next/src/compiled/%40vercel/og/package.json
+    // Newer versions are not deploying correctly on Edge
+    {
+      "matchPackageNames": ["@vercel/og"],
+      "allowedVersions": "<0.8"
+    }
+  ]
 }
