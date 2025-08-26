@@ -47,10 +47,12 @@ describe("fs", () => {
     "/functions/og-node.func/noto-sans-v27-latin-regular.ttf",
     "/functions/og-node.func/Roboto-Regular.ttf",
     "/functions/og-node.func/resvg.wasm",
+    "/functions/og-node.func/yoga.wasm",
     "/functions/og-edge.func/index.js",
     "/functions/og-edge.func/.vc-config.json",
     "/functions/og-edge.func/noto-sans-v27-latin-regular.ttf",
     "/functions/og-edge.func/resvg.wasm",
+    "/functions/og-edge.func/yoga.wasm",
     // static
     "/static/404.html",
     "/static/index.html",

@@ -24,4 +24,10 @@
   postUpdateOptions: [
     'pnpmDedupe'
   ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["@vercel/og"],
+      "allowedVersions": "<0.8"
+    }
+  ]
 }
