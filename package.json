@@ -30,7 +30,7 @@
   "pnpm": {
     "overrides": {
       "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
-      "vike": "0.4.237-commit-cc7f0f6",
+      "vike": "0.4.237-commit-33e34e7",
       "vite": "^7.1.3"
     }
   }
