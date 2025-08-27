@@ -39,7 +39,7 @@
     "@photonjs/core": "^0.0.7",
     "@photonjs/runtime": "^0.0.4",
     "vike": "^0.4.238",
-    "vike-server": "1.0.23-commit-4c60d35"
+    "vike-server": "1.0.23"
   },
   "engines": {
     "node": ">=20.19.0 || >=22.12.0"
