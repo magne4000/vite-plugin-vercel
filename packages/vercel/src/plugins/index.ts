@@ -1,12 +1,12 @@
-import type { ViteVercelConfig } from "../types";
+import { installPhoton } from "@photonjs/runtime/vite";
 import type { PluginOption } from "vite";
-import { vercelCleanupPlugin } from "./clean-outdir";
-import { wasmPlugin } from "./wasm";
+import type { ViteVercelConfig } from "../types";
 import { apiPlugin } from "./api";
 import { bundlePlugin } from "./bundle";
-import { installPhoton } from "@photonjs/core/vite";
-import { setupEnvs } from "./setupEnvs";
+import { vercelCleanupPlugin } from "./clean-outdir";
 import { loaderPlugin } from "./loader";
+import { setupEnvs } from "./setupEnvs";
+import { wasmPlugin } from "./wasm";
 
 export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
   const additionalConfig: Record<string, unknown> = {};

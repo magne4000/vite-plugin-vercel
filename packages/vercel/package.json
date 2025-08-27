@@ -28,7 +28,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "vite": ">=7"
+    "vite": ">=7.1"
   },
   "devDependencies": {
     "@types/node": "^20.19.11",
@@ -42,7 +42,8 @@
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^3.1.0",
-    "@photonjs/core": "^0.0.3",
+    "@photonjs/core": "^0.0.7",
+    "@photonjs/runtime": "^0.0.4",
     "@universal-middleware/core": "^0.4.9",
     "@universal-middleware/vercel": "^0.4.20",
     "@vercel/build-utils": "^11.0.2",

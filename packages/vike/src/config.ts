@@ -1,12 +1,12 @@
+import type { Photon } from "@photonjs/core";
 import type { Config } from "vike/types";
 import { vercel } from "vite-plugin-vercel";
 import { vikeVercel } from "./plugins";
-import type { Photon } from "@photonjs/core";
 
 export default {
   name: "vike-vercel",
   require: {
-    vike: ">=0.4.236",
+    vike: ">=0.4.238",
   },
   vite: {
     // biome-ignore lint/suspicious/noExplicitAny: avoid type mismatch between different Vite versions

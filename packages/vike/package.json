@@ -23,7 +23,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "vite": ">=7",
+    "vite": ">=7.1",
     "vite-plugin-vercel": "workspace:^"
   },
   "devDependencies": {
@@ -36,9 +36,10 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@photonjs/core": "^0.0.3",
-    "vike": "^0.4.236",
-    "vike-server": "1.0.23-commit-52c7d04"
+    "@photonjs/core": "^0.0.7",
+    "@photonjs/runtime": "^0.0.4",
+    "vike": "^0.4.238",
+    "vike-server": "1.0.23-commit-4c60d35"
   },
   "engines": {
     "node": ">=20.19.0 || >=22.12.0"

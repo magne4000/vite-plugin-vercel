@@ -1,5 +1,5 @@
+import { apply, serve } from "@photonjs/hono";
 import { Hono } from "hono";
-import { apply, serve } from "@photonjs/core/hono";
 
 const app = new Hono();
 

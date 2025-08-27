@@ -6,7 +6,6 @@ settings:
 
 overrides:
   path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
-  vike: 0.4.237-commit-33e34e7
   vite: ^7.1.3
 
 importers:
@@ -62,11 +61,11 @@ importers:
         specifier: ^5.9.2
         version: 5.9.2
       vike:
-        specifier: 0.4.237-commit-33e34e7
-        version: 0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
+        specifier: ^0.4.238
+        version: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
       vike-react:
         specifier: ^0.6.5
-        version: 0.6.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vike@0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))
+        version: 0.6.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))
       vike-vercel:
         specifier: workspace:^
         version: link:../../packages/vike
@@ -108,8 +107,8 @@ importers:
         specifier: ^1.55.0
         version: 1.55.0
       vike-server:
-        specifier: 1.0.23-commit-52c7d04
-        version: 1.0.23-commit-52c7d04(hono@4.9.4)(vike@0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
+        specifier: 1.0.23-commit-4c60d35
+        version: 1.0.23-commit-4c60d35(hono@4.9.4)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@20.19.11)
@@ -119,9 +118,9 @@ importers:
 
   examples/hono:
     dependencies:
-      '@photonjs/core':
-        specifier: ^0.0.3
-        version: 0.0.3(vite@7.1.3(@types/node@20.19.11))
+      '@photonjs/hono':
+        specifier: ^0.0.4
+        version: 0.0.4(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vercel
@@ -189,8 +188,11 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       '@photonjs/core':
-        specifier: ^0.0.3
-        version: 0.0.3(vite@7.1.3(@types/node@20.19.11))
+        specifier: ^0.0.7
+        version: 0.0.7(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
+      '@photonjs/runtime':
+        specifier: ^0.0.4
+        version: 0.0.4(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
       '@universal-middleware/core':
         specifier: ^0.4.9
         version: 0.4.9(hono@4.9.4)
@@ -259,14 +261,17 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       '@photonjs/core':
-        specifier: ^0.0.3
-        version: 0.0.3(vite@7.1.3(@types/node@20.19.11))
+        specifier: ^0.0.7
+        version: 0.0.7(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
+      '@photonjs/runtime':
+        specifier: ^0.0.4
+        version: 0.0.4(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
       vike:
-        specifier: 0.4.237-commit-33e34e7
-        version: 0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
+        specifier: ^0.4.238
+        version: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
       vike-server:
-        specifier: 1.0.23-commit-52c7d04
-        version: 1.0.23-commit-52c7d04(hono@4.9.4)(vike@0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
+        specifier: 1.0.23-commit-4c60d35
+        version: 1.0.23-commit-4c60d35(hono@4.9.4)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
     devDependencies:
       '@types/node':
         specifier: ^20.19.11
@@ -793,9 +798,26 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@photonjs/core@0.0.3':
-    resolution: {integrity: sha512-kjnsxtvgXBP6j0lxzJwGNGSSbzNvosICpooG9ntYqu649XNoA3uyiFs3F5X39BegM7Yv6oZGHoKSXbNi2JuSQQ==}
+  '@photonjs/core@0.0.7':
+    resolution: {integrity: sha512-gJ/f8RWvthlvN7cQpVV1wl88aksd00XUC1yFsWemMBDAIfMKaItSt4EstAURjejjb+iL4q0yJa1d5wFKMdEwnQ==}
     peerDependencies:
+      vite: ^7.1.3
+    peerDependenciesMeta:
+      vite:
+        optional: true
+
+  '@photonjs/hono@0.0.4':
+    resolution: {integrity: sha512-BAfbsakbAA0k09hXwC6x4ZXqBY4zUjqMtGkPSkT3C6kqbslBRSWPl1P/bkAmPUJNSbAg1wj1psQ+xt4AqfOllg==}
+    peerDependencies:
+      vite: ^7.1.3
+    peerDependenciesMeta:
+      vite:
+        optional: true
+
+  '@photonjs/runtime@0.0.4':
+    resolution: {integrity: sha512-gHopkg+Rho+Xlxn40ncVirKOKRxlrd8gjevSVx618MGvgAESi887hV+Q22MmEFK9x8aMhb92a9j5nxD+3QHEHw==}
+    peerDependencies:
+      hono: ^4.9.2
       vite: ^7.1.3
     peerDependenciesMeta:
       vite:
@@ -2736,19 +2758,19 @@ packages:
     peerDependencies:
       react: '>=19'
       react-dom: '>=19'
-      vike: 0.4.237-commit-33e34e7
+      vike: '>=0.4.182'
 
-  vike-server@1.0.23-commit-52c7d04:
-    resolution: {integrity: sha512-q+2FEhWtp9gt5VoH4dA/oCs87hYKGUIFWhuajfwURfgJcZVfT7Vx9+s0+rk35CMzIt5oToIXf5ZOk+wbhLSKlA==}
+  vike-server@1.0.23-commit-4c60d35:
+    resolution: {integrity: sha512-o4lwV6JrimWgEj/T6l/MjZ/Ni/fgYIvN4B6Ur9p487zmVTtn+u9I/Lp2GzW5z7C+FZq85Rc5QambNOJ1F2y3pw==}
     peerDependencies:
-      vike: 0.4.237-commit-33e34e7
+      vike: '>=0.4.238'
       vite: ^7.1.3
     peerDependenciesMeta:
       vite:
         optional: true
 
-  vike@0.4.237-commit-33e34e7:
-    resolution: {integrity: sha512-jNESK+gyo+KnYXkiP6j0SgChGFnJlc9NbSQzWbjNX8WLw52hxG5+1drBap6dMJffZ+j1NMYuJBNDGAICrJ8HAw==}
+  vike@0.4.238:
+    resolution: {integrity: sha512-Baw9UzQfScC7HCz5AFuuxjEG+1Q2tNQdpUZC1QcP7VmYEliLKqCLyqXqDm+7YekcY1jXfZP/DoCiS0GEzwBEoA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     peerDependencies:
@@ -3467,24 +3489,49 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@photonjs/core@0.0.3(vite@7.1.3(@types/node@20.19.11))':
+  '@photonjs/core@0.0.7(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))':
     dependencies:
       '@brillout/picocolors': 1.0.28
       '@brillout/vite-plugin-server-entry': 0.7.13
       '@universal-middleware/cloudflare': 0.4.10(hono@4.9.4)
       '@universal-middleware/compress': 0.2.30
       '@universal-middleware/core': 0.4.9(hono@4.9.4)
-      '@universal-middleware/elysia': 0.5.3(hono@4.9.4)
       '@universal-middleware/express': 0.4.19(hono@4.9.4)
-      '@universal-middleware/fastify': 0.5.20(hono@4.9.4)
-      '@universal-middleware/h3': 0.4.12(hono@4.9.4)
-      '@universal-middleware/hattip': 0.4.12(hono@4.9.4)
-      '@universal-middleware/hono': 0.4.16(hono@4.9.4)
       '@universal-middleware/sirv': 0.1.20
       estree-walker: 3.0.3
-      hono: 4.9.4
       ts-deepmerge: 7.0.3
       zod: 3.25.76
+    optionalDependencies:
+      vite: 7.1.3(@types/node@20.19.11)
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - '@hattip/core'
+      - '@webroute/route'
+      - elysia
+      - fastify
+      - h3
+      - hono
+
+  '@photonjs/hono@0.0.4(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))':
+    dependencies:
+      '@photonjs/core': 0.0.7(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
+      '@universal-middleware/hono': 0.4.16(hono@4.9.4)
+    optionalDependencies:
+      vite: 7.1.3(@types/node@20.19.11)
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - '@hattip/core'
+      - '@webroute/route'
+      - elysia
+      - fastify
+      - h3
+      - hono
+
+  '@photonjs/runtime@0.0.4(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))':
+    dependencies:
+      '@photonjs/core': 0.0.7(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
+      '@photonjs/hono': 0.0.4(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
+      hono: 4.9.4
     optionalDependencies:
       vite: 7.1.3(@types/node@20.19.11)
     transitivePeerDependencies:
@@ -5617,18 +5664,19 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vike-react@0.6.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vike@0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))):
+  vike-react@0.6.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))):
     dependencies:
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
       react-streaming: 0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      vike: 0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
+      vike: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
 
-  vike-server@1.0.23-commit-52c7d04(hono@4.9.4)(vike@0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11)):
+  vike-server@1.0.23-commit-4c60d35(hono@4.9.4)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11)):
     dependencies:
       '@brillout/picocolors': 1.0.28
       '@brillout/vite-plugin-server-entry': 0.7.13
-      '@photonjs/core': 0.0.3(vite@7.1.3(@types/node@20.19.11))
+      '@photonjs/core': 0.0.7(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
+      '@photonjs/runtime': 0.0.4(hono@4.9.4)(vite@7.1.3(@types/node@20.19.11))
       '@universal-middleware/compress': 0.2.30
       '@universal-middleware/core': 0.4.9(hono@4.9.4)
       '@universal-middleware/elysia': 0.5.3(hono@4.9.4)
@@ -5640,7 +5688,7 @@ snapshots:
       '@universal-middleware/sirv': 0.1.20
       arktype: 2.1.20
       esbuild: 0.25.9
-      vike: 0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
+      vike: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
     optionalDependencies:
       vite: 7.1.3(@types/node@20.19.11)
     transitivePeerDependencies:
@@ -5652,7 +5700,7 @@ snapshots:
       - h3
       - hono
 
-  vike@0.4.237-commit-33e34e7(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)):
+  vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)):
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.20
