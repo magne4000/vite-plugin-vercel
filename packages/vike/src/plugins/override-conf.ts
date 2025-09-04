@@ -1,4 +1,3 @@
-import { getVikeConfig } from "vike/plugin";
 import type { EnvironmentOptions, Plugin } from "vite";
 import { getVercelAPI } from "vite-plugin-vercel/api";
 
@@ -14,40 +13,8 @@ function setTargetAndCssTarget(env: EnvironmentOptions) {
 export function overrideConfPlugin(): Plugin[] {
   return [
     {
-      name: "vike-vercel:photon-config",
-
-      config(userConfig) {
-        const vikeConfig = getVikeConfig(userConfig);
-
-        return {
-          photon: {
-            ...vikeConfig.config.photon,
-            codeSplitting: {
-              framework: false,
-            },
-          },
-          resolve: {
-            // TODO should be set by vike-server itself
-            noExternal: ["vike-server"],
-          },
-        };
-      },
-    },
-    {
       name: "vike-vercel:override-conf",
       apply: "build",
-
-      config() {
-        return {
-          builder: {
-            // Override Vike's buildApp, because it exit(0)
-            async buildApp(builder) {
-              await builder.build(builder.environments.client);
-              await builder.build(builder.environments.ssr);
-            },
-          },
-        };
-      },
 
       configEnvironment(name, options) {
         if (name === "vercel_client" || name === "client" || name === "ssr") {

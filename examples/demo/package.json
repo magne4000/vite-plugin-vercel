@@ -34,12 +34,12 @@
     "@types/node": "^20.19.11",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.8",
-    "@universal-middleware/core": "^0.4.9",
+    "@universal-middleware/core": "^0.4.10",
     "@vercel/node": "^5.3.14",
     "@vite-plugin-vercel/schemas": "workspace:^",
     "fast-glob": "^3.3.3",
     "playwright": "^1.55.0",
-    "vike-server": "1.0.23-commit-4c60d35",
+    "vike-server": "1.0.23-commit-f61d031",
     "vitest": "^3.2.4",
     "zod": "^4.1.3"
   }

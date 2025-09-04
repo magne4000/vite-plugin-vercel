@@ -18,7 +18,7 @@
     "vite": "^7.1.3"
   },
   "dependencies": {
-    "hono": "^4.9.4",
+    "hono": "^4.9.6",
     "vite-plugin-vercel": "workspace:*"
   }
 }
