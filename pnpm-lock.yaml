@@ -107,8 +107,8 @@ importers:
         specifier: ^1.55.0
         version: 1.55.0
       vike-server:
-        specifier: 1.0.23-commit-f61d031
-        version: 1.0.23-commit-f61d031(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
+        specifier: 1.0.23-commit-1ccbb15
+        version: 1.0.23-commit-1ccbb15(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@20.19.11)
@@ -270,8 +270,8 @@ importers:
         specifier: ^0.4.238
         version: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
       vike-server:
-        specifier: 1.0.23-commit-f61d031
-        version: 1.0.23-commit-f61d031(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
+        specifier: 1.0.23-commit-1ccbb15
+        version: 1.0.23-commit-1ccbb15(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
     devDependencies:
       '@types/node':
         specifier: ^20.19.11
@@ -2776,8 +2776,8 @@ packages:
       react-dom: '>=19'
       vike: '>=0.4.182'
 
-  vike-server@1.0.23-commit-f61d031:
-    resolution: {integrity: sha512-yMvJRaeVMfvKPXtOxG0cwDNyKXqQIjYUULko5WWKMcwdN1MZKHf4B6IYb05wvGMuZxKJsI0zt9YlbYILt5vbSw==}
+  vike-server@1.0.23-commit-1ccbb15:
+    resolution: {integrity: sha512-KhnAuehWJJzlNZJoe6Y8MQt46unI1JxcyYgWonjWz7QHzdAC/QPU8DF12Al9BX8dnxNBEKeoSgfQSxANgNfbBw==}
     peerDependencies:
       vike: '>=0.4.238'
       vite: ^7.1.3
@@ -5726,7 +5726,7 @@ snapshots:
       react-streaming: 0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       vike: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
 
-  vike-server@1.0.23-commit-f61d031(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11)):
+  vike-server@1.0.23-commit-1ccbb15(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11)):
     dependencies:
       '@brillout/picocolors': 1.0.28
       '@brillout/vite-plugin-server-entry': 0.7.13

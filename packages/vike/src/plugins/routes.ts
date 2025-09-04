@@ -1,32 +1,28 @@
+///<reference types="vike-server/photon-types"/>
+
+import type { Photon } from "@photonjs/core";
 import { getVikeConfig } from "vike/plugin";
 import { normalizePath, type Plugin } from "vite";
 import { assert } from "../utils/assert";
-import { addPhotonEntry } from "@photonjs/core/api";
 
 export function routesPlugins(): Plugin[] {
-  const vikePages: {
-    pageId: string;
-    isr: number | null;
-    edge: null | boolean;
-    headers: Record<string, string> | null;
-    route: string | null;
-  }[] = [];
-
   return [
     {
-      name: "vike-vercel:routes:read-config",
+      name: "vike-vercel:routes:build",
       apply: "build",
 
       applyToEnvironment(env) {
         return env.name === "ssr";
       },
 
-      closeBundle: {
+      buildStart: {
+        // Ensure that this hook is executed after Vike had time to add all Photon entries
         order: "post",
-        async handler() {
-          const vikeConfig = getVikeConfig(this.environment.config);
+        handler() {
+          for (const entry of this.environment.config.photon.entries) {
+            if (!entry.vikeMeta) continue;
 
-          for (const [pageId, page] of Object.entries(vikeConfig.pages)) {
+            const { page, pageId } = entry.vikeMeta;
             const rawIsr = extractIsr(page.config);
             let isr = assertIsr(page.config);
             const edge = assertEdge(page.config);
@@ -45,78 +41,55 @@ export function routesPlugins(): Plugin[] {
               );
             }
 
-            const route = typeof page.route === "string" ? getParametrizedRoute(page.route) : null;
-
-            if (!route && headers !== null && headers !== undefined) {
+            if (!entry.route && headers !== null && headers !== undefined) {
               this.warn(
                 `Page ${pageId}: { headers } are not supported when using route function. Remove \`{ headers }\` config or use a route string if possible.`,
               );
             }
 
-            vikePages.push({
-              pageId,
-              isr,
-              edge,
-              headers,
-              route,
-            });
+            // Compute Vercel-specific metadata
+            entry.vercel = {
+              destination: normalizePath(entry.name),
+              isr: isr ? { expiration: isr } : undefined,
+              headers: headers,
+              route: entry.route ? `${routeToRegExp(entry.route)}(?:\\/index\\.pageContext\\.json)?` : undefined,
+              edge: Boolean(edge),
+            };
+            if (edge) {
+              entry.env = "vercel_edge";
+            }
           }
-        },
-      },
-
-      sharedDuringBuild: true,
-    },
-    {
-      name: "vike-vercel:routes:build",
-      apply: "build",
-
-      applyToEnvironment(env) {
-        return env.name === "vercel_node" || env.name === "vercel_edge";
-      },
-
-      buildStart: {
-        handler() {
-          // Emit vercel functions
-          const isEdge = this.environment.name === "vercel_edge";
-          const key = isEdge ? "__vike_edge" : "__vike_node";
 
           // By default, a unique Vike function is necessary per env (node, edge)
           // We only need to create a new function when either `isr` or `headers` is provided
-          const currentEnvPages = vikePages.filter((p) => Boolean(p.edge) === isEdge);
-          // Specific routes
-          for (const page of currentEnvPages.filter(
-            (p) => p.isr || (p.route && p.headers !== null && p.headers !== undefined),
-          )) {
-            const name = `${key}${page.pageId}`;
-            // TODO add all vike routes this way
-            //  and dedupe them in vpv core
-            addPhotonEntry(this, name, {
-              route: page.route ?? undefined,
-              type: "server-config",
-              vercel: {
-                destination: normalizePath(name),
-                isr: page.isr ? { expiration: page.isr } : undefined,
-                headers: page.headers,
-                route: page.route ? `${routeToRegExp(page.route)}(?:\\/index\\.pageContext\\.json)?` : undefined,
-                edge: isEdge,
-              },
-            });
+          {
+            const vikeEntriesEdge = this.environment.config.photon.entries.filter((e) => e.vikeMeta && e.vercel?.edge);
+            const vikeEntriesNode = this.environment.config.photon.entries.filter((e) => e.vikeMeta && !e.vercel?.edge);
+            const vikeEntriesToKeep = new Set<Photon.Entry>();
+
+            for (const envEntries of [vikeEntriesEdge, vikeEntriesNode]) {
+              for (const page of envEntries.filter(
+                (p) =>
+                  p.vercel?.isr || (p.vercel?.route && p.vercel?.headers !== null && p.vercel?.headers !== undefined),
+              )) {
+                vikeEntriesToKeep.add(page);
+              }
+            }
+
+            this.environment.config.photon.entries = this.environment.config.photon.entries.filter(
+              (e) => !e.vikeMeta || vikeEntriesToKeep.has(e),
+            );
           }
 
-          const vikeConfig = getVikeConfig(this.environment.config);
-
-          if (
-            currentEnvPages.length > 0 &&
-            // Only generate one default route
-            isEdge === Boolean(vikeConfig?.config.edge)
-          ) {
-            // Catch-all
-            const name = `${key}/__catch_all`;
+          // Generate default entry
+          {
+            const vikeConfig = getVikeConfig(this.environment.config);
+            const name = `__vike_/__catch_all`;
             this.environment.config.photon.server.route = "/**";
             this.environment.config.photon.server.vercel = {
               destination: normalizePath(name),
               route: ".*",
-              edge: isEdge,
+              edge: Boolean(vikeConfig?.config.edge),
               enforce: "post",
             };
           }
@@ -186,21 +159,7 @@ function assertHeaders(exports: unknown): Record<string, string> | null {
   return headers as Record<string, string>;
 }
 
-function getSegmentRou3(segment: string): string {
-  if (segment.startsWith("@")) {
-    return `/:${segment.slice(1)}`;
-  }
-  if (segment === "*") {
-    return "/**";
-  }
-  return `/${segment}`;
-}
-
-function getParametrizedRoute(route: string): string {
-  const segments = (route.replace(/\/$/, "") || "/").slice(1).split("/");
-  return segments.map(getSegmentRou3).join("");
-}
-
+// TODO move to https://github.com/magne4000/convert-route
 // https://github.com/h3js/rou3/blob/main/src/regexp.ts
 function routeToRegExp(route = "/"): string {
   const reSegments = [];
