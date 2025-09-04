@@ -45,7 +45,7 @@
     "@photonjs/core": "^0.0.11",
     "@photonjs/runtime": "^0.0.8",
     "@universal-middleware/core": "^0.4.10",
-    "@universal-middleware/vercel": "^0.4.21",
+    "@universal-middleware/vercel": "^0.4.22",
     "@vercel/build-utils": "^11.0.2",
     "@vercel/nft": "^0.30.1",
     "@vercel/routing-utils": "^5.1.1",

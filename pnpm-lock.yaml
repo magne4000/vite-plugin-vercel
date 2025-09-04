@@ -107,8 +107,8 @@ importers:
         specifier: ^1.55.0
         version: 1.55.0
       vike-server:
-        specifier: 1.0.23-commit-1ccbb15
-        version: 1.0.23-commit-1ccbb15(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
+        specifier: 1.0.23-commit-c90996e
+        version: 1.0.23-commit-c90996e(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@20.19.11)
@@ -197,8 +197,8 @@ importers:
         specifier: ^0.4.10
         version: 0.4.10(hono@4.9.6)
       '@universal-middleware/vercel':
-        specifier: ^0.4.21
-        version: 0.4.21(@universal-middleware/h3@0.4.12(hono@4.9.6))(hono@4.9.6)
+        specifier: ^0.4.22
+        version: 0.4.22(@universal-middleware/h3@0.4.12(hono@4.9.6))(hono@4.9.6)
       '@vercel/build-utils':
         specifier: ^11.0.2
         version: 11.0.2
@@ -270,8 +270,8 @@ importers:
         specifier: ^0.4.238
         version: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
       vike-server:
-        specifier: 1.0.23-commit-1ccbb15
-        version: 1.0.23-commit-1ccbb15(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
+        specifier: 1.0.23-commit-c90996e
+        version: 1.0.23-commit-c90996e(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
     devDependencies:
       '@types/node':
         specifier: ^20.19.11
@@ -1105,8 +1105,8 @@ packages:
   '@universal-middleware/srvx@0.1.0':
     resolution: {integrity: sha512-9LiPniDaBwHl/V+B6ct4ldBWIAQ/fKGLBBKd/6QaJiZqWQNDPekcfNvR4HjyxX8k8XbFfW3FpPJge4QysRGrig==}
 
-  '@universal-middleware/vercel@0.4.21':
-    resolution: {integrity: sha512-iI3sdklb8oPKJM4LK9aTmuJQo1ufDnnUYvtbW3o9WhwCvrLnO0BbqhNqTJtl6AMEUwKM10TPku9/F4mhrb2uHg==}
+  '@universal-middleware/vercel@0.4.22':
+    resolution: {integrity: sha512-HlRIYiTScgMjofAsqEIl8U8VS+rgzx/ZfRUQOzIOI1yoz/lRS8BYnMYzfqa4ccDBx7DsezqQpLvSoRbrXT5glg==}
     peerDependencies:
       '@hattip/core': ^0.0.49
       '@universal-middleware/h3': ^0.4.12
@@ -2776,8 +2776,8 @@ packages:
       react-dom: '>=19'
       vike: '>=0.4.182'
 
-  vike-server@1.0.23-commit-1ccbb15:
-    resolution: {integrity: sha512-KhnAuehWJJzlNZJoe6Y8MQt46unI1JxcyYgWonjWz7QHzdAC/QPU8DF12Al9BX8dnxNBEKeoSgfQSxANgNfbBw==}
+  vike-server@1.0.23-commit-c90996e:
+    resolution: {integrity: sha512-YXomNyBrDSRQylJa14U9orBpZLCxIbxGLilX5855zXadzSJBY9whZYqU5HTe1cRLkOeYXsnNrgfvnyvIhHyweA==}
     peerDependencies:
       vike: '>=0.4.238'
       vite: ^7.1.3
@@ -3871,7 +3871,7 @@ snapshots:
       - hono
       - srvx
 
-  '@universal-middleware/vercel@0.4.21(@universal-middleware/h3@0.4.12(hono@4.9.6))(hono@4.9.6)':
+  '@universal-middleware/vercel@0.4.22(@universal-middleware/h3@0.4.12(hono@4.9.6))(hono@4.9.6)':
     dependencies:
       '@universal-middleware/core': 0.4.10(hono@4.9.6)
       '@universal-middleware/express': 0.4.19(hono@4.9.6)
@@ -5726,7 +5726,7 @@ snapshots:
       react-streaming: 0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       vike: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
 
-  vike-server@1.0.23-commit-1ccbb15(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11)):
+  vike-server@1.0.23-commit-c90996e(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11)):
     dependencies:
       '@brillout/picocolors': 1.0.28
       '@brillout/vite-plugin-server-entry': 0.7.13

@@ -2,6 +2,7 @@
 
 import type { Photon } from "@photonjs/core";
 import { getVikeConfig } from "vike/plugin";
+import { pageNamePrefix } from "vike-server/api";
 import { normalizePath, type Plugin } from "vite";
 import { assert } from "../utils/assert";
 
@@ -49,6 +50,7 @@ export function routesPlugins(): Plugin[] {
 
             // Compute Vercel-specific metadata
             entry.vercel = {
+              ...entry.vercel,
               destination: normalizePath(entry.name),
               isr: isr ? { expiration: isr } : undefined,
               headers: headers,
@@ -84,7 +86,7 @@ export function routesPlugins(): Plugin[] {
           // Generate default entry
           {
             const vikeConfig = getVikeConfig(this.environment.config);
-            const name = `__vike_/__catch_all`;
+            const name = `${pageNamePrefix}/__catch_all`;
             this.environment.config.photon.server.route = "/**";
             this.environment.config.photon.server.vercel = {
               destination: normalizePath(name),

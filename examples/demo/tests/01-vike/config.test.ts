@@ -1,7 +1,7 @@
+import { vercelOutputConfigSchema } from "@vite-plugin-vercel/schemas";
 import { assert, expect, it } from "vitest";
 import { testSchema } from "../common/helpers";
 import { prepareTestJsonFileContent } from "./utils";
-import { vercelOutputConfigSchema } from "@vite-plugin-vercel/schemas";
 
 prepareTestJsonFileContent("config.json", (context) => {
   testSchema(context, vercelOutputConfigSchema);
@@ -33,7 +33,7 @@ prepareTestJsonFileContent("config.json", (context) => {
       { handle: "filesystem" },
       {
         src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_edge/pages/vike-edge?__original_path=$1",
+        dest: "/__vike/pages/vike-edge?__original_path=$1",
         check: true,
       },
       {
@@ -49,17 +49,17 @@ prepareTestJsonFileContent("config.json", (context) => {
       {
         check: true,
         src: "^(/catch-all/?(?<_>.*)(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/catch-all?__original_path=$1",
+        dest: "/__vike/pages/catch-all?__original_path=$1",
       },
       {
         check: true,
         src: "^(/named/(?<someId>[^/]+)(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/named?__original_path=$1",
+        dest: "/__vike/pages/named?__original_path=$1",
       },
       {
         check: true,
         src: "^(/isr(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike_node/pages/isr?__original_path=$1",
+        dest: "/__vike/pages/isr?__original_path=$1",
       },
       {
         check: true,
@@ -81,7 +81,7 @@ prepareTestJsonFileContent("config.json", (context) => {
         dest: "/og-node",
         check: true,
       },
-      { check: true, dest: "/__vike_node/__catch_all?__original_path=$1", src: "^(.*)$" },
+      { check: true, dest: "/__vike/__catch_all?__original_path=$1", src: "^(.*)$" },
     ];
 
     assert.sameDeepMembers((context.file as any).routes, expected);

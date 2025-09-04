@@ -1,16 +1,16 @@
+import { vercelOutputVcConfigSchema } from "@vite-plugin-vercel/schemas";
 import { expect, it } from "vitest";
 import { testSchema } from "../common/helpers";
 import { prepareTestJsonFilesContent } from "./utils";
-import { vercelOutputVcConfigSchema } from "@vite-plugin-vercel/schemas";
 
 prepareTestJsonFilesContent(
   [
     "/functions/api/page.func/.vc-config.json",
     "/functions/api/isr.func/.vc-config.json",
-    "/functions/__vike_node/__catch_all.func/.vc-config.json",
-    "/functions/__vike_node/pages/catch-all.func/.vc-config.json",
-    "/functions/__vike_node/pages/isr.func/.vc-config.json",
-    "/functions/__vike_node/pages/named.func/.vc-config.json",
+    "/functions/__vike/__catch_all.func/.vc-config.json",
+    "/functions/__vike/pages/catch-all.func/.vc-config.json",
+    "/functions/__vike/pages/isr.func/.vc-config.json",
+    "/functions/__vike/pages/named.func/.vc-config.json",
   ],
   (context) => {
     testSchema(context, vercelOutputVcConfigSchema);
@@ -28,7 +28,7 @@ prepareTestJsonFilesContent(
 );
 
 prepareTestJsonFilesContent(
-  ["/functions/edge.func/.vc-config.json", "/functions/__vike_edge/pages/vike-edge.func/.vc-config.json"],
+  ["/functions/edge.func/.vc-config.json", "/functions/__vike/pages/vike-edge.func/.vc-config.json"],
   (context) => {
     testSchema(context, vercelOutputVcConfigSchema);
 
