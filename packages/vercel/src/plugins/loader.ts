@@ -1,14 +1,14 @@
+import { targetLoader } from "@photonjs/core/vite";
 import { getNodeVersion, type NodeVersion } from "@vercel/build-utils";
 import { vercelOutputPrerenderConfigSchema } from "@vite-plugin-vercel/schemas";
+import { toPathToRegexpV6 } from "convert-route/path-to-regexp-v6";
+import { fromRou3 } from "convert-route/rou3";
 import type { Plugin } from "vite";
 import { assert } from "../assert";
 import { getVcConfig } from "../build";
 import type { ViteVercelConfig } from "../types";
 import { photonEntryDestination, photonEntryDestinationDefault } from "../utils/destination";
-import { fromRou3 } from "convert-route/rou3";
-import { toPathToRegexpV6 } from "convert-route/path-to-regexp-v6";
 import { entryToPathtoregex } from "../utils/route";
-import { targetLoader } from "@photonjs/core/vite";
 
 const DUMMY = "__DUMMY__";
 const re_DUMMY = new RegExp(`${DUMMY}$`);
@@ -18,8 +18,6 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
   let nodeVersion: NodeVersion;
 
   return [
-    // TODO create another plugin for "smart mode",
-    // where handlers are grouped by configuration
     {
       name: "vite-plugin-vercel:update-entries",
       apply: "build",
