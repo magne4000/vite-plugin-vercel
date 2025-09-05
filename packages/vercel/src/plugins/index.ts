@@ -5,6 +5,7 @@ import { apiPlugin } from "./api";
 import { bundlePlugin } from "./bundle";
 import { vercelCleanupPlugin } from "./clean-outdir";
 import { loaderPlugin } from "./loader";
+import { routesPlugins } from "./routes";
 import { setupEnvs } from "./setupEnvs";
 import { wasmPlugin } from "./wasm";
 
@@ -39,6 +40,7 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
     ...setupEnvs(pluginConfig),
     wasmPlugin(),
     ...loaderPlugin(pluginConfig),
+    ...routesPlugins(),
     ...bundlePlugin(pluginConfig),
   ];
 }

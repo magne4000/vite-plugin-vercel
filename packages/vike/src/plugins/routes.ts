@@ -1,6 +1,5 @@
 ///<reference types="vike-server/photon-types"/>
 
-import type { Photon } from "@photonjs/core";
 import { getVikeConfig } from "vike/plugin";
 import { pageNamePrefix } from "vike-server/api";
 import { normalizePath, type Plugin } from "vite";
@@ -17,8 +16,6 @@ export function routesPlugins(): Plugin[] {
       },
 
       buildStart: {
-        // Ensure that this hook is executed after Vike had time to add all Photon entries
-        order: "post",
         handler() {
           for (const entry of this.environment.config.photon.entries) {
             if (!entry.vikeMeta) continue;
@@ -60,27 +57,6 @@ export function routesPlugins(): Plugin[] {
             if (edge) {
               entry.env = "vercel_edge";
             }
-          }
-
-          // By default, a unique Vike function is necessary per env (node, edge)
-          // We only need to create a new function when either `isr` or `headers` is provided
-          {
-            const vikeEntriesEdge = this.environment.config.photon.entries.filter((e) => e.vikeMeta && e.vercel?.edge);
-            const vikeEntriesNode = this.environment.config.photon.entries.filter((e) => e.vikeMeta && !e.vercel?.edge);
-            const vikeEntriesToKeep = new Set<Photon.Entry>();
-
-            for (const envEntries of [vikeEntriesEdge, vikeEntriesNode]) {
-              for (const page of envEntries.filter(
-                (p) =>
-                  p.vercel?.isr || (p.vercel?.route && p.vercel?.headers !== null && p.vercel?.headers !== undefined),
-              )) {
-                vikeEntriesToKeep.add(page);
-              }
-            }
-
-            this.environment.config.photon.entries = this.environment.config.photon.entries.filter(
-              (e) => !e.vikeMeta || vikeEntriesToKeep.has(e),
-            );
           }
 
           // Generate default entry
