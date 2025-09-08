@@ -200,8 +200,8 @@ importers:
         specifier: ^0.4.22
         version: 0.4.22(@universal-middleware/h3@0.4.12(hono@4.9.6))(hono@4.9.6)
       '@vercel/build-utils':
-        specifier: ^11.0.2
-        version: 11.0.2
+        specifier: ^12.1.0
+        version: 12.1.0
       '@vercel/nft':
         specifier: ^0.30.1
         version: 0.30.1(rollup@4.48.1)
@@ -1136,6 +1136,9 @@ packages:
 
   '@vercel/build-utils@11.0.2':
     resolution: {integrity: sha512-Y48OT9IsvAFU21LJ3m5SbrXpQaD++h4v4nQoQjCUDZORxXzPf3doVQfrQBBIX45xoSkfq/Fuq0VNF0yRbJw/aA==}
+
+  '@vercel/build-utils@12.1.0':
+    resolution: {integrity: sha512-yqpAh2KHm9iWUXo/aRWiLIxi8dMAwFtse2iZsg2QNEMs9W20va6L8PMFvdAa5MX9pgRwc38gbjD3V7drxSwq4g==}
 
   '@vercel/edge-config-fs@0.1.0':
     resolution: {integrity: sha512-NRIBwfcS0bUoUbRWlNGetqjvLSwgYH/BqKqDN7vK1g32p7dN96k0712COgaz6VFizAm9b0g6IG6hR6+hc0KCPg==}
@@ -3883,6 +3886,8 @@ snapshots:
       - '@webroute/route'
 
   '@vercel/build-utils@11.0.2': {}
+
+  '@vercel/build-utils@12.1.0': {}
 
   '@vercel/edge-config-fs@0.1.0': {}
 
