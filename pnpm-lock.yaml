@@ -106,9 +106,9 @@ importers:
       playwright:
         specifier: ^1.55.0
         version: 1.55.0
-      vike-server:
-        specifier: 1.0.23-commit-9afb009
-        version: 1.0.23-commit-9afb009(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
+      vike-photon:
+        specifier: ^0.1.0
+        version: 0.1.0(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@20.19.11)
@@ -269,9 +269,9 @@ importers:
       vike:
         specifier: ^0.4.238
         version: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
-      vike-server:
-        specifier: 1.0.23-commit-9afb009
-        version: 1.0.23-commit-9afb009(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
+      vike-photon:
+        specifier: ^0.1.0
+        version: 0.1.0(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11))
     devDependencies:
       '@types/node':
         specifier: ^20.19.11
@@ -297,12 +297,6 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
-
-  '@ark/schema@0.46.0':
-    resolution: {integrity: sha512-c2UQdKgP2eqqDArfBqQIJppxJHvNNXuQPeuSPlDML4rjw+f1cu0qAlzOG4b8ujgm9ctIDWwhpyw6gjG5ledIVQ==}
-
-  '@ark/util@0.46.0':
-    resolution: {integrity: sha512-JPy/NGWn/lvf1WmGCPw2VGpBg5utZraE84I7wli18EDF3p3zc/e9WolT35tINeZO3l7C77SjqRJeAUoT0CvMRg==}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -475,8 +469,8 @@ packages:
   '@brillout/require-shim@0.1.2':
     resolution: {integrity: sha512-3I4LRHnVZXoSAsEoni5mosq9l6eiJED58d9V954W4CIZ88AUfYBanWGBGbJG3NztaRTpFHEA6wB3Hn93BmmJdg==}
 
-  '@brillout/vite-plugin-server-entry@0.7.13':
-    resolution: {integrity: sha512-fyUCB205PZwnMoGJtm73BhAs6G++AtmCJNdrud8/p6BHjTMIfP1upY2Em9WsNrzV9q61ZbUx1LGyYkECyLEwFQ==}
+  '@brillout/vite-plugin-server-entry@0.7.14':
+    resolution: {integrity: sha512-VSbiBAykItiXLK/CS9B9XZ1hmRkfgJ3nMJXOZt+mjeumhH4Vct17zQYG/Wcp/HDY1xEtxIxSOanxyM5upwaf8A==}
 
   '@changesets/apply-release-plan@7.0.12':
     resolution: {integrity: sha512-EaET7As5CeuhTzvXTQCRZeBUcisoYPDDcXvgTE/2jmmypKp0RC7LxKj/yzqeh/1qFTZI7oDGFcL1PHRuQuketQ==}
@@ -1081,20 +1075,11 @@ packages:
       srvx:
         optional: true
 
-  '@universal-middleware/elysia@0.5.3':
-    resolution: {integrity: sha512-7TdoG2x4lV5YG6sWCeFJJ/sP3Czjh8XjsZ65Vslg3zCEIR1TNF2G1E5jrBRmBj0YFY5ZvKcjX+lXGiKNQLG1QA==}
-
   '@universal-middleware/express@0.4.19':
     resolution: {integrity: sha512-Pb2iXPHYCqPxIPkWVnZoaOgVpYoeVA7t657nDCf295WGYmsalvVJMA5S09UgTxC+C2LW+RQppPQwX96uSGHPBg==}
 
-  '@universal-middleware/fastify@0.5.20':
-    resolution: {integrity: sha512-VDViiK2OwMUXNxs4yQWOVsYIKtgCfCHG8SX24YTELqlAlZCFDX/nrwqNG/W7l6UzRcr+n5sKMKpr0WdOgiO8vA==}
-
   '@universal-middleware/h3@0.4.12':
     resolution: {integrity: sha512-6wDIHm0eVNfV+M0BmFTM6WokgCdPd9zCfk7sgFCBvjPPk3QjfgBdZUqzTMoFFeLWF5Xo0lnfD80eomG6bSruYA==}
-
-  '@universal-middleware/hattip@0.4.13':
-    resolution: {integrity: sha512-YZcdvwdsESGKFeANb5Y20mkoAk8Hb4wYutVbj9ETHQAmxS0XyXA2IB6fUACq9pxNAFyk7lzGMWYh33X/vVgMkQ==}
 
   '@universal-middleware/hono@0.4.16':
     resolution: {integrity: sha512-Nk2yJksuTOcrY3SVE4UKlnwa9BzBKLJqjYi0XmTAqWsF2ngPlDZYL36o5XKNEy/CXoNKPL7kRxcdg6clOQ4vsg==}
@@ -1278,9 +1263,6 @@ packages:
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
 
-  arktype@2.1.20:
-    resolution: {integrity: sha512-IZCEEXaJ8g+Ijd59WtSYwtjnqXiwM8sWQ5EjGamcto7+HVN9eK0C4p0zDlCuAwWhpqr6fIBkxPuYDl4/Mcj/+Q==}
-
   array-union@2.1.0:
     resolution: {integrity: sha512-HGyxoOTYUyCM6stUe6EJgnd4EoewAI7zMdfqO+kGjnlZmBDz/cR5pf8r/cR4Wq60sL/p0IkcjUEEPwS3GFrIyw==}
     engines: {node: '>=8'}
@@ -1344,10 +1326,6 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     peerDependencies:
       esbuild: '>=0.18'
-
-  bytes@3.1.2:
-    resolution: {integrity: sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==}
-    engines: {node: '>= 0.8'}
 
   cac@6.7.14:
     resolution: {integrity: sha512-b6Ilus+c3RrdDk+JhLKUAQfzzgLEPy6wcXqS7f/xe1EETvsDP6GORG7SFuOs6cID5YkqchW/LXZbX5bc8j7ZcQ==}
@@ -1487,10 +1465,6 @@ packages:
   deep-eql@5.0.2:
     resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
     engines: {node: '>=6'}
-
-  depd@2.0.0:
-    resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==}
-    engines: {node: '>= 0.8'}
 
   dequal@2.0.3:
     resolution: {integrity: sha512-0je+qPKHEMohvfRTCEo3CrPG6cAzAYgmzKyxRiYSSDkS6eGJdyVJm7WaYA5ECaAD9wLB2T4EEeymA5aFVcYXCA==}
@@ -1742,13 +1716,6 @@ packages:
   fast-json-stable-stringify@2.1.0:
     resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
 
-  fastify-plugin@5.0.1:
-    resolution: {integrity: sha512-HCxs+YnRaWzCl+cWRYFnHmeRFyR5GVnJTAaCJQiYzQSDwK9MgJdyAsuL3nh0EWRCYMgQ5MeziymvmAhUHYHDUQ==}
-
-  fastify-raw-body@5.0.0:
-    resolution: {integrity: sha512-2qfoaQ3BQDhZ1gtbkKZd6n0kKxJISJGM6u/skD9ljdWItAscjXrtZ1lnjr7PavmXX9j4EyCPmBDiIsLn07d5vA==}
-    engines: {node: '>= 10'}
-
   fastq@1.19.1:
     resolution: {integrity: sha512-GwLTyxkCXjXbxqIhTsMI2Nui8huMPtnxg7krajPJAjnEG/iiOS7i+zCtWGZR9G0NBKbXKh6X9m9UIsYX/N6vvQ==}
 
@@ -1836,10 +1803,6 @@ packages:
     resolution: {integrity: sha512-doVjXhSFvYZ7y0dNokjwwSahcrAfdz+/BCLvAMa/vHLzjj8+CFyV5xteThGUsKdkaasgN+gF2mUxao+SGLpUeA==}
     engines: {node: '>=16.9.0'}
 
-  http-errors@2.0.0:
-    resolution: {integrity: sha512-FtwrG/euBzaEjYeRqOgly7G0qviiXoJWnvEH2Z1plBdXgbyjv34pHTSb9zoeHMyDy33+DWy5Wt9Wo+TURtOYSQ==}
-    engines: {node: '>= 0.8'}
-
   https-proxy-agent@7.0.6:
     resolution: {integrity: sha512-vK9P5/iUfdl95AI+JVyUuIcVtd4ofvtrOr3HNtM2yxC9bnMbEdp3x01OhQNnjb8IJYi38VlTE3mBXwcfvywuSw==}
     engines: {node: '>= 14'}
@@ -1855,9 +1818,6 @@ packages:
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
-
-  inherits@2.0.4:
-    resolution: {integrity: sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==}
 
   inline-style-parser@0.2.4:
     resolution: {integrity: sha512-0aO8FkhNZlj/ZIbNi7Lxxr12obT7cL1moPfE4tg1LkX7LlLfC6DeX4l2ZEud1ukP9jNQyNnfzQVqwbwmAATY4Q==}
@@ -2361,10 +2321,6 @@ packages:
   queue-microtask@1.2.3:
     resolution: {integrity: sha512-NuaNSa6flKT5JaSYQzJok04JzTL1CA6aGhv5rfLW3PgqA+M2ChpZQnAC8h8i4ZFkBS8X5RqkDBHA7r4hej3K9A==}
 
-  raw-body@3.0.0:
-    resolution: {integrity: sha512-RmkhL8CAyCRPXCE28MMH0z2PNWQBNk2Q09ZdxM9IOOXwxwZbN+qbWaatPkdkWIKL2ZVDImrN/pK5HTRz2PcS4g==}
-    engines: {node: '>= 0.8'}
-
   react-dom@19.1.1:
     resolution: {integrity: sha512-Dlq/5LAZgF0Gaz6yiqZCf6VCcZs1ghAJyrsu84Q/GT0gV+mCxbfmKNoGRKBYMJ8IEdGPqu49YWXD02GCknEDkw==}
     peerDependencies:
@@ -2452,9 +2408,6 @@ packages:
   scheduler@0.26.0:
     resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
 
-  secure-json-parse@2.7.0:
-    resolution: {integrity: sha512-6aU+Rwsezw7VR8/nyvKTx8QpWH9FrcYiXXlqC4z5d5XQBDRqtbfsRjnwGyqbi3gddNtWHuEk9OANUotL26qKUw==}
-
   semver@6.3.1:
     resolution: {integrity: sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==}
     hasBin: true
@@ -2463,9 +2416,6 @@ packages:
     resolution: {integrity: sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==}
     engines: {node: '>=10'}
     hasBin: true
-
-  setprototypeof@1.2.0:
-    resolution: {integrity: sha512-E5LDX7Wrp85Kil5bhZv46j8jOeboKq5JMmYM3gVGdGH8xFpPWXUMsNrlODCrkoxMEeNi/XZIwuRvY4XNwYMJpw==}
 
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
@@ -2525,10 +2475,6 @@ packages:
 
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
-
-  statuses@2.0.1:
-    resolution: {integrity: sha512-RwNA9Z/7PrK06rYLIzFMlaF+l73iwpzsqRIFgbMLbTcLD6cOao82TaWefPXQvB2fOC4AjuYSEndS7N/mTCbkdQ==}
-    engines: {node: '>= 0.8'}
 
   std-env@3.9.0:
     resolution: {integrity: sha512-UGvjygr6F6tpH7o2qyqR6QYpwraIjKSdtzyBdyytFOHmPZY917kwdwLG0RbOjWOnKmnm3PeHjaoLLMie7kPLQw==}
@@ -2627,10 +2573,6 @@ packages:
   to-regex-range@5.0.1:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
-
-  toidentifier@1.0.1:
-    resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
-    engines: {node: '>=0.6'}
 
   totalist@3.0.1:
     resolution: {integrity: sha512-sf4i37nQ2LBx4m3wB74y+ubopq6W/dIzXg0FDGjsYnZHVa1Da8FH853wlL2gtUhg+xJXjfk3kUZS3BRoQeoQBQ==}
@@ -2750,10 +2692,6 @@ packages:
     resolution: {integrity: sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==}
     engines: {node: '>= 4.0.0'}
 
-  unpipe@1.0.0:
-    resolution: {integrity: sha512-pjy2bYhSsufwWlKwPc+l3cN7+wuJlK6uz0YdJEOlQDbl6jo/YlPi4mb8agUkVC8BF7V8NuzeyPNqRksA3hztKQ==}
-    engines: {node: '>= 0.8'}
-
   update-browserslist-db@1.1.3:
     resolution: {integrity: sha512-UxhIZQ+QInVdunkDAaiazvvT/+fXL5Osr0JZlJulepYu6Jd7qJtDZjlur0emRlT71EN3ScPoE7gvsuIKKNavKw==}
     hasBin: true
@@ -2772,21 +2710,24 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
+  vike-photon@0.1.0:
+    resolution: {integrity: sha512-0bvOlVsnr5pB9LvkdJ0B2jhc3yc12gwIAeDkJeS/1fZriPoNoWbhJmnQcthrXsxcEbOccZ3VPk7KAagBT4K15w==}
+    peerDependencies:
+      '@photonjs/cloudflare': '>=0.0.9'
+      vike: '>=0.4.238'
+      vite: ^7.1.3
+    peerDependenciesMeta:
+      '@photonjs/cloudflare':
+        optional: true
+      vite:
+        optional: true
+
   vike-react@0.6.5:
     resolution: {integrity: sha512-SRw/zOSZqdz7EvSyw8yIdy9iJOOMDP7Vra63NnI5L4xHx1Mmj4ebppfYEDcV2MRcCYzyQFv/xSmvI02pEJcT0A==}
     peerDependencies:
       react: '>=19'
       react-dom: '>=19'
       vike: '>=0.4.182'
-
-  vike-server@1.0.23-commit-9afb009:
-    resolution: {integrity: sha512-vrUMLlXr41jlV2jac7Jx8pi0zvhAQ2ZMPZgHtVpoX/iiOKFtyh89n7S5Y4xnOAwPOb7nt+g7N2odsI30BFe0OQ==}
-    peerDependencies:
-      vike: '>=0.4.238'
-      vite: ^7.1.3
-    peerDependenciesMeta:
-      vite:
-        optional: true
 
   vike@0.4.238:
     resolution: {integrity: sha512-Baw9UzQfScC7HCz5AFuuxjEG+1Q2tNQdpUZC1QcP7VmYEliLKqCLyqXqDm+7YekcY1jXfZP/DoCiS0GEzwBEoA==}
@@ -2938,12 +2879,6 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.12
       '@jridgewell/trace-mapping': 0.3.29
-
-  '@ark/schema@0.46.0':
-    dependencies:
-      '@ark/util': 0.46.0
-
-  '@ark/util@0.46.0': {}
 
   '@babel/code-frame@7.27.1':
     dependencies:
@@ -3124,7 +3059,7 @@ snapshots:
 
   '@brillout/require-shim@0.1.2': {}
 
-  '@brillout/vite-plugin-server-entry@0.7.13':
+  '@brillout/vite-plugin-server-entry@0.7.14':
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/picocolors': 1.0.28
@@ -3511,7 +3446,7 @@ snapshots:
   '@photonjs/core@0.0.11(hono@4.9.6)(vite@7.1.3(@types/node@20.19.11))':
     dependencies:
       '@brillout/picocolors': 1.0.28
-      '@brillout/vite-plugin-server-entry': 0.7.13
+      '@brillout/vite-plugin-server-entry': 0.7.14
       '@universal-middleware/cloudflare': 0.4.10(hono@4.9.6)
       '@universal-middleware/compress': 0.2.31
       '@universal-middleware/core': 0.4.10(hono@4.9.6)
@@ -3776,37 +3711,9 @@ snapshots:
     optionalDependencies:
       hono: 4.9.6
 
-  '@universal-middleware/elysia@0.5.3(hono@4.9.6)':
-    dependencies:
-      '@universal-middleware/core': 0.4.10(hono@4.9.6)
-    transitivePeerDependencies:
-      - '@cloudflare/workers-types'
-      - '@hattip/core'
-      - '@webroute/route'
-      - elysia
-      - fastify
-      - h3
-      - hono
-      - srvx
-
   '@universal-middleware/express@0.4.19(hono@4.9.6)':
     dependencies:
       '@universal-middleware/core': 0.4.10(hono@4.9.6)
-    transitivePeerDependencies:
-      - '@cloudflare/workers-types'
-      - '@hattip/core'
-      - '@webroute/route'
-      - elysia
-      - fastify
-      - h3
-      - hono
-      - srvx
-
-  '@universal-middleware/fastify@0.5.20(hono@4.9.6)':
-    dependencies:
-      '@universal-middleware/core': 0.4.10(hono@4.9.6)
-      '@universal-middleware/express': 0.4.19(hono@4.9.6)
-      fastify-raw-body: 5.0.0
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -3829,19 +3736,7 @@ snapshots:
       - h3
       - hono
       - srvx
-
-  '@universal-middleware/hattip@0.4.13(hono@4.9.6)':
-    dependencies:
-      '@universal-middleware/core': 0.4.10(hono@4.9.6)
-    transitivePeerDependencies:
-      - '@cloudflare/workers-types'
-      - '@hattip/core'
-      - '@webroute/route'
-      - elysia
-      - fastify
-      - h3
-      - hono
-      - srvx
+    optional: true
 
   '@universal-middleware/hono@0.4.16(hono@4.9.6)':
     dependencies:
@@ -4093,11 +3988,6 @@ snapshots:
 
   argparse@2.0.1: {}
 
-  arktype@2.1.20:
-    dependencies:
-      '@ark/schema': 0.46.0
-      '@ark/util': 0.46.0
-
   array-union@2.1.0: {}
 
   assertion-error@2.0.1: {}
@@ -4150,8 +4040,6 @@ snapshots:
     dependencies:
       esbuild: 0.25.9
       load-tsconfig: 0.2.5
-
-  bytes@3.1.2: {}
 
   cac@6.7.14: {}
 
@@ -4255,8 +4143,6 @@ snapshots:
       character-entities: 2.0.2
 
   deep-eql@5.0.2: {}
-
-  depd@2.0.0: {}
 
   dequal@2.0.3: {}
 
@@ -4493,14 +4379,6 @@ snapshots:
   fast-json-stable-stringify@2.1.0:
     optional: true
 
-  fastify-plugin@5.0.1: {}
-
-  fastify-raw-body@5.0.0:
-    dependencies:
-      fastify-plugin: 5.0.1
-      raw-body: 3.0.0
-      secure-json-parse: 2.7.0
-
   fastq@1.19.1:
     dependencies:
       reusify: 1.1.0
@@ -4626,14 +4504,6 @@ snapshots:
 
   hono@4.9.6: {}
 
-  http-errors@2.0.0:
-    dependencies:
-      depd: 2.0.0
-      inherits: 2.0.4
-      setprototypeof: 1.2.0
-      statuses: 2.0.1
-      toidentifier: 1.0.1
-
   https-proxy-agent@7.0.6:
     dependencies:
       agent-base: 7.1.4
@@ -4648,8 +4518,6 @@ snapshots:
       safer-buffer: 2.1.2
 
   ignore@5.3.2: {}
-
-  inherits@2.0.4: {}
 
   inline-style-parser@0.2.4: {}
 
@@ -5257,13 +5125,6 @@ snapshots:
 
   queue-microtask@1.2.3: {}
 
-  raw-body@3.0.0:
-    dependencies:
-      bytes: 3.1.2
-      http-errors: 2.0.0
-      iconv-lite: 0.6.3
-      unpipe: 1.0.0
-
   react-dom@19.1.1(react@19.1.1):
     dependencies:
       react: 19.1.1
@@ -5408,13 +5269,9 @@ snapshots:
 
   scheduler@0.26.0: {}
 
-  secure-json-parse@2.7.0: {}
-
   semver@6.3.1: {}
 
   semver@7.7.2: {}
-
-  setprototypeof@1.2.0: {}
 
   shebang-command@2.0.0:
     dependencies:
@@ -5461,8 +5318,6 @@ snapshots:
   sprintf-js@1.0.3: {}
 
   stackback@0.0.2: {}
-
-  statuses@2.0.1: {}
 
   std-env@3.9.0: {}
 
@@ -5566,8 +5421,6 @@ snapshots:
   to-regex-range@5.0.1:
     dependencies:
       is-number: 7.0.0
-
-  toidentifier@1.0.1: {}
 
   totalist@3.0.1: {}
 
@@ -5700,8 +5553,6 @@ snapshots:
 
   universalify@0.1.2: {}
 
-  unpipe@1.0.0: {}
-
   update-browserslist-db@1.1.3(browserslist@4.25.1):
     dependencies:
       browserslist: 4.25.1
@@ -5724,29 +5575,15 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vike-react@0.6.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))):
-    dependencies:
-      react: 19.1.1
-      react-dom: 19.1.1(react@19.1.1)
-      react-streaming: 0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      vike: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
-
-  vike-server@1.0.23-commit-9afb009(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11)):
+  vike-photon@0.1.0(hono@4.9.6)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)))(vite@7.1.3(@types/node@20.19.11)):
     dependencies:
       '@brillout/picocolors': 1.0.28
-      '@brillout/vite-plugin-server-entry': 0.7.13
+      '@brillout/vite-plugin-server-entry': 0.7.14
       '@photonjs/core': 0.0.11(hono@4.9.6)(vite@7.1.3(@types/node@20.19.11))
       '@photonjs/runtime': 0.0.8(hono@4.9.6)(vite@7.1.3(@types/node@20.19.11))
       '@universal-middleware/compress': 0.2.31
       '@universal-middleware/core': 0.4.10(hono@4.9.6)
-      '@universal-middleware/elysia': 0.5.3(hono@4.9.6)
-      '@universal-middleware/express': 0.4.19(hono@4.9.6)
-      '@universal-middleware/fastify': 0.5.20(hono@4.9.6)
-      '@universal-middleware/h3': 0.4.12(hono@4.9.6)
-      '@universal-middleware/hattip': 0.4.13(hono@4.9.6)
-      '@universal-middleware/hono': 0.4.16(hono@4.9.6)
       '@universal-middleware/sirv': 0.1.21
-      arktype: 2.1.20
       esbuild: 0.25.9
       vike: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
     optionalDependencies:
@@ -5761,13 +5598,20 @@ snapshots:
       - hono
       - srvx
 
+  vike-react@0.6.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))):
+    dependencies:
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+      react-streaming: 0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      vike: 0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11))
+
   vike@0.4.238(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.3(@types/node@20.19.11)):
     dependencies:
       '@brillout/import': 0.2.6
       '@brillout/json-serializer': 0.5.20
       '@brillout/picocolors': 1.0.28
       '@brillout/require-shim': 0.1.2
-      '@brillout/vite-plugin-server-entry': 0.7.13
+      '@brillout/vite-plugin-server-entry': 0.7.14
       acorn: 8.15.0
       cac: 6.7.14
       es-module-lexer: 1.7.0
