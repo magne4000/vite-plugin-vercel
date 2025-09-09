@@ -5,9 +5,7 @@ import { prerenderPlugin } from "./prerender";
 import { routesPlugins } from "./routes";
 
 export const vikeVercel: Plugin[] = [
-  ...installPhoton("vike-vercel", {
-    fullInstall: true,
-  }),
+  ...installPhoton("vike-vercel"),
   ...overrideConfPlugin(),
   ...routesPlugins(),
   ...prerenderPlugin(),

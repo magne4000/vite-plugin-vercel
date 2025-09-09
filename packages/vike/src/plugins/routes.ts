@@ -1,7 +1,7 @@
-///<reference types="vike-server/photon-types"/>
+///<reference types="vike-photon/photon-types"/>
 
 import { getVikeConfig } from "vike/plugin";
-import { pageNamePrefix } from "vike-server/api";
+import { pageNamePrefix } from "vike-photon/api";
 import { normalizePath, type Plugin } from "vite";
 import { assert } from "../utils/assert";
 

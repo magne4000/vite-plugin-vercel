@@ -12,7 +12,7 @@ export default {
     // biome-ignore lint/suspicious/noExplicitAny: avoid type mismatch between different Vite versions
     plugins: [vercel(), vikeVercel] as any[],
   },
-  extends: ["import:vike-server/config"],
+  extends: ["import:vike-photon/config"],
   meta: {
     isr: {
       env: { server: true, config: true },
