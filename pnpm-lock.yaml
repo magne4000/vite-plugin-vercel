@@ -272,6 +272,9 @@ importers:
       vike-photon:
         specifier: ^0.1.2
         version: 0.1.2(hono@4.9.6)(vike@0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13)))(vite@7.1.5(@types/node@20.19.13))
+      vite-plugin-vercel:
+        specifier: workspace:^
+        version: link:../vercel
     devDependencies:
       '@types/node':
         specifier: ^20.19.13
@@ -288,9 +291,6 @@ importers:
       vite:
         specifier: ^7.1.5
         version: 7.1.5(@types/node@20.19.13)
-      vite-plugin-vercel:
-        specifier: workspace:^
-        version: link:../vercel
 
 packages:
 
