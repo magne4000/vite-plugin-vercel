@@ -1,6 +1,6 @@
 {
   "name": "vike-vercel",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.0",
   "type": "module",
   "files": [
     "dist",
@@ -36,10 +36,10 @@
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "@photonjs/core": "^0.0.11",
-    "@photonjs/runtime": "^0.0.8",
+    "@photonjs/core": "^0.0.13",
+    "@photonjs/runtime": "^0.0.10",
     "vike": "^0.4.239",
-    "vike-photon": "^0.1.0"
+    "vike-photon": "^0.1.2"
   },
   "engines": {
     "node": ">=20.19.0 || >=22.12.0"

@@ -188,11 +188,11 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       '@photonjs/core':
-        specifier: ^0.0.11
-        version: 0.0.11(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
+        specifier: ^0.0.13
+        version: 0.0.13(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
       '@photonjs/runtime':
-        specifier: ^0.0.8
-        version: 0.0.8(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
+        specifier: ^0.0.10
+        version: 0.0.10(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
       '@universal-middleware/core':
         specifier: ^0.4.10
         version: 0.4.10(hono@4.9.6)
@@ -261,17 +261,17 @@ importers:
         specifier: ^0.5.8
         version: 0.5.8
       '@photonjs/core':
-        specifier: ^0.0.11
-        version: 0.0.11(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
+        specifier: ^0.0.13
+        version: 0.0.13(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
       '@photonjs/runtime':
-        specifier: ^0.0.8
-        version: 0.0.8(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
+        specifier: ^0.0.10
+        version: 0.0.10(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
       vike:
         specifier: ^0.4.239
         version: 0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13))
       vike-photon:
-        specifier: ^0.1.0
-        version: 0.1.0(hono@4.9.6)(vike@0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13)))(vite@7.1.5(@types/node@20.19.13))
+        specifier: ^0.1.2
+        version: 0.1.2(hono@4.9.6)(vike@0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13)))(vite@7.1.5(@types/node@20.19.13))
     devDependencies:
       '@types/node':
         specifier: ^20.19.13
@@ -800,8 +800,24 @@ packages:
       vite:
         optional: true
 
+  '@photonjs/core@0.0.13':
+    resolution: {integrity: sha512-rGiHuEzVFs721SWpdKuhH67NEtIDxkZ6P8q69rW5TT5GVsWwfsODOOQvLmrlPm7+DVZWlOswl3FXFQNwyQZDNw==}
+    peerDependencies:
+      vite: ^7.1.5
+    peerDependenciesMeta:
+      vite:
+        optional: true
+
   '@photonjs/hono@0.0.8':
     resolution: {integrity: sha512-+QWK9y/D6LchLQQg6r7cqyAJK5FS9jnLKGP3hnr281M+VeSoSk6XgOj+iZc74Tbq9Tb+QrTdecR4AInsCBiReQ==}
+    peerDependencies:
+      vite: ^7.1.5
+    peerDependenciesMeta:
+      vite:
+        optional: true
+
+  '@photonjs/runtime@0.0.10':
+    resolution: {integrity: sha512-X19NqQCbJyjkfGvvHzmh/Tm6DV8JZps7Qc0pz3N9f2ttlVjIL8ypf5M/TbIFpdNEBhKh75gdngaBX4lllFtnxA==}
     peerDependencies:
       vite: ^7.1.5
     peerDependenciesMeta:
@@ -818,6 +834,14 @@ packages:
 
   '@photonjs/srvx@0.0.5':
     resolution: {integrity: sha512-2TnkqRlJDaUK3k+62/pyYXFOqRTCXDykh4kLxyEkdWz2vqHmgVDbJjuXQVyw94p6x8/TWjzpchATUB0dExNXlA==}
+    peerDependencies:
+      vite: ^7.1.5
+    peerDependenciesMeta:
+      vite:
+        optional: true
+
+  '@photonjs/srvx@0.0.7':
+    resolution: {integrity: sha512-jYdIFx2m8prscJGY3t4LTTsXbasH0pkUfivQIR8XvjxtKpEasybzDWbmbOw/bAQ4Mn5PZ6FQRmHPgMbLM2sbog==}
     peerDependencies:
       vite: ^7.1.5
     peerDependenciesMeta:
@@ -2726,6 +2750,18 @@ packages:
       vite:
         optional: true
 
+  vike-photon@0.1.2:
+    resolution: {integrity: sha512-C7z9OpqfLBKe73mXxlc+d5Zn0SQDgAeENdMI6dQo4G0+WpTURIsj3c9yfqU6XGe6CS6oS7BX/COkyNVQctGiOQ==}
+    peerDependencies:
+      '@photonjs/cloudflare': '>=0.0.9'
+      vike: '>=0.4.238'
+      vite: ^7.1.5
+    peerDependenciesMeta:
+      '@photonjs/cloudflare':
+        optional: true
+      vite:
+        optional: true
+
   vike-react@0.6.5:
     resolution: {integrity: sha512-SRw/zOSZqdz7EvSyw8yIdy9iJOOMDP7Vra63NnI5L4xHx1Mmj4ebppfYEDcV2MRcCYzyQFv/xSmvI02pEJcT0A==}
     peerDependencies:
@@ -3470,10 +3506,50 @@ snapshots:
       - hono
       - srvx
 
+  '@photonjs/core@0.0.13(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))':
+    dependencies:
+      '@brillout/picocolors': 1.0.28
+      '@brillout/vite-plugin-server-entry': 0.7.14
+      '@universal-middleware/cloudflare': 0.4.10(hono@4.9.6)
+      '@universal-middleware/compress': 0.2.31
+      '@universal-middleware/core': 0.4.10(hono@4.9.6)
+      '@universal-middleware/express': 0.4.19(hono@4.9.6)
+      '@universal-middleware/sirv': 0.1.21
+      estree-walker: 3.0.3
+      ts-deepmerge: 7.0.3
+      zod: 3.25.76
+    optionalDependencies:
+      vite: 7.1.5(@types/node@20.19.13)
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - '@hattip/core'
+      - '@webroute/route'
+      - elysia
+      - fastify
+      - h3
+      - hono
+      - srvx
+
   '@photonjs/hono@0.0.8(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))':
     dependencies:
       '@photonjs/core': 0.0.11(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
       '@universal-middleware/hono': 0.4.16(hono@4.9.6)
+    optionalDependencies:
+      vite: 7.1.5(@types/node@20.19.13)
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - '@hattip/core'
+      - '@webroute/route'
+      - elysia
+      - fastify
+      - h3
+      - hono
+      - srvx
+
+  '@photonjs/runtime@0.0.10(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))':
+    dependencies:
+      '@photonjs/core': 0.0.13(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
+      '@photonjs/srvx': 0.0.7(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
     optionalDependencies:
       vite: 7.1.5(@types/node@20.19.13)
     transitivePeerDependencies:
@@ -3505,6 +3581,22 @@ snapshots:
   '@photonjs/srvx@0.0.5(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))':
     dependencies:
       '@photonjs/core': 0.0.11(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
+      '@universal-middleware/srvx': 0.1.0(hono@4.9.6)
+    optionalDependencies:
+      vite: 7.1.5(@types/node@20.19.13)
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - '@hattip/core'
+      - '@webroute/route'
+      - elysia
+      - fastify
+      - h3
+      - hono
+      - srvx
+
+  '@photonjs/srvx@0.0.7(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))':
+    dependencies:
+      '@photonjs/core': 0.0.13(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
       '@universal-middleware/srvx': 0.1.0(hono@4.9.6)
     optionalDependencies:
       vite: 7.1.5(@types/node@20.19.13)
@@ -5574,6 +5666,29 @@ snapshots:
       '@brillout/vite-plugin-server-entry': 0.7.14
       '@photonjs/core': 0.0.11(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
       '@photonjs/runtime': 0.0.8(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
+      '@universal-middleware/compress': 0.2.31
+      '@universal-middleware/core': 0.4.10(hono@4.9.6)
+      '@universal-middleware/sirv': 0.1.21
+      esbuild: 0.25.9
+      vike: 0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13))
+    optionalDependencies:
+      vite: 7.1.5(@types/node@20.19.13)
+    transitivePeerDependencies:
+      - '@cloudflare/workers-types'
+      - '@hattip/core'
+      - '@webroute/route'
+      - elysia
+      - fastify
+      - h3
+      - hono
+      - srvx
+
+  vike-photon@0.1.2(hono@4.9.6)(vike@0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13)))(vite@7.1.5(@types/node@20.19.13)):
+    dependencies:
+      '@brillout/picocolors': 1.0.28
+      '@brillout/vite-plugin-server-entry': 0.7.14
+      '@photonjs/core': 0.0.13(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
+      '@photonjs/runtime': 0.0.10(hono@4.9.6)(vite@7.1.5(@types/node@20.19.13))
       '@universal-middleware/compress': 0.2.31
       '@universal-middleware/core': 0.4.10(hono@4.9.6)
       '@universal-middleware/sirv': 0.1.21
