@@ -138,3 +138,5 @@ vite.config.ts.js
 
 .idea
 
+.vercel
+

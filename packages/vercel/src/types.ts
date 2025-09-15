@@ -108,10 +108,6 @@ export interface VercelEntryOptions {
    * When true, the Serverless Function will stream the response to the client
    */
   streaming?: boolean;
-  /**
-   * When true, do not build output files for this entry
-   */
-  disabled?: boolean;
 }
 
 declare module "@photonjs/core" {
