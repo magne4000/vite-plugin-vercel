@@ -1,6 +1,6 @@
 {
   "name": "vite-plugin-vercel",
-  "version": "10.0.0-beta.0",
+  "version": "10.0.0-beta.1",
   "type": "module",
   "files": [
     "dist",
@@ -14,7 +14,7 @@
     "./utils": "./dist/utils.js",
     "./api": "./dist/api.js",
     "./types": {
-      "types": "./index.d.ts"
+      "types": "./dist/types.d.ts"
     }
   },
   "description": "Vercel adapter for vite",
