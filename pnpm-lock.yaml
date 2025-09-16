@@ -104,8 +104,8 @@ importers:
         specifier: ^1.55.0
         version: 1.55.0
       vike-photon:
-        specifier: ^0.1.4
-        version: 0.1.4(hono@4.9.6)(vike@0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13)))(vite-plugin-vercel@packages+vercel)(vite@7.1.5(@types/node@20.19.13))
+        specifier: ^0.1.5
+        version: 0.1.5(hono@4.9.6)(vike@0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13)))(vite-plugin-vercel@packages+vercel)(vite@7.1.5(@types/node@20.19.13))
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@edge-runtime/vm@3.2.0)(@types/debug@4.1.12)(@types/node@20.19.13)
@@ -2695,13 +2695,13 @@ packages:
   vfile@6.0.3:
     resolution: {integrity: sha512-KzIbH/9tXat2u30jf+smMwFCsno4wHVdNmzFyL+T/L3UGqqk6JKfVqOFOZEpZSHADH1k40ab6NUIXZq422ov3Q==}
 
-  vike-photon@0.1.4:
-    resolution: {integrity: sha512-VJd9799Ic7gDWy/bAzTLrff2Rxl08IayuAFHTO/VaRGbTgmiKgbwU41UDvUcWP4FcqlBDimTD7QoSXrN0MlHlQ==}
+  vike-photon@0.1.5:
+    resolution: {integrity: sha512-47bHd4uAgwZWfgoRHz66EKD+wcw95OSla1hiSlM7bZjYMkCdG1vChiGvlbcXRMKhSH2XRgqEaJZZtnkQN68TNg==}
     peerDependencies:
       '@photonjs/cloudflare': '>=0.0.9'
       vike: '>=0.4.238'
       vite: ^7.1.5
-      vite-plugin-vercel: ^10.0.0-beta.2
+      vite-plugin-vercel: ^10.0.0-beta.3
     peerDependenciesMeta:
       '@photonjs/cloudflare':
         optional: true
@@ -5592,7 +5592,7 @@ snapshots:
       '@types/unist': 3.0.3
       vfile-message: 4.0.3
 
-  vike-photon@0.1.4(hono@4.9.6)(vike@0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13)))(vite-plugin-vercel@packages+vercel)(vite@7.1.5(@types/node@20.19.13)):
+  vike-photon@0.1.5(hono@4.9.6)(vike@0.4.239(react-streaming@0.4.3(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.13)))(vite-plugin-vercel@packages+vercel)(vite@7.1.5(@types/node@20.19.13)):
     dependencies:
       '@brillout/picocolors': 1.0.28
       '@brillout/vite-plugin-server-entry': 0.7.14
