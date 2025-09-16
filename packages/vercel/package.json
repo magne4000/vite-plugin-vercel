@@ -43,7 +43,7 @@
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^3.1.0",
     "@photonjs/core": "^0.0.13",
-    "@photonjs/runtime": "^0.0.10",
+    "@photonjs/runtime": "^0.0.11",
     "@universal-middleware/core": "^0.4.10",
     "@universal-middleware/vercel": "^0.4.22",
     "@vercel/build-utils": "^12.1.0",
