@@ -1,13 +1,13 @@
 import type { Config } from "vike/types";
+import vikePhoton from "vike-photon/config";
 import vikeReact from "vike-react/config";
-import vikeVercel from "vike-vercel/config";
 import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 import { Layout } from "../components/Layout";
 
 export default {
   prerender: true,
   Layout,
-  extends: [vikeReact, vikeVercel],
+  extends: [vikeReact, vikePhoton],
   photon: {
     expiration: 25,
     entries: {
