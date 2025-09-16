@@ -9,13 +9,6 @@ prepareTestJsonFileContent("config.json", (context) => {
   it("should have defaults routes only", () => {
     const expected = [
       {
-        src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
-        headers: {
-          "X-VitePluginVercel-Test": "test",
-        },
-        continue: true,
-      },
-      {
         src: "^/api/page$",
         headers: { "X-VitePluginVercel-Test": "test" },
         continue: true,
@@ -47,24 +40,14 @@ prepareTestJsonFileContent("config.json", (context) => {
         check: true,
       },
       {
+        src: "^/og-node$",
+        dest: "/og-node",
         check: true,
-        src: "^(/catch-all/?(?<_>.*)(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike/pages/catch-all?__original_path=$1",
       },
       {
         check: true,
-        src: "^(/named/(?<someId>[^/]+)(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike/pages/named?__original_path=$1",
-      },
-      {
-        check: true,
-        src: "^(/isr(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike/pages/isr?__original_path=$1",
-      },
-      {
-        check: true,
-        src: "^/api/name(?:/([^/]+?))$",
-        dest: "/api/name/[name]?name=$1",
+        src: "^/api/isr$",
+        dest: "/api/isr",
       },
       {
         check: true,
@@ -73,13 +56,23 @@ prepareTestJsonFileContent("config.json", (context) => {
       },
       {
         check: true,
-        src: "^/api/isr$",
-        dest: "/api/isr",
+        src: "^/api/name(?:/([^/]+?))$",
+        dest: "/api/name/[name]?name=$1",
       },
       {
-        src: "^/og-node$",
-        dest: "/og-node",
         check: true,
+        src: "^(/isr(?:/index\\.pageContext\\.json)?)$",
+        dest: "/__vike/pages/isr?__original_path=$1",
+      },
+      {
+        check: true,
+        src: "^(/catch-all/?(?<_>.*)(?:/index\\.pageContext\\.json)?)$",
+        dest: "/__vike/pages/catch-all?__original_path=$1",
+      },
+      {
+        check: true,
+        src: "^(/named/(?<someId>[^/]+)(?:/index\\.pageContext\\.json)?)$",
+        dest: "/__vike/pages/named?__original_path=$1",
       },
       { check: true, dest: "/__vike/__catch_all?__original_path=$1", src: "^(.*)$" },
     ];
