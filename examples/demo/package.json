@@ -22,7 +22,6 @@
     "typescript": "^5.9.2",
     "vike": "^0.4.239",
     "vike-react": "^0.6.5",
-    "vike-vercel": "workspace:^",
     "vite": "^7.1.5",
     "vite-plugin-vercel": "workspace:^"
   },
