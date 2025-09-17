@@ -28,10 +28,12 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "vite": ">=7.1"
+    "vite": ">=7.1",
+    "@photonjs/core": "0.0.*",
+    "@photonjs/runtime": "0.0.*"
   },
   "devDependencies": {
-    "@types/node": "^20.19.13",
+    "@types/node": "^20.19.16",
     "@universal-middleware/express": "^0.4.19",
     "@vercel/node": "^5.3.22",
     "rollup": "^4.50.2",
@@ -42,8 +44,8 @@
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
     "@manypkg/find-root": "^3.1.0",
-    "@photonjs/core": "^0.0.13",
-    "@photonjs/runtime": "^0.0.11",
+    "@photonjs/core": "0.0.*",
+    "@photonjs/runtime": "0.0.*",
     "@universal-middleware/core": "^0.4.10",
     "@universal-middleware/vercel": "^0.4.22",
     "@vercel/build-utils": "^12.1.0",

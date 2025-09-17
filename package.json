@@ -21,7 +21,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
     "@changesets/cli": "^2.29.7",
-    "@types/node": "^20.19.13",
+    "@types/node": "^20.19.16",
     "cross-env": "^10.0.0",
     "playwright": "^1.55.0",
     "typescript": "^5.9.2"
