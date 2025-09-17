@@ -62,6 +62,7 @@ export function createAPI(outfiles: ViteVercelOutFile[], pluginConfig: ViteVerce
   };
 }
 
+// TODO PluginContext is too specific and can generate mismatch when using this helper
 export function getVercelAPI(pluginContextOrServer: PluginContext | ViteDevServer) {
   const config =
     "environment" in pluginContextOrServer ? pluginContextOrServer.environment.config : pluginContextOrServer.config;
