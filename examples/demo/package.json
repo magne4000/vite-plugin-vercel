@@ -16,12 +16,12 @@
     "@mdx-js/rollup": "^3.1.1",
     "@vercel/edge-config": "^1.4.0",
     "@vercel/og": "^0.7.2",
-    "@vitejs/plugin-react": "^5.0.2",
+    "@vitejs/plugin-react": "^5.0.3",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "typescript": "^5.9.2",
-    "vike": "^0.4.239",
-    "vike-react": "^0.6.5",
+    "vike": "^0.4.240",
+    "vike-react": "^0.6.6",
     "vite": "^7.1.5",
     "vite-plugin-vercel": "workspace:^"
   },
@@ -30,16 +30,16 @@
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.27.1",
     "@playwright/test": "^1.55.0",
-    "@types/node": "^20.19.13",
-    "@types/react": "^19.1.12",
+    "@types/node": "^20.19.16",
+    "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@universal-middleware/core": "^0.4.10",
-    "@vercel/node": "^5.3.21",
+    "@vercel/node": "^5.3.22",
     "@vite-plugin-vercel/schemas": "workspace:^",
     "fast-glob": "^3.3.3",
     "playwright": "^1.55.0",
-    "vike-photon": "^0.1.5",
+    "vike-photon": "^0.1.7",
     "vitest": "^3.2.4",
-    "zod": "^4.1.5"
+    "zod": "^4.1.9"
   }
 }

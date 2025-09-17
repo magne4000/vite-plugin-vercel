@@ -12,13 +12,13 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@types/node": "^20.19.13",
-    "@vercel/node": "^5.3.21",
+    "@types/node": "^20.19.16",
+    "@vercel/node": "^5.3.22",
     "typescript": "^5.9.2",
     "vite": "^7.1.5"
   },
   "dependencies": {
-    "hono": "^4.9.6",
+    "hono": "^4.9.7",
     "vite-plugin-vercel": "workspace:*"
   }
 }
