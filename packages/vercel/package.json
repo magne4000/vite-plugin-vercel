@@ -33,8 +33,8 @@
   "devDependencies": {
     "@types/node": "^20.19.13",
     "@universal-middleware/express": "^0.4.19",
-    "@vercel/node": "^5.3.21",
-    "rollup": "^4.50.1",
+    "@vercel/node": "^5.3.22",
+    "rollup": "^4.50.2",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.5"
