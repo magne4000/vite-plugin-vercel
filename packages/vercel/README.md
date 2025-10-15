@@ -1,11 +1,9 @@
 # vite-plugin-vercel
 
-> [!WARNING]
-> :construction: Work In Progress
-> 
-> You are on the [Vite Environment API](https://vite.dev/guide/api-environment.html#environment-configuration) development branch. Check out [v9 branch](https://github.com/magne4000/vite-plugin-vercel/tree/v9) current stable version.
+> [!NOTE]
+> You are on the [Vite Environment API](https://vite.dev/guide/api-environment.html#environment-configuration) beta branch (v10). Check out [v9 branch](https://github.com/magne4000/vite-plugin-vercel/tree/v9) for current stable version.
 
-Vercel adapter for [Vite 6](https://vitejs.dev/).
+Vercel adapter for [Vite 7](https://vitejs.dev/).
 
 Bundle your Vite application as supported by [Vercel Output API (v3)](https://vercel.com/docs/build-output-api/v3).
 
