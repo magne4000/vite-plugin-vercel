@@ -26,7 +26,7 @@ importers:
         version: 10.0.0
       playwright:
         specifier: ^1.55.0
-        version: 1.55.0
+        version: 1.55.1
       typescript:
         specifier: ^5.9.2
         version: 5.9.2
@@ -102,7 +102,7 @@ importers:
         version: 3.3.3
       playwright:
         specifier: ^1.55.0
-        version: 1.55.0
+        version: 1.55.1
       vike-photon:
         specifier: ^0.1.7
         version: 0.1.7(@photonjs/core@0.0.15(hono@4.9.7)(vite@7.1.5(@types/node@20.19.16)))(@photonjs/runtime@0.0.13(hono@4.9.7)(vite@7.1.5(@types/node@20.19.16)))(hono@4.9.7)(vike@0.4.240(react-streaming@0.4.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(vite@7.1.5(@types/node@20.19.16)))(vite-plugin-vercel@packages+vercel)(vite@7.1.5(@types/node@20.19.16))
@@ -2246,8 +2246,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  playwright-core@1.55.1:
+    resolution: {integrity: sha512-Z6Mh9mkwX+zxSlHqdr5AOcJnfp+xUWLCt9uKV18fhzA8eyxUd8NUWzAjxUh55RZKSYwDGX0cfaySdhZJGMoJ+w==}
+    engines: {node: '>=18'}
+    hasBin: true
+
   playwright@1.55.0:
     resolution: {integrity: sha512-sdCWStblvV1YU909Xqx0DhOjPZE4/5lJsIS84IfN9dAZfcl/CIZ5O8l3o0j7hPMjDvqoTF8ZUcc+i/GL5erstA==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.55.1:
+    resolution: {integrity: sha512-cJW4Xd/G3v5ovXtJJ52MAOclqeac9S/aGGgRzLabuF8TnIb6xHvMzKIa6JmrRzUkeXJgfL1MhukP0NK6l39h3A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -5064,9 +5074,17 @@ snapshots:
 
   playwright-core@1.55.0: {}
 
+  playwright-core@1.55.1: {}
+
   playwright@1.55.0:
     dependencies:
       playwright-core: 1.55.0
+    optionalDependencies:
+      fsevents: 2.3.2
+
+  playwright@1.55.1:
+    dependencies:
+      playwright-core: 1.55.1
     optionalDependencies:
       fsevents: 2.3.2
 
