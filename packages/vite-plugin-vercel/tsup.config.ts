@@ -1,12 +1,12 @@
 import { defineConfig } from "tsup";
 
 const entry = {
-  index: "./src/plugins/index.ts",
-  utils: "./src/utils/index.ts",
+  index: "./src/vite.ts",
+  utils: "./src/utils.ts",
   api: "./src/api.ts",
   types: "./src/types.ts",
-  "universal-middleware-dev": "./src/photon/universal-middleware-dev.ts",
-  "universal-middleware-prod": "./src/photon/universal-middleware-prod.ts",
+  "universal-middleware-dev": "./src/universal-middleware-dev.ts",
+  "universal-middleware-prod": "./src/universal-middleware-prod.ts",
 };
 
 export default defineConfig([
@@ -21,7 +21,6 @@ export default defineConfig([
       compilerOptions: {
         paths: {},
       },
-      banner: `/// <reference types="@photonjs/core" />\n`,
     },
   },
 ]);

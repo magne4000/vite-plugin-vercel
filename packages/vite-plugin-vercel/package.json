@@ -27,37 +27,18 @@
     "prepack": "rm -rf dist && pnpm build",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
-  "peerDependencies": {
-    "vite": ">=7.1",
-    "@photonjs/core": "0.0.*",
-    "@photonjs/runtime": "0.0.*"
-  },
   "devDependencies": {
-    "@types/node": "^20.19.16",
-    "@universal-middleware/express": "^0.4.19",
-    "@vercel/node": "^5.3.22",
-    "rollup": "^4.50.2",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vite": "^7.1.5"
   },
   "dependencies": {
-    "@brillout/libassert": "^0.5.8",
-    "@manypkg/find-root": "^3.1.0",
-    "@photonjs/core": "0.0.*",
-    "@photonjs/runtime": "0.0.*",
-    "@universal-middleware/core": "^0.4.10",
-    "@universal-middleware/vercel": "^0.4.22",
-    "@vercel/build-utils": "^12.1.0",
-    "@vercel/nft": "^0.30.1",
-    "@vercel/routing-utils": "^5.1.1",
-    "@vite-plugin-vercel/schemas": "workspace:^",
-    "convert-route": "^0.1.1",
-    "esbuild": "^0.25.9",
-    "fast-glob": "^3.3.3",
-    "magicast": "^0.3.5",
-    "path-to-regexp": "^8.3.0",
-    "strip-ansi": "^7.1.2",
-    "vite-plugin-wasm": "^3.5.0"
+    "@photonjs/vercel": "^0.1.5",
+    "@photonjs/core": "^0.1.4",
+    "@photonjs/runtime": "^0.1.4"
+  },
+  "peerDependencies": {
+    "@photonjs/core": "^0.1.4",
+    "@photonjs/runtime": "^0.1.4"
   }
 }
