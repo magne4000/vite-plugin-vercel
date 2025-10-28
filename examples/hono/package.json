@@ -15,12 +15,12 @@
   "devDependencies": {
     "@types/node": "^20.19.16",
     "cross-env": "^10.0.0",
-    "hono": "^4.9.7",
+    "hono": "^4.10.3",
     "typescript": "^5.9.2",
-    "vite": "^7.1.5"
+    "vite": "^7.1.12"
   },
   "dependencies": {
-    "@photonjs/hono": "0.0.*",
+    "@photonjs/hono": "^0.1.4",
     "vite-plugin-vercel": "workspace:*"
   }
 }

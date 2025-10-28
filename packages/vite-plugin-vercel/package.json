@@ -30,7 +30,7 @@
   "devDependencies": {
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
-    "vite": "^7.1.5"
+    "vite": "^7.1.12"
   },
   "dependencies": {
     "@photonjs/vercel": "^0.1.5",
