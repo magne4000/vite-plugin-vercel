@@ -40,8 +40,6 @@ export function routesPlugins(): Plugin[] {
             entriesToKeep.add(page);
           }
 
-          console.log("entriesToKeep", entriesToKeep);
-
           this.environment.config.photon.entries = this.environment.config.photon.entries.filter(
             (e) => !e.vikeMeta || entriesToKeep.has(e),
           );

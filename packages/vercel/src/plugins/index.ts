@@ -1,5 +1,4 @@
 import { installPhoton } from "@photonjs/runtime/vite";
-import type { PluginOption } from "vite";
 import type { ViteVercelConfig } from "../types";
 import { apiPlugin } from "./api";
 import { bundlePlugin } from "./bundle";
@@ -9,7 +8,8 @@ import { routesPlugins } from "./routes";
 import { setupEnvs } from "./setupEnvs";
 import { wasmPlugin } from "./wasm";
 
-export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
+type PluginInterop = Record<string, unknown> & { name: string };
+export function vercel(pluginConfig: ViteVercelConfig = {}): PluginInterop[] {
   const additionalConfig: Record<string, unknown> = {};
   if (pluginConfig.entries) {
     additionalConfig.entries = pluginConfig.entries;
@@ -42,7 +42,7 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginOption[] {
     ...loaderPlugin(pluginConfig),
     ...routesPlugins(),
     ...bundlePlugin(pluginConfig),
-  ];
+  ] as PluginInterop[];
 }
 
 export default vercel;
