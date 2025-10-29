@@ -12,7 +12,7 @@
     "test:e2e": "test-e2e",
     "format": "biome format --write .",
     "lint": "biome lint .",
-    "prepublishOnly": "pnpm run test && changeset version",
+    "prepublishOnly": "pnpm run test:e2e && changeset version",
     "publish:beta": "changeset pre enter beta && pnpm run prepublishOnly && changeset publish -r --tag beta && changeset pre exit",
     "publish:stable": "pnpm run prepublishOnly && changeset publish -r"
   },
