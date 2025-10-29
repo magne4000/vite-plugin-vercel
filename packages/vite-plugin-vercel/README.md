@@ -7,6 +7,9 @@ Vercel adapter for [Vite](https://vitejs.dev/).
 
 Bundle your Vite application as supported by [Vercel Output API (v3)](https://vercel.com/docs/build-output-api/v3).
 
+> [!NOTE]
+> This plugin is mostly a re-export of [`@photonjs/vercel`](https://github.com/photon-js/photon/tree/main/packages/adapter-vercel)
+
 ## Install
 
 ```bash
