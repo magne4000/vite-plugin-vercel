@@ -16,7 +16,6 @@ jobs:
           - pnpm run build:simple
           - pnpm run build:hono
           - pnpm run build:hono-edge
-          - pnpm run build:demo
 
     steps:
       - uses: actions/checkout@v5
