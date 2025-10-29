@@ -4,14 +4,12 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm run -C ./packages/vercel dev",
-    "vercel-build": "pnpm run build && pnpm run build:demo",
     "build": "pnpm --recursive --filter {packages/*} run build",
     "build:simple": "pnpm run -C ./examples/simple build",
     "build:hono": "pnpm run -C ./examples/hono build",
     "build:hono-edge": "pnpm run -C ./examples/hono build:edge",
-    "build:demo": " pnpm run -C ./examples/demo build && cp -rf examples/demo/public examples/demo/.vercel .",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm run -r test",
+    "test:e2e": "test-e2e",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "prepublishOnly": "pnpm run test && changeset version",
@@ -20,16 +18,16 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
+    "@brillout/test-e2e": "^0.6.19",
     "@changesets/cli": "^2.29.7",
     "@types/node": "^20.19.16",
     "cross-env": "^10.0.0",
-    "playwright": "^1.55.0",
+    "playwright": "^1.56.1",
     "typescript": "^5.9.2"
   },
   "pnpm": {
     "overrides": {
-      "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0",
-      "vite": "^7.1.5"
+      "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0"
     },
     "onlyBuiltDependencies": [
       "esbuild"

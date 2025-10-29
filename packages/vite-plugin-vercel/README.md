@@ -1,13 +1,14 @@
 # vite-plugin-vercel
 
-> [!WARNING]
-> :construction: Work In Progress
-> 
-> You are on the [Vite Environment API](https://vite.dev/guide/api-environment.html#environment-configuration) development branch. Check out [v9 branch](https://github.com/magne4000/vite-plugin-vercel/tree/v9) current stable version.
+> [!NOTE]
+> You are on the [Vite Environment API](https://vite.dev/guide/api-environment.html#environment-configuration) beta branch (v10). Check out [v9 branch](https://github.com/magne4000/vite-plugin-vercel/tree/v9) for current stable version.
 
-Vercel adapter for [Vite 6](https://vitejs.dev/).
+Vercel adapter for [Vite](https://vitejs.dev/).
 
 Bundle your Vite application as supported by [Vercel Output API (v3)](https://vercel.com/docs/build-output-api/v3).
+
+> [!NOTE]
+> This plugin is mostly a re-export of [`@photonjs/vercel`](https://github.com/photon-js/photon/tree/main/packages/adapter-vercel)
 
 ## Install
 
@@ -52,16 +53,16 @@ import { defineConfig } from 'vite';
 import vercel from 'vite-plugin-vercel';
 import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 
+const entries = await getEntriesFromFs("endpoints/api", {
+  // Auto mapping examples:
+  //   endpoints/api/page.ts -> /api/page
+  //   endpoints/api/name/[name].ts -> /api/name/*
+  destination: "api",
+});
+
 export default defineConfig({
   plugins: [vercel({
-    entries: [
-      ...(await getEntriesFromFs("endpoints/api", {
-        // Auto mapping examples:
-        //   endpoints/api/page.ts -> /api/page
-        //   endpoints/api/name/[name].ts -> /api/name/*
-        destination: "api",
-      }))
-    ]
+    entries,
   })],
 });
 ```
@@ -104,6 +105,95 @@ export default async function handler() {
 
 You can use [Edge middleware as describe in the official documentation](https://vercel.com/docs/functions/edge-middleware/middleware-api) (i.e. with a `middleware.ts` file at the root of your project).
 
+## Advanced settings
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+import vercel from 'vite-plugin-vercel';
+
+export default defineConfig({
+  plugins: [vercel({
+    // All the followings optional
+
+    /**
+     * How long Functions should be allowed to run for every request, in seconds.
+     * If left empty, default value for your plan will be used.
+     */
+    defaultMaxDuration: 30,
+    /**
+     * Enable streaming responses by default for all Serverless Functions
+     */
+    defaultSupportsResponseStreaming: true,
+    /**
+     * Default expiration time (in seconds) for prerender functions.
+     * Defaults to 86400 seconds (24h).
+     */
+    expiration: 86400,
+
+    /**
+     * See https://vercel.com/docs/projects/project-configuration#rewrites
+     */
+    rewrites: [{ source: '/about', destination: '/about-our-company.html' }],
+    /**
+     * @see {@link https://vercel.com/docs/projects/project-configuration#headers}
+     */
+    headers: [
+      {
+        "source": "/service-worker.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ],
+    /**
+     * See https://vercel.com/docs/projects/project-configuration#redirects
+     */
+    redirects: [
+      { source: '/me', destination: '/profile.html', permanent: false },
+    ],
+    /**
+     * See https://vercel.com/docs/projects/project-configuration#cleanurls
+     */
+    cleanUrls: true,
+    /**
+     * See https://vercel.com/docs/projects/project-configuration#trailingslash
+     */
+    trailingSlash: true,
+    /**
+     * Use `getEntriesFromFs` for mapping your filesystem routes to entries.
+     * If you are interfacing this plugin with a framework, entries can also be added through the Photon API
+     */
+    entries: {
+      root: {
+        id: 'src/routes/root.ts',
+        name: 'root',
+        route: '/'
+      }
+    },
+    /**
+     * Advanced configuration to override .vercel/output/config.json
+     * See https://vercel.com/docs/build-output-api/v3/configuration#configuration
+     */
+    config: {
+      // routes?: Route[];
+      // images?: ImagesConfig;
+      // wildcard?: WildcardConfig;
+      // overrides?: OverrideConfig;
+      // cache?: string[];
+      // crons?: CronsConfig;
+    },
+    /**
+     * Defaults to `.vercel/output`. Mostly useful for testing purpose
+     */
+    outDir: '.vercel/output',
+  })]
+});
+```
+
 ## FAQ
 
 ### What does ISR do in dev mode?
@@ -117,18 +207,10 @@ This is not yet supported. Please open an issue if you need this (PR welcome).
 
 Related documentation: https://vercel.com/docs/edge-network/headers/request-headers
 
-## Migration from v9
+## Migrations
 
-This repository branch targets the new Vite Environment API (v10). If you are upgrading from v9, the migration steps are the same as for the root package:
+- [Migration from v9 to v10](https://github.com/magne4000/vite-plugin-vercel/blob/main/MIGRATION.md)
 
-- Require Vite 7+ and Node 18+.
-- Prefer explicit entries via `getEntriesFromFs()` instead of relying solely on the `/api` folder.
-- Configure per-endpoint behavior using exports in each endpoint file (`edge`, `headers`, `streaming`, `isr`).
-- Move project settings like `rewrites`, `headers`, `redirects`, `cleanUrls`, and `trailingSlash` into the plugin options to be emitted into `.vercel/output/config.json`.
-- Default output directory remains `.vercel/output`.
+## Demo
 
-For detailed, code-level examples and explanations, see the Migration from v9 section in the top-level README:
-https://github.com/magne4000/vite-plugin-vercel/tree/v10#migration-from-v9
-
-For the previous behavior and reference docs, see the v9 README:
-https://github.com/magne4000/vite-plugin-vercel/tree/v9
+https://vike-photon-demo.vercel.app/

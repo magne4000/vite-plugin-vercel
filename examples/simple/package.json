@@ -15,7 +15,7 @@
     "@types/node": "^20.19.16",
     "@vercel/node": "^5.3.22",
     "typescript": "^5.9.2",
-    "vite": "^7.1.5"
+    "vite": "^7.1.12"
   },
   "dependencies": {
     "hono": "^4.9.7",
