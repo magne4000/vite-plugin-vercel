@@ -13,7 +13,7 @@
     "format": "biome format --write .",
     "lint": "biome lint .",
     "prepublishOnly": "pnpm run test:e2e && changeset version",
-    "publish:beta": "changeset pre enter beta && pnpm run prepublishOnly && changeset publish -r --tag beta && changeset pre exit",
+    "publish:beta": "changeset pre enter beta && pnpm run prepublishOnly && changeset publish -r && changeset pre exit",
     "publish:stable": "pnpm run prepublishOnly && changeset publish -r"
   },
   "devDependencies": {
