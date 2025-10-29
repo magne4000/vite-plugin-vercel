@@ -204,9 +204,9 @@ This is not yet supported. Please open an issue if you need this (PR welcome).
 
 Related documentation: https://vercel.com/docs/edge-network/headers/request-headers
 
-## Migration from v9
+## Migrations
 
-TODO
+- [Migration from v9 to v10](https://github.com/magne4000/vite-plugin-vercel/blob/main/MIGRATION.md)
 
 ## Demo
 

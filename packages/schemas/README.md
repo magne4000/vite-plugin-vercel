@@ -119,4 +119,16 @@ Related documentation: https://vercel.com/docs/edge-network/headers/request-head
 
 ## Migration from v9
 
-TODO
+This repository branch targets the new Vite Environment API (v10). If you are upgrading from v9, the migration steps are the same as for the root package:
+
+- Require Vite 7+ and Node 18+.
+- Prefer explicit entries via `getEntriesFromFs()` instead of relying solely on the `/api` folder.
+- Configure per-endpoint behavior using exports in each endpoint file (`edge`, `headers`, `streaming`, `isr`).
+- Move project settings like `rewrites`, `headers`, `redirects`, `cleanUrls`, and `trailingSlash` into the plugin options to be emitted into `.vercel/output/config.json`.
+- Default output directory remains `.vercel/output`.
+
+For detailed, code-level examples and explanations, see the Migration from v9 section in the top-level README:
+https://github.com/magne4000/vite-plugin-vercel/tree/v10#migration-from-v9
+
+For the previous behavior and reference docs, see the v9 README:
+https://github.com/magne4000/vite-plugin-vercel/tree/v9
