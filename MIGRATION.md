@@ -53,3 +53,6 @@ vercel({
   trailingSlash: true,
 })
 ```
+
+### 4) Vike's migration
+If you were using this plugin with Vike, please refer to [Vike's documentation](https://vike.dev/vercel) for the most up-to-date integration instructions.
