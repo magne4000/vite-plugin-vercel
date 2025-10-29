@@ -9,7 +9,7 @@
     "build:hono": "pnpm run -C ./examples/hono build",
     "build:hono-edge": "pnpm run -C ./examples/hono build:edge",
     "typecheck": "pnpm -r typecheck",
-    "test": "pnpm run -r test",
+    "test:e2e": "test-e2e",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "prepublishOnly": "pnpm run test && changeset version",
@@ -18,6 +18,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.4",
+    "@brillout/test-e2e": "^0.6.19",
     "@changesets/cli": "^2.29.7",
     "@types/node": "^20.19.16",
     "cross-env": "^10.0.0",
