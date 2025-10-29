@@ -9,7 +9,6 @@
     "build:simple": "pnpm run -C ./examples/simple build",
     "build:hono": "pnpm run -C ./examples/hono build",
     "build:hono-edge": "pnpm run -C ./examples/hono build:edge",
-    "build:demo": " pnpm run -C ./examples/demo build && cp -rf examples/demo/public examples/demo/.vercel .",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm run -r test",
     "format": "biome format --write .",
