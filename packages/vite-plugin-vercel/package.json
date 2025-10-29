@@ -34,11 +34,11 @@
   },
   "dependencies": {
     "@photonjs/vercel": "^0.1.5",
-    "@photonjs/core": "^0.1.4",
+    "@photonjs/core": "^0.1.5",
     "@photonjs/runtime": "^0.1.4"
   },
   "peerDependencies": {
-    "@photonjs/core": "^0.1.4",
+    "@photonjs/core": "^0.1.5",
     "@photonjs/runtime": "^0.1.4"
   }
 }
