@@ -50,16 +50,16 @@ import { defineConfig } from 'vite';
 import vercel from 'vite-plugin-vercel';
 import { getEntriesFromFs } from "vite-plugin-vercel/utils";
 
+const entries = await getEntriesFromFs("endpoints/api", {
+  // Auto mapping examples:
+  //   endpoints/api/page.ts -> /api/page
+  //   endpoints/api/name/[name].ts -> /api/name/*
+  destination: "api",
+});
+
 export default defineConfig({
   plugins: [vercel({
-    entries: [
-      ...(await getEntriesFromFs("endpoints/api", {
-        // Auto mapping examples:
-        //   endpoints/api/page.ts -> /api/page
-        //   endpoints/api/name/[name].ts -> /api/name/*
-        destination: "api",
-      }))
-    ]
+    entries,
   })],
 });
 ```
@@ -101,6 +101,95 @@ export default async function handler() {
 ### Edge middleware
 
 You can use [Edge middleware as describe in the official documentation](https://vercel.com/docs/functions/edge-middleware/middleware-api) (i.e. with a `middleware.ts` file at the root of your project).
+
+## Advanced settings
+
+```ts
+// vite.config.ts
+import { defineConfig } from 'vite';
+import vercel from 'vite-plugin-vercel';
+
+export default defineConfig({
+  plugins: [vercel({
+    // All the followings optional
+
+    /**
+     * How long Functions should be allowed to run for every request, in seconds.
+     * If left empty, default value for your plan will be used.
+     */
+    defaultMaxDuration: 30,
+    /**
+     * Enable streaming responses by default for all Serverless Functions
+     */
+    defaultSupportsResponseStreaming: true,
+    /**
+     * Default expiration time (in seconds) for prerender functions.
+     * Defaults to 86400 seconds (24h).
+     */
+    expiration: 86400,
+
+    /**
+     * See https://vercel.com/docs/projects/project-configuration#rewrites
+     */
+    rewrites: [{ source: '/about', destination: '/about-our-company.html' }],
+    /**
+     * @see {@link https://vercel.com/docs/projects/project-configuration#headers}
+     */
+    headers: [
+      {
+        "source": "/service-worker.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=0, must-revalidate"
+          }
+        ]
+      }
+    ],
+    /**
+     * See https://vercel.com/docs/projects/project-configuration#redirects
+     */
+    redirects: [
+      { source: '/me', destination: '/profile.html', permanent: false },
+    ],
+    /**
+     * See https://vercel.com/docs/projects/project-configuration#cleanurls
+     */
+    cleanUrls: true,
+    /**
+     * See https://vercel.com/docs/projects/project-configuration#trailingslash
+     */
+    trailingSlash: true,
+    /**
+     * Use `getEntriesFromFs` for mapping your filesystem routes to entries.
+     * If you are interfacing this plugin with a framework, entries can also be added through the Photon API
+     */
+    entries: {
+      root: {
+        id: 'src/routes/root.ts',
+        name: 'root',
+        route: '/'
+      }
+    },
+    /**
+     * Advanced configuration to override .vercel/output/config.json
+     * See https://vercel.com/docs/build-output-api/v3/configuration#configuration
+     */
+    config: {
+      // routes?: Route[];
+      // images?: ImagesConfig;
+      // wildcard?: WildcardConfig;
+      // overrides?: OverrideConfig;
+      // cache?: string[];
+      // crons?: CronsConfig;
+    },
+    /**
+     * Defaults to `.vercel/output`. Mostly useful for testing purpose
+     */
+    outDir: '.vercel/output',
+  })]
+});
+```
 
 ## FAQ
 
