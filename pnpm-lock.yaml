@@ -39,8 +39,8 @@ importers:
         specifier: ^3.0.1
         version: 3.1.0(acorn@8.14.1)(rollup@4.40.1)
       '@vercel/edge-config':
-        specifier: ^1.3.0
-        version: 1.4.0
+        specifier: ^1.4.3
+        version: 1.4.3
       '@vercel/og':
         specifier: ^0.6.3
         version: 0.6.8
@@ -88,7 +88,7 @@ importers:
         specifier: ^18.3.0
         version: 18.3.6(@types/react@18.3.20)
       '@vercel/node':
-        specifier: ^3.2.18
+        specifier: ^3.2.29
         version: 3.2.29(@swc/core@1.11.29)
       fast-glob:
         specifier: ^3.3.2
@@ -119,10 +119,10 @@ importers:
         specifier: ^18.3.0
         version: 18.3.6(@types/react@18.3.20)
       '@universal-middleware/express':
-        specifier: ^0.2.6
+        specifier: ^0.2.10
         version: 0.2.10
       '@vercel/node':
-        specifier: ^3.2.18
+        specifier: ^3.2.29
         version: 3.2.29(@swc/core@1.11.29)
       '@vitejs/plugin-react-swc':
         specifier: ^3.7.1
@@ -159,7 +159,7 @@ importers:
         specifier: ^18.19.54
         version: 18.19.86
       '@vercel/node':
-        specifier: ^3.2.18
+        specifier: ^3.2.29
         version: 3.2.29(@swc/core@1.11.29)
       typescript:
         specifier: ^5.6.2
@@ -177,16 +177,16 @@ importers:
         specifier: ^2.2.3
         version: 2.2.3
       '@vercel/build-utils':
-        specifier: ^8.4.12
+        specifier: ^8.8.0
         version: 8.8.0
       '@vercel/nft':
-        specifier: ^0.27.6
+        specifier: ^0.27.10
         version: 0.27.10(rollup@4.40.1)
       '@vercel/routing-utils':
-        specifier: ^3.1.0
-        version: 3.1.0
+        specifier: ^5.2.1
+        version: 5.2.1
       esbuild:
-        specifier: ^0.24.0
+        specifier: ^0.24.2
         version: 0.24.2
       fast-glob:
         specifier: ^3.3.2
@@ -236,10 +236,10 @@ importers:
         specifier: ^6.9.17
         version: 6.14.0
       '@vercel/edge':
-        specifier: ^1.1.2
+        specifier: ^1.2.2
         version: 1.2.2
       '@vercel/node':
-        specifier: ^3.2.24
+        specifier: ^3.2.29
         version: 3.2.29(@swc/core@1.11.29)
       tsup:
         specifier: ^8.3.5
@@ -1141,13 +1141,16 @@ packages:
   '@vercel/edge-config-fs@0.1.0':
     resolution: {integrity: sha512-NRIBwfcS0bUoUbRWlNGetqjvLSwgYH/BqKqDN7vK1g32p7dN96k0712COgaz6VFizAm9b0g6IG6hR6+hc0KCPg==}
 
-  '@vercel/edge-config@1.4.0':
-    resolution: {integrity: sha512-69Wg5gw9DzwnyUmnjToSeLRm1nm8mCPgN0kflX8EHRHyqvzH80wPem5A8rI2LXPb2Y9tJNoqN3vXPcQhS2Wh5g==}
+  '@vercel/edge-config@1.4.3':
+    resolution: {integrity: sha512-8vTDATodRrH49wMzKEjZ8/5H2qs1aPkD0uRK585f/Fx4YN2wfHfY/3td9OFrh+gdnCq07z8A5f0hoY6xhBcPkg==}
     engines: {node: '>=14.6'}
     peerDependencies:
       '@opentelemetry/api': ^1.7.0
+      next: '>=1'
     peerDependenciesMeta:
       '@opentelemetry/api':
+        optional: true
+      next:
         optional: true
 
   '@vercel/edge@1.2.2':
@@ -1173,8 +1176,8 @@ packages:
     resolution: {integrity: sha512-e4kQK9mP8ntpo3dACWirGod/hHv4qO5JMj9a/0a2AZto7b4persj5YP7t1Er372gTtYFTYxNhMx34jRvHooglw==}
     engines: {node: '>=16'}
 
-  '@vercel/routing-utils@3.1.0':
-    resolution: {integrity: sha512-Ci5xTjVTJY/JLZXpCXpLehMft97i9fH34nu9PGav6DtwkVUF6TOPX86U0W0niQjMZ5n6/ZP0BwcJK2LOozKaGw==}
+  '@vercel/routing-utils@5.2.1':
+    resolution: {integrity: sha512-8xn8U7V4aFzBJSzJQ5fEV90Z9wmlW8USVeGOPNNPJ8p57yapEc6VmTUelZOPkCHcCACshyfSTU1KYgch1RPMqw==}
 
   '@vercel/static-config@3.0.0':
     resolution: {integrity: sha512-2qtvcBJ1bGY0dYGYh3iM7yGKkk971FujLEDXzuW5wcZsPr1GSEjO/w2iSr3qve6nDDtBImsGoDEnus5FI4+fIw==}
@@ -2807,6 +2810,7 @@ packages:
   source-map@0.8.0-beta.0:
     resolution: {integrity: sha512-2ymg6oRBpebeZi9UUNsgQ89bhx01TcTkmNTGnNO88imTmbSgy4nfujrgVEFKWpMTEGA11EDkTt7mqObTPdigIA==}
     engines: {node: '>= 8'}
+    deprecated: The work that was done in this beta branch won't be included in future versions
 
   space-separated-tokens@2.0.2:
     resolution: {integrity: sha512-PEGlAwrG8yXGXRjW32fGbg66JAlOAwbObuqVoJpv/mRgoWDQfgH1wDPvtzWyUSNAXBGSk8h755YDbbcEy3SH2Q==}
@@ -4032,7 +4036,7 @@ snapshots:
 
   '@vercel/edge-config-fs@0.1.0': {}
 
-  '@vercel/edge-config@1.4.0':
+  '@vercel/edge-config@1.4.3':
     dependencies:
       '@vercel/edge-config-fs': 0.1.0
 
@@ -4111,9 +4115,10 @@ snapshots:
       satori: 0.12.2
       yoga-wasm-web: 0.3.3
 
-  '@vercel/routing-utils@3.1.0':
+  '@vercel/routing-utils@5.2.1':
     dependencies:
       path-to-regexp: 6.3.0
+      path-to-regexp-updated: path-to-regexp@6.3.0
     optionalDependencies:
       ajv: 6.12.6
 
