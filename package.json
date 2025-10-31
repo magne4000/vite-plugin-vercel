@@ -30,7 +30,8 @@
       "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0"
     },
     "onlyBuiltDependencies": [
-      "esbuild"
+      "esbuild",
+      "playwright-chromium"
     ]
   },
   "packageManager": "pnpm@10.15.1"
