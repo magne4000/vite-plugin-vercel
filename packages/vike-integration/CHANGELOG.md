@@ -1,5 +1,11 @@
 # @vite-plugin-vercel/vike
 
+## 9.0.7
+
+### Patch Changes
+
+- feat: adding support for node@24
+
 ## 9.0.6
 
 ### MINOR BREAKING CHANGES
