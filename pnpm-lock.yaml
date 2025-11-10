@@ -12,8 +12,8 @@ importers:
   .:
     devDependencies:
       '@biomejs/biome':
-        specifier: ^2.3.2
-        version: 2.3.2
+        specifier: ^2.3.4
+        version: 2.3.4
       '@brillout/test-e2e':
         specifier: ^0.6.19
         version: 0.6.19
@@ -37,7 +37,7 @@ importers:
     dependencies:
       '@photonjs/hono':
         specifier: ^0.1.4
-        version: 0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
+        version: 0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
       vite-plugin-vercel:
         specifier: workspace:*
         version: link:../../packages/vite-plugin-vercel
@@ -56,7 +56,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.1.12
-        version: 7.1.12(@types/node@20.19.16)
+        version: 7.2.2(@types/node@20.19.16)
 
   examples/simple:
     dependencies:
@@ -78,7 +78,7 @@ importers:
         version: 5.9.3
       vite:
         specifier: ^7.1.12
-        version: 7.1.12(@types/node@20.19.16)
+        version: 7.2.2(@types/node@20.19.16)
 
   packages/schemas:
     dependencies:
@@ -100,13 +100,13 @@ importers:
     dependencies:
       '@photonjs/core':
         specifier: ^0.1.5
-        version: 0.1.5(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
+        version: 0.1.5(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
       '@photonjs/runtime':
         specifier: ^0.1.4
-        version: 0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
+        version: 0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
       '@photonjs/vercel':
         specifier: ^0.1.5
-        version: 0.1.5(@photonjs/core@0.1.5(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16)))(@photonjs/runtime@0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16)))(hono@4.10.3)(rollup@4.50.2)(vite@7.1.12(@types/node@20.19.16))
+        version: 0.1.5(@photonjs/core@0.1.5(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16)))(@photonjs/runtime@0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16)))(hono@4.10.3)(rollup@4.50.2)(vite@7.2.2(@types/node@20.19.16))
     devDependencies:
       tsup:
         specifier: ^8.5.0
@@ -115,8 +115,8 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite:
-        specifier: ^7.1.12
-        version: 7.1.12(@types/node@20.19.16)
+        specifier: ^7.2.2
+        version: 7.2.2(@types/node@20.19.16)
 
 packages:
 
@@ -141,55 +141,55 @@ packages:
     resolution: {integrity: sha512-bkFqkLhh3pMBUQQkpVgWDWq/lqzc2678eUyDlTBhRqhCHFguYYGM0Efga7tYk4TogG/3x0EEl66/OQ+WGbWB/Q==}
     engines: {node: '>=6.9.0'}
 
-  '@biomejs/biome@2.3.2':
-    resolution: {integrity: sha512-8e9tzamuDycx7fdrcJ/F/GDZ8SYukc5ud6tDicjjFqURKYFSWMl0H0iXNXZEGmcmNUmABgGuHThPykcM41INgg==}
+  '@biomejs/biome@2.3.4':
+    resolution: {integrity: sha512-TU08LXjBHdy0mEY9APtEtZdNQQijXUDSXR7IK1i45wgoPD5R0muK7s61QcFir6FpOj/RP1+YkPx5QJlycXUU3w==}
     engines: {node: '>=14.21.3'}
     hasBin: true
 
-  '@biomejs/cli-darwin-arm64@2.3.2':
-    resolution: {integrity: sha512-4LECm4kc3If0JISai4c3KWQzukoUdpxy4fRzlrPcrdMSRFksR9ZoXK7JBcPuLBmd2SoT4/d7CQS33VnZpgBjew==}
+  '@biomejs/cli-darwin-arm64@2.3.4':
+    resolution: {integrity: sha512-w40GvlNzLaqmuWYiDU6Ys9FNhJiclngKqcGld3iJIiy2bpJ0Q+8n3haiaC81uTPY/NA0d8Q/I3Z9+ajc14102Q==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [darwin]
 
-  '@biomejs/cli-darwin-x64@2.3.2':
-    resolution: {integrity: sha512-jNMnfwHT4N3wi+ypRfMTjLGnDmKYGzxVr1EYAPBcauRcDnICFXN81wD6wxJcSUrLynoyyYCdfW6vJHS/IAoTDA==}
+  '@biomejs/cli-darwin-x64@2.3.4':
+    resolution: {integrity: sha512-3s7TLVtjJ7ni1xADXsS7x7GMUrLBZXg8SemXc3T0XLslzvqKj/dq1xGeBQ+pOWQzng9MaozfacIHdK2UlJ3jGA==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [darwin]
 
-  '@biomejs/cli-linux-arm64-musl@2.3.2':
-    resolution: {integrity: sha512-2Zz4usDG1GTTPQnliIeNx6eVGGP2ry5vE/v39nT73a3cKN6t5H5XxjcEoZZh62uVZvED7hXXikclvI64vZkYqw==}
+  '@biomejs/cli-linux-arm64-musl@2.3.4':
+    resolution: {integrity: sha512-IruVGQRwMURivWazchiq7gKAqZSFs5so6gi0hJyxk7x6HR+iwZbO2IxNOqyLURBvL06qkIHs7Wffl6Bw30vCbQ==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-arm64@2.3.2':
-    resolution: {integrity: sha512-amnqvk+gWybbQleRRq8TMe0rIv7GHss8mFJEaGuEZYWg1Tw14YKOkeo8h6pf1c+d3qR+JU4iT9KXnBKGON4klw==}
+  '@biomejs/cli-linux-arm64@2.3.4':
+    resolution: {integrity: sha512-y7efHyyM2gYmHy/AdWEip+VgTMe9973aP7XYKPzu/j8JxnPHuSUXftzmPhkVw0lfm4ECGbdBdGD6+rLmTgNZaA==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64-musl@2.3.2':
-    resolution: {integrity: sha512-gzB19MpRdTuOuLtPpFBGrV3Lq424gHyq2lFj8wfX9tvLMLdmA/R9C7k/mqBp/spcbWuHeIEKgEs3RviOPcWGBA==}
+  '@biomejs/cli-linux-x64-musl@2.3.4':
+    resolution: {integrity: sha512-mzKFFv/w66e4/jCobFmD3kymCqG+FuWE7sVa4Yjqd9v7qt2UhXo67MSZKY9Ih18V2IwPzRKQPCw6KwdZs6AXSA==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-linux-x64@2.3.2':
-    resolution: {integrity: sha512-8BG/vRAhFz1pmuyd24FQPhNeueLqPtwvZk6yblABY2gzL2H8fLQAF/Z2OPIc+BPIVPld+8cSiKY/KFh6k81xfA==}
+  '@biomejs/cli-linux-x64@2.3.4':
+    resolution: {integrity: sha512-gKfjWR/6/dfIxPJCw8REdEowiXCkIpl9jycpNVHux8aX2yhWPLjydOshkDL6Y/82PcQJHn95VCj7J+BRcE5o1Q==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [linux]
 
-  '@biomejs/cli-win32-arm64@2.3.2':
-    resolution: {integrity: sha512-lCruqQlfWjhMlOdyf5pDHOxoNm4WoyY2vZ4YN33/nuZBRstVDuqPPjS0yBkbUlLEte11FbpW+wWSlfnZfSIZvg==}
+  '@biomejs/cli-win32-arm64@2.3.4':
+    resolution: {integrity: sha512-5TJ6JfVez+yyupJ/iGUici2wzKf0RrSAxJhghQXtAEsc67OIpdwSKAQboemILrwKfHDi5s6mu7mX+VTCTUydkw==}
     engines: {node: '>=14.21.3'}
     cpu: [arm64]
     os: [win32]
 
-  '@biomejs/cli-win32-x64@2.3.2':
-    resolution: {integrity: sha512-6Ee9P26DTb4D8sN9nXxgbi9Dw5vSOfH98M7UlmkjKB2vtUbrRqCbZiNfryGiwnPIpd6YUoTl7rLVD2/x1CyEHQ==}
+  '@biomejs/cli-win32-x64@2.3.4':
+    resolution: {integrity: sha512-FGCijXecmC4IedQ0esdYNlMpx0Jxgf4zceCaMu6fkjWyjgn50ZQtMiqZZQ0Q/77yqPxvtkgZAvt5uGw0gAAjig==}
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
@@ -2022,8 +2022,8 @@ packages:
     peerDependencies:
       vite: ^2 || ^3 || ^4 || ^5 || ^6 || ^7
 
-  vite@7.1.12:
-    resolution: {integrity: sha512-ZWyE8YXEXqJrrSLvYgrRP7p62OziLW7xI5HYGWFzOvupfAlrLvURSzv/FyGyy0eidogEM3ujU+kUG1zuHgb6Ug==}
+  vite@7.2.2:
+    resolution: {integrity: sha512-BxAKBWmIbrDgrokdGZH1IgkIk/5mMHDreLDmCJ0qpyJaAteP8NvMhkwr/ZCQNqNH97bw/dANTE9PDzqwJghfMQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -2115,39 +2115,39 @@ snapshots:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.27.1
 
-  '@biomejs/biome@2.3.2':
+  '@biomejs/biome@2.3.4':
     optionalDependencies:
-      '@biomejs/cli-darwin-arm64': 2.3.2
-      '@biomejs/cli-darwin-x64': 2.3.2
-      '@biomejs/cli-linux-arm64': 2.3.2
-      '@biomejs/cli-linux-arm64-musl': 2.3.2
-      '@biomejs/cli-linux-x64': 2.3.2
-      '@biomejs/cli-linux-x64-musl': 2.3.2
-      '@biomejs/cli-win32-arm64': 2.3.2
-      '@biomejs/cli-win32-x64': 2.3.2
+      '@biomejs/cli-darwin-arm64': 2.3.4
+      '@biomejs/cli-darwin-x64': 2.3.4
+      '@biomejs/cli-linux-arm64': 2.3.4
+      '@biomejs/cli-linux-arm64-musl': 2.3.4
+      '@biomejs/cli-linux-x64': 2.3.4
+      '@biomejs/cli-linux-x64-musl': 2.3.4
+      '@biomejs/cli-win32-arm64': 2.3.4
+      '@biomejs/cli-win32-x64': 2.3.4
 
-  '@biomejs/cli-darwin-arm64@2.3.2':
+  '@biomejs/cli-darwin-arm64@2.3.4':
     optional: true
 
-  '@biomejs/cli-darwin-x64@2.3.2':
+  '@biomejs/cli-darwin-x64@2.3.4':
     optional: true
 
-  '@biomejs/cli-linux-arm64-musl@2.3.2':
+  '@biomejs/cli-linux-arm64-musl@2.3.4':
     optional: true
 
-  '@biomejs/cli-linux-arm64@2.3.2':
+  '@biomejs/cli-linux-arm64@2.3.4':
     optional: true
 
-  '@biomejs/cli-linux-x64-musl@2.3.2':
+  '@biomejs/cli-linux-x64-musl@2.3.4':
     optional: true
 
-  '@biomejs/cli-linux-x64@2.3.2':
+  '@biomejs/cli-linux-x64@2.3.4':
     optional: true
 
-  '@biomejs/cli-win32-arm64@2.3.2':
+  '@biomejs/cli-win32-arm64@2.3.4':
     optional: true
 
-  '@biomejs/cli-win32-x64@2.3.2':
+  '@biomejs/cli-win32-x64@2.3.4':
     optional: true
 
   '@brillout/import@0.2.6': {}
@@ -2580,7 +2580,7 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.19.1
 
-  '@photonjs/core@0.1.5(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))':
+  '@photonjs/core@0.1.5(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))':
     dependencies:
       '@brillout/vite-plugin-server-entry': 0.7.15
       '@universal-middleware/cloudflare': 0.4.10(hono@4.10.3)
@@ -2592,7 +2592,7 @@ snapshots:
       ts-deepmerge: 7.0.3
       zod: 4.1.12
     optionalDependencies:
-      vite: 7.1.12(@types/node@20.19.16)
+      vite: 7.2.2(@types/node@20.19.16)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -2603,12 +2603,12 @@ snapshots:
       - hono
       - srvx
 
-  '@photonjs/hono@0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))':
+  '@photonjs/hono@0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))':
     dependencies:
-      '@photonjs/core': 0.1.5(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
+      '@photonjs/core': 0.1.5(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
       '@universal-middleware/hono': 0.4.17(hono@4.10.3)
     optionalDependencies:
-      vite: 7.1.12(@types/node@20.19.16)
+      vite: 7.2.2(@types/node@20.19.16)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -2619,12 +2619,12 @@ snapshots:
       - hono
       - srvx
 
-  '@photonjs/runtime@0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))':
+  '@photonjs/runtime@0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))':
     dependencies:
-      '@photonjs/core': 0.1.5(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
-      '@photonjs/srvx': 0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
+      '@photonjs/core': 0.1.5(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
+      '@photonjs/srvx': 0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
     optionalDependencies:
-      vite: 7.1.12(@types/node@20.19.16)
+      vite: 7.2.2(@types/node@20.19.16)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -2635,12 +2635,12 @@ snapshots:
       - hono
       - srvx
 
-  '@photonjs/srvx@0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))':
+  '@photonjs/srvx@0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))':
     dependencies:
-      '@photonjs/core': 0.1.5(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
+      '@photonjs/core': 0.1.5(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
       '@universal-middleware/srvx': 0.1.1(hono@4.10.3)
     optionalDependencies:
-      vite: 7.1.12(@types/node@20.19.16)
+      vite: 7.2.2(@types/node@20.19.16)
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -2651,12 +2651,12 @@ snapshots:
       - hono
       - srvx
 
-  '@photonjs/vercel@0.1.5(@photonjs/core@0.1.5(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16)))(@photonjs/runtime@0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16)))(hono@4.10.3)(rollup@4.50.2)(vite@7.1.12(@types/node@20.19.16))':
+  '@photonjs/vercel@0.1.5(@photonjs/core@0.1.5(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16)))(@photonjs/runtime@0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16)))(hono@4.10.3)(rollup@4.50.2)(vite@7.2.2(@types/node@20.19.16))':
     dependencies:
       '@brillout/libassert': 0.5.8
       '@manypkg/find-root': 3.1.0
-      '@photonjs/core': 0.1.5(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
-      '@photonjs/runtime': 0.1.4(hono@4.10.3)(vite@7.1.12(@types/node@20.19.16))
+      '@photonjs/core': 0.1.5(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
+      '@photonjs/runtime': 0.1.4(hono@4.10.3)(vite@7.2.2(@types/node@20.19.16))
       '@universal-middleware/core': 0.4.12(hono@4.10.3)
       '@universal-middleware/vercel': 0.4.25(hono@4.10.3)
       '@vercel/build-utils': 12.2.1
@@ -2669,8 +2669,8 @@ snapshots:
       magicast: 0.3.5
       path-to-regexp: 8.3.0
       strip-ansi: 7.1.2
-      vite: 7.1.12(@types/node@20.19.16)
-      vite-plugin-wasm: 3.5.0(vite@7.1.12(@types/node@20.19.16))
+      vite: 7.2.2(@types/node@20.19.16)
+      vite-plugin-wasm: 3.5.0(vite@7.2.2(@types/node@20.19.16))
     transitivePeerDependencies:
       - '@cloudflare/workers-types'
       - '@hattip/core'
@@ -3912,11 +3912,11 @@ snapshots:
 
   v8-compile-cache-lib@3.0.1: {}
 
-  vite-plugin-wasm@3.5.0(vite@7.1.12(@types/node@20.19.16)):
+  vite-plugin-wasm@3.5.0(vite@7.2.2(@types/node@20.19.16)):
     dependencies:
-      vite: 7.1.12(@types/node@20.19.16)
+      vite: 7.2.2(@types/node@20.19.16)
 
-  vite@7.1.12(@types/node@20.19.16):
+  vite@7.2.2(@types/node@20.19.16):
     dependencies:
       esbuild: 0.25.11
       fdir: 6.5.0(picomatch@4.0.3)
