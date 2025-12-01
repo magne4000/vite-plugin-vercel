@@ -256,4 +256,4 @@ export default defineConfig({
 
 ## Demo
 
-https://test-vite-vercel-plugin.vercel.app/
+https://vike-photon-demo.vercel.app/
