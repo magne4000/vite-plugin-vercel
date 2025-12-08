@@ -32,19 +32,19 @@
   },
   "devDependencies": {
     "@types/node": "^18.19.54",
-    "@types/qs": "^6.9.17",
+    "@types/qs": "^6.14.0",
     "@vercel/edge": "^1.2.2",
     "@vercel/node": "^3.2.29",
-    "tsup": "^8.3.5",
-    "typescript": "^5.6.3",
-    "vike": "^0.4.229",
-    "vite": "^6.3.5",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vike": "^0.4.247",
+    "vite": "^6.4.1",
     "vite-plugin-vercel": "workspace:*"
   },
   "dependencies": {
     "@brillout/libassert": "^0.5.8",
-    "nanoid": "^5.0.8",
-    "qs": "^6.13.1"
+    "nanoid": "^5.1.6",
+    "qs": "^6.14.0"
   },
   "peerDependencies": {
     "vike": "^0.4.229",
