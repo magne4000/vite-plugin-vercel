@@ -1,5 +1,16 @@
 # vite-plugin-vercel
 
+## 9.1.0
+
+### Minor Changes
+
+- fix: upgrade dependencies. Dropping support for node@18
+
+### Patch Changes
+
+- Updated dependencies
+  - @vite-plugin-vercel/vike@9.1.0
+
 ## 9.0.8
 
 ### Patch Changes
