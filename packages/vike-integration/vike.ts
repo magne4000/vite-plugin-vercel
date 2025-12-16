@@ -1,6 +1,10 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+// @ts-ignore
+import { newError } from "@brillout/libassert";
+import { nanoid } from "nanoid";
+import { getPagesAndRoutes, type PageFile, type PageRoutes, route } from "vike/__internal";
 import { prerender as prerenderCli } from "vike/api";
 import { getVikeConfig } from "vike/plugin";
 import type { PageContextServer } from "vike/types";
@@ -11,13 +15,7 @@ import type {
   ViteVercelConfig,
   ViteVercelPrerenderFn,
   ViteVercelPrerenderRoute,
-} from "vite-plugin-vercel";
-// TODO/next-major-release: remove this and require >=vike@0.4.219
-import "vike/__internal/setup";
-// @ts-ignore
-import { newError } from "@brillout/libassert";
-import { nanoid } from "nanoid";
-import { getPagesAndRoutes, type PageFile, type PageRoutes, route } from "vike/__internal";
+} from "vite-plugin-vercel"; // @ts-ignore
 import { getParametrizedRoute } from "./route-regex";
 
 declare module "vite" {
@@ -184,7 +182,7 @@ function getRouteMatch(myroute: Awaited<ReturnType<typeof route>>): unknown {
     routeMatch = (myroute.pageContextAddendum._routeMatches as unknown[])?.[0];
   } else if ("_debugRouteMatches" in myroute.pageContextAddendum) {
     // Between 0.4.145 and 0.4.157 (still in place but prefer using _routeMatch)
-    routeMatch = myroute.pageContextAddendum._debugRouteMatches?.[0];
+    routeMatch = (myroute.pageContextAddendum._debugRouteMatches as unknown[])?.[0];
   }
 
   return routeMatch;
@@ -339,9 +337,6 @@ export function vikeVercelPlugin(options: Options = {}): Plugin {
     name: libName,
     apply: "build",
     async config(userConfig): Promise<UserConfig> {
-      // wait for vike second build step with `ssr` flag
-      if (!userConfig.build?.ssr) return {};
-
       const getSsrEndpointIfNotPresent = async (endpoints: ViteVercelApiEntry[]): Promise<ViteVercelApiEntry[]> => {
         return endpoints.flatMap((e) => e.destination).some((d) => d === rendererDestination)
           ? // vite deep merges config
