@@ -19,7 +19,7 @@ prepareTestJsonFilesContent(
       expect(context.file).toStrictEqual({
         handler: "index.mjs",
         launcherType: "Nodejs",
-        runtime: "nodejs22.x",
+        runtime: "nodejs24.x",
         shouldAddHelpers: true,
         supportsResponseStreaming: true,
       });
