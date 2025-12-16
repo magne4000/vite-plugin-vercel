@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 9.1.1
+
+### Patch Changes
+
+- fix: support recent node versions
+
 ## 9.1.0
 
 ### Minor Changes
