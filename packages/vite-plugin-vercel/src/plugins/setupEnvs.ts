@@ -1,11 +1,9 @@
 import { cp } from "node:fs/promises";
 import path from "node:path";
-import stripAnsi from "strip-ansi";
 import {
   BuildEnvironment,
   type EnvironmentOptions,
   type Plugin,
-  createLogger,
   createRunnableDevEnvironment,
   mergeConfig,
 } from "vite";
@@ -44,7 +42,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
         const outDirOverride: EnvironmentOptions = pluginConfig.outDir
           ? {
               build: {
-                outDir: path.posix.join(pluginConfig.outDir, "_tmp"),
+                outDir: pluginConfig.outDir,
               },
             }
           : {};
@@ -65,7 +63,6 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
               consumer: "client",
             },
           },
-          customLogger: createVercelLogger(),
           // Required for environments to be taken into account
           builder: {},
         };
@@ -180,40 +177,6 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
   ];
 }
 
-function createVercelLogger() {
-  const logger = createLogger();
-  const loggerInfo = logger.info;
-
-  logger.info = (msg, options) => {
-    if (
-      options?.environment &&
-      (msg.includes("building for production") || msg.includes("building SSR bundle for production"))
-    ) {
-      return loggerInfo(`${msg} ${options.environment}`, options);
-    }
-    if (msg.includes(".vercel/output/_tmp")) {
-      const strippedMsg = stripAnsi(msg);
-      if (
-        strippedMsg.includes(".vercel/output/_tmp/assets") ||
-        strippedMsg.includes(".vercel/output/_tmp/chunks") ||
-        strippedMsg.includes(".vercel/output/_tmp/entries")
-      )
-        return;
-      if (
-        !strippedMsg.includes(".vercel/output/_tmp/functions/") &&
-        !strippedMsg.includes(".vercel/output/_tmp/config.json")
-      ) {
-        return;
-      }
-      return loggerInfo(msg.replace(".vercel/output/_tmp/", ".vercel/output/"), options);
-    }
-
-    loggerInfo(msg, options);
-  };
-
-  return logger;
-}
-
 function createVercelEnvironmentOptions(overrides?: EnvironmentOptions): EnvironmentOptions {
   return mergeConfig(
     {
@@ -226,7 +189,7 @@ function createVercelEnvironmentOptions(overrides?: EnvironmentOptions): Environ
         createEnvironment(name, config) {
           return new BuildEnvironment(name, config);
         },
-        outDir: path.posix.join(outDir, "_tmp"),
+        outDir,
         copyPublicDir: false,
         rollupOptions: {
           input: getDummyInput(),
