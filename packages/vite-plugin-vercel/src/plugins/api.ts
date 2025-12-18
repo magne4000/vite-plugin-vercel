@@ -1,0 +1,55 @@
+import type { EntryMeta } from "@universal-deploy/store";
+import type { Plugin } from "vite";
+import { type ViteVercelOutFile, createAPI } from "../api";
+import type { ViteVercelConfig } from "../types.js";
+import { dedupeRoutes } from "../utils/dedupeRoutes";
+import { photonEntryDestination } from "../utils/destination.js";
+
+export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
+  const outfiles: ViteVercelOutFile[] = [];
+
+  return {
+    name: "vite-plugin-vercel:api",
+
+    api() {
+      return createAPI(outfiles, pluginConfig);
+    },
+
+    applyToEnvironment({ name }) {
+      return name === "vercel_edge" || name === "vercel_node";
+    },
+
+    // Compute outfiles for the API
+    writeBundle(_opts, bundle) {
+      const entryMapByDestination = new Map<string, EntryMeta>(
+        dedupeRoutes().map((e) => [photonEntryDestination(e, ".func/index"), e]),
+      );
+
+      for (const [key, value] of Object.entries(bundle)) {
+        if (value.type === "chunk" && entryMapByDestination.has(removeExtension(key))) {
+          outfiles.push({
+            type: "chunk",
+            root: this.environment.config.root,
+            outdir: this.environment.config.build.outDir,
+            filepath: key,
+            // biome-ignore lint/style/noNonNullAssertion: guarded by entryMap.has(...)
+            relatedEntry: entryMapByDestination.get(removeExtension(key))!,
+          });
+        } else if ((value.type === "asset" && key.startsWith("functions/")) || key === "config.json") {
+          outfiles.push({
+            type: "asset",
+            root: this.environment.config.root,
+            outdir: this.environment.config.build.outDir,
+            filepath: key,
+          });
+        }
+      }
+    },
+
+    sharedDuringBuild: true,
+  };
+}
+
+function removeExtension(subject: string) {
+  return subject.replace(/\.[^/.]+$/, "");
+}

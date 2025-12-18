@@ -16,6 +16,16 @@
     "enabled": true,
     "clientKind": "git"
   },
+  "linter": {
+    "rules": {
+      "correctness": {
+        "noUnusedImports": {
+          "level": "error",
+          "fix": "safe"
+        }
+      }
+    }
+  },
   "overrides": [
     {
       "include": ["**/*.test.ts"],
