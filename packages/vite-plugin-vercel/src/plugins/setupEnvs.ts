@@ -1,11 +1,12 @@
 import { cp } from "node:fs/promises";
 import path from "node:path";
+import { store } from "@universal-deploy/store";
 import {
   BuildEnvironment,
-  type EnvironmentOptions,
-  type Plugin,
   createRunnableDevEnvironment,
+  type EnvironmentOptions,
   mergeConfig,
+  type Plugin,
 } from "vite";
 import { getConfig } from "../config.js";
 import type { ViteVercelConfig } from "../types.js";
@@ -16,6 +17,7 @@ import { edgeExternal } from "../utils/external.js";
 const outDir = path.posix.join(process.cwd(), ".vercel/output");
 const DUMMY = "__DUMMY__";
 
+let injected = false;
 export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
   return [
     {
@@ -39,6 +41,13 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
       },
 
       config() {
+        if (!injected) {
+          injected = true;
+          if (pluginConfig.entries) {
+            store.entries.push(...pluginConfig.entries);
+          }
+        }
+
         const outDirOverride: EnvironmentOptions = pluginConfig.outDir
           ? {
               build: {
@@ -163,11 +172,17 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
           const topLevelConfig = this.environment.getTopLevelConfig();
           const clientEnv = topLevelConfig.environments.client;
           if (clientEnv) {
-            await cp(path.join(topLevelConfig.root, clientEnv.build.outDir), this.environment.config.build.outDir, {
-              recursive: true,
-              force: true,
-              dereference: true,
-            });
+            try {
+              await cp(path.join(topLevelConfig.root, clientEnv.build.outDir), this.environment.config.build.outDir, {
+                recursive: true,
+                force: true,
+                dereference: true,
+              });
+            } catch (e) {
+              if (e instanceof Error && e.message.includes("ENOENT")) {
+                // ignore
+              } else throw e;
+            }
           }
         },
       },

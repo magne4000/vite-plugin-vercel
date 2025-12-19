@@ -10,9 +10,6 @@
   "exports": {
     ".": "./dist/index.js",
     "./vite": "./dist/vite.js",
-    "./universal-middleware": "./dist/universal-middleware-prod.js",
-    "./universal-middleware/dev": "./dist/universal-middleware-dev.js",
-    "./utils": "./dist/utils.js",
     "./api": "./dist/api.js",
     "./types": {
       "types": "./dist/types.d.ts"

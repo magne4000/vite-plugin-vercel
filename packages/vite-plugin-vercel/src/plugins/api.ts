@@ -1,9 +1,10 @@
 import type { EntryMeta } from "@universal-deploy/store";
 import type { Plugin } from "vite";
-import { type ViteVercelOutFile, createAPI } from "../api";
+import { createAPI, type ViteVercelOutFile } from "../api";
 import type { ViteVercelConfig } from "../types.js";
 import { dedupeRoutes } from "../utils/dedupeRoutes";
-import { photonEntryDestination } from "../utils/destination.js";
+import { entryDestination } from "../utils/destination.js";
+import { removeExtension } from "../utils/extension";
 
 export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
   const outfiles: ViteVercelOutFile[] = [];
@@ -21,8 +22,9 @@ export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
     // Compute outfiles for the API
     writeBundle(_opts, bundle) {
+      const root = this.environment.config.root ?? process.cwd();
       const entryMapByDestination = new Map<string, EntryMeta>(
-        dedupeRoutes().map((e) => [photonEntryDestination(e, ".func/index"), e]),
+        dedupeRoutes().map((e) => [entryDestination(root, e, ".func/index"), e]),
       );
 
       for (const [key, value] of Object.entries(bundle)) {
@@ -48,8 +50,4 @@ export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
 
     sharedDuringBuild: true,
   };
-}
-
-function removeExtension(subject: string) {
-  return subject.replace(/\.[^/.]+$/, "");
 }

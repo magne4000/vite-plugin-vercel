@@ -1,16 +1,12 @@
 {
   "name": "vite-plugin-vercel-workspace-root",
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@10.24.0",
   "private": "true",
   "type": "module",
   "scripts": {
-    "dev:all": "pnpm -r --filter \"./packages/*\" --parallel dev",
-    "dev:demo": "pnpm -r --filter \"./examples/demo\" --parallel dev",
-    "vercel-build": "pnpm run build:all",
-    "build:all": "pnpm -r --filter \"./packages/vercel\" build && pnpm -r --filter \"./packages/vike-integration\" build && pnpm -r --filter \"./examples/*\" build",
-    "build:demo": "pnpm run build:all && cp -rf examples/demo/public examples/demo/.vercel .",
-    "typecheck:all": "pnpm -r typecheck",
-    "test": "pnpm run build:all && pnpm run -r test",
+    "dev": "pnpm run -C ./packages/vercel dev",
+    "build": "pnpm --recursive run build",
+    "test:e2e": "test-e2e",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "prepublishOnly": "pnpm run test && changeset version",
@@ -18,10 +14,10 @@
     "publish:stable": "pnpm run prepublishOnly && changeset publish -r"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.9.4",
-    "@changesets/cli": "^2.29.8",
-    "@types/node": "^18.19.130",
-    "cross-env": "^7.0.3",
+    "@biomejs/biome": "^2.3.6",
+    "@brillout/test-e2e": "^0.6.19",
+    "@changesets/cli": "^2.29.7",
+    "playwright": "^1.56.1",
     "typescript": "^5.9.3"
   },
   "pnpm": {

@@ -16,7 +16,7 @@ export function wasmPlugin(): Plugin {
 
     resolveId: {
       filter: {
-        id: /\.wasm\?module$/
+        id: /\.wasm\?module$/,
       },
       order: "pre",
       async handler(id) {

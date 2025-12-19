@@ -1,5 +1,6 @@
 import { type EntryMeta, store } from "@universal-deploy/store";
 
+// FIXME unit test this
 /**
  * When multiple entries point to the same module, we can deploy them as a single function.
  * Create a separate function only when specific configuration is provided (`isr`, `headers`, `edge` or `streaming`).
@@ -9,7 +10,9 @@ export function dedupeRoutes(): EntryMeta[] {
 
   const entriesGroupedByModuleId = groupBy(store.entries, (e) => e.id);
   for (const entries of entriesGroupedByModuleId.values()) {
-    const groupedEntry = structuredClone(entries[0]);
+    // biome-ignore lint/style/noNonNullAssertion: contains at least one element
+    const first = entries.shift()!;
+    const groupedEntry = structuredClone(first);
     if (!Array.isArray(groupedEntry.pattern)) {
       groupedEntry.pattern = [groupedEntry.pattern];
     }

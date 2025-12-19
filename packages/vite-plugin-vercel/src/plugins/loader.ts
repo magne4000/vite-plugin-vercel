@@ -7,12 +7,13 @@ import { getVcConfig } from "../build.js";
 
 import type { ViteVercelConfig } from "../types.js";
 import { dedupeRoutes } from "../utils/dedupeRoutes";
-import { photonEntryDestination, photonEntryDestinationDefault } from "../utils/destination.js";
+import { entryDestination, entryDestinationDefault } from "../utils/destination.js";
 
 const DUMMY = "__DUMMY__";
 const re_DUMMY = new RegExp(`${DUMMY}$`);
 
 export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
+  let root: string | undefined;
   return [
     {
       name: "vite-plugin-vercel:dummy",
@@ -44,35 +45,47 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
       apply: "build",
 
       applyToEnvironment(env) {
-        return env.name === "vercel_node" || env.name === "vercel_edge" || env.name === "vercel_client";
+        return env.name === "vercel_node" || env.name === "vercel_edge";
       },
 
-      configEnvironment(name) {
-        const isEdge = name === "vercel_edge";
-        if (name === "vercel_node" || isEdge) {
-          const entries = dedupeRoutes().filter((e) => (e.vercel?.edge ?? false) === isEdge);
+      config: {
+        order: "post",
+        handler(config) {
+          root = config.root;
+        },
+      },
 
-          return {
-            build: {
-              rollupOptions: {
-                input: Object.fromEntries(entries.map((e) => [photonEntryDestination(e, ".func/index"), e.id])),
+      configEnvironment: {
+        order: "post",
+        handler(name) {
+          const isEdge = name === "vercel_edge";
+          if (name === "vercel_node" || isEdge) {
+            const entries = dedupeRoutes().filter((e) => (e.vercel?.edge ?? false) === isEdge);
+            return {
+              build: {
+                rollupOptions: {
+                  input: Object.fromEntries(
+                    entries.map((e) => [entryDestination(root ?? process.cwd(), e, ".func/index"), e.id]),
+                  ),
+                },
               },
-            },
-          };
-        }
+            };
+          }
+        },
       },
 
       async buildStart() {
+        const isEdge = this.environment.name === "vercel_edge";
         const nodeVersion = await getNodeVersion(process.cwd());
         const entries = dedupeRoutes();
 
-        for (const entry of entries) {
+        for (const entry of entries.filter((e) => (e.vercel?.edge ?? false) === isEdge)) {
           const isEdge = this.environment.name === "vercel_edge";
 
           // Generate .vc-config.json
           this.emitFile({
             type: "asset",
-            fileName: photonEntryDestination(entry, ".func/.vc-config.json"),
+            fileName: entryDestination(root ?? process.cwd(), entry, ".func/.vc-config.json"),
             source: JSON.stringify(
               // Unpredictable things happen when the extension is .mjs on edge
               getVcConfig(pluginConfig, isEdge ? "index.js" : "index.mjs", {
@@ -89,7 +102,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
           if (entry.vercel?.isr) {
             this.emitFile({
               type: "asset",
-              fileName: photonEntryDestination(entry, ".prerender-config.json"),
+              fileName: entryDestination(root ?? process.cwd(), entry, ".prerender-config.json"),
               source: JSON.stringify(vercelOutputPrerenderConfigSchema.parse(entry.vercel.isr), undefined, 2),
             });
           }
@@ -104,7 +117,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
             pluginConfig.rewrites.push({
               enforce: entry.vercel?.enforce,
               source,
-              destination: `/${photonEntryDestinationDefault(entry)}`,
+              destination: `/${entryDestinationDefault(root ?? process.cwd(), entry)}`,
             });
 
             // Generate headers

@@ -14,7 +14,8 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginInterop[] {
     ...setupEnvs(pluginConfig),
     wasmPlugin(),
     ...loaderPlugin(pluginConfig),
-    ...bundlePlugin(),
+    // FIXME build fails
+    // ...bundlePlugin(),
   ] as PluginInterop[];
 }
 

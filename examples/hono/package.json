@@ -1,5 +1,5 @@
 {
-  "name": "vite-plugin-vercel-simple",
+  "name": "vite-plugin-vercel-hono",
   "private": true,
   "version": null,
   "description": "",
@@ -7,13 +7,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "keywords": [],
   "author": "",
   "devDependencies": {
     "@types/node": "^20.19.16",
-    "@vercel/node": "^5.3.22",
+    "hono": "^4.10.3",
     "typescript": "^5.9.2",
     "vite": "^7.1.12"
   },

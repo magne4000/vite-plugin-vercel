@@ -1,11 +1,13 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
 import type { EntryMeta } from "@universal-deploy/store";
+import { removeExtension } from "./extension";
+import { pathRelativeTo } from "./path";
 
 function shortHash(obj: unknown) {
-  const str = JSON.stringify(obj, (key, val) => {
+  const str = JSON.stringify(obj, (_key, val) => {
     // URLPattern always stringifies as `{}` by default
-    // @ts-ignore
+    // @ts-expect-error
     if (typeof URLPattern !== "undefined" && val instanceof URLPattern) {
       return {
         pathname: val.pathname,
@@ -21,13 +23,15 @@ function shortHash(obj: unknown) {
   return createHash("sha256").update(str).digest("hex").slice(0, 7);
 }
 
-export function photonEntryDestinationDefault(entry: EntryMeta) {
-  return `${entry.id.replace(/[^a-zA-Z0-9\-_[\]/]/g, "-")}-${shortHash(entry)}`;
+export function entryDestinationDefault(root: string, entry: EntryMeta) {
+  const rel = pathRelativeTo(entry.id, root);
+  return `${removeExtension(rel).replace(/[^a-zA-Z0-9\-_[\]/]/g, "-")}-${shortHash(entry)}`;
 }
 
-export function photonEntryDestination(
+export function entryDestination(
+  root: string,
   entry: EntryMeta,
   postfix: `.func/index` | `.func/.vc-config.json` | `.func/package.json` | `.prerender-config.json`,
 ) {
-  return `${path.posix.join("functions/", photonEntryDestinationDefault(entry))}${postfix}`;
+  return `${path.posix.join("functions/", entryDestinationDefault(root, entry))}${postfix}`;
 }

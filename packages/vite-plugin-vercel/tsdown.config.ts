@@ -18,11 +18,8 @@ export default defineConfig([
     entry: {
       index: "./src/index.ts",
       vite: "./src/plugins/index.ts",
-      utils: "./src/utils/index.ts",
       api: "./src/api.ts",
       types: "./src/types.ts",
-      "universal-middleware-dev": "./src/photon/universal-middleware-dev.ts",
-      "universal-middleware-prod": "./src/photon/universal-middleware-prod.ts",
     },
   },
 ]);

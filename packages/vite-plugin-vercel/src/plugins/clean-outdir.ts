@@ -12,7 +12,7 @@ export function vercelCleanupPlugin(pluginConfig?: ViteVercelConfig): Plugin {
     enforce: "pre",
 
     applyToEnvironment(env) {
-      return env.name === "client";
+      return env.name === "vercel_client";
     },
 
     buildStart: {
