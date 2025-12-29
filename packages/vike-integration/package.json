@@ -34,7 +34,7 @@
     "@types/node": "^18.19.130",
     "@types/qs": "^6.14.0",
     "@vercel/edge": "^1.2.2",
-    "@vercel/node": "^3.2.29",
+    "@vercel/node": "^5.5.16",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
     "vike": "^0.4.250",
