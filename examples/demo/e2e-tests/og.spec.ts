@@ -1,5 +1,4 @@
-import { test } from "@playwright/test";
-import { expect } from "playwright/test";
+import { expect, test } from "@playwright/test";
 
 test("has image (edge)", async ({ request }) => {
   const response = await request.get("/og-edge");

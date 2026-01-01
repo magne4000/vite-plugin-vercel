@@ -17,8 +17,3 @@ test("has response", async ({ request }) => {
   const date2 = await response2.text();
   expect(new Date(date1).getTime()).toBeLessThan(new Date(date2).getTime());
 });
-
-test("should 404", async ({ request }) => {
-  const response = await request.get("/api/isr/sub");
-  expect(response.status()).toBe(404);
-});

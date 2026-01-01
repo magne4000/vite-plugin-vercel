@@ -27,7 +27,7 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     /* process.env.BASE_URL is provided by the CI */
-    baseURL: process.env.BASE_URL ?? "http://localhost:3000",
+    baseURL: process.env.BASE_URL ?? "http://localhost:5173",
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
@@ -45,7 +45,7 @@ export default defineConfig({
   webServer: !process.env.BASE_URL
     ? {
         command: "pnpm run dev",
-        url: "http://localhost:3000",
+        url: "http://localhost:5173",
       }
     : undefined,
 });
