@@ -8,14 +8,9 @@ import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
 import { pathRelativeTo } from "./utils/path";
 
-export function entryToRou3(key: string) {
-  const res = toRou3(fromNextFs(path.posix.resolve("/", key)));
-  // next-fs patterns cannot generate more than one rou3 pattern, so [0] is fine
-  return res[0].replace(/\/index$/, "/");
-}
-
 /**
  * Scans the filesystem for entry points.
+ * @experimental
  */
 export async function getVercelEntries(
   dir: string,
@@ -58,6 +53,12 @@ export async function getVercelEntries(
   }
 
   return entryPoints;
+}
+
+function entryToRou3(key: string) {
+  const res = toRou3(fromNextFs(path.posix.resolve("/", key)));
+  // next-fs patterns cannot generate more than one rou3 pattern, so [0] is fine
+  return res[0].replace(/\/index$/, "/");
 }
 
 export async function extractExports(filepath: string) {

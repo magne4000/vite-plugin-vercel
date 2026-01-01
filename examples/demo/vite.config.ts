@@ -1,3 +1,4 @@
+import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import { getVercelEntries } from "vite-plugin-vercel";
 import { vercel } from "vite-plugin-vercel/vite";
@@ -9,6 +10,7 @@ const routes = await getVercelEntries("src/routes", {
 
 export default defineConfig({
   plugins: [
+    react(),
     vercel({
       entries: routes,
     }),

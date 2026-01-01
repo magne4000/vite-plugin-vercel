@@ -1,0 +1,42 @@
+{
+  "name": "vite-plugin-vercel-demo",
+  "private": "true",
+  "version": null,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "pnpm run test:01",
+    "test:01": "vite build && vitest run --dir tests/01-vike --config tests/01-vike/vitest.config.ts",
+    "test:e2e": "playwright test",
+    "test:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mdx-js/mdx": "^3.1.1",
+    "@mdx-js/react": "^3.1.1",
+    "@mdx-js/rollup": "^3.1.1",
+    "@vercel/edge-config": "^1.4.3",
+    "@vercel/og": "^0.7.2",
+    "@vitejs/plugin-react": "^5.1.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "vite": "^7.3.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.27.1",
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^20.19.25",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@universal-middleware/core": "^0.4.14",
+    "@vercel/node": "^5.5.16",
+    "@vite-plugin-vercel/schemas": "^1.0.0",
+    "fast-glob": "^3.3.3",
+    "playwright": "^1.57.0",
+    "typescript": "^5.9.3",
+    "vite-plugin-vercel": "^10.1.0",
+    "vitest": "^4.0.16",
+    "zod": "^4.2.1"
+  }
+}
