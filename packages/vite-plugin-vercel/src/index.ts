@@ -17,7 +17,7 @@ export function entryToRou3(key: string) {
 /**
  * Scans the filesystem for entry points.
  */
-export async function getEntriesFromFs(
+export async function getVercelEntries(
   dir: string,
   { destination = dir, tryParseExports = true },
 ): Promise<EntryMeta[]> {

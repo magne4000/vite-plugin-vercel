@@ -51,9 +51,9 @@ Install this package as a dev dependency and add it to your Vite config:
 // vite.config.ts
 import { defineConfig } from 'vite';
 import vercel from 'vite-plugin-vercel';
-import { getEntriesFromFs } from "vite-plugin-vercel";
+import { getVercelEntries } from "vite-plugin-vercel";
 
-const entries = await getEntriesFromFs("endpoints/api", {
+const entries = await getVercelEntries("endpoints/api", {
   // Auto mapping examples:
   //   endpoints/api/page.ts -> /api/page
   //   endpoints/api/name/[name].ts -> /api/name/*
@@ -73,7 +73,7 @@ export default defineConfig({
 
 ### Configure endpoints
 
-Endpoints added via `getEntriesFromFs` can be configured by exporting values from the endpoint file:
+Endpoints added via `getVercelEntries` can be configured by exporting values from the endpoint file:
 
 ```ts
 // file: endpoints/api/endpoint.ts
@@ -164,7 +164,7 @@ export default defineConfig({
      */
     trailingSlash: true,
     /**
-     * Use `getEntriesFromFs` for mapping your filesystem routes to entries.
+     * Use `getVercelEntries` for mapping your filesystem routes to entries.
      * If you are interfacing this plugin with a framework, entries can also be added through the Photon API
      */
     entries: {

@@ -49,7 +49,7 @@ export interface ViteVercelConfig {
    */
   defaultSupportsResponseStreaming?: boolean;
   /**
-   * Use `getEntriesFromFs` for mapping your filesystem routes to entries.
+   * Use `getVercelEntries` for mapping your filesystem routes to entries.
    */
   entries?: EntryMeta[];
   /**

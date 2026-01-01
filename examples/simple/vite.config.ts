@@ -1,8 +1,7 @@
 import { defineConfig } from "vite";
-import { getEntriesFromFs } from "vite-plugin-vercel";
-import vercel from "vite-plugin-vercel/vite";
+import { getVercelEntries } from "vite-plugin-vercel";
 
-const routes = await getEntriesFromFs("src/routes", {
+const routes = await getVercelEntries("src/routes", {
   destination: "",
 });
 
