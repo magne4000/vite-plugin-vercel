@@ -9,7 +9,7 @@ const routes = await getEntriesFromFs("src/routes", {
 export default defineConfig({
   plugins: [
     vercel({
-      // Scan `src` directory for entries, and map them to `/*`
+      // Scan `src/routes` directory for entries, and map them to `/*`
       entries: routes,
     }),
   ],

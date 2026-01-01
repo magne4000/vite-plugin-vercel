@@ -1,3 +1,4 @@
+import { catchAll, devServer } from "@universal-deploy/store/vite";
 import type { ViteVercelConfig } from "../types.js";
 import { apiPlugin } from "./api.js";
 import { bundlePlugin } from "./bundle.js";
@@ -15,6 +16,8 @@ export function vercel(pluginConfig: ViteVercelConfig = {}): PluginInterop[] {
     wasmPlugin(),
     ...loaderPlugin(pluginConfig),
     ...bundlePlugin(),
+    catchAll(),
+    devServer(),
   ] as PluginInterop[];
 }
 

@@ -2,9 +2,9 @@ export { testRun };
 
 import { expect, fetchHtml, run, test } from "@brillout/test-e2e";
 
-function testRun(cmd: `pnpm run ${"dev" | "prod"}`) {
+function testRun(cmd: `pnpm run ${"dev" | "prod"}${string}`) {
   run(cmd, {
-    serverUrl: "http://127.0.0.1:3000",
+    serverUrl: "http://localhost:3000",
   });
 
   test("/", async () => {

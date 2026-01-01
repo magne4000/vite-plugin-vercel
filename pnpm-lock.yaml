@@ -15,13 +15,13 @@ importers:
         specifier: ^2.3.6
         version: 2.3.10
       '@brillout/test-e2e':
-        specifier: ^0.6.19
+        specifier: ^0.6.21
         version: 0.6.21
       '@changesets/cli':
         specifier: ^2.29.7
         version: 2.29.8(@types/node@22.19.3)
       playwright:
-        specifier: ^1.56.1
+        specifier: ^1.57.0
         version: 1.57.0
       typescript:
         specifier: ^5.9.3

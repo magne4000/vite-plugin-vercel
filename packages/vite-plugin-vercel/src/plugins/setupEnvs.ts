@@ -35,7 +35,6 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
               throw e;
             }
           }
-          // TODO Can we create one env per functions dynamically? (easier isolation of functions)
           await builder.build(builder.environments.vercel_edge);
           await builder.build(builder.environments.vercel_node);
         },

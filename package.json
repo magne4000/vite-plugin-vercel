@@ -15,9 +15,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.6",
-    "@brillout/test-e2e": "^0.6.19",
+    "@brillout/test-e2e": "^0.6.21",
     "@changesets/cli": "^2.29.7",
-    "playwright": "^1.56.1",
+    "playwright": "^1.57.0",
     "typescript": "^5.9.3"
   },
   "pnpm": {
