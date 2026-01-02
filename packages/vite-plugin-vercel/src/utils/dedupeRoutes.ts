@@ -1,6 +1,5 @@
 import { type EntryMeta, store } from "@universal-deploy/store";
 
-// FIXME unit test this
 /**
  * When multiple entries point to the same module, we can deploy them as a single function.
  * Create a separate function only when specific configuration is provided (`isr`, `headers`, `edge` or `streaming`).
@@ -10,17 +9,21 @@ export function dedupeRoutes(): EntryMeta[] {
 
   const entriesGroupedByModuleId = groupBy(store.entries, (e) => e.id);
   for (const entries of entriesGroupedByModuleId.values()) {
-    // biome-ignore lint/style/noNonNullAssertion: contains at least one element
-    const first = entries.shift()!;
-    const groupedEntry = structuredClone(first);
-    if (!Array.isArray(groupedEntry.pattern)) {
-      groupedEntry.pattern = [groupedEntry.pattern];
-    }
-    entriesToKeep.push(groupedEntry);
+    let groupedEntry: EntryMeta | undefined;
+
     for (const entry of entries) {
       // For now, we do not try to be too smart, we only check if there is specific vercel configs attached to the entry
       if (entry.vercel && Object.keys(entry.vercel).length > 0) {
+        if (!Array.isArray(entry.pattern)) {
+          entry.pattern = [entry.pattern];
+        }
         entriesToKeep.push(entry);
+      } else if (!groupedEntry) {
+        groupedEntry = structuredClone(entry);
+        if (!Array.isArray(groupedEntry.pattern)) {
+          groupedEntry.pattern = [groupedEntry.pattern];
+        }
+        entriesToKeep.push(groupedEntry);
       } else {
         groupedEntry.pattern.push(...[entry.pattern].flat());
       }

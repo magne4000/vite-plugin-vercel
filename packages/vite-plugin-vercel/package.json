@@ -22,6 +22,7 @@
   "scripts": {
     "dev": "tsdown --watch",
     "build": "tsdown",
+    "test": "vitest run",
     "test:types": "tsc --noEmit"
   },
   "peerDependencies": {
@@ -33,7 +34,8 @@
     "@vercel/node": "^5.5.15",
     "tsdown": "^0.18.1",
     "typescript": "^5.9.3",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vitest": "^4.0.16"
   },
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
