@@ -1,6 +1,6 @@
-import path from "node:path";
-import os from "node:os";
 import fs from "node:fs/promises";
+import os from "node:os";
+import path from "node:path";
 
 export function teardown(displayName: string) {
   return async () => {
