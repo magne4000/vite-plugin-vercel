@@ -177,8 +177,8 @@ importers:
         specifier: ^8.3.0
         version: 8.3.0
       standaloner:
-        specifier: ^0.2.0
-        version: 0.2.0(rollup@4.53.3)
+        specifier: ^0.2.2
+        version: 0.2.2(rollup@4.53.3)
       strip-ansi:
         specifier: ^7.1.2
         version: 7.1.2
@@ -2760,8 +2760,8 @@ packages:
   stackback@0.0.2:
     resolution: {integrity: sha512-1XMJE5fQo1jGH6Y/7ebnwPOBEkIEnT4QF32d5R1+VXdXveM0IBMJt8zfaxX1P3QhVwrYe+576+jkANtSS2mBbw==}
 
-  standaloner@0.2.0:
-    resolution: {integrity: sha512-51NjJF2gRrRw2arrsFdbaSTaiiYA5qadEQfA+VXbbggC5JVpxrDgKM78eNdCkREGdZjYNkcjPLf4xNizupGBSg==}
+  standaloner@0.2.2:
+    resolution: {integrity: sha512-u2petNp6YcEvRM96SIynC/ly4UI3EsevXGzdUcdAmXn7vA7iFaQCLd5+uyWRc7wSUsHfXck6VLEPrmI03Uy5Ug==}
 
   std-env@3.10.0:
     resolution: {integrity: sha512-5GS12FdOZNliM5mAOxFRg7Ir0pWz8MdpYm6AY6VPkGpbA7ZzmbzNcBJQ0GPvvyWgcY7QAhCgf9Uy89I03faLkg==}
@@ -5755,7 +5755,7 @@ snapshots:
 
   stackback@0.0.2: {}
 
-  standaloner@0.2.0(rollup@4.53.3):
+  standaloner@0.2.2(rollup@4.53.3):
     dependencies:
       '@vercel/nft': 1.1.1(rollup@4.53.3)
       acorn: 8.15.0

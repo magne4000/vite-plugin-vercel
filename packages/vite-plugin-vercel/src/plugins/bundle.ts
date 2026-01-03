@@ -5,14 +5,21 @@ import { wasmPlugin } from "./wasm.js";
 export function bundlePlugin() {
   return standaloner({
     external: edgeExternal,
-    isolated: true,
     bundle: {
       output: {
         // disable CJS banner
         banner: "",
+        // already sanitized
+        sanitizeFileName: false,
+        // avoids empty imports at the top of entry chunks
+        hoistTransitiveImports: false,
+      },
+      experimental: {
+        // avoids empty imports at the top of entry chunks
+        strictExecutionOrder: false,
       },
       plugins: [wasmPlugin()],
-      // FIXME this one is not used, but it should be the only one
+      // one isolated file per function
       isolated: true,
     },
   });

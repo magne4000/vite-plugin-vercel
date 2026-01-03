@@ -50,7 +50,7 @@
     "fast-glob": "^3.3.3",
     "magicast": "^0.5.1",
     "path-to-regexp": "^8.3.0",
-    "standaloner": "^0.2.0",
+    "standaloner": "^0.2.2",
     "strip-ansi": "^7.1.2",
     "vite-plugin-wasm": "^3.5.0"
   }
