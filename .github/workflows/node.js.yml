@@ -29,10 +29,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build
-        run: pnpm run build:all
+        run: pnpm run build
       - name: Typecheck
         run: pnpm run typecheck:all
       - name: Lint
         run: pnpm lint
       - name: Test
-        run: pnpm test
+        run: pnpm test:e2e
