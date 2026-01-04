@@ -31,7 +31,7 @@ jobs:
       - name: Build
         run: pnpm run build
       - name: Typecheck
-        run: pnpm run typecheck:all
+        run: pnpm run -r test:types
       - name: Lint
         run: pnpm lint
       - name: Test
