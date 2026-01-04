@@ -68,7 +68,7 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
                     entries.map((e) => [entryDestination(root ?? process.cwd(), e, ".func/index"), e.id]),
                   ),
                   output: {
-                    // `Avoids empty imports at the top of entry chunks`
+                    // Avoids empty imports at the top of entry chunks
                     hoistTransitiveImports: false,
                   },
                 },
