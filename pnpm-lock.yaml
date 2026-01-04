@@ -100,25 +100,6 @@ importers:
         specifier: ^4.2.1
         version: 4.2.1
 
-  examples/hono:
-    dependencies:
-      vite-plugin-vercel:
-        specifier: workspace:*
-        version: link:../../packages/vite-plugin-vercel
-    devDependencies:
-      '@types/node':
-        specifier: ^20.19.16
-        version: 20.19.27
-      hono:
-        specifier: ^4.10.3
-        version: 4.11.3
-      typescript:
-        specifier: ^5.9.2
-        version: 5.9.3
-      vite:
-        specifier: ^7.1.12
-        version: 7.3.0(@types/node@20.19.27)(tsx@4.21.0)
-
   examples/simple:
     dependencies:
       vite-plugin-vercel:
@@ -4918,7 +4899,8 @@ snapshots:
 
   hex-rgb@4.3.0: {}
 
-  hono@4.11.3: {}
+  hono@4.11.3:
+    optional: true
 
   hookable@6.0.1: {}
 
