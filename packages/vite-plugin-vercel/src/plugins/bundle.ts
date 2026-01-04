@@ -1,9 +1,10 @@
 import fs from "node:fs";
 import { cpus } from "node:os";
 import path from "node:path";
-import { externals, type ExternalsPluginOptions } from "nf3/plugin";
+import { resolve } from "@vercel/nft";
+import { type ExternalsPluginOptions, externals } from "nf3/plugin";
 import pLimit from "p-limit";
-import { build, type BuildOptions, type OutputBundle, type RolldownOutput } from "rolldown";
+import { type BuildOptions, build, type OutputBundle, type RolldownOutput } from "rolldown";
 import { normalizePath, type Plugin } from "vite";
 import { assert } from "../utils/assert";
 import { edgeExternal } from "../utils/external";
@@ -71,6 +72,11 @@ export function bundlePlugin(): Plugin[] {
                   rootDir: this.environment.config.root,
                   trace: {
                     outDir: path.dirname(entryPath),
+                    nft: {
+                      async resolve(id, parent, job, cjsResolve) {
+                        return resolve(id.replace(/\.wasm\?module$/, ".wasm"), parent, job, cjsResolve);
+                      },
+                    },
                   },
                 },
               });
@@ -114,7 +120,7 @@ export function bundle(
       conditionNames: options.externals.conditions,
     },
     output: {
-      entryFileNames: options.isEdge ? "[name].js" : "[names].mjs",
+      entryFileNames: options.isEdge ? "[name].js" : "[name].mjs",
       sanitizeFileName: false, // already done by Vite
       dir: options.outDir,
       hoistTransitiveImports: false, // avoids empty imports at the top of entry chunks
