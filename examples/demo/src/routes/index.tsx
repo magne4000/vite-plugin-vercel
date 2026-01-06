@@ -1,4 +1,6 @@
 import { renderToReadableStream } from "react-dom/server";
+import bootstrapScriptContent from "../client/home.client.tsx?client";
+
 import { Document } from "../components/Document";
 import { HomePage } from "../pages/HomePage";
 
@@ -9,7 +11,7 @@ export default {
         <HomePage />
       </Document>,
       {
-        bootstrapModules: ["/src/client/home.client.tsx"],
+        bootstrapScriptContent,
       },
     );
 

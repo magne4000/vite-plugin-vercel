@@ -1,10 +1,10 @@
 import { renderToReadableStream } from "react-dom/server";
+import bootstrapScriptContent from "../client/home.client.tsx?client";
 import { Document } from "../components/Document";
 import { HomePage } from "../pages/HomePage";
 
 export const edge = true;
 
-const isProd = process.env.NODE_ENV === "production";
 export default {
   async fetch(_request: Request) {
     const stream = await renderToReadableStream(
@@ -12,7 +12,7 @@ export default {
         <HomePage />
       </Document>,
       {
-        bootstrapModules: ["/src/client/home.client.tsx"],
+        bootstrapScriptContent,
       },
     );
 
