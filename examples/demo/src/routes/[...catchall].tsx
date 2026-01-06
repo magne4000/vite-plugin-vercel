@@ -1,4 +1,5 @@
 import { renderToReadableStream } from "react-dom/server";
+import bootstrapScriptContent from "../client/catchall.client.tsx?client";
 import { Document } from "../components/Document";
 import { CatchAllPage } from "../pages/CatchAllPage";
 
@@ -11,7 +12,7 @@ export default {
         <CatchAllPage />
       </Document>,
       {
-        bootstrapModules: ["/src/client/catchall.client.tsx"],
+        bootstrapScriptContent,
       },
     );
 

@@ -1,4 +1,5 @@
 import { renderToReadableStream } from "react-dom/server";
+import bootstrapScriptContent from "../client/isr.client.tsx?client";
 import { Document } from "../components/Document";
 import { IsrPage } from "../pages/IsrPage";
 
@@ -11,7 +12,7 @@ export default {
         <IsrPage isr={isr.expiration} />
       </Document>,
       {
-        bootstrapModules: ["/src/client/isr.client.tsx"],
+        bootstrapScriptContent,
       },
     );
 

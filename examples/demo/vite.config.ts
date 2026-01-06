@@ -33,7 +33,6 @@ export default defineConfig({
           sourcemap: false,
           jsx: "automatic",
           loader: {
-            // Important for JSX/TSX
             ".ts": "ts",
             ".tsx": "tsx",
             ".js": "js",

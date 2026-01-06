@@ -1,4 +1,5 @@
 import { renderToReadableStream } from "react-dom/server";
+import bootstrapScriptContent from "../client/dynamic.client.tsx?client";
 import { Document } from "../components/Document";
 import { DynamicPage } from "../pages/DynamicPage";
 
@@ -9,7 +10,7 @@ export default {
         <DynamicPage />
       </Document>,
       {
-        bootstrapModules: ["/src/client/dynamic.client.tsx"],
+        bootstrapScriptContent,
       },
     );
 
