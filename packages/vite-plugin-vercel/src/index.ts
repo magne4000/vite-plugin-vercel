@@ -1,8 +1,8 @@
 import path from "node:path";
 import type { EntryMeta } from "@universal-deploy/store";
 import { type VercelEndpointExports, vercelEndpointExports } from "@vite-plugin-vercel/schemas";
-import { toRou3 } from "convert-route";
 import { fromNextFs } from "convert-route/next-fs";
+import { toRou3 } from "convert-route/rou3";
 import glob from "fast-glob";
 import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";

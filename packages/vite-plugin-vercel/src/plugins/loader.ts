@@ -41,6 +41,33 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
       },
     },
     {
+      name: "vite-plugin-vercel:load-edge",
+      apply: "build",
+
+      resolveId: {
+        filter: {
+          id: [/\?edge$/],
+        },
+        async handler(id, importer, opts) {
+          const resolved = await this.resolve(id.replace(/\?edge$/, ""), importer, opts);
+          if (!resolved) return null;
+          return `${resolved.id}?edge`;
+        },
+      },
+
+      load: {
+        filter: {
+          id: [/\?edge$/],
+        },
+        async handler(id) {
+          const mod = id.replace(/\?edge$/, "");
+          return `import mod from ${JSON.stringify(mod)};
+const def = mod.fetch;
+export default def;`;
+        },
+      },
+    },
+    {
       name: "vite-plugin-vercel:build-functions",
       apply: "build",
 
@@ -65,7 +92,10 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
               build: {
                 rollupOptions: {
                   input: Object.fromEntries(
-                    entries.map((e) => [entryDestination(root ?? process.cwd(), e, ".func/index"), e.id]),
+                    entries.map((e) => [
+                      entryDestination(root ?? process.cwd(), e, ".func/index"),
+                      isEdge ? `${e.id}?edge` : e.id,
+                    ]),
                   ),
                   output: {
                     // Avoids empty imports at the top of entry chunks
