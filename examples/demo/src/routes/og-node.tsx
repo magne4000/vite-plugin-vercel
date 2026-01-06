@@ -1,11 +1,6 @@
-import { readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
 import { ImageResponse } from "@vercel/og";
-
-// isomorphic __dirname
-const _dirname = typeof __dirname !== "undefined" ? __dirname : dirname(fileURLToPath(import.meta.url));
-const font = readFileSync(join(_dirname, "./Roboto-Regular.ttf"));
+// make sure to inline all assets, or move them in a dedicated package
+import font from "./Roboto-Regular.ttf?inline";
 
 export default {
   async fetch(_request: Request) {
@@ -32,8 +27,8 @@ export default {
         fonts: [
           {
             name: "Roboto",
-            // Use `fs` (Node.js only) or `fetch` to read the font as Buffer/ArrayBuffer and provide `data` here.
-            data: font,
+            // biome-ignore lint/style/noNonNullAssertion: inline imports of ttf files are always base64 data uri
+            data: Buffer.from(font.match(/^data:([^;]+);base64,(.+)$/)![2], "base64"),
             weight: 400,
             style: "normal",
           },

@@ -4,6 +4,7 @@ import { HomePage } from "../pages/HomePage";
 
 export const edge = true;
 
+const isProd = process.env.NODE_ENV === "production";
 export default {
   async fetch(_request: Request) {
     const stream = await renderToReadableStream(
