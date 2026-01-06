@@ -25,7 +25,8 @@ export function dedupeRoutes(): EntryMeta[] {
         }
         entriesToKeep.push(groupedEntry);
       } else {
-        groupedEntry.pattern.push(...[entry.pattern].flat());
+        // biome-ignore lint/suspicious/noExplicitAny: array enforced at creation
+        (groupedEntry.pattern as any[]).push(...[entry.pattern].flat());
       }
     }
   }
