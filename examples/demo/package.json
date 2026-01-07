@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "pnpm run test:01",
-    "test:01": "vite build && vitest run --dir tests/01-vike --config tests/01-vike/vitest.config.ts",
+    "test:01": "vite build && vitest run --dir tests/01 --config tests/01/vitest.config.ts",
     "test:e2e": "playwright test",
     "test:types": "tsc --noEmit"
   },
