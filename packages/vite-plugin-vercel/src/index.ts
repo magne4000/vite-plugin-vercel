@@ -25,6 +25,7 @@ export async function getVercelEntries(
 
   const entryPoints: EntryMeta[] = [];
 
+  // FIXME paths should be sorted by precedence, using convert-route IR
   for (const filePath of apiEntries) {
     const outFilePath = pathRelativeTo(filePath, normalizedDir);
     const parsed = path.posix.parse(outFilePath);

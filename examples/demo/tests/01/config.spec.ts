@@ -25,56 +25,56 @@ prepareTestJsonFileContent("config.json", (context) => {
       },
       { handle: "filesystem" },
       {
-        src: "^(/vike-edge(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike/pages/vike-edge?__original_path=$1",
         check: true,
-      },
-      {
         src: "^/edge$",
-        dest: "/edge",
-        check: true,
+        dest: "/src/routes/edge",
       },
       {
+        check: true,
         src: "^/og-edge$",
-        dest: "/og-edge",
-        check: true,
+        dest: "/src/routes/og-edge",
       },
       {
-        src: "^/og-node$",
-        dest: "/og-node",
         check: true,
+        dest: "/src/routes/dynamic",
+        src: "^/dynamic$",
+      },
+      {
+        check: true,
+        dest: "/src/routes/index",
+        src: "^/$",
+      },
+      {
+        check: true,
+        src: "^/isr$",
+        dest: "/src/routes/isr",
+      },
+      {
+        check: true,
+        src: "^/og-node$",
+        dest: "/src/routes/og-node",
       },
       {
         check: true,
         src: "^/api/isr$",
-        dest: "/api/isr",
+        dest: "/src/routes/api/isr",
       },
       {
         check: true,
         src: "^/api/page$",
-        dest: "/api/page",
+        dest: "/src/routes/api/page",
+      },
+      {
+        check: true,
+        src: "^/named(?:/([^/]+?))$",
+        dest: "/src/routes/named/[someId]?someId=$1",
       },
       {
         check: true,
         src: "^/api/name(?:/([^/]+?))$",
-        dest: "/api/name/[name]?name=$1",
+        dest: "/src/routes/api/name/[name]?name=$1",
       },
-      {
-        check: true,
-        src: "^(/isr(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike/pages/isr?__original_path=$1",
-      },
-      {
-        check: true,
-        src: "^(/catch-all/?(?<_>.*)(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike/pages/catch-all?__original_path=$1",
-      },
-      {
-        check: true,
-        src: "^(/named/(?<someId>[^/]+)(?:/index\\.pageContext\\.json)?)$",
-        dest: "/__vike/pages/named?__original_path=$1",
-      },
-      { check: true, dest: "/__vike/__catch_all?__original_path=$1", src: "^(.*)$" },
+      { check: true, dest: "/src/routes/[---catchall]?catchall=$1", src: "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))$" },
     ];
 
     assert.sameDeepMembers((context.file as any).routes, expected);
