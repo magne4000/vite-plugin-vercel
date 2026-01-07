@@ -94,7 +94,7 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
       vite-plugin-vercel:
-        specifier: ^10.1.0
+        specifier: workspace:*
         version: link:../../packages/vite-plugin-vercel
       vitest:
         specifier: ^4.0.16
