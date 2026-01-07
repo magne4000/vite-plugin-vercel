@@ -9,7 +9,7 @@
     "test:e2e": "pnpm --recursive run --workspace-concurrency 1 test:e2e",
     "format": "biome format --write .",
     "lint": "biome lint .",
-    "publish:beta": "changeset pre enter beta && changeset version && changeset publish -r --tag beta && changeset pre exit",
+    "publish:beta": "changeset pre enter beta && changeset version && pnpm publish -r --no-git-checks --tag beta",
     "publish:stable": "changeset version && changeset publish -r"
   },
   "devDependencies": {
