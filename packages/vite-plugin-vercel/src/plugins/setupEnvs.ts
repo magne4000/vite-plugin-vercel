@@ -105,15 +105,27 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
             target: "es2022",
             rollupOptions: {
               input: {},
-              treeshake: "smallest",
+              treeshake: {
+                preset: "smallest",
+              },
             },
           },
           optimizeDeps: {
             ...config.optimizeDeps,
-            esbuildOptions: {
-              target: "es2022",
-              format: "esm",
-            },
+            // biome-ignore lint/suspicious/noExplicitAny: vite@8 types
+            ...((this.meta as any).rolldownVersion
+              ? {
+                  rolldownOptions: {
+                    target: "es2022",
+                    format: "esm",
+                  },
+                }
+              : {
+                  esbuildOptions: {
+                    target: "es2022",
+                    format: "esm",
+                  },
+                }),
           },
         };
       },

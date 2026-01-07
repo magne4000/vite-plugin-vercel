@@ -1,6 +1,6 @@
 import react from "@vitejs/plugin-react";
 import { build } from "esbuild";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import { getVercelEntries } from "vite-plugin-vercel";
 import { vercel } from "vite-plugin-vercel/vite";
 
@@ -15,14 +15,34 @@ export default defineConfig({
     vercel({
       entries: routes,
     }),
-    // Minimal SSR plugin for React
-    {
-      name: "vite-plugin-demo:react-ssr",
-      enforce: "pre",
-      async load(id) {
-        if (!id.endsWith("?client")) return;
+    minimalReactSsrPlugin(),
+  ],
+});
 
-        const [filePath] = id.split("?client");
+function minimalReactSsrPlugin(): Plugin {
+  const re = /\?client$/;
+  return {
+    name: "vite-plugin-demo:react-ssr",
+    enforce: "pre",
+
+    config() {
+      return {
+        build: {
+          rolldownOptions: {
+            checks: {
+              pluginTimings: false,
+            },
+          },
+        },
+      };
+    },
+
+    load: {
+      filter: {
+        id: [re],
+      },
+      async handler(id) {
+        const filePath = id.replace(re, "");
 
         // Compile the client module with esbuild to ESM
         const result = await build({
@@ -40,12 +60,9 @@ export default defineConfig({
           },
         });
 
-        // Get the code as string
         const code = result.outputFiles[0].text;
-
-        // Return a JS module exporting that string
         return `export default ${JSON.stringify(code)}`;
       },
     },
-  ],
-});
+  };
+}
