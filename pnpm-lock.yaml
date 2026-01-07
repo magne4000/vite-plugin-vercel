@@ -149,8 +149,8 @@ importers:
         specifier: latest
         version: 1.0.0
       convert-route:
-        specifier: ^0.1.2
-        version: 0.1.2
+        specifier: ^1.0.0
+        version: 1.0.0
       fast-glob:
         specifier: ^3.3.3
         version: 3.3.3
@@ -1692,8 +1692,8 @@ packages:
     resolution: {integrity: sha512-7V+KqSvMiHp8yWDuwfww06XleMWVVB9b9tURBx+G7UTADuo5hYPuowKloz4OzOqbPezxgo+fdQ1522WzPG4OeA==}
     engines: {node: '>=8'}
 
-  convert-route@0.1.2:
-    resolution: {integrity: sha512-KSp+HiFELyZGWsrderXM0EjVo8Hj2eDT2LvJXNz9vnK6BVgEvlhREkAYz1oV6bx3ulhXvOtuRyE94BovdPigCQ==}
+  convert-route@1.0.0:
+    resolution: {integrity: sha512-nztGBAS0A9YfDx5nP6YMrFCxMJMwgi14dcwL7jNJ2osNYx2mvXvm8cFSv1TWGB9EOn9becVaGSRXT0DhPrxeRA==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -4485,7 +4485,7 @@ snapshots:
 
   convert-hrtime@3.0.0: {}
 
-  convert-route@0.1.2: {}
+  convert-route@1.0.0: {}
 
   convert-source-map@2.0.0: {}
 
