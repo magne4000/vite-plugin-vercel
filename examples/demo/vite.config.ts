@@ -1,31 +1,68 @@
-import react from "@vitejs/plugin-react-swc";
-import vike from "vike/plugin";
-import type { UserConfig } from "vite";
-import vercel from "vite-plugin-vercel";
+import react from "@vitejs/plugin-react";
+import { build } from "esbuild";
+import { defineConfig, type Plugin } from "vite";
+import { getVercelEntries } from "vite-plugin-vercel";
+import { vercel } from "vite-plugin-vercel/vite";
 
-export default {
-  plugins: [react(), vike(), vercel()],
-  vercel: {
-    expiration: 25,
-    additionalEndpoints: [
-      {
-        source: "endpoints/edge.ts",
-        destination: "edge",
-        route: true,
+// Scan `src/routes` directory for entries
+const routes = await getVercelEntries("src/routes", {
+  destination: "",
+});
+
+export default defineConfig({
+  plugins: [
+    react(),
+    vercel({
+      entries: routes,
+    }),
+    minimalReactSsrPlugin(),
+  ],
+});
+
+function minimalReactSsrPlugin(): Plugin {
+  const re = /\?client$/;
+  return {
+    name: "vite-plugin-demo:react-ssr",
+    enforce: "pre",
+
+    config() {
+      return {
+        build: {
+          rolldownOptions: {
+            checks: {
+              pluginTimings: false,
+            },
+          },
+        },
+      };
+    },
+
+    load: {
+      filter: {
+        id: [re],
       },
-      {
-        source: "endpoints/og-node.tsx",
-        destination: "og-node",
-        route: true,
+      async handler(id) {
+        const filePath = id.replace(re, "");
+
+        // Compile the client module with esbuild to ESM
+        const result = await build({
+          entryPoints: [filePath],
+          bundle: true,
+          format: "esm",
+          write: false,
+          sourcemap: false,
+          jsx: "automatic",
+          loader: {
+            ".ts": "ts",
+            ".tsx": "tsx",
+            ".js": "js",
+            ".jsx": "jsx",
+          },
+        });
+
+        const code = result.outputFiles[0].text;
+        return `export default ${JSON.stringify(code)}`;
       },
-      {
-        source: "endpoints/og-edge.tsx",
-        destination: "og-edge",
-        route: true,
-      },
-    ],
-  },
-  // We manually add a list of dependencies to be pre-bundled, in order to avoid a page reload at dev start which breaks vike's CI
-  // (The 'react/jsx-runtime' entry is not needed in Vite 3 anymore.)
-  optimizeDeps: { include: ["cross-fetch", "react/jsx-runtime"] },
-} as UserConfig;
+    },
+  };
+}
