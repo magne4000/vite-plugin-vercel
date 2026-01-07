@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "pnpm run -C ./packages/vercel dev",
     "build": "pnpm --recursive run build",
-    "test:e2e": "test-e2e",
+    "test:e2e": "pnpm --recursive run --workspace-concurrency 1 test:e2e",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "prepublishOnly": "pnpm run test && changeset version",
@@ -15,7 +15,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.6",
-    "@brillout/test-e2e": "^0.6.21",
     "@changesets/cli": "^2.29.7",
     "playwright": "^1.57.0",
     "typescript": "^5.9.3"
