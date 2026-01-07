@@ -22,8 +22,8 @@ export function getVcConfig(
           handler: filename,
           maxDuration: pluginConfig.defaultMaxDuration,
           launcherType: "Nodejs",
-          shouldAddHelpers: true,
-          supportsResponseStreaming: options.streaming ?? pluginConfig.defaultSupportsResponseStreaming,
+          shouldAddHelpers: false,
+          supportsResponseStreaming: options.streaming ?? pluginConfig.defaultSupportsResponseStreaming ?? true,
         },
   );
 }

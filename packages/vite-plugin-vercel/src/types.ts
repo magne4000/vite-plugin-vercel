@@ -46,6 +46,7 @@ export interface ViteVercelConfig {
   /**
    * When true, the Serverless Function will stream the response to the client.
    * @see {@link https://vercel.com/docs/build-output-api/v3/primitives#serverless-function-configuration}
+   * @default true
    */
   defaultSupportsResponseStreaming?: boolean;
   /**
