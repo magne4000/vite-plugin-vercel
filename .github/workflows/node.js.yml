@@ -34,5 +34,7 @@ jobs:
         run: pnpm run -r test:types
       - name: Lint
         run: pnpm lint
+      - name: Install playwright
+        run: pnpm playwright install chromium
       - name: Test
         run: pnpm test:e2e
