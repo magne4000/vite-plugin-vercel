@@ -3,7 +3,7 @@ import bootstrapScriptContent from "../client/isr.client.tsx?client";
 import { Document } from "../components/Document";
 import { IsrPage } from "../pages/IsrPage";
 
-export const isr = { expiration: 15 };
+export const isr = { expiration: 5 };
 
 export default {
   async fetch(_request: Request) {
