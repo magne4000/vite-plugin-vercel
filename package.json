@@ -9,9 +9,8 @@
     "test:e2e": "pnpm --recursive run --workspace-concurrency 1 test:e2e",
     "format": "biome format --write .",
     "lint": "biome lint .",
-    "prepublishOnly": "pnpm run test && changeset version",
-    "publish:beta": "changeset pre enter beta && pnpm run prepublishOnly && changeset publish -r --tag beta && changeset pre exit",
-    "publish:stable": "pnpm run prepublishOnly && changeset publish -r"
+    "publish:beta": "changeset pre enter beta && changeset version && changeset publish -r --tag beta && changeset pre exit",
+    "publish:stable": "changeset version && changeset publish -r"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.6",
