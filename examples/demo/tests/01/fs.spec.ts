@@ -4,6 +4,7 @@ import { assert, describe, it } from "vitest";
 
 describe("fs", () => {
   const expected = [
+    "/config.json",
     "/functions/src/routes/[---catchall].func/.vc-config.json",
     "/functions/src/routes/[---catchall].func/index.mjs",
     "/functions/src/routes/[---catchall].func/node_modules/react-dom/cjs/react-dom-server-legacy.node.development.js",
