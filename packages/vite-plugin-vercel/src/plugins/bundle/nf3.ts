@@ -6,10 +6,14 @@ import { type ExternalsPluginOptions, externals } from "nf3/plugin";
 import pLimit from "p-limit";
 import { type BuildOptions, build, type OutputBundle, type RolldownOutput } from "rolldown";
 import { normalizePath, type Plugin } from "vite";
-import { assert } from "../utils/assert";
-import { edgeExternal } from "../utils/external";
+import { assert } from "../../utils/assert";
+import { edgeExternal } from "../../utils/external";
 
-export function bundlePlugin(): Plugin[] {
+export function nf3BundlePlugin(): Plugin[] {
+  // TODO fix nf3 -> if (rOpts?.isEntry) return;
+  // TODO fix nf3 -> monorepo linked packages are excluded from trace because resolved path does not contain node_modules
+  //  Easy fix would be to pass unresolved files to tracedPaths
+  //  https://chatgpt.com/c/695e6b45-bbb4-8331-bb4d-7734f11625f8
   const externalsPlugin = externals({});
   // Keeps the logic that properly marks modules as externals, without copying the files.
   // The actual copy is executed at a later stage.
@@ -45,7 +49,7 @@ export function bundlePlugin(): Plugin[] {
             outPath: path.join(outDir, e[1].fileName),
           }));
 
-        assert(entries.length > 0, "No entry files found in build output");
+        if (entries.length === 0) return;
 
         const outPaths = entries.map((entry) => entry.outPath);
 
@@ -59,11 +63,25 @@ export function bundlePlugin(): Plugin[] {
         const concurrency = Math.max(1, Math.ceil(cpus().length / 2));
         const limit = pLimit(concurrency);
 
+        // FIXME finish testing this
+        //  tanstack-start tracing doesn't seem to work
+        //  #tanstack-start-entry and #tanstack-router-entry are in there, so an almost noExternal build seems necessary
+        const nonVitePlugins = this.environment.config.plugins
+          .filter((p) => {
+            return (
+              !p.name.startsWith("vite:") && p.name !== "alias" && p.name !== "commonjs" && p.name !== "nitro:externals"
+            );
+          })
+          .map((x) => {
+            const { buildStart, buildEnd, writeBundle, generateBundle, ...rest } = x;
+            return rest;
+          });
         const results = await Promise.all(
           Object.values(input).map((entryPath) =>
             limit(async () => {
               const outDir = path.dirname(entryPath);
               const res = await bundle({
+                plugins: nonVitePlugins,
                 isEdge,
                 input: { index: entryPath },
                 outDir,
@@ -106,6 +124,7 @@ export function bundle(
     isEdge: boolean;
     outDir: string;
     externals: ExternalsPluginOptions;
+    plugins: Plugin[];
   },
 ): Promise<RolldownOutput> {
   assert(options.input, "No input specified");
@@ -114,7 +133,7 @@ export function bundle(
     platform: options.isEdge ? "browser" : "node",
     external: options.isEdge ? edgeExternal : [],
     write: true,
-    plugins: [externals(options.externals)],
+    plugins: [...options.plugins, externals(options.externals)],
     input: options.input,
     resolve: {
       conditionNames: options.externals.conditions,

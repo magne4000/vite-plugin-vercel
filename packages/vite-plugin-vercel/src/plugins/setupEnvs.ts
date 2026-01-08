@@ -40,41 +40,44 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
         },
       },
 
-      config() {
-        if (!injected) {
-          injected = true;
-          if (pluginConfig.entries) {
-            store.entries.push(...pluginConfig.entries);
-          }
-        }
-
-        const outDirOverride: EnvironmentOptions = pluginConfig.outDir
-          ? {
-              build: {
-                outDir: pluginConfig.outDir,
-              },
+      config: {
+        order: "post",
+        handler() {
+          if (!injected) {
+            injected = true;
+            if (pluginConfig.entries) {
+              store.entries.push(...pluginConfig.entries);
             }
-          : {};
+          }
 
-        // rollup inputs are computed by the bundle plugin dynamically
-        return {
-          environments: {
-            vercel_edge: createVercelEnvironmentOptions(outDirOverride),
-            vercel_node: createVercelEnvironmentOptions(outDirOverride),
-            vercel_client: {
-              build: {
-                outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
-                copyPublicDir: true,
-                rollupOptions: {
-                  input: getDummyInput(),
+          const outDirOverride: EnvironmentOptions = pluginConfig.outDir
+            ? {
+                build: {
+                  outDir: pluginConfig.outDir,
                 },
+              }
+            : {};
+
+          // rollup inputs are computed by the bundle plugin dynamically
+          return {
+            environments: {
+              vercel_edge: createVercelEnvironmentOptions(outDirOverride),
+              vercel_node: createVercelEnvironmentOptions(outDirOverride),
+              vercel_client: {
+                build: {
+                  outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
+                  copyPublicDir: true,
+                  rollupOptions: {
+                    input: getDummyInput(),
+                  },
+                },
+                consumer: "client",
               },
-              consumer: "client",
             },
-          },
-          // Required for environments to be taken into account
-          builder: {},
-        };
+            // Required for environments to be taken into account
+            builder: {},
+          };
+        },
       },
 
       sharedDuringBuild: true,
