@@ -4,7 +4,12 @@ import { removeExtension } from "./extension";
 import { pathRelativeTo } from "./path";
 
 export function entryDestinationDefault(root: string, entry: EntryMeta) {
-  const rel = pathRelativeTo(entry.id, root);
+  let rel = pathRelativeTo(entry.id, root);
+  // If id contains node_modules, its probably very long. Extract only the last part of it in this case
+  if (rel.includes("node_modules")) {
+    const split = rel.split("node_modules");
+    rel = split[split.length - 1];
+  }
   return `${removeExtension(rel).replace(/[^a-zA-Z0-9\-_[\]/]/g, "-")}`;
 }
 
