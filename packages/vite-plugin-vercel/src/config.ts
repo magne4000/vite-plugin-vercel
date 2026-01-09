@@ -1,4 +1,4 @@
-import { type Route, getTransformedRoutes, mergeRoutes, normalizeRoutes } from "@vercel/routing-utils";
+import { getTransformedRoutes, mergeRoutes, normalizeRoutes, type Route } from "@vercel/routing-utils";
 import { type VercelOutputConfig, vercelOutputConfigSchema } from "@vite-plugin-vercel/schemas";
 import type { ViteVercelConfig, ViteVercelRewrite } from "./types.js";
 
@@ -16,7 +16,15 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
   const { routes, error } = getTransformedRoutes({
     cleanUrls: pluginConfig.cleanUrls ?? true,
     trailingSlash: pluginConfig.trailingSlash,
-    rewrites: reorderEnforce(_rewrites),
+    rewrites: reorderEnforce(
+      _rewrites.map((r) => {
+        // catch-all regex generation is broken, make it less complex
+        if (r.source === "/:_1*") {
+          r.source = "(.*)";
+        }
+        return r;
+      }),
+    ),
     redirects: pluginConfig.redirects ? reorderEnforce(pluginConfig.redirects) : undefined,
     headers: pluginConfig.headers,
   });
