@@ -146,6 +146,7 @@ async function bundle(
   buildOptions.output = {
     format: "esm",
     legalComments: "none",
+    inlineDynamicImports: true,
   };
   buildOptions.checks = {
     pluginTimings: false,

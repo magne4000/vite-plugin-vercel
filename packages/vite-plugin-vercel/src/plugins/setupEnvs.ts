@@ -30,19 +30,23 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
       buildApp: {
         order: "post",
         async handler(builder) {
-          try {
-            await builder.build(builder.environments[envNames.client]);
-          } catch (e) {
-            if (e instanceof Error && e.message.includes(`Could not resolve entry module "index.html"`)) {
-              // ignore error
-            } else {
-              throw e;
+          if (!builder.environments[envNames.client].isBuilt) {
+            try {
+              await builder.build(builder.environments[envNames.client]);
+            } catch (e) {
+              if (e instanceof Error && e.message.includes(`Could not resolve entry module "index.html"`)) {
+                // ignore error
+              } else {
+                throw e;
+              }
             }
           }
-          if (envNames.edge !== false) {
+          if (envNames.edge !== false && !builder.environments[envNames.edge].isBuilt) {
             await builder.build(builder.environments[envNames.edge]);
           }
-          await builder.build(builder.environments[envNames.node]);
+          if (!builder.environments[envNames.node].isBuilt) {
+            await builder.build(builder.environments[envNames.node]);
+          }
         },
       },
 
@@ -240,7 +244,9 @@ function createVercelEnvironmentOptions(overrides?: EnvironmentOptions): Environ
         rollupOptions: {
           input: getDummyInput(),
           output: {
-            sanitizeFileName: false,
+            sanitizeFileName: (filename) => {
+              return filename.replace("\0", "_");
+            },
             sourcemap: false,
           },
         },
