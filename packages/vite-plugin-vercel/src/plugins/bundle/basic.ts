@@ -62,6 +62,7 @@ interface BundleAsset {
 // We cannot disable code-splitting with Vite/Rollup,
 // so we use esbuild when all files are written on the filesystem to bundle each function.
 export function basicBundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
+  const envNames = getBuildEnvNames(pluginConfig);
   const bundledAssets = new Map<string, BundleAsset>();
   const bundledChunks: string[] = [];
 
@@ -91,7 +92,9 @@ export function basicBundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
               bundledAssets.set(originalFileName, asset);
             }
           } else {
-            bundledChunks.push(outFile);
+            if (this.environment.name === envNames.edge || this.environment.name === envNames.node) {
+              bundledChunks.push(outFile);
+            }
           }
         }
       },
