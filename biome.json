@@ -1,24 +1,41 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "files": {
-    "ignore": ["dist/", "package.json"]
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "react": "recommended"
+    },
+    "rules": {
+      "recommended": true
+    }
   },
   "formatter": {
+    "enabled": true,
     "indentWidth": 2,
     "indentStyle": "space"
   },
   "javascript": {
     "formatter": {
+      "semicolons": "always",
       "lineWidth": 120
     }
   },
   "vcs": {
     "enabled": true,
-    "clientKind": "git"
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": "on"
+      }
+    }
   },
   "overrides": [
     {
-      "include": ["**/*.test.ts"],
+      "includes": ["**/*.test.ts"],
       "linter": {
         "rules": {
           "suspicious": { "noExplicitAny": "off" }

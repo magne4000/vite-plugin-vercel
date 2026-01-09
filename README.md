@@ -1,1 +1,1 @@
-packages/vercel/README.md
+packages/vite-plugin-vercel/README.md
