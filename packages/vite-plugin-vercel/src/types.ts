@@ -11,6 +11,11 @@ export type PluginContext = ThisParameterType<Extract<Plugin["resolveId"], (...a
 
 export interface ViteVercelConfig {
   /**
+   * @experimental
+   * @default basic
+   */
+  bundleStrategy?: "basic" | "nf3";
+  /**
    * How long Functions should be allowed to run for every request, in seconds.
    * If left empty, default value for your plan will be used.
    */
