@@ -6,6 +6,7 @@ import type { Plugin } from "vite";
 import { getVcConfig } from "../build.js";
 
 import type { ViteVercelConfig } from "../types.js";
+import { getBuildEnvNames } from "../utils/buildEnvs";
 import { dedupeRoutes } from "../utils/dedupeRoutes";
 import { entryDestination, entryDestinationDefault } from "../utils/destination.js";
 
@@ -13,6 +14,7 @@ const DUMMY = "__DUMMY__";
 const re_DUMMY = new RegExp(`${DUMMY}$`);
 
 export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
+  const envNames = getBuildEnvNames(pluginConfig);
   let root: string | undefined;
   return [
     {
@@ -72,7 +74,7 @@ export default def;`;
       apply: "build",
 
       applyToEnvironment(env) {
-        return env.name === "vercel_node" || env.name === "vercel_edge";
+        return env.name === envNames.node || env.name === envNames.edge;
       },
 
       config: {
@@ -85,8 +87,8 @@ export default def;`;
       configEnvironment: {
         order: "post",
         handler(name) {
-          const isEdge = name === "vercel_edge";
-          if (name === "vercel_node" || isEdge) {
+          const isEdge = name === envNames.edge;
+          if (name === envNames.node || isEdge) {
             const entries = dedupeRoutes().filter((e) => (e.vercel?.edge ?? false) === isEdge);
             return {
               build: {
@@ -109,13 +111,11 @@ export default def;`;
       },
 
       async buildStart() {
-        const isEdge = this.environment.name === "vercel_edge";
+        const isEdge = this.environment.name === envNames.edge;
         const nodeVersion = await getNodeVersion(process.cwd());
         const entries = dedupeRoutes();
 
         for (const entry of entries.filter((e) => (e.vercel?.edge ?? false) === isEdge)) {
-          const isEdge = this.environment.name === "vercel_edge";
-
           // Generate .vc-config.json
           this.emitFile({
             type: "asset",

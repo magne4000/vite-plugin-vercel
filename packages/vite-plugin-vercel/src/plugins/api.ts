@@ -2,11 +2,13 @@ import type { EntryMeta } from "@universal-deploy/store";
 import type { Plugin } from "vite";
 import { createAPI, type ViteVercelOutFile } from "../api";
 import type { ViteVercelConfig } from "../types.js";
+import { getBuildEnvNames } from "../utils/buildEnvs";
 import { dedupeRoutes } from "../utils/dedupeRoutes";
 import { entryDestination } from "../utils/destination.js";
 import { removeExtension } from "../utils/extension";
 
 export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
+  const envNames = getBuildEnvNames(pluginConfig);
   const outfiles: ViteVercelOutFile[] = [];
 
   return {
@@ -17,7 +19,7 @@ export function apiPlugin(pluginConfig: ViteVercelConfig): Plugin {
     },
 
     applyToEnvironment({ name }) {
-      return name === "vercel_edge" || name === "vercel_node";
+      return name === envNames.edge || name === envNames.node;
     },
 
     // Compute outfiles for the API

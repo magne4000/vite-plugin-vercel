@@ -6,10 +6,13 @@ import { type ExternalsPluginOptions, externals } from "nf3/plugin";
 import pLimit from "p-limit";
 import { type BuildOptions, build, type OutputBundle, type RolldownOutput } from "rolldown";
 import { normalizePath, type Plugin } from "vite";
+import type { ViteVercelConfig } from "../../types";
 import { assert } from "../../utils/assert";
+import { getBuildEnvNames } from "../../utils/buildEnvs";
 import { edgeExternal } from "../../utils/external";
 
-export function nf3BundlePlugin(): Plugin[] {
+export function nf3BundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
+  const envNames = getBuildEnvNames(pluginConfig);
   // TODO fix nf3 -> if (rOpts?.isEntry) return;
   // TODO fix nf3 -> monorepo linked packages are excluded from trace because resolved path does not contain node_modules
   //  Easy fix would be to pass unresolved files to tracedPaths
@@ -35,7 +38,7 @@ export function nf3BundlePlugin(): Plugin[] {
         return env.config.consumer !== "client";
       },
       async writeBundle(_, output) {
-        const isEdge = this.environment.name === "vercel_edge";
+        const isEdge = this.environment.name === envNames.edge;
         const config = this.environment.config;
         const outDir = normalizePath(
           path.isAbsolute(config.build.outDir) ? config.build.outDir : path.join(config.root, config.build.outDir),

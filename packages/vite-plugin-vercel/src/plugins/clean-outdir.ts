@@ -2,9 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import type { Plugin } from "vite";
 import type { ViteVercelConfig } from "../types";
+import { getBuildEnvNames } from "../utils/buildEnvs";
 
-export function vercelCleanupPlugin(pluginConfig?: ViteVercelConfig): Plugin {
+export function vercelCleanupPlugin(pluginConfig: ViteVercelConfig): Plugin {
   let alreadyRun = false;
+  const envNames = getBuildEnvNames(pluginConfig);
 
   return {
     apply: "build",
@@ -12,7 +14,7 @@ export function vercelCleanupPlugin(pluginConfig?: ViteVercelConfig): Plugin {
     enforce: "pre",
 
     applyToEnvironment(env) {
-      return env.name === "vercel_client";
+      return env.name === envNames.client;
     },
 
     buildStart: {

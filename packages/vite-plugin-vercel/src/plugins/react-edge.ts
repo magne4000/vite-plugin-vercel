@@ -1,11 +1,14 @@
 import type { Plugin } from "vite";
+import type { ViteVercelConfig } from "../types";
+import { getBuildEnvNames } from "../utils/buildEnvs";
 
-export function reactEdgePlugin(): Plugin {
+export function reactEdgePlugin(pluginConfig: ViteVercelConfig): Plugin {
+  const envNames = getBuildEnvNames(pluginConfig);
   return {
     name: "vite-plugin-vercel:react-edge",
 
     applyToEnvironment(env) {
-      return env.name === "vercel_edge";
+      return env.name === envNames.edge;
     },
 
     resolveId: {

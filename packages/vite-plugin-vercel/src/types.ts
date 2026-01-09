@@ -16,6 +16,15 @@ export interface ViteVercelConfig {
    */
   bundleStrategy?: "basic" | "nf3";
   /**
+   * Override vite build environments
+   * @experimental
+   */
+  viteEnvNames?: {
+    client?: string;
+    edge?: string | false;
+    node?: string;
+  };
+  /**
    * How long Functions should be allowed to run for every request, in seconds.
    * If left empty, default value for your plan will be used.
    */

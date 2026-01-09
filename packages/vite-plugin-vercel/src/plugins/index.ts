@@ -11,12 +11,12 @@ import { setupEnvs } from "./setupEnvs.js";
 type PluginInterop = Record<string, unknown> & { name: string };
 export function vercel(pluginConfig: ViteVercelConfig = {}): PluginInterop[] {
   return [
-    reactEdgePlugin(),
-    vercelCleanupPlugin(),
+    reactEdgePlugin(pluginConfig),
+    vercelCleanupPlugin(pluginConfig),
     apiPlugin(pluginConfig),
     ...setupEnvs(pluginConfig),
     ...loaderPlugin(pluginConfig),
-    ...(pluginConfig?.bundleStrategy === "nf3" ? nf3BundlePlugin() : basicBundlePlugin()),
+    ...(pluginConfig?.bundleStrategy === "nf3" ? nf3BundlePlugin(pluginConfig) : basicBundlePlugin(pluginConfig)),
     catchAll(),
     devServer(),
   ] as PluginInterop[];

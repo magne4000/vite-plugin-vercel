@@ -7,9 +7,11 @@ import {
   type EnvironmentOptions,
   mergeConfig,
   type Plugin,
+  type UserConfig,
 } from "vite";
 import { getConfig } from "../config.js";
 import type { ViteVercelConfig } from "../types.js";
+import { getBuildEnvNames } from "../utils/buildEnvs";
 import { virtualEntry } from "../utils/const.js";
 import { edgeConditions } from "../utils/edge.js";
 import { edgeExternal } from "../utils/external.js";
@@ -19,6 +21,8 @@ const DUMMY = "__DUMMY__";
 
 let injected = false;
 export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
+  const envNames = getBuildEnvNames(pluginConfig);
+
   return [
     {
       name: "vite-plugin-vercel:setup-envs",
@@ -27,7 +31,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
         order: "post",
         async handler(builder) {
           try {
-            await builder.build(builder.environments.vercel_client);
+            await builder.build(builder.environments[envNames.client]);
           } catch (e) {
             if (e instanceof Error && e.message.includes(`Could not resolve entry module "index.html"`)) {
               // ignore error
@@ -35,8 +39,10 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
               throw e;
             }
           }
-          await builder.build(builder.environments.vercel_edge);
-          await builder.build(builder.environments.vercel_node);
+          if (envNames.edge !== false) {
+            await builder.build(builder.environments[envNames.edge]);
+          }
+          await builder.build(builder.environments[envNames.node]);
         },
       },
 
@@ -58,22 +64,32 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
               }
             : {};
 
+          const environments: UserConfig["environments"] = {};
+
+          if (envNames.client) {
+            environments[envNames.client] = {
+              build: {
+                outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
+                copyPublicDir: true,
+                rollupOptions: {
+                  input: getDummyInput(),
+                },
+              },
+              consumer: "client",
+            };
+          }
+
+          if (envNames.edge) {
+            environments[envNames.edge] = createVercelEnvironmentOptions(outDirOverride);
+          }
+
+          if (envNames.node) {
+            environments[envNames.node] = createVercelEnvironmentOptions(outDirOverride);
+          }
+
           // rollup inputs are computed by the bundle plugin dynamically
           return {
-            environments: {
-              vercel_edge: createVercelEnvironmentOptions(outDirOverride),
-              vercel_node: createVercelEnvironmentOptions(outDirOverride),
-              vercel_client: {
-                build: {
-                  outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
-                  copyPublicDir: true,
-                  rollupOptions: {
-                    input: getDummyInput(),
-                  },
-                },
-                consumer: "client",
-              },
-            },
+            environments,
             // Required for environments to be taken into account
             builder: {},
           };
@@ -85,11 +101,11 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
     {
       name: "vite-plugin-vercel:setup-envs:vercel_edge",
       applyToEnvironment(env) {
-        return env.name === "vercel_edge";
+        return env.name === envNames.edge;
       },
 
       configEnvironment(name, config, env) {
-        if (name !== "vercel_edge") return;
+        if (name !== envNames.edge) return;
 
         const isDev = env.command === "serve";
         // In dev, we're running on node, so we do not apply edge conditions
@@ -145,11 +161,11 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
     {
       name: "vite-plugin-vercel:setup-envs:vercel_node",
       applyToEnvironment(env) {
-        return env.name === "vercel_node";
+        return env.name === envNames.node;
       },
 
       configEnvironment(name, config) {
-        if (name !== "vercel_node") return;
+        if (name !== envNames.node) return;
 
         return {
           optimizeDeps: {
@@ -177,7 +193,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
     {
       name: "vite-plugin-vercel:setup-envs:vercel_client",
       applyToEnvironment(env) {
-        return env.name === "vercel_client";
+        return env.name === envNames.client;
       },
 
       generateBundle: {

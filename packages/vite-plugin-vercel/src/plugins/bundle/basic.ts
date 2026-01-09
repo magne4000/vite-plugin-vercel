@@ -7,7 +7,8 @@ import { nodeFileTrace } from "@vercel/nft";
 import { type BuildOptions, build } from "rolldown";
 import type { Environment, Plugin } from "vite";
 import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../../api.js";
-import type { PluginContext } from "../../types.js";
+import type { PluginContext, ViteVercelConfig } from "../../types.js";
+import { getBuildEnvNames } from "../../utils/buildEnvs";
 import { edgeConditions } from "../../utils/edge.js";
 import { edgeExternal } from "../../utils/external.js";
 
@@ -60,7 +61,7 @@ interface BundleAsset {
 
 // We cannot disable code-splitting with Vite/Rollup,
 // so we use esbuild when all files are written on the filesystem to bundle each function.
-export function basicBundlePlugin(): Plugin[] {
+export function basicBundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
   const bundledAssets = new Map<string, BundleAsset>();
   const bundledChunks: string[] = [];
 
@@ -98,7 +99,7 @@ export function basicBundlePlugin(): Plugin[] {
       closeBundle: {
         order: "post",
         async handler() {
-          if (!isVercelLastBuildStep(this.environment)) return;
+          if (!isVercelLastBuildStep(this.environment, pluginConfig)) return;
 
           this.environment.logger.info("Creating Vercel bundles...");
 
@@ -298,9 +299,10 @@ function joinAbsolutePosix(env_or_p0: Environment | string, p1: string, ...p: st
   return path.posix.join(typeof env_or_p0 === "string" ? env_or_p0 : env_or_p0.config.root, p1, ...p);
 }
 
-function isVercelLastBuildStep(env: string | Environment) {
+function isVercelLastBuildStep(env: string | Environment, pluginConfig: ViteVercelConfig) {
+  const envNames = getBuildEnvNames(pluginConfig);
   const name = typeof env !== "string" ? env.name : env;
-  return name === "vercel_node";
+  return name === envNames.node;
 }
 
 async function cleanup(filesToKeep: string[], bundledChunks: string[]) {

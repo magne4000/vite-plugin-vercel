@@ -6,7 +6,5 @@
     "vite-plugin-vercel-simple": null,
     "vite-plugin-vercel": "11.0.0-beta.1"
   },
-  "changesets": [
-    "fair-stars-like"
-  ]
+  "changesets": ["fair-stars-like"]
 }
