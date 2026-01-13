@@ -89,6 +89,7 @@ export default def;`;
         handler(name) {
           const isEdge = name === envNames.edge;
           if (name === envNames.node || isEdge) {
+            // dedupeRoutes reads and merges `store.entries`
             const entries = dedupeRoutes().filter((e) => (e.vercel?.edge ?? false) === isEdge);
             return {
               build: {
