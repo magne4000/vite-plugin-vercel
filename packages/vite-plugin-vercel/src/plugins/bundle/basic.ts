@@ -4,6 +4,7 @@ import { builtinModules } from "node:module";
 import path from "node:path";
 import { findRoot } from "@manypkg/find-root";
 import { nodeFileTrace } from "@vercel/nft";
+import { transform } from "oxc-transform";
 import { type BuildOptions, build } from "rolldown";
 import type { Environment, Plugin } from "vite";
 import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../../api.js";
@@ -108,15 +109,15 @@ export function basicBundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
 
           const api = getVercelAPI(this);
           const outfiles = api.getOutFiles();
-          const filesToKeep: string[] = [];
+          const filesToKeepP: Promise<string[]>[] = [];
 
-          // TODO concurrency
           for (const outfile of outfiles) {
             if (outfile.type === "chunk") {
-              filesToKeep.push(...(await bundle(this, bundledAssets, outfile)));
+              filesToKeepP.push(bundle(this, bundledAssets, outfile));
             }
           }
 
+          const filesToKeep = (await Promise.all(filesToKeepP)).flat();
           await cleanup(filesToKeep, bundledChunks);
         },
       },
@@ -211,7 +212,7 @@ var __dirname = topLevelDirname(__filename);
     return [];
   }
 
-  const { fileList, reasons } = await nodeFileTrace([entryFilePath], {
+  const { fileList, reasons, warnings } = await nodeFileTrace([entryFilePath], {
     base,
     processCwd: environment.config.root,
     mixedModules: true,
@@ -223,31 +224,17 @@ var __dirname = topLevelDirname(__filename);
       "**/node_modules/webpack5/**/*",
     ],
     async readFile(filepath) {
+      const code = readFileSync(filepath, "utf-8");
+
       if (filepath.endsWith(".ts") || filepath.endsWith(".tsx")) {
-        const result = await build({
-          output: {
-            format: "esm",
-            minify: false,
-          },
-          // Compile only input
-          external: /.*/,
-          platform: "node",
-          logLevel: "info",
-          plugins: [],
-          transform: {
-            define: {
-              "process.env.NODE_ENV": '"production"',
-              "import.meta.env.NODE_ENV": '"production"',
-            },
-          },
-          input: [entryFilePath],
-          write: false,
+        const result = await transform(filepath, code, {
+          target: "es2022",
         });
 
-        return result.output[0].code;
+        return result.code;
       }
 
-      return readFileSync(filepath, "utf-8");
+      return code;
     },
   });
 
