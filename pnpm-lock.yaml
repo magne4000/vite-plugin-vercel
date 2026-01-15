@@ -77,7 +77,7 @@ importers:
         version: 5.5.16(@swc/core@1.15.5)(rollup@4.53.3)
       '@vite-plugin-vercel/schemas':
         specifier: ^1.0.0
-        version: 1.0.0
+        version: link:../../packages/schemas
       esbuild:
         specifier: ^0.27.2
         version: 0.27.2
@@ -122,11 +122,27 @@ importers:
         specifier: ^1.57.0
         version: 1.57.0
       typescript:
-        specifier: ^5.9.2
+        specifier: ^5.9.3
         version: 5.9.3
       vite:
         specifier: ^7.1.12
         version: 7.3.0(@types/node@20.19.27)(lightningcss@1.30.2)(tsx@4.21.0)
+
+  packages/schemas:
+    dependencies:
+      zod:
+        specifier: ^4.2.1
+        version: 4.2.1
+    devDependencies:
+      '@types/node':
+        specifier: ^22.19.3
+        version: 22.19.3
+      tsdown:
+        specifier: ^0.18.4
+        version: 0.18.4(typescript@5.9.3)
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
 
   packages/vite-plugin-vercel:
     dependencies:
@@ -153,7 +169,7 @@ importers:
         version: 5.3.1
       '@vite-plugin-vercel/schemas':
         specifier: latest
-        version: 1.0.0
+        version: link:../schemas
       convert-route:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1393,9 +1409,6 @@ packages:
 
   '@vercel/static-config@3.1.2':
     resolution: {integrity: sha512-2d+TXr6K30w86a+WbMbGm2W91O0UzO5VeemZYBBUJbCjk/5FLLGIi8aV6RS2+WmaRvtcqNTn2pUA7nCOK3bGcQ==}
-
-  '@vite-plugin-vercel/schemas@1.0.0':
-    resolution: {integrity: sha512-iUEJwHmAD4wFem5iI1Jmtcj4CO49PVBBUGDA8R8yWKC72/n1FLiQ6AgaetLqFTTT7KCbA32o9T6P3XJow4vCsg==}
 
   '@vitejs/plugin-react@5.1.2':
     resolution: {integrity: sha512-EcA07pHJouywpzsoTUqNh5NwGayl2PPVEJKUSinGGSxFGYn+shYbqMGBg6FXDqgXum9Ou/ecb+411ssw8HImJQ==}
@@ -4260,10 +4273,6 @@ snapshots:
       ajv: 8.6.3
       json-schema-to-ts: 1.6.4
       ts-morph: 12.0.0
-
-  '@vite-plugin-vercel/schemas@1.0.0':
-    dependencies:
-      zod: 4.2.1
 
   '@vitejs/plugin-react@5.1.2(vite@8.0.0-beta.6(@types/node@20.19.27)(esbuild@0.27.2)(tsx@4.21.0))':
     dependencies:
