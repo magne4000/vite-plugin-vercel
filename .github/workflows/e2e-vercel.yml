@@ -1,0 +1,25 @@
+name: E2E - Vercel
+on:
+  deployment_status:
+jobs:
+  e2e:
+    if: |
+      github.event_name == 'deployment_status' && 
+      github.event.deployment_status.state == 'success' &&
+      contains(github.event.deployment_status.environment_url, 'vercel.app')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: pnpm install
+      - run: pnpm exec playwright install chromium
+      - run: pnpm run build
+      - name: Test e2e deployed
+        run: pnpm test:e2e
+        working-directory: examples/demo
+        env:
+          BASE_URL: ${{ github.event.deployment_status.environment_url }}
+          NODE_ENV: production
