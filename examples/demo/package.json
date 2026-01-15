@@ -21,7 +21,7 @@
     "@vitejs/plugin-react": "^5.1.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "vite": "^8.0.0-beta.6"
+    "vite": "^8.0.0-beta.8"
   },
   "devDependencies": {
     "@babel/plugin-transform-react-jsx": "^7.27.1",
