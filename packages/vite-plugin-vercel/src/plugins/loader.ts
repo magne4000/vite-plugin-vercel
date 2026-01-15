@@ -146,7 +146,7 @@ export default def;`;
           pluginConfig.rewrites ??= [];
 
           // FIXME assume rou3 routes for now
-          for (const ir of sortRoutes([entry.pattern].flatMap((p) => fromRou3(p as string)))) {
+          for (const ir of sortRoutes([entry.pattern].flat().map((p) => fromRou3(p as string)))) {
             const source = toPathToRegexpV6(ir);
 
             pluginConfig.rewrites.push({
