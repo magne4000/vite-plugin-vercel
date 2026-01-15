@@ -167,21 +167,6 @@ export default def;`;
               });
             }
           }
-
-          // FIXME can we get rid of this?
-          // Append additional rewrite rules
-          // if (entry.vercel?.route) {
-          //   const source =
-          //     typeof entry.vercel?.route === "string" ? `(${entry.vercel.route})` : entryToPathtoregex(entry);
-          //   pluginConfig.rewrites.push({
-          //     enforce: entry.vercel?.enforce,
-          //     source,
-          //     destination:
-          //       typeof entry.vercel?.route === "string"
-          //         ? `/${photonEntryDestinationDefault(entry)}?__original_path=$1`
-          //         : `/${photonEntryDestinationDefault(entry)}`,
-          //   });
-          // }
         }
       },
 
