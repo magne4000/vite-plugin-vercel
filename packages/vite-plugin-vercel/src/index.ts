@@ -8,13 +8,31 @@ import { type ASTNode, generateCode, loadFile } from "magicast";
 import { normalizePath } from "vite";
 import { pathRelativeTo } from "./utils/path";
 
+export interface GetVercelEntriesOptions {
+  /**
+   * Map entries to URL patterns
+   * @example
+   *  // When dir: "endpoints/myapi" and destination: "api"
+   *  //  endpoints/myapi/page.ts -> /api/page
+   *  //  endpoints/myapi/name/[name].ts -> /api/name/*
+   */
+  destination?: string;
+  /**
+   * If true, parse entries exports for per-file settings.
+   * Entries can export `edge`, `isr`, `headers` and `streaming`. See README for more details
+   *
+   * @default true
+   */
+  tryParseExports?: boolean;
+}
+
 /**
  * Scans the filesystem for entry points.
- * @experimental
+ * @beta
  */
 export async function getVercelEntries(
   dir: string,
-  { destination = dir, tryParseExports = true },
+  { destination = dir, tryParseExports = true }: GetVercelEntriesOptions,
 ): Promise<EntryMeta[]> {
   const normalizedDir = normalizePath(dir);
   destination = normalizePath(destination);
