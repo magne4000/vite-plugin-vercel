@@ -12,11 +12,11 @@ import { getBuildEnvNames } from "../../utils/buildEnvs";
 import { edgeExternal } from "../../utils/external";
 
 export function nf3BundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
+  console.warn(
+    "[vite-plugin-vercel] bundleStrategy 'nf3' is highly experimental. Use at your own risk; support is not provided for related issues.",
+  );
+
   const envNames = getBuildEnvNames(pluginConfig);
-  // TODO fix nf3 -> if (rOpts?.isEntry) return;
-  // TODO fix nf3 -> monorepo linked packages are excluded from trace because resolved path does not contain node_modules
-  //  Easy fix would be to pass unresolved files to tracedPaths
-  //  https://chatgpt.com/c/695e6b45-bbb4-8331-bb4d-7734f11625f8
   const externalsPlugin = externals({});
   // Keeps the logic that properly marks modules as externals, without copying the files.
   // The actual copy is executed at a later stage.
