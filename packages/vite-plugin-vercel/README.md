@@ -1,14 +1,11 @@
 # vite-plugin-vercel
 
 > [!NOTE]
-> You are on the [Vite Environment API](https://vite.dev/guide/api-environment.html#environment-configuration) beta branch (v10). Check out [v9 branch](https://github.com/magne4000/vite-plugin-vercel/tree/v9) for current stable version.
+> You are on the [Vite Environment API](https://vite.dev/guide/api-environment.html#environment-configuration) beta branch (v11). Check out [v9 branch](https://github.com/magne4000/vite-plugin-vercel/tree/v9) for current stable version.
 
 Vercel adapter for [Vite](https://vitejs.dev/).
 
 Bundle your Vite application as supported by [Vercel Output API (v3)](https://vercel.com/docs/build-output-api/v3).
-
-> [!NOTE]
-> This plugin is mostly a re-export of [`@photonjs/vercel`](https://github.com/photon-js/photon/tree/main/packages/adapter-vercel)
 
 ## Install
 
@@ -68,7 +65,7 @@ export default defineConfig({
 ```
 
 > [!NOTE]
-> `@vercel/build` currently forces the building of files in the _/api_ folder, with no way to disable this behavior.
+> `@vercel/build` forces the building of files in the _/api_ folder, with no way to disable this behavior.
 > It's recommended to place your files in a different folder.
 
 ### Configure endpoints
@@ -165,7 +162,7 @@ export default defineConfig({
     trailingSlash: true,
     /**
      * Use `getVercelEntries` for mapping your filesystem routes to entries.
-     * If you are interfacing this plugin with a framework, entries can also be added through the Photon API
+     * If you are interfacing this plugin with a framework, entries can also be added through the {@link https://github.com/photon-js/universal-deploy | universal-deploy} API
      */
     entries: {
       root: {
@@ -209,7 +206,7 @@ Related documentation: https://vercel.com/docs/edge-network/headers/request-head
 
 ## Migrations
 
-- [Migration from v9 to v10](https://github.com/magne4000/vite-plugin-vercel/blob/main/MIGRATION.md)
+- [Migration from v9 to v11](https://github.com/magne4000/vite-plugin-vercel/blob/main/MIGRATION.md)
 
 ## Demo
 
