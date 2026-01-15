@@ -46,7 +46,18 @@ export default defineConfig({
 > [!NOTE]
 > `@vercel/build` currently forces building files under `/api`. To avoid unintended builds, prefer using a different folder (like `endpoints/api`) and map it via `getEntriesFromFs`.
 
-### 3) Project configuration in plugin options
+### 3) Update entries to `export default { fetch }` pattern
+
+The server entries should respect the following format:
+```ts
+export default {
+  fetch(request: Request): Response | Promise<Response> {
+    // ...
+  }
+}
+```
+
+### 4) Project configuration in plugin options
 If you configured `rewrites`, `headers`, `redirects`, `cleanUrls`, or `trailingSlash` in v9 (either via plugin options or `vercel.json`), define them in the plugin options in v11:
 ```ts
 vercel({
