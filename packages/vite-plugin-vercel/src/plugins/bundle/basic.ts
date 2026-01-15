@@ -212,7 +212,7 @@ var __dirname = topLevelDirname(__filename);
     return [];
   }
 
-  const { fileList, reasons, warnings } = await nodeFileTrace([entryFilePath], {
+  const { fileList, reasons } = await nodeFileTrace([entryFilePath], {
     base,
     processCwd: environment.config.root,
     mixedModules: true,

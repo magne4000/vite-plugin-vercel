@@ -17,7 +17,7 @@ const Link: FC<LinkProps> = ({ href, style, children, ...rest }) => {
     if (typeof window === "undefined") return;
 
     const currentPath = window.location.pathname;
-    setIsActive(currentPath === href || currentPath.startsWith(href + "/"));
+    setIsActive(currentPath === href || currentPath.startsWith(`${href}/`));
   }, [href]);
 
   return (

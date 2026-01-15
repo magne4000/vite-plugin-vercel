@@ -40,11 +40,17 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.test.ts"],
+      "includes": ["**/*.test.ts", "**/*.spec.ts"],
       "linter": {
         "rules": {
           "suspicious": { "noExplicitAny": "off" }
         }
+      }
+    },
+    {
+      "includes": ["examples/tanstack-start/**"],
+      "linter": {
+        "enabled": false
       }
     }
   ]
