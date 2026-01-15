@@ -31,9 +31,11 @@ jobs:
         run: pnpm run build
       - name: Typecheck
         run: pnpm run -r test:types
+      - name: Test
+        run: pnpm -r test
       - name: Lint
         run: pnpm lint
       - name: Install playwright
         run: pnpm playwright install chromium
-      - name: Test
+      - name: E2E Test
         run: pnpm test:e2e
