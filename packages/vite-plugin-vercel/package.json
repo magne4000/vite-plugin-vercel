@@ -45,7 +45,7 @@
     "@vercel/build-utils": "^13.2.3",
     "@vercel/nft": "^1.2.0",
     "@vercel/routing-utils": "^5.3.1",
-    "@vite-plugin-vercel/schemas": "latest",
+    "@vite-plugin-vercel/schemas": "workspace:^",
     "convert-route": "^1.0.0",
     "fast-glob": "^3.3.3",
     "magicast": "^0.5.1",
