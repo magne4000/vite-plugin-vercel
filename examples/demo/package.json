@@ -7,8 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "pnpm run test:01",
+    "test": "run-s test:01 test:02",
     "test:01": "vite build && vitest run --dir tests/01-vite --config tests/01-vite/vitest.config.ts",
+    "test:02": "vite build -c tests/02-nf3/vite.config.ts && vitest run --dir tests/02-nf3 --config tests/02-nf3/vitest.config.ts",
     "test:e2e": "playwright test",
     "test:types": "tsc --noEmit"
   },
@@ -34,6 +35,7 @@
     "@vite-plugin-vercel/schemas": "^1.0.0",
     "esbuild": "^0.27.2",
     "fast-glob": "^3.3.3",
+    "npm-run-all2": "^8.0.4",
     "playwright": "^1.57.0",
     "rolldown-vite": "^7.3.0",
     "typescript": "^5.9.3",
