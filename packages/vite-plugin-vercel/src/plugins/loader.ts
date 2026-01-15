@@ -7,7 +7,7 @@ import { getVcConfig } from "../build.js";
 
 import type { ViteVercelConfig } from "../types.js";
 import { getBuildEnvNames } from "../utils/buildEnvs";
-import { dedupeRoutes } from "../utils/dedupeRoutes";
+import { dedupeRoutes, sortRoutes } from "../utils/dedupeRoutes";
 import { entryDestination, entryDestinationDefault } from "../utils/destination.js";
 
 const DUMMY = "__DUMMY__";
@@ -144,10 +144,10 @@ export default def;`;
 
           // Append patterns rewrites
           pluginConfig.rewrites ??= [];
-          for (const pattern of [entry.pattern].flat()) {
-            // FIXME assume rou3 routes for now
-            const route = pattern as string;
-            const source = toPathToRegexpV6(fromRou3(route));
+
+          // FIXME assume rou3 routes for now
+          for (const ir of sortRoutes([entry.pattern].flatMap((p) => fromRou3(p as string)))) {
+            const source = toPathToRegexpV6(ir);
 
             pluginConfig.rewrites.push({
               enforce: entry.vercel?.enforce,
