@@ -12,6 +12,8 @@ import { entryDestination, entryDestinationDefault } from "../utils/destination.
 
 const DUMMY = "__DUMMY__";
 const re_DUMMY = new RegExp(`${DUMMY}$`);
+const re_edge = /[?&]vercel_edge\b/;
+const re_node = /[?&]vercel_node\b/;
 
 export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
   const envNames = getBuildEnvNames(pluginConfig);
@@ -48,23 +50,51 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
 
       resolveId: {
         filter: {
-          id: [/\?edge$/],
+          id: re_edge,
         },
         async handler(id, importer, opts) {
-          const resolved = await this.resolve(id.replace(/\?edge$/, ""), importer, opts);
+          const resolved = await this.resolve(id.replace(re_edge, ""), importer, opts);
           if (!resolved) return null;
-          return `${resolved.id}?edge`;
+          return `${resolved.id}?vercel_edge`;
         },
       },
 
       load: {
         filter: {
-          id: [/\?edge$/],
+          id: re_edge,
         },
         async handler(id) {
-          const mod = id.replace(/\?edge$/, "");
+          const mod = id.replace(re_edge, "");
           return `import mod from ${JSON.stringify(mod)};
 const def = mod.fetch;
+export default def;`;
+        },
+      },
+    },
+    {
+      name: "vite-plugin-vercel:load-node",
+      apply: "build",
+
+      resolveId: {
+        filter: {
+          id: re_node,
+        },
+        async handler(id, importer, opts) {
+          const resolved = await this.resolve(id.replace(re_node, ""), importer, opts);
+          if (!resolved) return null;
+          return `${resolved.id}?vercel_node`;
+        },
+      },
+
+      load: {
+        filter: {
+          id: re_node,
+        },
+        async handler(id) {
+          const mod = id.replace(re_node, "");
+          // server.nodeHandler supports native node handlers, like express app
+          return `import mod from ${JSON.stringify(mod)};
+const def = mod?.server?.nodeHandler ?? mod;
 export default def;`;
         },
       },
@@ -97,7 +127,7 @@ export default def;`;
                   input: Object.fromEntries(
                     entries.map((e) => [
                       entryDestination(root ?? process.cwd(), e, ".func/index"),
-                      isEdge ? `${e.id}?edge` : e.id,
+                      isEdge ? `${e.id}?vercel_edge` : `${e.id}?vercel_node`,
                     ]),
                   ),
                   output: {
