@@ -27,54 +27,54 @@ prepareTestJsonFileContent("config.json", (context) => {
       {
         check: true,
         src: "^/edge$",
-        dest: "/src/routes/edge",
+        dest: "/routes_edge_1bx41y",
       },
       {
         check: true,
         src: "^/og-edge$",
-        dest: "/src/routes/og-edge",
+        dest: "/routes_og-edge_u8dtyy",
       },
       {
         check: true,
-        dest: "/src/routes/dynamic",
+        dest: "/routes_dynamic_1j4abj",
         src: "^/dynamic$",
       },
       {
         check: true,
-        dest: "/src/routes/index",
+        dest: "/routes_index_1afnff",
         src: "^/$",
       },
       {
         check: true,
         src: "^/isr$",
-        dest: "/src/routes/isr",
+        dest: "/routes_isr_1ndvja",
       },
       {
         check: true,
         src: "^/og-node$",
-        dest: "/src/routes/og-node",
+        dest: "/routes_og-node_sewegp",
       },
       {
         check: true,
         src: "^/api/isr$",
-        dest: "/src/routes/api/isr",
+        dest: "/api_isr_1w7em5",
       },
       {
         check: true,
         src: "^/api/page$",
-        dest: "/src/routes/api/page",
+        dest: "/api_page_1gngr9",
       },
       {
         check: true,
         src: "^/named(?:/([^/]+?))$",
-        dest: "/src/routes/named/[someId]?someId=$1",
+        dest: "/named_[someId]_cfm46n?someId=$1",
       },
       {
         check: true,
         src: "^/api/name(?:/([^/]+?))$",
-        dest: "/src/routes/api/name/[name]?name=$1",
+        dest: "/name_[name]_vl2chm?name=$1",
       },
-      { check: true, dest: "/src/routes/[---catchall]?catchall=$1", src: "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))$" },
+      { check: true, dest: "/routes_[---catchall]_96lu7c?catchall=$1", src: "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))$" },
     ];
 
     assert.sameDeepMembers((context.file as any).routes, expected);
