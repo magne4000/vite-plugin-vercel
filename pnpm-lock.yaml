@@ -189,8 +189,8 @@ importers:
         specifier: ^19.2.0
         version: 19.2.3(@types/react@19.2.7)
       '@universal-deploy/store':
-        specifier: ^0.0.2
-        version: 0.0.2(srvx@0.10.0)
+        specifier: ^0.0.6
+        version: 0.0.6(srvx@0.10.0)
       '@vitejs/plugin-react':
         specifier: ^5.0.4
         version: 5.1.2(vite@7.3.0(@types/node@22.19.3)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.21.0))
@@ -235,8 +235,8 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       '@universal-deploy/store':
-        specifier: ^0.0.2
-        version: 0.0.2(@types/express@4.17.25)(hono@4.11.3)
+        specifier: ^0.0.6
+        version: 0.0.6(@types/express@4.17.25)(hono@4.11.3)
       '@universal-middleware/core':
         specifier: ^0.4.13
         version: 0.4.14(@types/express@4.17.25)(hono@4.11.3)
@@ -1926,8 +1926,8 @@ packages:
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
 
-  '@universal-deploy/store@0.0.2':
-    resolution: {integrity: sha512-fmNALSCBkjrpJmidLmMU5c4jWTXs/CKsgk9cDmTPZpne5+vWLqw73Smav6NT2tXbkGlG9nl8v4BNIFb1eE9wuw==}
+  '@universal-deploy/store@0.0.6':
+    resolution: {integrity: sha512-OtIQSDx34xKPdtLcTFO0/WOUTdowDCQ+IBKMn/7jj0ex5BjvuKfF2QtAoDK98a9p2MPRkfN65BjizABlaVGZkA==}
 
   '@universal-middleware/core@0.4.14':
     resolution: {integrity: sha512-yomLeaMdh0YYnIWA5wt71+znX1oTf+olO+XnsvEEids8FexxsAxyjkjGaIeRYr4Vc5CviKEriTe6ewkpLRtdgQ==}
@@ -3791,6 +3791,7 @@ packages:
   tar@7.4.3:
     resolution: {integrity: sha512-5S7Va8hKfV7W5U6g3aYxXmlPoZVAwUMy9AOKyF2fVuZa2UD3qZjg578OrLRt8PcNN1PleVaL/5/yYATNL0ICUw==}
     engines: {node: '>=18'}
+    deprecated: Old versions of tar are not supported, and contain widely publicized security vulnerabilities, which have been fixed in the current version. Please update. Support for old versions may be purchased (at exhorbitant rates) by contacting i@izs.me
 
   term-size@2.2.1:
     resolution: {integrity: sha512-wK0Ri4fOGjv/XPy8SBHZChl8CM7uMc5VML7SqiQ0zG7+J5Vr+RMQDoHa2CNT6KHUnTGIXH34UDMkPzAUyapBZg==}
@@ -5854,7 +5855,7 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
-  '@universal-deploy/store@0.0.2(@types/express@4.17.25)(hono@4.11.3)':
+  '@universal-deploy/store@0.0.6(@types/express@4.17.25)(hono@4.11.3)':
     dependencies:
       '@universal-middleware/express': 0.4.22(@types/express@4.17.25)(hono@4.11.3)
       rou3: 0.7.12
@@ -5869,7 +5870,7 @@ snapshots:
       - hono
       - srvx
 
-  '@universal-deploy/store@0.0.2(srvx@0.10.0)':
+  '@universal-deploy/store@0.0.6(srvx@0.10.0)':
     dependencies:
       '@universal-middleware/express': 0.4.22(srvx@0.10.0)
       rou3: 0.7.12
