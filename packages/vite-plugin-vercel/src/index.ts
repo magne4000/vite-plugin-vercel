@@ -65,8 +65,7 @@ export async function getVercelEntries(
     if (xports?.headers) entry.vercel!.headers = xports.headers;
     // biome-ignore lint/style/noNonNullAssertion: ok
     if (xports?.streaming) entry.vercel!.streaming = xports.streaming;
-    // FIXME migrate to URLPatternInit
-    entry.pattern = entryToRou3(key);
+    entry.route = entryToRou3(key);
     if (key.includes("[...")) {
       // biome-ignore lint/style/noNonNullAssertion: ok
       entry.vercel!.enforce = "post";

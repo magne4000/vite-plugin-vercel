@@ -1,4 +1,4 @@
-import { type EntryMeta, store } from "@universal-deploy/store";
+import { type EntryMeta, getAllEntries } from "@universal-deploy/store";
 import type { fromRou3 } from "convert-route";
 
 export type RouteIR = ReturnType<typeof fromRou3>;
@@ -10,26 +10,26 @@ export type RouteIR = ReturnType<typeof fromRou3>;
 export function dedupeRoutes(): EntryMeta[] {
   const entriesToKeep: EntryMeta[] = [];
 
-  const entriesGroupedByModuleId = groupBy(store.entries, (e) => e.id);
+  const entriesGroupedByModuleId = groupBy(getAllEntries(), (e) => e.id);
   for (const entries of entriesGroupedByModuleId.values()) {
     let groupedEntry: EntryMeta | undefined;
 
     for (const entry of entries) {
       // For now, we do not try to be too smart, we only check if there is specific vercel configs attached to the entry
       if (entry.vercel && Object.keys(entry.vercel).length > 0) {
-        if (!Array.isArray(entry.pattern)) {
-          entry.pattern = [entry.pattern];
+        if (!Array.isArray(entry.route)) {
+          entry.route = [entry.route];
         }
         entriesToKeep.push(entry);
       } else if (!groupedEntry) {
         groupedEntry = structuredClone(entry);
-        if (!Array.isArray(groupedEntry.pattern)) {
-          groupedEntry.pattern = [groupedEntry.pattern];
+        if (!Array.isArray(groupedEntry.route)) {
+          groupedEntry.route = [groupedEntry.route];
         }
         entriesToKeep.push(groupedEntry);
       } else {
         // biome-ignore lint/suspicious/noExplicitAny: array enforced at creation
-        (groupedEntry.pattern as any[]).push(...[entry.pattern].flat());
+        (groupedEntry.route as any[]).push(...[entry.route].flat());
       }
     }
   }

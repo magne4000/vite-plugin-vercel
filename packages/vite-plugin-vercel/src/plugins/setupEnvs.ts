@@ -1,6 +1,6 @@
 import { cp } from "node:fs/promises";
 import path from "node:path";
-import { store } from "@universal-deploy/store";
+import { addEntry } from "@universal-deploy/store";
 import {
   BuildEnvironment,
   createRunnableDevEnvironment,
@@ -56,7 +56,9 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
           if (!injected) {
             injected = true;
             if (pluginConfig.entries) {
-              store.entries.push(...pluginConfig.entries);
+              pluginConfig.entries.forEach((entry) => {
+                addEntry(entry);
+              });
             }
           }
 

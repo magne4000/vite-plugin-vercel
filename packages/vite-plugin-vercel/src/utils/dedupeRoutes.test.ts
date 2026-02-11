@@ -1,46 +1,39 @@
-import { store } from "@universal-deploy/store";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { addEntry, type Store } from "@universal-deploy/store";
+import { beforeEach, describe, expect, it } from "vitest";
 import { dedupeRoutes, type RouteIR, sortRoutes } from "./dedupeRoutes";
 
-// Mocking @universal-deploy/store
-vi.mock("@universal-deploy/store", async () => {
-  const actual = await vi.importActual<any>("@universal-deploy/store");
-  return {
-    ...actual,
-    store: {
-      entries: [],
-    },
-  };
-});
+const storeSymbol = Symbol.for("ud:store");
+
+function getStore(): Store {
+  return (globalThis as any)[storeSymbol];
+}
 
 describe("dedupeRoutes", () => {
   beforeEach(() => {
-    store.entries = [];
+    getStore().entries = [];
   });
 
   it("should return empty array if no entries", () => {
     expect(dedupeRoutes()).toEqual([]);
   });
 
-  it("should keep a single entry as is (wrapping pattern in array)", () => {
+  it("should keep a single entry as is (wrapping route in array)", () => {
     const entry = {
       id: "module1",
-      pattern: "/a",
+      route: "/a",
     };
-    store.entries.push(entry as any);
+    addEntry(entry);
 
     const result = dedupeRoutes();
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe("module1");
-    expect(result[0].pattern).toEqual(["/a"]);
+    expect(result[0].route).toEqual(["/a"]);
   });
 
   it("should dedupe multiple entries with same id", () => {
-    store.entries.push(
-      { id: "module1", pattern: "/a" } as any,
-      { id: "module1", pattern: "/b" } as any,
-      { id: "module2", pattern: "/c" } as any,
-    );
+    addEntry({ id: "module1", route: "/a" });
+    addEntry({ id: "module1", route: "/b" });
+    addEntry({ id: "module2", route: "/c" });
 
     const result = dedupeRoutes();
     expect(result).toHaveLength(2);
@@ -48,33 +41,29 @@ describe("dedupeRoutes", () => {
     const m1 = result.find((e) => e.id === "module1");
     const m2 = result.find((e) => e.id === "module2");
 
-    expect(m1?.pattern).toEqual(["/a", "/b"]);
-    expect(m2?.pattern).toEqual(["/c"]);
+    expect(m1?.route).toEqual(["/a", "/b"]);
+    expect(m2?.route).toEqual(["/c"]);
   });
 
   it("should NOT dedupe entries with vercel config", () => {
-    store.entries.push(
-      { id: "module1", pattern: "/a", vercel: { isr: 60 } } as any,
-      { id: "module1", pattern: "/b" } as any,
-      { id: "module1", pattern: "/c", vercel: { edge: true } } as any,
-    );
+    addEntry({ id: "module1", route: "/a", vercel: { isr: { expiration: 60 } } });
+    addEntry({ id: "module1", route: "/b" });
+    addEntry({ id: "module1", route: "/c", vercel: { edge: true } });
 
     const result = dedupeRoutes();
 
     expect(result).toHaveLength(3);
-    expect(result[0].pattern).toEqual(["/a"]);
-    expect(result[0].vercel).toEqual({ isr: 60 });
-    expect(result[1].pattern).toEqual(["/b"]);
+    expect(result[0].route).toEqual(["/a"]);
+    expect(result[0].vercel).toEqual({ isr: { expiration: 60 } });
+    expect(result[1].route).toEqual(["/b"]);
     expect(result[1].vercel).toBeUndefined();
-    expect(result[2].pattern).toEqual(["/c"]);
+    expect(result[2].route).toEqual(["/c"]);
     expect(result[2].vercel).toEqual({ edge: true });
   });
 
   it("should NOT merge entries without vercel config into an entry with vercel config", () => {
-    store.entries.push(
-      { id: "module1", pattern: "/a", vercel: { isr: 60 } } as any,
-      { id: "module1", pattern: "/b" } as any,
-    );
+    addEntry({ id: "module1", route: "/a", vercel: { isr: { expiration: 60 } } });
+    addEntry({ id: "module1", route: "/b" });
 
     const result = dedupeRoutes();
     // Expected: /a stays separate with its config, /b becomes its own entry (or merges with other pure entries)
@@ -82,20 +71,18 @@ describe("dedupeRoutes", () => {
     const withConfig = result.find((e) => e.vercel && Object.keys(e.vercel).length > 0);
     const withoutConfig = result.find((e) => !e.vercel || Object.keys(e.vercel).length === 0);
 
-    expect(withConfig?.pattern).toEqual(["/a"]);
-    expect(withoutConfig?.pattern).toEqual(["/b"]);
+    expect(withConfig?.route).toEqual(["/a"]);
+    expect(withoutConfig?.route).toEqual(["/b"]);
   });
 
   it("should handle array patterns correctly when deduping", () => {
-    store.entries.push(
-      { id: "module1", pattern: ["/a", "/b"] } as any,
-      { id: "module1", pattern: "/c" } as any,
-      { id: "module1", pattern: ["/d"] } as any,
-    );
+    addEntry({ id: "module1", route: ["/a", "/b"] });
+    addEntry({ id: "module1", route: "/c" });
+    addEntry({ id: "module1", route: ["/d"] });
 
     const result = dedupeRoutes();
     expect(result).toHaveLength(1);
-    expect(result[0].pattern).toEqual(["/a", "/b", "/c", "/d"]);
+    expect(result[0].route).toEqual(["/a", "/b", "/c", "/d"]);
   });
 });
 

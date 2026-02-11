@@ -119,7 +119,7 @@ export default def;`;
         handler(name) {
           const isEdge = name === envNames.edge;
           if (name === envNames.node || isEdge) {
-            // dedupeRoutes reads and merges `store.entries`
+            // dedupeRoutes reads and merges store entries
             const entries = dedupeRoutes().filter((e) => (e.vercel?.edge ?? false) === isEdge);
             return {
               build: {
@@ -175,8 +175,7 @@ export default def;`;
           // Append patterns rewrites
           pluginConfig.rewrites ??= [];
 
-          // FIXME assume rou3 routes for now
-          for (const ir of sortRoutes([entry.pattern].flat().map((p) => fromRou3(p as string)))) {
+          for (const ir of sortRoutes([entry.route].flat().map((p) => fromRou3(p as string)))) {
             const source = toPathToRegexpV6(ir);
 
             pluginConfig.rewrites.push({
