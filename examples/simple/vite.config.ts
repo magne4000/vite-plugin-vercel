@@ -1,12 +1,16 @@
 import { defineConfig } from "vite";
-import vercel from "vite-plugin-vercel";
+import { getVercelEntries } from "vite-plugin-vercel";
+import { vercel } from "vite-plugin-vercel/vite";
+
+// Scan `src/routes` directory for entries
+const routes = await getVercelEntries("src/routes", {
+  destination: "",
+});
 
 export default defineConfig({
   plugins: [
     vercel({
-      // `smart` param only exist to circumvent a pnpm issue in this repo
-      // You should not use this parameter outside this repository
-      smart: false,
+      entries: routes,
     }),
   ],
 });

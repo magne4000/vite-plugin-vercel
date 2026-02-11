@@ -1,0 +1,11 @@
+{
+  "mode": "pre",
+  "tag": "beta",
+  "initialVersions": {
+    "vite-plugin-vercel-demo": null,
+    "vite-plugin-vercel-simple": null,
+    "vite-plugin-vercel": "11.0.0-beta.1",
+    "@vite-plugin-vercel/schemas": "1.0.0"
+  },
+  "changesets": ["fair-stars-like"]
+}

@@ -7,7 +7,6 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
 
 jobs:
   build:
@@ -29,10 +28,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Build
-        run: pnpm run build:all
+        run: pnpm run build
       - name: Typecheck
-        run: pnpm run typecheck:all
+        run: pnpm run -r test:types
+      - name: Test
+        run: pnpm -r test
       - name: Lint
         run: pnpm lint
-      - name: Test
-        run: pnpm test
+      - name: Install playwright
+        run: pnpm playwright install chromium
+      - name: E2E Test
+        run: pnpm test:e2e

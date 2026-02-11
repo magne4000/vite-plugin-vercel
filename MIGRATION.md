@@ -1,0 +1,73 @@
+## v9 to v11
+
+> [!NOTE]
+> `v10` never went out of beta, so migration from it is not supported.
+
+
+### 1) Update dependencies
+- Install the latest `vite-plugin-vercel`.
+- Ensure Vite is 7+. Older Vite versions used in v9 are not supported on this branch.
+
+### 2) Declare entries explicitly (recommended)
+In v9 you could rely on the conventional `/api` folder or custom mappings. In v11 you can still keep `/api`, but it’s recommended to move your handlers to a custom folder and declare them via `getVercelEntries()` so you fully control the mapping.
+
+Example migration:
+
+v9 (typical):
+```ts
+// vite.config.ts (v9)
+import { defineConfig } from 'vite'
+import vercel from 'vite-plugin-vercel'
+
+export default defineConfig({
+  plugins: [vercel()], // relied on /api or framework mapping
+})
+```
+
+v11 (recommended):
+```ts
+// vite.config.ts (v10)
+import { defineConfig } from 'vite'
+import vercel from 'vite-plugin-vercel'
+import { getVercelEntries } from 'vite-plugin-vercel'
+
+const entries = await getVercelEntries('endpoints/api', {
+  // Auto mapping examples:
+  //   endpoints/api/page.ts -> /api/page
+  //   endpoints/api/name/[name].ts -> /api/name/*
+  destination: 'api',
+})
+
+export default defineConfig({
+  plugins: [vercel({ entries })],
+})
+```
+
+> [!NOTE]
+> `@vercel/build` currently forces building files under `/api`. To avoid unintended builds, prefer using a different folder (like `endpoints/api`) and map it via `getEntriesFromFs`.
+
+### 3) Update entries to `export default { fetch }` pattern
+
+The server entries should respect the following format:
+```ts
+export default {
+  fetch(request: Request): Response | Promise<Response> {
+    // ...
+  }
+}
+```
+
+### 4) Project configuration in plugin options
+If you configured `rewrites`, `headers`, `redirects`, `cleanUrls`, or `trailingSlash` in v9 (either via plugin options or `vercel.json`), define them in the plugin options in v11:
+```ts
+vercel({
+  rewrites: [{ source: '/about', destination: '/about-our-company.html' }],
+  headers: [{ source: '/service-worker.js', headers: [{ key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' }] }],
+  redirects: [{ source: '/me', destination: '/profile.html', permanent: false }],
+  cleanUrls: true,
+  trailingSlash: true,
+})
+```
+
+### 4) Vike's migration
+If you were using this plugin with Vike, please refer to [Vike's documentation](https://vike.dev/vercel) for the most up-to-date integration instructions.
