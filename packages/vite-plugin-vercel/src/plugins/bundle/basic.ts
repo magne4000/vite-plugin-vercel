@@ -173,13 +173,6 @@ async function bundle(
   } else {
     buildOptions.platform = "node";
     buildOptions.output.file = destination.replace(/\.js$/, ".mjs");
-    buildOptions.output.banner = `import { createRequire as topLevelCreateRequire } from 'node:module';
-import { dirname as topLevelDirname } from 'node:path';
-import { fileURLToPath as topLevelFileURLToPath } from 'node:url';
-var require = topLevelCreateRequire(import.meta.url);
-var __filename = topLevelFileURLToPath(import.meta.url);
-var __dirname = topLevelDirname(__filename);
-`;
   }
 
   try {
