@@ -44,17 +44,17 @@ function hashString(str: string, length = 6) {
   return hash.toString(36).slice(0, length); // base36, short
 }
 
-function uniqueViteName(id: string, maxSegments = 2) {
+function uniqueViteName(id: string, entry: EntryMeta, maxSegments = 2) {
   const parsed = parseViteId(id);
   const bestPath = extractBestPath(parsed);
   const base = mapPath(bestPath, maxSegments); // short readable name
-  const hash = hashString(id); // hash of full id ensures uniqueness
+  const hash = hashString(JSON.stringify(entry)); // hash of full id ensures uniqueness
   return removeExtension(`${base}_${hash}`.replace(/[^a-zA-Z0-9\-_[\]/]/g, "-"));
 }
 
 export function entryDestinationDefault(root: string, entry: EntryMeta) {
   const rel = pathRelativeTo(entry.id, root);
-  return uniqueViteName(rel);
+  return uniqueViteName(rel, entry);
 }
 
 export function entryDestination(
