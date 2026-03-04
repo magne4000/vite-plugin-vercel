@@ -96,6 +96,6 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
 }
 
 function wrapRouteInParentheses(route: Route) {
-  if (!route.dest || route.dest.match(/^\(.*\)$/) || route.dest.match(/^\^\(.*\)\$$/)) return;
-  route.dest = `(${route.dest})`;
+  if (!route.src || route.src.match(/^\(.*\)$/) || route.src.match(/^\^\(.*\)\$$/)) return;
+  route.src = `(${route.src})`;
 }
