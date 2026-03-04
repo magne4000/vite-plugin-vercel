@@ -79,6 +79,12 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
     ],
   });
 
+  for (const route of cleanRoutes) {
+    // Ensures that ISR routes have `x-now-route-matches` header,
+    // which will then be used to recompute the original URL
+    wrapRouteInParentheses(route);
+  }
+
   return vercelOutputConfigSchema.parse({
     version: 3,
     ...pluginConfig.config,
@@ -87,4 +93,9 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
       ...pluginConfig.config?.overrides,
     },
   });
+}
+
+function wrapRouteInParentheses(route: Route) {
+  if (!route.dest || route.dest.match(/^\(.*\)$/) || route.dest.match(/^\^\(.*\)\$$/)) return;
+  route.dest = `(${route.dest})`;
 }

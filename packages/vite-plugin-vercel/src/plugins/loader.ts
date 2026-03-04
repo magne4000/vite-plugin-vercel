@@ -9,6 +9,7 @@ import type { ViteVercelConfig } from "../types.js";
 import { getBuildEnvNames } from "../utils/buildEnvs";
 import { dedupeRoutes, sortRoutes } from "../utils/dedupeRoutes";
 import { entryDestination, entryDestinationDefault } from "../utils/destination.js";
+import { getOriginalRequest } from "../utils/request";
 
 const DUMMY = "__DUMMY__";
 const re_DUMMY = new RegExp(`${DUMMY}$`);
@@ -66,8 +67,15 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
         async handler(id) {
           const mod = id.replace(re_edge, "");
           return `import mod from ${JSON.stringify(mod)};
-const def = mod.fetch;
-export default def;`;
+
+${getOriginalRequest.toString()}
+
+const fn = (...args) => {
+  Object.assign(args[0], getOriginalRequest(request));
+  return mod.fetch(...args);
+};
+
+export default fn`;
         },
       },
     },
@@ -94,7 +102,19 @@ export default def;`;
           const mod = id.replace(re_node, "");
           // server.nodeHandler supports native node handlers, like express app
           return `import mod from ${JSON.stringify(mod)};
+
+${getOriginalRequest.toString()}
+
+if (mod?.fetch) {
+  const ori = mod.fetch;
+  mod.fetch = (...args) => {
+    Object.assign(args[0], getOriginalRequest(request));
+    return ori(...args);
+  }
+}
+
 const def = mod?.server?.nodeHandler ?? mod;
+
 export default def;`;
         },
       },
