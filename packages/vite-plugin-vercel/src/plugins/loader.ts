@@ -133,6 +133,7 @@ export default def;`;
                   output: {
                     // Avoids empty imports at the top of entry chunks
                     hoistTransitiveImports: false,
+                    entryFileNames: "[name].js",
                   },
                 },
               },
