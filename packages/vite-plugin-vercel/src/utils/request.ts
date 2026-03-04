@@ -1,18 +1,15 @@
 // Keep this function side effect free so that we can stringify it
 export function getOriginalRequest(request: Request) {
-  const xNowRouteMatchesHeader = request.headers.get("x-now-route-matches");
+  const xOriginalPath = request.headers.get("x-original-path");
   let newUrl = null;
 
   let newRequest = request;
 
-  if (typeof xNowRouteMatchesHeader === "string") {
-    const originalPathBis = new URLSearchParams(xNowRouteMatchesHeader).get("1");
-    if (originalPathBis) {
-      newUrl = new URL(originalPathBis, request.url).toString();
-    }
+  if (typeof xOriginalPath === "string") {
+    newUrl = new URL(xOriginalPath, request.url).toString();
   }
 
-  if (newUrl) {
+  if (newUrl && request.url !== newUrl) {
     newRequest = new Request(newUrl, {
       method: request.method,
       headers: request.headers,

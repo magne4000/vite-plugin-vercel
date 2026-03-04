@@ -26,7 +26,18 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
       }),
     ),
     redirects: pluginConfig.redirects ? reorderEnforce(pluginConfig.redirects) : undefined,
-    headers: pluginConfig.headers,
+    headers: [
+      {
+        source: "/(.*)",
+        headers: [
+          {
+            key: "x-original-path",
+            value: "/$1",
+          },
+        ],
+      },
+      ...(pluginConfig.headers ?? []),
+    ],
   });
 
   if (error) {
@@ -79,12 +90,6 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
     ],
   });
 
-  for (const route of cleanRoutes) {
-    // Ensures that ISR routes have `x-now-route-matches` header,
-    // which will then be used to recompute the original URL
-    wrapRouteInParentheses(route);
-  }
-
   return vercelOutputConfigSchema.parse({
     version: 3,
     ...pluginConfig.config,
@@ -93,9 +98,4 @@ export function getConfig(pluginConfig: ViteVercelConfig): VercelOutputConfig {
       ...pluginConfig.config?.overrides,
     },
   });
-}
-
-function wrapRouteInParentheses(route: Route) {
-  if (!route.src || !route.dest || route.src.match(/^\(.*\)$/) || route.src.match(/^\^\(.*\)\$$/)) return;
-  route.src = `(${route.src})`;
 }
