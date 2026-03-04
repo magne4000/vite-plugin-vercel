@@ -70,9 +70,8 @@ export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
 
 ${getOriginalRequest.toString()}
 
-const fn = (...args) => {
-  Object.assign(args[0], getOriginalRequest(args[0]));
-  return mod.fetch(...args);
+const fn = (r) => {
+  return mod.fetch(getOriginalRequest(r));
 };
 
 export default fn`;
@@ -107,9 +106,8 @@ ${getOriginalRequest.toString()}
 
 if (mod?.fetch) {
   const ori = mod.fetch;
-  mod.fetch = (...args) => {
-    Object.assign(args[0], getOriginalRequest(args[0]));
-    return ori(...args);
+  mod.fetch = (r) => {
+    return ori(getOriginalRequest(r));
   }
 }
 
