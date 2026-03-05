@@ -1,9 +1,9 @@
 import { vercelOutputPrerenderConfigSchema } from "@vite-plugin-vercel/schemas";
 import { expect, it } from "vitest";
 import { testSchema } from "../common/helpers";
-import { prepareTestJsonFileContent } from "./utils";
+import { prepareTestJsonFileContent } from "../common/utils";
 
-prepareTestJsonFileContent("/functions/routes_[---catchall]_1bo9vv.prerender-config.json", (context) => {
+prepareTestJsonFileContent("/functions/routes_\\[---catchall\\]_*.prerender-config.json", (context) => {
   testSchema(context, vercelOutputPrerenderConfigSchema);
 
   it("should have only necessary properties", () => {
@@ -12,7 +12,7 @@ prepareTestJsonFileContent("/functions/routes_[---catchall]_1bo9vv.prerender-con
   });
 });
 
-prepareTestJsonFileContent("/functions/routes_isr_1da035.prerender-config.json", (context) => {
+prepareTestJsonFileContent("/functions/routes_isr_*.prerender-config.json", (context) => {
   testSchema(context, vercelOutputPrerenderConfigSchema);
 
   it("should have only necessary properties", () => {
@@ -21,7 +21,7 @@ prepareTestJsonFileContent("/functions/routes_isr_1da035.prerender-config.json",
   });
 });
 
-prepareTestJsonFileContent("/functions/api_isr_1w5tvv.prerender-config.json", (context) => {
+prepareTestJsonFileContent("/functions/api_isr_*.prerender-config.json", (context) => {
   testSchema(context, vercelOutputPrerenderConfigSchema);
 
   it("should have only necessary properties", () => {

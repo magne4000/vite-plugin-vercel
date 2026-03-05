@@ -1,7 +1,7 @@
 import { vercelOutputConfigSchema } from "@vite-plugin-vercel/schemas";
-import { assert, expect, it } from "vitest";
+import { expect, it } from "vitest";
 import { testSchema } from "../common/helpers";
-import { prepareTestJsonFileContent } from "./utils";
+import { prepareTestJsonFileContent } from "../common/utils";
 
 prepareTestJsonFileContent("config.json", (context) => {
   testSchema(context, vercelOutputConfigSchema);
@@ -34,57 +34,61 @@ prepareTestJsonFileContent("config.json", (context) => {
       {
         check: true,
         src: "^/edge$",
-        dest: "/routes_edge_op8pqm",
+        dest: expect.stringMatching(/\/routes_edge_.{6}/),
       },
       {
         check: true,
         src: "^/og-edge$",
-        dest: "/routes_og-edge_om1szy",
+        dest: expect.stringMatching(/\/routes_og-edge_.{6}/),
       },
       {
         check: true,
-        dest: "/routes_dynamic_43i6m9",
+        dest: expect.stringMatching(/\/routes_dynamic_.{6}/),
         src: "^/dynamic$",
       },
       {
         check: true,
-        dest: "/routes_index_1bcj9q",
+        dest: expect.stringMatching(/\/routes_index_.{6}/),
         src: "^/$",
       },
       {
         check: true,
         src: "^/isr$",
-        dest: "/routes_isr_1da035",
+        dest: expect.stringMatching(/\/routes_isr_.{6}/),
       },
       {
         check: true,
         src: "^/og-node$",
-        dest: "/routes_og-node_m5d401",
+        dest: expect.stringMatching(/\/routes_og-node_.{6}/),
       },
       {
         check: true,
         src: "^/api/isr$",
-        dest: "/api_isr_1w5tvv",
+        dest: expect.stringMatching(/\/api_isr_.{6}/),
       },
       {
         check: true,
         src: "^/api/page$",
-        dest: "/api_page_zt7nev",
+        dest: expect.stringMatching(/\/api_page_.{6}/),
       },
       {
         check: true,
         src: "^/named(?:/([^/]+?))$",
-        dest: "/named_[someId]_jxhapp?someId=$1",
+        dest: expect.stringMatching(/\/named_\[someId]_.{6}\?someId=\$1/),
       },
       {
         check: true,
         src: "^/api/name(?:/([^/]+?))$",
-        dest: "/name_[name]_m09fvp?name=$1",
+        dest: expect.stringMatching(/\/name_\[name]_.{6}\?name=\$1/),
       },
-      { check: true, dest: "/routes_[---catchall]_1bo9vv?catchall=$1", src: "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))$" },
+      {
+        check: true,
+        dest: expect.stringMatching(/\/routes_\[---catchall]_.{6}\?catchall=\$1/),
+        src: "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))$",
+      },
     ];
 
-    assert.sameDeepMembers((context.file as any).routes, expected);
+    expect((context.file as any).routes).toEqual(expected);
 
     expect((context.file as any).overrides).toEqual({});
     expect(Object.keys(context.file as any).sort()).toEqual(["version", "overrides", "routes"].sort());

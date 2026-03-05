@@ -1,5 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
+import glob from "fast-glob";
 import { beforeAll, describe } from "vitest";
 import type { TestContext } from "../common/helpers";
 
@@ -10,9 +11,13 @@ export function prepareTestJsonFileContent<T extends TestContext>(file: string, 
 
   beforeAll(async () => {
     const dest = path.join(__dirname, "../../.vercel/output", file);
-    await fs.stat(dest);
+    const entries = await glob(dest);
 
-    const fileContent = await fs.readFile(dest, {
+    if (entries.length !== 1) {
+      throw new Error(`Multiple or no file matches ${dest}`);
+    }
+
+    const fileContent = await fs.readFile(entries[0], {
       encoding: "utf-8",
     });
 

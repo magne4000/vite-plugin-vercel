@@ -1,15 +1,15 @@
 import { vercelOutputVcConfigSchema } from "@vite-plugin-vercel/schemas";
 import { expect, it } from "vitest";
 import { testSchema } from "../common/helpers";
-import { prepareTestJsonFilesContent } from "./utils";
+import { prepareTestJsonFilesContent } from "../common/utils";
 
 prepareTestJsonFilesContent(
   [
-    "/functions/api_page_zt7nev.func/.vc-config.json",
-    "/functions/api_isr_1w5tvv.func/.vc-config.json",
-    "/functions/routes_[---catchall]_1bo9vv.func/.vc-config.json",
-    "/functions/routes_isr_1da035.func/.vc-config.json",
-    "/functions/named_[someId]_jxhapp.func/.vc-config.json",
+    "/functions/api_page_*.func/.vc-config.json",
+    "/functions/api_isr_*.func/.vc-config.json",
+    "/functions/routes_\\[---catchall\\]_*.func/.vc-config.json",
+    "/functions/routes_isr_*.func/.vc-config.json",
+    "/functions/named_\\[someId\\]_*.func/.vc-config.json",
   ],
   (context) => {
     testSchema(context, vercelOutputVcConfigSchema);
@@ -27,7 +27,7 @@ prepareTestJsonFilesContent(
 );
 
 prepareTestJsonFilesContent(
-  ["/functions/routes_edge_op8pqm.func/.vc-config.json", "/functions/routes_og-edge_om1szy.func/.vc-config.json"],
+  ["/functions/routes_edge_*.func/.vc-config.json", "/functions/routes_og-edge_*.func/.vc-config.json"],
   (context) => {
     testSchema(context, vercelOutputVcConfigSchema);
 
