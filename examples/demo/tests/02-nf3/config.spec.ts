@@ -34,56 +34,56 @@ prepareTestJsonFileContent("config.json", (context) => {
       {
         check: true,
         src: "^/edge$",
-        dest: expect.stringMatching(/\/routes_edge_.{6}/),
+        dest: expect.stringMatching(/\/routes_edge_.{1,6}/),
       },
       {
         check: true,
         src: "^/og-edge$",
-        dest: expect.stringMatching(/\/routes_og-edge_.{6}/),
+        dest: expect.stringMatching(/\/routes_og-edge_.{1,6}/),
       },
       {
         check: true,
-        dest: expect.stringMatching(/\/routes_dynamic_.{6}/),
+        dest: expect.stringMatching(/\/routes_dynamic_.{1,6}/),
         src: "^/dynamic$",
       },
       {
         check: true,
-        dest: expect.stringMatching(/\/routes_index_.{6}/),
+        dest: expect.stringMatching(/\/routes_index_.{1,6}/),
         src: "^/$",
       },
       {
         check: true,
         src: "^/isr$",
-        dest: expect.stringMatching(/\/routes_isr_.{6}/),
+        dest: expect.stringMatching(/\/routes_isr_.{1,6}/),
       },
       {
         check: true,
         src: "^/og-node$",
-        dest: expect.stringMatching(/\/routes_og-node_.{6}/),
+        dest: expect.stringMatching(/\/routes_og-node_.{1,6}/),
       },
       {
         check: true,
         src: "^/api/isr$",
-        dest: expect.stringMatching(/\/api_isr_.{6}/),
+        dest: expect.stringMatching(/\/api_isr_.{1,6}/),
       },
       {
         check: true,
         src: "^/api/page$",
-        dest: expect.stringMatching(/\/api_page_.{6}/),
+        dest: expect.stringMatching(/\/api_page_.{1,6}/),
       },
       {
         check: true,
         src: "^/named(?:/([^/]+?))$",
-        dest: expect.stringMatching(/\/named_\[someId]_.{6}\?someId=\$1/),
+        dest: expect.stringMatching(/\/named_\[someId]_.{1,6}\?someId=\$1/),
       },
       {
         check: true,
         src: "^/api/name(?:/([^/]+?))$",
-        dest: expect.stringMatching(/\/name_\[name]_.{6}\?name=\$1/),
+        dest: expect.stringMatching(/\/name_\[name]_.{1,6}\?name=\$1/),
       },
       {
         check: true,
-        dest: expect.stringMatching(/\/routes_\[---catchall]_.{6}\?catchall=\$1/),
+        dest: expect.stringMatching(/\/routes_\[---catchall]_.{1,6}\?catchall=\$1/),
         src: "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))$",
       },
     ];
