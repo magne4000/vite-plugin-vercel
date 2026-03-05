@@ -3,7 +3,7 @@ import { expect, it } from "vitest";
 import { testSchema } from "../common/helpers";
 import { prepareTestJsonFileContent } from "./utils";
 
-prepareTestJsonFileContent("/functions/routes_[---catchall]_96lu7c.prerender-config.json", (context) => {
+prepareTestJsonFileContent("/functions/routes_[---catchall]_1bo9vv.prerender-config.json", (context) => {
   testSchema(context, vercelOutputPrerenderConfigSchema);
 
   it("should have only necessary properties", () => {
@@ -12,7 +12,7 @@ prepareTestJsonFileContent("/functions/routes_[---catchall]_96lu7c.prerender-con
   });
 });
 
-prepareTestJsonFileContent("/functions/routes_isr_1ndvja.prerender-config.json", (context) => {
+prepareTestJsonFileContent("/functions/routes_isr_1da035.prerender-config.json", (context) => {
   testSchema(context, vercelOutputPrerenderConfigSchema);
 
   it("should have only necessary properties", () => {
@@ -21,7 +21,7 @@ prepareTestJsonFileContent("/functions/routes_isr_1ndvja.prerender-config.json",
   });
 });
 
-prepareTestJsonFileContent("/functions/api_isr_1w7em5.prerender-config.json", (context) => {
+prepareTestJsonFileContent("/functions/api_isr_1w5tvv.prerender-config.json", (context) => {
   testSchema(context, vercelOutputPrerenderConfigSchema);
 
   it("should have only necessary properties", () => {

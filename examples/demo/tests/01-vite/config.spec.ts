@@ -9,6 +9,13 @@ prepareTestJsonFileContent("config.json", (context) => {
   it("should have defaults routes only", () => {
     const expected = [
       {
+        src: "^(?:/(.*))$",
+        headers: {
+          "x-original-path": "/$1",
+        },
+        continue: true,
+      },
+      {
         src: "^/api/page$",
         headers: { "X-VitePluginVercel-Test": "test" },
         continue: true,
@@ -27,54 +34,54 @@ prepareTestJsonFileContent("config.json", (context) => {
       {
         check: true,
         src: "^/edge$",
-        dest: "/routes_edge_1bx41y",
+        dest: "/routes_edge_op8pqm",
       },
       {
         check: true,
         src: "^/og-edge$",
-        dest: "/routes_og-edge_u8dtyy",
+        dest: "/routes_og-edge_om1szy",
       },
       {
         check: true,
-        dest: "/routes_dynamic_1j4abj",
+        dest: "/routes_dynamic_43i6m9",
         src: "^/dynamic$",
       },
       {
         check: true,
-        dest: "/routes_index_1afnff",
+        dest: "/routes_index_1bcj9q",
         src: "^/$",
       },
       {
         check: true,
         src: "^/isr$",
-        dest: "/routes_isr_1ndvja",
+        dest: "/routes_isr_1da035",
       },
       {
         check: true,
         src: "^/og-node$",
-        dest: "/routes_og-node_sewegp",
+        dest: "/routes_og-node_m5d401",
       },
       {
         check: true,
         src: "^/api/isr$",
-        dest: "/api_isr_1w7em5",
+        dest: "/api_isr_1w5tvv",
       },
       {
         check: true,
         src: "^/api/page$",
-        dest: "/api_page_1gngr9",
+        dest: "/api_page_zt7nev",
       },
       {
         check: true,
         src: "^/named(?:/([^/]+?))$",
-        dest: "/named_[someId]_cfm46n?someId=$1",
+        dest: "/named_[someId]_jxhapp?someId=$1",
       },
       {
         check: true,
         src: "^/api/name(?:/([^/]+?))$",
-        dest: "/name_[name]_vl2chm?name=$1",
+        dest: "/name_[name]_m09fvp?name=$1",
       },
-      { check: true, dest: "/routes_[---catchall]_96lu7c?catchall=$1", src: "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))$" },
+      { check: true, dest: "/routes_[---catchall]_1bo9vv?catchall=$1", src: "^(?:/((?:[^/]+?)(?:/(?:[^/]+?))*))$" },
     ];
 
     assert.sameDeepMembers((context.file as any).routes, expected);

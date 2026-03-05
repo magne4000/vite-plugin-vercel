@@ -5,11 +5,11 @@ import { prepareTestJsonFilesContent } from "./utils";
 
 prepareTestJsonFilesContent(
   [
-    "/functions/api_page_1gngr9.func/.vc-config.json",
-    "/functions/api_isr_1w7em5.func/.vc-config.json",
-    "/functions/routes_[---catchall]_96lu7c.func/.vc-config.json",
-    "/functions/routes_isr_1ndvja.func/.vc-config.json",
-    "/functions/name_[name]_vl2chm.func/.vc-config.json",
+    "/functions/api_page_zt7nev.func/.vc-config.json",
+    "/functions/api_isr_1w5tvv.func/.vc-config.json",
+    "/functions/routes_[---catchall]_1bo9vv.func/.vc-config.json",
+    "/functions/routes_isr_1da035.func/.vc-config.json",
+    "/functions/name_[name]_m09fvp.func/.vc-config.json",
   ],
   (context) => {
     testSchema(context, vercelOutputVcConfigSchema);
@@ -27,7 +27,7 @@ prepareTestJsonFilesContent(
 );
 
 prepareTestJsonFilesContent(
-  ["/functions/routes_edge_1bx41y.func/.vc-config.json", "/functions/routes_og-edge_u8dtyy.func/.vc-config.json"],
+  ["/functions/routes_edge_op8pqm.func/.vc-config.json", "/functions/routes_og-edge_om1szy.func/.vc-config.json"],
   (context) => {
     testSchema(context, vercelOutputVcConfigSchema);
 
