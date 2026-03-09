@@ -5,7 +5,7 @@ import path from "node:path";
 import { findRoot } from "@manypkg/find-root";
 import { nodeFileTrace } from "@vercel/nft";
 import { transform } from "oxc-transform";
-import { type BuildOptions, build } from "rolldown";
+import { build, type BuildOptions } from "rolldown";
 import type { Environment, Plugin } from "vite";
 import { getVercelAPI, type ViteVercelOutFile, type ViteVercelOutFileChunk } from "../../api.js";
 import type { PluginContext, ViteVercelConfig } from "../../types.js";
@@ -149,7 +149,9 @@ async function bundle(
   const buildOptions: BuildOptions = {};
   buildOptions.output = {
     format: "esm",
-    legalComments: "none",
+    comments: {
+      legal: false,
+    },
     codeSplitting: false,
   };
   buildOptions.checks = {
