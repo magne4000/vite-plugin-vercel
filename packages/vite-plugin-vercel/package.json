@@ -39,7 +39,8 @@
   },
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
-    "@universal-deploy/store": "^0.1.4",
+    "@universal-deploy/store": "^0.2.0",
+    "@universal-deploy/vite": "^0.1.0",
     "@universal-middleware/core": "^0.4.13",
     "@universal-middleware/vercel": "^0.4.29",
     "@vercel/build-utils": "^13.2.3",

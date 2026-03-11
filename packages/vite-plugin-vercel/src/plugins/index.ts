@@ -1,4 +1,4 @@
-import { catchAll, devServer } from "@universal-deploy/store/vite";
+import { catchAll, devServer } from "@universal-deploy/vite";
 import type { ViteVercelConfig } from "../types.js";
 import { apiPlugin } from "./api.js";
 import { basicBundlePlugin } from "./bundle/basic.js";

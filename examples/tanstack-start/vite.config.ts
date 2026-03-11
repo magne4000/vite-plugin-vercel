@@ -1,7 +1,7 @@
 import tailwindcss from "@tailwindcss/vite";
 import { devtools } from "@tanstack/devtools-vite";
 import { tanstackStart } from "@tanstack/react-start/plugin/vite";
-import { compat } from "@universal-deploy/store/vite";
+import { compat } from "@universal-deploy/vite";
 import viteReact from "@vitejs/plugin-react";
 import { fileURLToPath, URL } from "url";
 import { defineConfig, type Plugin } from "vite";
