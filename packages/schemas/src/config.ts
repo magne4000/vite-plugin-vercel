@@ -86,6 +86,7 @@ export const vercelOutputConfigSchema = z
                               lt: z.number().optional(),
                               lte: z.number().optional(),
                             })
+                            .strict()
                             .refine((data) => Object.values(data).some((v) => v !== undefined), {
                               message: "At least one field must be provided",
                             }),
