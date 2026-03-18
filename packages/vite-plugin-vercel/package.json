@@ -45,7 +45,7 @@
     "@universal-middleware/vercel": "^0.4.29",
     "@vercel/build-utils": "^13.2.3",
     "@vercel/nft": "^1.2.0",
-    "@vercel/routing-utils": "^5.3.1",
+    "@vercel/routing-utils": "^6.0.2",
     "@vite-plugin-vercel/schemas": "workspace:^",
     "convert-route": "^1.0.0",
     "fast-glob": "^3.3.3",
