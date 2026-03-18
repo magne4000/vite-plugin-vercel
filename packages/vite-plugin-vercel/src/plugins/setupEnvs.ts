@@ -80,6 +80,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
                 rollupOptions: {
                   input: getDummyInput(),
                 },
+                emptyOutDir: false,
               },
               consumer: "client",
             };
@@ -130,10 +131,9 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
             target: "es2022",
             rollupOptions: {
               input: {},
-              treeshake: {
-                preset: "smallest",
-              },
+              treeshake: true,
             },
+            rolldownOptions: {},
           },
           optimizeDeps: {
             ...config.optimizeDeps,
