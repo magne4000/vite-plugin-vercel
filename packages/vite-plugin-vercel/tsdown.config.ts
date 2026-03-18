@@ -8,7 +8,6 @@ const commonOptions = {
   treeshake: true,
   nodeProtocol: true,
   fixedExtension: false,
-  external: [/^virtual:photon:get-middlewares:/, /^@photonjs\/core\/dev/, /^@photonjs\/vercel/],
 } satisfies TsdownOptions;
 
 export default defineConfig([
