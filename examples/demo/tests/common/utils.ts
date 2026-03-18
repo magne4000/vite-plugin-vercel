@@ -1,37 +1,36 @@
-import os from "node:os";
+import fs from "node:fs/promises";
 import path from "node:path";
-import { type InlineConfig, build } from "vite";
+import glob from "fast-glob";
+import { beforeAll, describe } from "vitest";
+import type { TestContext } from "../common/helpers";
 
-export function getTmpDir(displayName: string) {
-  return path.join(os.tmpdir(), `vpv-demo-${displayName}`);
+export function prepareTestJsonFileContent<T extends TestContext>(file: string, callback: (context: T) => void) {
+  const context = {
+    file: undefined,
+  } as T;
+
+  beforeAll(async () => {
+    const dest = path.join(__dirname, "../../.vercel/output", file);
+    const entries = await glob(dest);
+
+    if (entries.length !== 1) {
+      throw new Error(`Multiple or no file matches ${dest}`);
+    }
+
+    const fileContent = await fs.readFile(entries[0], {
+      encoding: "utf-8",
+    });
+
+    context.file = JSON.parse(fileContent);
+  });
+
+  describe(file, () => {
+    callback(context);
+  });
 }
 
-export async function callBuild(dirname: string, config: InlineConfig) {
-  const tmpdir = getTmpDir(dirname);
-
-  await build({
-    ...config,
-    vercel: {
-      ...config.vercel,
-      additionalEndpoints: [
-        {
-          source: "endpoints/edge.ts",
-          destination: "edge",
-          route: true,
-        },
-        ...(config.vercel?.additionalEndpoints ?? []),
-      ],
-      outDir: tmpdir,
-    },
-    build: {
-      ssr: true,
-      ...config.build,
-      rollupOptions: {
-        input: {
-          "index.html": "tests/common/index.html",
-        },
-      },
-    },
-    logLevel: "info",
-  });
+export function prepareTestJsonFilesContent<T extends TestContext>(files: string[], callback: (context: T) => void) {
+  for (const f of files) {
+    prepareTestJsonFileContent(f, callback);
+  }
 }
