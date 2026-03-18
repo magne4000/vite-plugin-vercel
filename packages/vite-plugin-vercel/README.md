@@ -1,11 +1,8 @@
 # vite-plugin-vercel
 
-> [!NOTE]
-> You are on the [Vite Environment API](https://vite.dev/guide/api-environment.html#environment-configuration) beta branch (v11). Check out [v9 branch](https://github.com/magne4000/vite-plugin-vercel/tree/v9) for current stable version.
-
 Vercel adapter for [Vite](https://vitejs.dev/).
 
-Bundle your Vite application as supported by [Vercel Output API (v3)](https://vercel.com/docs/build-output-api/v3).
+Bundle your Vite application as supported by [Vercel Output API](https://vercel.com/docs/build-output-api).
 
 ## Install
 
@@ -111,7 +108,7 @@ import vercel from 'vite-plugin-vercel';
 
 export default defineConfig({
   plugins: [vercel({
-    // All the followings optional
+    // All the followings are optional
 
     /**
      * How long Functions should be allowed to run for every request, in seconds.
