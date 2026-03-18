@@ -13,9 +13,9 @@
     "publish:stable": "changeset version && changeset publish -r"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.6",
-    "@changesets/cli": "^2.29.7",
-    "playwright": "^1.57.0",
+    "@biomejs/biome": "^2.4.7",
+    "@changesets/cli": "^2.30.0",
+    "playwright": "^1.58.2",
     "typescript": "^5.9.3"
   },
   "pnpm": {
