@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 11.0.3
+
+### Patch Changes
+
+- 41111f7: fix: remove unused dependencies
+
 ## 11.0.2
 
 ### Patch Changes
