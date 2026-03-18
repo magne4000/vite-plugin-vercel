@@ -1,5 +1,13 @@
 # vite-plugin-vercel
 
+## 11.0.2
+
+### Patch Changes
+
+- d6239c5: feat: new routes.transforms property
+- Updated dependencies [d6239c5]
+  - @vite-plugin-vercel/schemas@1.1.0
+
 ## 11.0.1
 
 ### Patch Changes
