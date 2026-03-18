@@ -70,28 +70,30 @@ export const vercelOutputConfigSchema = z
                     .object({
                       type: z.enum(["request.headers", "request.query", "response.headers"]),
                       op: z.enum(["append", "set", "delete"]),
-                      target: z.object({
-                        key: z.union([
-                          z.string(),
-                          z
-                            .object({
-                              eq: z.union([z.string(), z.number()]).optional(),
-                              neq: z.string().optional(),
-                              inc: z.array(z.string()).optional(),
-                              ninc: z.array(z.string()).optional(),
-                              pre: z.string().optional(),
-                              suf: z.string().optional(),
-                              gt: z.number().optional(),
-                              gte: z.number().optional(),
-                              lt: z.number().optional(),
-                              lte: z.number().optional(),
-                            })
-                            .strict()
-                            .refine((data) => Object.values(data).some((v) => v !== undefined), {
-                              message: "At least one field must be provided",
-                            }),
-                        ]),
-                      }),
+                      target: z
+                        .object({
+                          key: z.union([
+                            z.string(),
+                            z
+                              .object({
+                                eq: z.union([z.string(), z.number()]).optional(),
+                                neq: z.string().optional(),
+                                inc: z.array(z.string()).optional(),
+                                ninc: z.array(z.string()).optional(),
+                                pre: z.string().optional(),
+                                suf: z.string().optional(),
+                                gt: z.number().optional(),
+                                gte: z.number().optional(),
+                                lt: z.number().optional(),
+                                lte: z.number().optional(),
+                              })
+                              .strict()
+                              .refine((data) => Object.values(data).some((v) => v !== undefined), {
+                                message: "At least one field must be provided",
+                              }),
+                          ]),
+                        })
+                        .strict(),
                       args: z.union([z.string(), z.array(z.string())]).optional(),
                     })
                     .strict(),
