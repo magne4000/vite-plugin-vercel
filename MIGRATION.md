@@ -6,16 +6,16 @@
 
 ### 1) Update dependencies
 - Install the latest `vite-plugin-vercel`.
-- Ensure Vite is 7+. Older Vite versions used in v9 are not supported on this branch.
+- Ensure Vite is 7+.
 
-### 2) Declare entries explicitly (recommended)
+### 2) Declare entries explicitly
 In v9 you could rely on the conventional `/api` folder or custom mappings. In v11 you can still keep `/api`, but it’s recommended to move your handlers to a custom folder and declare them via `getVercelEntries()` so you fully control the mapping.
 
 Example migration:
 
-v9 (typical):
+v9:
 ```ts
-// vite.config.ts (v9)
+// vite.config.ts
 import { defineConfig } from 'vite'
 import vercel from 'vite-plugin-vercel'
 
@@ -24,9 +24,9 @@ export default defineConfig({
 })
 ```
 
-v11 (recommended):
+v11:
 ```ts
-// vite.config.ts (v10)
+// vite.config.ts
 import { defineConfig } from 'vite'
 import vercel from 'vite-plugin-vercel'
 import { getVercelEntries } from 'vite-plugin-vercel'
@@ -58,7 +58,7 @@ export default {
 ```
 
 ### 4) Project configuration in plugin options
-If you configured `rewrites`, `headers`, `redirects`, `cleanUrls`, or `trailingSlash` in v9 (either via plugin options or `vercel.json`), define them in the plugin options in v11:
+If you configured `rewrites`, `headers`, `redirects`, `cleanUrls`, or `trailingSlash` in v9 via Vite options, define them in the plugin options in v11:
 ```ts
 vercel({
   rewrites: [{ source: '/about', destination: '/about-our-company.html' }],
@@ -69,5 +69,5 @@ vercel({
 })
 ```
 
-### 4) Vike's migration
+### 5) Vike's migration (optional)
 If you were using this plugin with Vike, please refer to [Vike's documentation](https://vike.dev/vercel) for the most up-to-date integration instructions.
