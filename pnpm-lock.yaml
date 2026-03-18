@@ -5,7 +5,7 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  path-to-regexp@>=4.0.0 <6.3.0: ^6.3.0
+  path-to-regexp@>=4.0.0 <6.3.0: ^8.3.0
 
 importers:
 
@@ -6017,7 +6017,7 @@ snapshots:
       etag: 1.8.1
       mime-types: 2.1.35
       node-fetch: 2.6.9
-      path-to-regexp: 6.3.0
+      path-to-regexp: 8.3.0
       path-to-regexp-updated: path-to-regexp@6.3.0
       ts-morph: 12.0.0
       ts-node: 10.9.1(@swc/core@1.15.5)(@types/node@16.18.11)(typescript@4.9.5)
@@ -6039,7 +6039,7 @@ snapshots:
 
   '@vercel/routing-utils@5.3.1':
     dependencies:
-      path-to-regexp: 6.3.0
+      path-to-regexp: 8.3.0
       path-to-regexp-updated: path-to-regexp@6.3.0
     optionalDependencies:
       ajv: 6.12.6
