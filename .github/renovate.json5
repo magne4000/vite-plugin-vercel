@@ -17,6 +17,8 @@
     'node',
     '@types/node',
     'pnpm',
+    'playwright',
+    '@playwright/test'
   ],
   postUpdateOptions: [
     'pnpmDedupe',
