@@ -64,6 +64,38 @@ export const vercelOutputConfigSchema = z
                 .strict()
                 .optional(),
               middlewarePath: z.string().optional(),
+              transforms: z
+                .array(
+                  z
+                    .object({
+                      type: z.enum(["request.headers", "request.query", "response.headers"]),
+                      op: z.enum(["append", "set", "delete"]),
+                      target: z.object({
+                        key: z.union([
+                          z.string(),
+                          z
+                            .object({
+                              eq: z.union([z.string(), z.number()]).optional(),
+                              neq: z.array(z.string()).optional(),
+                              inc: z.array(z.string()).optional(),
+                              ninc: z.string().optional(),
+                              pre: z.string().optional(),
+                              suf: z.string().optional(),
+                              gt: z.number().optional(),
+                              gte: z.number().optional(),
+                              lt: z.number().optional(),
+                              lte: z.number().optional(),
+                            })
+                            .refine((data) => Object.values(data).some((v) => v !== undefined), {
+                              message: "At least one field must be provided",
+                            }),
+                        ]),
+                      }),
+                      args: z.union([z.string(), z.array(z.string())]).optional(),
+                    })
+                    .strict(),
+                )
+                .optional(),
             })
             .strict(),
           z
