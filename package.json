@@ -15,12 +15,15 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.7",
     "@changesets/cli": "^2.30.0",
-    "playwright": "^1.58.2",
+    "playwright": "^1.57.0",
     "typescript": "^5.9.3"
   },
   "pnpm": {
     "overrides": {
       "path-to-regexp@>=4.0.0 <6.3.0": "^6.3.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
