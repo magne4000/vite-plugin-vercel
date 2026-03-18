@@ -76,9 +76,9 @@ export const vercelOutputConfigSchema = z
                           z
                             .object({
                               eq: z.union([z.string(), z.number()]).optional(),
-                              neq: z.array(z.string()).optional(),
+                              neq: z.string().optional(),
                               inc: z.array(z.string()).optional(),
-                              ninc: z.string().optional(),
+                              ninc: z.array(z.string()).optional(),
                               pre: z.string().optional(),
                               suf: z.string().optional(),
                               gt: z.number().optional(),
