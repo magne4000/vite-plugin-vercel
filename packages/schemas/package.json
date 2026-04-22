@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@types/node": "^22.19.15",
-    "tsdown": "^0.21.7",
-    "typescript": "^6.0.2"
+    "tsdown": "^0.21.10",
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "zod": "^4.3.6"
