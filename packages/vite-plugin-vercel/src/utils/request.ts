@@ -13,10 +13,6 @@ export function getOriginalRequest(request: Request) {
       originalUrl.search = requestUrl.search;
     }
 
-    if (!originalUrl.hash) {
-      originalUrl.hash = requestUrl.hash;
-    }
-
     newUrl = originalUrl.toString();
   }
 
