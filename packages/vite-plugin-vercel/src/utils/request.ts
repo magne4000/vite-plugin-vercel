@@ -6,7 +6,18 @@ export function getOriginalRequest(request: Request) {
   let newRequest = request;
 
   if (typeof xOriginalPath === "string") {
-    newUrl = new URL(xOriginalPath, request.url).toString();
+    const requestUrl = new URL(request.url);
+    const originalUrl = new URL(xOriginalPath, requestUrl);
+
+    if (!originalUrl.search) {
+      originalUrl.search = requestUrl.search;
+    }
+
+    if (!originalUrl.hash) {
+      originalUrl.hash = requestUrl.hash;
+    }
+
+    newUrl = originalUrl.toString();
   }
 
   if (newUrl && request.url !== newUrl) {
