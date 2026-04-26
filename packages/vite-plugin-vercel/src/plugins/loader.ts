@@ -166,6 +166,10 @@ export default def;`;
         const entries = dedupeRoutes();
 
         for (const entry of entries.filter((e) => (e.vercel?.edge ?? false) === isEdge)) {
+          if (isEdge && entry.vercel?.experimentalTriggers) {
+            throw new Error("Vercel queue consumers must be serverless functions, not edge functions.");
+          }
+
           // Generate .vc-config.json
           this.emitFile({
             type: "asset",
@@ -176,6 +180,7 @@ export default def;`;
                 nodeVersion,
                 edge: isEdge,
                 streaming: entry.vercel?.streaming,
+                experimentalTriggers: entry.vercel?.experimentalTriggers,
               }),
               undefined,
               2,
@@ -193,6 +198,8 @@ export default def;`;
 
           // Append patterns rewrites
           pluginConfig.rewrites ??= [];
+
+          if (entry.vercel?.experimentalTriggers) continue;
 
           for (const ir of sortRoutes([entry.route].flat().map((p) => fromRou3(p as string)))) {
             const source = toPathToRegexpV6(ir);

@@ -1,10 +1,15 @@
 import type { EntryMeta } from "@universal-deploy/store";
 import type { Header, Redirect, Rewrite } from "@vercel/routing-utils";
-import type { VercelOutputConfig, VercelOutputPrerenderConfig } from "@vite-plugin-vercel/schemas";
+import type {
+  VercelOutputConfig,
+  VercelOutputPrerenderConfig,
+  VercelOutputQueueTrigger,
+} from "@vite-plugin-vercel/schemas";
 import type { Plugin } from "vite";
 
 export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
 export type ViteVercelRedirect = Redirect & { enforce?: "pre" | "post" };
+export type ViteVercelQueueTrigger = VercelOutputQueueTrigger;
 
 // biome-ignore lint/suspicious/noExplicitAny: any
 export type PluginContext = ThisParameterType<Extract<Plugin["resolveId"], (...args: never) => any>>;
@@ -112,4 +117,11 @@ export interface VercelEntryOptions {
    * When true, the Serverless Function will stream the response to the client
    */
   streaming?: boolean;
+  experimentalTriggers?: ViteVercelQueueTrigger[];
+}
+
+declare module "@universal-deploy/store" {
+  export interface EntryMeta {
+    vercel?: VercelEntryOptions;
+  }
 }
