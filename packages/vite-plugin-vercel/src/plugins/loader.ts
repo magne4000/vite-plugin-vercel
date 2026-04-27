@@ -15,6 +15,15 @@ const DUMMY = "__DUMMY__";
 const re_DUMMY = new RegExp(`${DUMMY}$`);
 const re_edge = /[?&]vercel_edge\b/;
 const re_node = /[?&]vercel_node\b/;
+const queueConsumerEdgeError = "Vercel queue consumers must be serverless functions, not edge functions.";
+
+function validateQueueConsumersAreServerless(entries: ReturnType<typeof dedupeRoutes>) {
+  for (const entry of entries) {
+    if (entry.vercel?.edge === true && (entry.vercel.experimentalTriggers?.length ?? 0) > 0) {
+      throw new Error(queueConsumerEdgeError);
+    }
+  }
+}
 
 export function loaderPlugin(pluginConfig: ViteVercelConfig): Plugin[] {
   const envNames = getBuildEnvNames(pluginConfig);
@@ -138,15 +147,18 @@ export default def;`;
           const isEdge = name === envNames.edge;
           if (name === envNames.node || isEdge) {
             // dedupeRoutes reads and merges store entries
-            const entries = dedupeRoutes().filter((e) => (e.vercel?.edge ?? false) === isEdge);
+            const entries = dedupeRoutes();
+            validateQueueConsumersAreServerless(entries);
             return {
               build: {
                 rollupOptions: {
                   input: Object.fromEntries(
-                    entries.map((e) => [
-                      entryDestination(root ?? process.cwd(), e, ".func/index"),
-                      isEdge ? `${e.id}?vercel_edge` : `${e.id}?vercel_node`,
-                    ]),
+                    entries
+                      .filter((e) => (e.vercel?.edge ?? false) === isEdge)
+                      .map((e) => [
+                        entryDestination(root ?? process.cwd(), e, ".func/index"),
+                        isEdge ? `${e.id}?vercel_edge` : `${e.id}?vercel_node`,
+                      ]),
                   ),
                   output: {
                     // Avoids empty imports at the top of entry chunks
@@ -167,10 +179,6 @@ export default def;`;
 
         for (const entry of entries.filter((e) => (e.vercel?.edge ?? false) === isEdge)) {
           const hasExperimentalTriggers = (entry.vercel?.experimentalTriggers?.length ?? 0) > 0;
-
-          if (isEdge && hasExperimentalTriggers) {
-            throw new Error("Vercel queue consumers must be serverless functions, not edge functions.");
-          }
 
           // Generate .vc-config.json
           this.emitFile({

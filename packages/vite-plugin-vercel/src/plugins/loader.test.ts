@@ -16,6 +16,8 @@ vi.mock("@vercel/build-utils", () => ({
 
 const storeSymbol = Symbol.for("ud:store");
 
+// Intentionally coupled to @universal-deploy/store 0.x internals because it does not expose a reset API.
+// TODO: Replace this with a public reset/clear API once the store package provides one.
 function getStore(): Store {
   return (globalThis as any)[storeSymbol];
 }
@@ -47,6 +49,10 @@ async function runBuildStart(pluginConfig: ViteVercelConfig, environmentName: st
 
   if (typeof plugin.config === "object" && typeof plugin.config.handler === "function") {
     plugin.config.handler.call({} as never, { root: "/project" } as never, {} as never);
+  }
+
+  if (typeof plugin.configEnvironment === "object" && typeof plugin.configEnvironment.handler === "function") {
+    plugin.configEnvironment.handler.call({} as never, environmentName, {} as never, {} as never);
   }
 
   if (typeof plugin.buildStart !== "function") {
@@ -127,6 +133,33 @@ describe("loaderPlugin", () => {
     });
 
     await expect(runBuildStart(pluginConfig, getBuildEnvName(pluginConfig, "edge"))).rejects.toThrow(
+      "Vercel queue consumers must be serverless functions, not edge functions.",
+    );
+  });
+
+  it("rejects edge queue consumers when the edge environment is disabled", async () => {
+    const pluginConfig: ViteVercelConfig = {
+      viteEnvNames: {
+        edge: false,
+      },
+    };
+
+    addEntry({
+      id: "src/queue.ts",
+      route: "/api/queue",
+      vercel: {
+        edge: true,
+        experimentalTriggers: [
+          {
+            type: "queue/v2beta",
+            topic: "orders",
+            consumer: "orders-consumer",
+          },
+        ],
+      },
+    });
+
+    await expect(runBuildStart(pluginConfig, getBuildEnvName(pluginConfig, "node"))).rejects.toThrow(
       "Vercel queue consumers must be serverless functions, not edge functions.",
     );
   });
