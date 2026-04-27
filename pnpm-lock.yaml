@@ -223,7 +223,7 @@ importers:
         specifier: ^3.1.0
         version: 3.1.0
       '@universal-deploy/store':
-        specifier: ^0.2.1
+        specifier: 0.2.1
         version: 0.2.1(srvx@0.11.9)
       '@universal-deploy/vite':
         specifier: ^0.1.6
