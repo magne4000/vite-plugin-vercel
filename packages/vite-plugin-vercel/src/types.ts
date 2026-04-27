@@ -9,6 +9,11 @@ import type { Plugin } from "vite";
 
 export type ViteVercelRewrite = Rewrite & { enforce?: "pre" | "post" };
 export type ViteVercelRedirect = Redirect & { enforce?: "pre" | "post" };
+/**
+ * Vercel Queues consumer trigger configuration.
+ *
+ * @experimental
+ */
 export type ViteVercelQueueTrigger = VercelOutputQueueTrigger;
 
 // biome-ignore lint/suspicious/noExplicitAny: any
@@ -117,6 +122,12 @@ export interface VercelEntryOptions {
    * When true, the Serverless Function will stream the response to the client
    */
   streaming?: boolean;
+  /**
+   * Configures Vercel Queues consumers. Entries with queue triggers are private, so no public rewrite is generated.
+   * Queue consumers must be Serverless Functions; Edge Function builds will throw.
+   *
+   * @experimental
+   */
   experimentalTriggers?: ViteVercelQueueTrigger[];
 }
 

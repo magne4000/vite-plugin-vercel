@@ -166,7 +166,9 @@ export default def;`;
         const entries = dedupeRoutes();
 
         for (const entry of entries.filter((e) => (e.vercel?.edge ?? false) === isEdge)) {
-          if (isEdge && entry.vercel?.experimentalTriggers) {
+          const hasExperimentalTriggers = (entry.vercel?.experimentalTriggers?.length ?? 0) > 0;
+
+          if (isEdge && hasExperimentalTriggers) {
             throw new Error("Vercel queue consumers must be serverless functions, not edge functions.");
           }
 
@@ -199,7 +201,7 @@ export default def;`;
           // Append patterns rewrites
           pluginConfig.rewrites ??= [];
 
-          if (entry.vercel?.experimentalTriggers) continue;
+          if (hasExperimentalTriggers) continue;
 
           for (const ir of sortRoutes([entry.route].flat().map((p) => fromRou3(p as string)))) {
             const source = toPathToRegexpV6(ir);

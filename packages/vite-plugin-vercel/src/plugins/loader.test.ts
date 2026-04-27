@@ -1,6 +1,7 @@
 import { addEntry, type Store } from "@universal-deploy/store";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ViteVercelConfig } from "../types";
+import { getBuildEnvNames } from "../utils/buildEnvs";
 import { loaderPlugin } from "./loader";
 
 vi.mock("@vercel/build-utils", () => ({
@@ -27,9 +28,22 @@ function getBuildFunctionsPlugin(pluginConfig: ViteVercelConfig) {
   return plugin;
 }
 
+function getBuildEnvName(pluginConfig: ViteVercelConfig, runtime: "edge" | "node") {
+  const environmentName = getBuildEnvNames(pluginConfig)[runtime];
+
+  if (!environmentName) {
+    throw new Error(`Expected ${runtime} build environment`);
+  }
+
+  return environmentName;
+}
+
 async function runBuildStart(pluginConfig: ViteVercelConfig, environmentName: string) {
   const emittedFiles: unknown[] = [];
   const plugin = getBuildFunctionsPlugin(pluginConfig);
+  const buildEnvNames = getBuildEnvNames(pluginConfig);
+
+  expect([buildEnvNames.node, buildEnvNames.edge]).toContain(environmentName);
 
   if (typeof plugin.config === "object" && typeof plugin.config.handler === "function") {
     plugin.config.handler.call({} as never, { root: "/project" } as never, {} as never);
@@ -77,7 +91,7 @@ describe("loaderPlugin", () => {
       },
     });
 
-    const emittedFiles = await runBuildStart(pluginConfig, "vercel_node");
+    const emittedFiles = await runBuildStart(pluginConfig, getBuildEnvName(pluginConfig, "node"));
     const vcConfig = emittedFiles[0] as { source: string };
 
     expect(pluginConfig.rewrites).toEqual([]);
@@ -112,8 +126,28 @@ describe("loaderPlugin", () => {
       },
     });
 
-    await expect(runBuildStart(pluginConfig, "vercel_edge")).rejects.toThrow(
+    await expect(runBuildStart(pluginConfig, getBuildEnvName(pluginConfig, "edge"))).rejects.toThrow(
       "Vercel queue consumers must be serverless functions, not edge functions.",
     );
+  });
+
+  it("creates public rewrites when experimental triggers are empty", async () => {
+    const pluginConfig: ViteVercelConfig = {};
+
+    addEntry({
+      id: "src/api.ts",
+      route: "/api",
+      vercel: {
+        experimentalTriggers: [],
+      },
+    });
+
+    await runBuildStart(pluginConfig, getBuildEnvName(pluginConfig, "node"));
+
+    expect(pluginConfig.rewrites).toHaveLength(1);
+    expect(pluginConfig.rewrites?.[0]).toMatchObject({
+      enforce: undefined,
+      source: "/api",
+    });
   });
 });
