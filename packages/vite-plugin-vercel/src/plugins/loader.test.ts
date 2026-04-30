@@ -1,5 +1,6 @@
 import { addEntry, type Store } from "@universal-deploy/store";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { getConfig } from "../config";
 import type { ViteVercelConfig } from "../types";
 import { getBuildEnvNames } from "../utils/buildEnvs";
 import { loaderPlugin } from "./loader";
@@ -21,6 +22,12 @@ const storeSymbol = Symbol.for("ud:store");
 function getStore(): Store {
   return (globalThis as any)[storeSymbol];
 }
+
+type EmittedAsset = {
+  type: "asset";
+  fileName: string;
+  source: string;
+};
 
 function getBuildFunctionsPlugin(pluginConfig: ViteVercelConfig) {
   const plugin = loaderPlugin(pluginConfig).find(
@@ -112,6 +119,57 @@ describe("loaderPlugin", () => {
         consumer: "orders-consumer",
       },
     ]);
+  });
+
+  it("generates private queue consumer output alongside public routes", async () => {
+    const pluginConfig: ViteVercelConfig = {};
+
+    addEntry({
+      id: "src/queue.ts",
+      route: "/api/queue",
+      vercel: {
+        experimentalTriggers: [
+          {
+            type: "queue/v2beta",
+            topic: "orders",
+            consumer: "orders-consumer",
+          },
+        ],
+      },
+    });
+
+    addEntry({
+      id: "src/api.ts",
+      route: "/api",
+      vercel: {},
+    });
+
+    const emittedFiles = (await runBuildStart(pluginConfig, getBuildEnvName(pluginConfig, "node"))) as EmittedAsset[];
+    const outputConfig = getConfig(pluginConfig);
+    const outputRoutes = JSON.stringify(outputConfig.routes);
+    const queueConfig = emittedFiles.find((file) => file.fileName.includes("src_queue_"));
+    const apiConfig = emittedFiles.find((file) => file.fileName.includes("src_api_"));
+
+    expect(emittedFiles).toHaveLength(2);
+    expect(apiConfig).toMatchObject({
+      type: "asset",
+      fileName: expect.stringMatching(/^functions\/src_api_[a-z0-9]+\.func\/\.vc-config\.json$/),
+    });
+    expect(queueConfig).toMatchObject({
+      type: "asset",
+      fileName: expect.stringMatching(/^functions\/src_queue_[a-z0-9]+\.func\/\.vc-config\.json$/),
+    });
+    expect(JSON.parse(queueConfig?.source ?? "{}")).toMatchObject({
+      experimentalTriggers: [
+        {
+          type: "queue/v2beta",
+          topic: "orders",
+          consumer: "orders-consumer",
+        },
+      ],
+    });
+    expect(outputRoutes).toContain("src_api_");
+    expect(outputRoutes).not.toContain("src_queue_");
   });
 
   it("rejects queue consumers on edge functions", async () => {
