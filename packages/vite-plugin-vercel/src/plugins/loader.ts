@@ -209,6 +209,7 @@ export default def;`;
           // Append patterns rewrites
           pluginConfig.rewrites ??= [];
 
+          // Queue consumers are registered via .vc-config.json triggers and must not be exposed as public routes.
           if (hasExperimentalTriggers) continue;
 
           for (const ir of sortRoutes([entry.route].flat().map((p) => fromRou3(p as string)))) {
