@@ -17,7 +17,7 @@ export function getOriginalRequest(request: Request) {
   }
 
   if (newUrl && request.url !== newUrl) {
-    newRequest = new Request(newUrl, {
+    const requestInit: RequestInit & { duplex?: "half" } = {
       method: request.method,
       headers: request.headers,
       body: request.body,
@@ -27,7 +27,13 @@ export function getOriginalRequest(request: Request) {
       redirect: request.redirect,
       referrer: request.referrer,
       integrity: request.integrity,
-    });
+    };
+
+    if (request.body) {
+      requestInit.duplex = "half";
+    }
+
+    newRequest = new Request(newUrl, requestInit);
   }
 
   return newRequest;

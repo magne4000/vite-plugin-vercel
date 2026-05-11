@@ -1,6 +1,6 @@
 import type { NodeVersion } from "@vercel/build-utils";
 import { vercelOutputVcConfigSchema } from "@vite-plugin-vercel/schemas";
-import type { ViteVercelConfig } from "./types.js";
+import type { ViteVercelConfig, ViteVercelQueueTrigger } from "./types.js";
 
 export function getVcConfig(
   pluginConfig: ViteVercelConfig,
@@ -9,6 +9,7 @@ export function getVcConfig(
     edge: boolean;
     nodeVersion: NodeVersion;
     streaming?: boolean;
+    experimentalTriggers?: ViteVercelQueueTrigger[];
   },
 ) {
   return vercelOutputVcConfigSchema.parse(
@@ -24,6 +25,7 @@ export function getVcConfig(
           launcherType: "Nodejs",
           shouldAddHelpers: false,
           supportsResponseStreaming: options.streaming ?? pluginConfig.defaultSupportsResponseStreaming ?? true,
+          experimentalTriggers: options.experimentalTriggers,
         },
   );
 }
