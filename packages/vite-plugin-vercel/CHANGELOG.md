@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 11.1.0
+
+### Minor Changes
+
+- 2f9a542: feat: add support for Vercel Queues
+
 ## 11.0.4
 
 ### Patch Changes
