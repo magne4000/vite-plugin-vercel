@@ -10,7 +10,7 @@
     "format": "biome format --write .",
     "lint": "biome lint .",
     "publish:beta": "changeset pre enter beta && changeset version && pnpm publish -r --no-git-checks --tag beta",
-    "publish:stable": "changeset version && changeset publish -r"
+    "publish:stable": "changeset version && changeset publish"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.15",
