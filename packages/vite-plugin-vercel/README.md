@@ -36,6 +36,7 @@ bun add -D vite-plugin-vercel
 - [ ] [Images optimization](https://vercel.com/docs/build-output-api/v3/configuration#images)
 - [ ] [Preview mode](https://vercel.com/docs/build-output-api/v3/features#preview-mode)
 - [x] [Advanced config](/packages/vercel/src/types.ts#L19)
+- [x] [Queues](https://vercel.com/docs/queues)
 
 ## Simple usage
 
