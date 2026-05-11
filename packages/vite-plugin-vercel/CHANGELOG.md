@@ -1,5 +1,14 @@
 # vite-plugin-vercel
 
+## 11.0.4
+
+### Patch Changes
+
+- c8398bc: Preserve the original request query string when reconstructing requests from `x-original-path`.
+- 5ffb74d: Support Vercel queue triggers on serverless function entries.
+- Updated dependencies [5ffb74d]
+  - @vite-plugin-vercel/schemas@1.1.1
+
 ## 11.0.3
 
 ### Patch Changes
