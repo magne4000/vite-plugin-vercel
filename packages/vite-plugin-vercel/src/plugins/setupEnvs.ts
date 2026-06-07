@@ -66,14 +66,6 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
             ? path.resolve(root, pluginConfig.outDir)
             : path.join(root, ".vercel/output");
 
-          const outDirOverride: EnvironmentOptions = pluginConfig.outDir
-            ? {
-                build: {
-                  outDir: resolvedOutDir,
-                },
-              }
-            : {};
-
           const environments: UserConfig["environments"] = {};
 
           if (envNames.client) {
@@ -91,17 +83,11 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
           }
 
           if (envNames.edge) {
-            environments[envNames.edge] = createVercelEnvironmentOptions(
-              resolvedOutDir,
-              outDirOverride,
-            );
+            environments[envNames.edge] = createVercelEnvironmentOptions(resolvedOutDir);
           }
 
           if (envNames.node) {
-            environments[envNames.node] = createVercelEnvironmentOptions(
-              resolvedOutDir,
-              outDirOverride,
-            );
+            environments[envNames.node] = createVercelEnvironmentOptions(resolvedOutDir);
           }
 
           // rollup inputs are computed by the bundle plugin dynamically
