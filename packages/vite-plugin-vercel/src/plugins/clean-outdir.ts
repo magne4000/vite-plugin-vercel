@@ -3,8 +3,6 @@ import path from "node:path";
 import type { Plugin } from "vite";
 import type { ViteVercelConfig } from "../types";
 
-const outDir = path.posix.join(process.cwd(), ".vercel/output");
-
 export function vercelCleanupPlugin(pluginConfig: ViteVercelConfig): Plugin {
   let alreadyRun = false;
   return {
@@ -18,7 +16,11 @@ export function vercelCleanupPlugin(pluginConfig: ViteVercelConfig): Plugin {
       handler() {
         if (alreadyRun) return;
         alreadyRun = true;
-        cleanOutputDirectory(pluginConfig.outDir ?? outDir);
+        const root = this.environment?.config?.root ?? process.cwd();
+        const resolvedOutDir = pluginConfig.outDir
+          ? path.resolve(root, pluginConfig.outDir)
+          : path.join(root, ".vercel/output");
+        cleanOutputDirectory(resolvedOutDir);
       },
     },
 

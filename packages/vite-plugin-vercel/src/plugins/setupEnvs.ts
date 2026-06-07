@@ -16,7 +16,6 @@ import { virtualEntry } from "../utils/const.js";
 import { edgeConditions } from "../utils/edge.js";
 import { edgeExternal } from "../utils/external.js";
 
-const outDir = path.posix.join(process.cwd(), ".vercel/output");
 const DUMMY = "__DUMMY__";
 
 let injected = false;
@@ -52,7 +51,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
 
       config: {
         order: "post",
-        handler() {
+        handler(config) {
           if (!injected) {
             injected = true;
             if (pluginConfig.entries) {
@@ -62,10 +61,15 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
             }
           }
 
+          const root = config.root ?? process.cwd();
+          const resolvedOutDir = pluginConfig.outDir
+            ? path.resolve(root, pluginConfig.outDir)
+            : path.join(root, ".vercel/output");
+
           const outDirOverride: EnvironmentOptions = pluginConfig.outDir
             ? {
                 build: {
-                  outDir: pluginConfig.outDir,
+                  outDir: resolvedOutDir,
                 },
               }
             : {};
@@ -75,7 +79,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
           if (envNames.client) {
             environments[envNames.client] = {
               build: {
-                outDir: path.join(pluginConfig.outDir ?? outDir, "static"),
+                outDir: path.join(resolvedOutDir, "static"),
                 copyPublicDir: true,
                 rollupOptions: {
                   input: getDummyInput(),
@@ -87,11 +91,17 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
           }
 
           if (envNames.edge) {
-            environments[envNames.edge] = createVercelEnvironmentOptions(outDirOverride);
+            environments[envNames.edge] = createVercelEnvironmentOptions(
+              resolvedOutDir,
+              outDirOverride,
+            );
           }
 
           if (envNames.node) {
-            environments[envNames.node] = createVercelEnvironmentOptions(outDirOverride);
+            environments[envNames.node] = createVercelEnvironmentOptions(
+              resolvedOutDir,
+              outDirOverride,
+            );
           }
 
           // rollup inputs are computed by the bundle plugin dynamically
@@ -229,7 +239,7 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
   ];
 }
 
-function createVercelEnvironmentOptions(overrides?: EnvironmentOptions): EnvironmentOptions {
+function createVercelEnvironmentOptions(outDir: string, overrides?: EnvironmentOptions): EnvironmentOptions {
   return mergeConfig(
     {
       dev: {
