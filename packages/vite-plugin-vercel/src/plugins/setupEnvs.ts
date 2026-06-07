@@ -5,7 +5,6 @@ import {
   BuildEnvironment,
   createRunnableDevEnvironment,
   type EnvironmentOptions,
-  mergeConfig,
   type Plugin,
   type UserConfig,
 } from "vite";
@@ -225,40 +224,37 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
   ];
 }
 
-function createVercelEnvironmentOptions(outDir: string, overrides?: EnvironmentOptions): EnvironmentOptions {
-  return mergeConfig(
-    {
-      dev: {
-        async createEnvironment(name, config) {
-          return createRunnableDevEnvironment(name, config);
-        },
+function createVercelEnvironmentOptions(outDir: string): EnvironmentOptions {
+  return {
+    dev: {
+      async createEnvironment(name, config) {
+        return createRunnableDevEnvironment(name, config);
       },
-      build: {
-        createEnvironment(name, config) {
-          return new BuildEnvironment(name, config);
-        },
-        outDir,
-        copyPublicDir: false,
-        rollupOptions: {
-          input: getDummyInput(),
-          output: {
-            sanitizeFileName: (filename) => {
-              return filename.replace("\0", "_");
-            },
-            sourcemap: false,
+    },
+    build: {
+      createEnvironment(name, config) {
+        return new BuildEnvironment(name, config);
+      },
+      outDir,
+      copyPublicDir: false,
+      rollupOptions: {
+        input: getDummyInput(),
+        output: {
+          sanitizeFileName: (filename) => {
+            return filename.replace("\0", "_");
           },
+          sourcemap: false,
         },
-        target: "es2022",
-        emptyOutDir: false,
-        emitAssets: true,
       },
+      target: "es2022",
+      emptyOutDir: false,
+      emitAssets: true,
+    },
 
-      consumer: "server",
+    consumer: "server",
 
-      keepProcessEnv: true,
-    } satisfies EnvironmentOptions,
-    overrides ?? {},
-  );
+    keepProcessEnv: true,
+  };
 }
 
 function getDummyInput(): Record<string, string> {
