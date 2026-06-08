@@ -30,25 +30,25 @@
   },
   "devDependencies": {
     "@types/node": "^22.19.15",
-    "tsdown": "^0.22.0",
+    "tsdown": "^0.22.2",
     "typescript": "^6.0.3",
-    "vite": "^7.3.3",
-    "vitest": "^4.1.7"
+    "vite": "^7.3.5",
+    "vitest": "^4.1.8"
   },
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
     "@universal-deploy/store": "^0.2.1",
-    "@universal-deploy/vite": "^0.1.9",
-    "@vercel/build-utils": "^13.26.1",
-    "@vercel/nft": "^1.5.0",
+    "@universal-deploy/vite": "^0.1.10",
+    "@vercel/build-utils": "^13.27.1",
+    "@vercel/nft": "^1.10.2",
     "@vercel/routing-utils": "^6.2.0",
     "@vite-plugin-vercel/schemas": "workspace:^",
     "convert-route": "^1.1.1",
     "fast-glob": "^3.3.3",
     "magicast": "^0.5.3",
     "nf3": "^0.3.17",
-    "oxc-transform": "^0.132.0",
+    "oxc-transform": "^0.134.0",
     "p-limit": "^7.3.0",
-    "rolldown": "^1.0.2"
+    "rolldown": "^1.1.0"
   }
 }
