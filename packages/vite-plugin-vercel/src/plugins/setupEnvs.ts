@@ -30,17 +30,22 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
       buildApp: {
         order: "post",
         async handler(builder) {
-          if (!builder.environments[envNames.client].isBuilt) {
+          const vercelClientEnv = builder.environments[envNames.client];
+
+          if (!vercelClientEnv.isBuilt) {
             try {
-              await builder.build(builder.environments[envNames.client]);
+              await builder.build(vercelClientEnv);
             } catch (e) {
-              if (e instanceof Error && e.message.includes(`Could not resolve entry module "index.html"`)) {
-                // ignore error
-              } else {
+              // vercel_client builds from a dummy entry, so a missing index.html
+              // is expected and harmless — copyClientOutput copies the real
+              // client output regardless of whether this build produced any.
+              if (!(e instanceof Error && e.message.includes(`Could not resolve entry module "index.html"`))) {
                 throw e;
               }
             }
           }
+          await copyClientOutput(vercelClientEnv);
+
           if (envNames.edge !== false && !builder.environments[envNames.edge].isBuilt) {
             await builder.build(builder.environments[envNames.edge]);
           }
@@ -205,22 +210,6 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
       generateBundle: {
         async handler(_opts, bundle) {
           cleanupDummy(bundle);
-
-          const topLevelConfig = this.environment.getTopLevelConfig();
-          const clientEnv = topLevelConfig.environments.client;
-          if (clientEnv) {
-            try {
-              await cp(path.join(topLevelConfig.root, clientEnv.build.outDir), this.environment.config.build.outDir, {
-                recursive: true,
-                force: true,
-                dereference: true,
-              });
-            } catch (e) {
-              if (e instanceof Error && e.message.includes("ENOENT")) {
-                // ignore
-              } else throw e;
-            }
-          }
         },
       },
 
@@ -276,5 +265,24 @@ function cleanupDummy(bundle: Record<string, unknown>) {
   const dummy = Object.keys(bundle).find((key) => key.includes("_DUMMY_"));
   if (dummy) {
     delete bundle[dummy];
+  }
+}
+
+// Copies the framework's client output into Vercel's static directory so it is
+// served as the SPA shell.
+async function copyClientOutput(vercelClientEnv: BuildEnvironment) {
+  const topLevelConfig = vercelClientEnv.getTopLevelConfig();
+  const srcDir = path.resolve(topLevelConfig.root, topLevelConfig.environments.client.build.outDir);
+  const destDir = path.resolve(topLevelConfig.root, vercelClientEnv.config.build.outDir);
+
+  // When vercel_client is the only client environment, src and dest are the
+  // same directory and the output is already where Vercel expects it.
+  if (srcDir === destDir) return;
+
+  try {
+    await cp(srcDir, destDir, { recursive: true, force: true, dereference: true });
+  } catch (e) {
+    // The client environment may not have produced any output to copy.
+    if (!(e instanceof Error && "code" in e && e.code === "ENOENT")) throw e;
   }
 }
