@@ -7,7 +7,6 @@ import {
   type EnvironmentOptions,
   mergeConfig,
   type Plugin,
-  type ResolvedConfig,
   type UserConfig,
 } from "vite";
 import { getConfig } from "../config.js";
@@ -37,17 +36,16 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
             try {
               await builder.build(vercelClientEnv);
             } catch (e) {
-              if (e instanceof Error && e.message.includes(`Could not resolve entry module "index.html"`)) {
-                // vercel_client build failed (expected for frameworks without
-                // index.html). We still need to copy the real client output
-                // into .vercel/output/static/ so Vercel can serve SPA shell
-                // files.
-                await copyClientOutput(vercelClientEnv, pluginConfig);
-              } else {
+              // vercel_client builds from a dummy entry, so a missing index.html
+              // is expected and harmless — copyClientOutput copies the real
+              // client output regardless of whether this build produced any.
+              if (!(e instanceof Error && e.message.includes(`Could not resolve entry module "index.html"`))) {
                 throw e;
               }
             }
           }
+          await copyClientOutput(vercelClientEnv);
+
           if (envNames.edge !== false && !builder.environments[envNames.edge].isBuilt) {
             await builder.build(builder.environments[envNames.edge]);
           }
@@ -212,35 +210,6 @@ export function setupEnvs(pluginConfig: ViteVercelConfig): Plugin[] {
       generateBundle: {
         async handler(_opts, bundle) {
           cleanupDummy(bundle);
-
-          const topLevelConfig = this.environment.getTopLevelConfig();
-          const clientEnv = topLevelConfig.environments.client;
-          if (clientEnv) {
-            const clientOutDir = clientEnv.build.outDir;
-            const srcDir = path.isAbsolute(clientOutDir)
-              ? clientOutDir
-              : path.join(topLevelConfig.root, clientOutDir);
-            const destDir = this.environment.config.build.outDir;
-
-            // When vercel_client is the **only** client environment, srcDir and
-            // destDir resolve to the same path. That means the files are
-            // already in the right place, so we should skip the copy.
-            if (path.resolve(srcDir) === path.resolve(destDir)) {
-              return;
-            }
-
-            try {
-              await cp(srcDir, destDir, {
-                recursive: true,
-                force: true,
-                dereference: true,
-              });
-            } catch (e) {
-              if (e instanceof Error && e.message.includes("ENOENT")) {
-                // ignore
-              } else throw e;
-            }
-          }
         },
       },
 
@@ -299,49 +268,21 @@ function cleanupDummy(bundle: Record<string, unknown>) {
   }
 }
 
-async function copyClientOutput(
-  vercelClientEnv: {
-    getTopLevelConfig(): ResolvedConfig;
-    config: { build: { outDir: string } };
-  },
-  pluginConfig: ViteVercelConfig,
-) {
+// Copies the framework's client output into Vercel's static directory so it is
+// served as the SPA shell.
+async function copyClientOutput(vercelClientEnv: BuildEnvironment) {
   const topLevelConfig = vercelClientEnv.getTopLevelConfig();
-  if (!topLevelConfig) {
-    return;
-  }
+  const srcDir = path.resolve(topLevelConfig.root, topLevelConfig.environments.client.build.outDir);
+  const destDir = path.resolve(topLevelConfig.root, vercelClientEnv.config.build.outDir);
 
-  const clientEnv = topLevelConfig.environments?.client;
-  if (!clientEnv) {
-    return;
-  }
-
-  const clientOutDir = clientEnv.build.outDir;
-  const srcDir = path.isAbsolute(clientOutDir)
-    ? clientOutDir
-    : path.join(topLevelConfig.root, clientOutDir);
-  const rawDestDir = vercelClientEnv.config.build.outDir;
-  const destDir = path.isAbsolute(rawDestDir)
-    ? rawDestDir
-    : path.join(topLevelConfig.root, rawDestDir);
-
-  // When vercel_client is the **only** client environment, srcDir and destDir
-  // resolve to the same path. The files are already in the right place so we
-  // should skip the copy.
-  if (path.resolve(srcDir) === path.resolve(destDir)) {
-    return;
-  }
+  // When vercel_client is the only client environment, src and dest are the
+  // same directory and the output is already where Vercel expects it.
+  if (srcDir === destDir) return;
 
   try {
-    await cp(srcDir, destDir, {
-      recursive: true,
-      force: true,
-      dereference: true,
-    });
+    await cp(srcDir, destDir, { recursive: true, force: true, dereference: true });
   } catch (e) {
-    // ENOENT is expected when the client build hasn't produced output yet
-    if (!(e instanceof Error && e.message.includes("ENOENT"))) {
-      throw e;
-    }
+    // The client environment may not have produced any output to copy.
+    if (!(e instanceof Error && "code" in e && e.code === "ENOENT")) throw e;
   }
 }
