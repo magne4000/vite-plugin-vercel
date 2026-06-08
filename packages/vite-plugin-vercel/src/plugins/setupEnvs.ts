@@ -320,7 +320,10 @@ async function copyClientOutput(
   const srcDir = path.isAbsolute(clientOutDir)
     ? clientOutDir
     : path.join(topLevelConfig.root, clientOutDir);
-  const destDir = path.join(pluginConfig.outDir ?? outDir, "static");
+  const rawDestDir = vercelClientEnv.config.build.outDir;
+  const destDir = path.isAbsolute(rawDestDir)
+    ? rawDestDir
+    : path.join(topLevelConfig.root, rawDestDir);
 
   // When vercel_client is the **only** client environment, srcDir and destDir
   // resolve to the same path. The files are already in the right place so we
