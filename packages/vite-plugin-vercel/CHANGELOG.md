@@ -1,5 +1,11 @@
 # vite-plugin-vercel
 
+## 11.1.1
+
+### Patch Changes
+
+- 6e6129f: fix: copy client build for better SPA support
+
 ## 11.1.0
 
 ### Minor Changes
