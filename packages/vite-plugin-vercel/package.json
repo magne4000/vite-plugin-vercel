@@ -30,10 +30,10 @@
   },
   "devDependencies": {
     "@types/node": "^22.19.15",
-    "tsdown": "^0.22.2",
+    "tsdown": "^0.22.3",
     "typescript": "^6.0.3",
     "vite": "^7.3.5",
-    "vitest": "^4.1.8"
+    "vitest": "^4.1.9"
   },
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
@@ -47,8 +47,8 @@
     "fast-glob": "^3.3.3",
     "magicast": "^0.5.3",
     "nf3": "^0.3.17",
-    "oxc-transform": "^0.135.0",
+    "oxc-transform": "^0.137.0",
     "p-limit": "^7.3.0",
-    "rolldown": "^1.1.1"
+    "rolldown": "^1.1.2"
   }
 }
