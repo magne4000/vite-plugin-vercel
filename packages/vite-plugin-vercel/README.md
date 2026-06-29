@@ -45,7 +45,7 @@ Install this package as a dev dependency and add it to your Vite config:
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
-import vercel from 'vite-plugin-vercel';
+import vercel from 'vite-plugin-vercel/vite';
 import { getVercelEntries } from "vite-plugin-vercel";
 
 const entries = await getVercelEntries("endpoints/api", {
@@ -105,7 +105,7 @@ You can use [Edge middleware as describe in the official documentation](https://
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite';
-import vercel from 'vite-plugin-vercel';
+import vercel from 'vite-plugin-vercel/vite';
 
 export default defineConfig({
   plugins: [vercel({

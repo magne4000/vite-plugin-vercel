@@ -28,7 +28,7 @@ v11:
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite'
-import vercel from 'vite-plugin-vercel'
+import vercel from 'vite-plugin-vercel/vite'
 import { getVercelEntries } from 'vite-plugin-vercel'
 
 const entries = await getVercelEntries('endpoints/api', {
