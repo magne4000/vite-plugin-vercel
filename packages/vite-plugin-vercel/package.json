@@ -39,16 +39,16 @@
     "@manypkg/find-root": "^3.1.0",
     "@universal-deploy/store": "^0.2.1",
     "@universal-deploy/vite": "^0.1.10",
-    "@vercel/build-utils": "^13.35.0",
+    "@vercel/build-utils": "^13.36.3",
     "@vercel/nft": "^1.10.2",
     "@vercel/routing-utils": "^6.4.0",
     "@vite-plugin-vercel/schemas": "workspace:^",
     "convert-route": "^1.1.1",
     "fast-glob": "^3.3.3",
-    "magicast": "^0.5.3",
-    "nf3": "^0.3.22",
-    "oxc-transform": "^0.141.0",
+    "magicast": "^0.5.4",
+    "nf3": "^0.3.23",
+    "oxc-transform": "^0.142.0",
     "p-limit": "^7.3.1",
-    "rolldown": "^1.2.0"
+    "rolldown": "^1.2.1"
   }
 }
