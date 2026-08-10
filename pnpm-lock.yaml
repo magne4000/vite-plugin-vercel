@@ -229,8 +229,8 @@ importers:
         specifier: ^0.1.11
         version: 0.1.11(@types/express@4.17.25)(srvx@0.12.5)(vite@7.3.5(@types/node@22.19.17)(jiti@2.6.1)(lightningcss@1.32.0)(tsx@4.21.0))
       '@vercel/build-utils':
-        specifier: ^13.36.3
-        version: 13.36.3
+        specifier: ^14.0.3
+        version: 14.0.3
       '@vercel/nft':
         specifier: ^1.10.2
         version: 1.10.2(rollup@4.60.1)
@@ -2027,8 +2027,8 @@ packages:
   '@universal-middleware/node@0.2.2':
     resolution: {integrity: sha512-QLovBNvsmKCUMd29IOCJchft7JdAPi5/ConbXxg2Z1a6Yl0lG7M/heCYvjesvUcrg4gPCUWowBZAjwPp4Z6uqQ==}
 
-  '@vercel/build-utils@13.36.3':
-    resolution: {integrity: sha512-2f6RhmPYLiQjAJltaq9WPsRNdnzos0bWShL/AbYLXoydBVszlX8H/5w9rJ23nqPmtGjbDfZ9kLLGuAdyftvcTA==}
+  '@vercel/build-utils@14.0.3':
+    resolution: {integrity: sha512-yfK9NmS/P9p7Sk5XebxwpIqIUQCj2qRdHMmlZ+r4mp45Xy4jJeLoCN5TsyZc3yUN7wJmJHcRYdTy421pCMA2PQ==}
 
   '@vercel/edge-config-fs@0.1.0':
     resolution: {integrity: sha512-NRIBwfcS0bUoUbRWlNGetqjvLSwgYH/BqKqDN7vK1g32p7dN96k0712COgaz6VFizAm9b0g6IG6hR6+hc0KCPg==}
@@ -2054,8 +2054,8 @@ packages:
     resolution: {integrity: sha512-yOlbztkWaDtPOrCBsV66SpIZvIwRidAe3DiAYxDOjVj2H7HaJm1PDultH9PQO8J+PeT+mFQaNNSxS9yUTo7i9A==}
     engines: {node: '>=16'}
 
-  '@vercel/python-analysis@0.12.0':
-    resolution: {integrity: sha512-T9YgtINVJfZmDhXe6ULKoLC1Zr3LU3Cl4CgC+m+S1KsNDPlfGfXdr93K7aOqkMaJEDLpUH8dqrPP3/TuZXTjRw==}
+  '@vercel/python-analysis@0.13.1':
+    resolution: {integrity: sha512-ec4tii9I7i6eHfvsvG/eaNaKh0TxmxBsc904V7yjwZImeyFTEVvDSLQ/+510FB+wBG6gCvpyqBH5aAKP9llqsw==}
 
   '@vercel/routing-utils@6.4.1':
     resolution: {integrity: sha512-d/DqMAbxV8ymZdPzVbmihFj9oK3IvskucNbRN18ik53JLFtMlfu8v1SuVTt+iRhnYXaeA/y4NYLcyOnkkNmq/Q==}
@@ -5920,9 +5920,9 @@ snapshots:
       - hono
       - srvx
 
-  '@vercel/build-utils@13.36.3':
+  '@vercel/build-utils@14.0.3':
     dependencies:
-      '@vercel/python-analysis': 0.12.0
+      '@vercel/python-analysis': 0.13.1
       cjs-module-lexer: 1.2.3
       es-module-lexer: 1.5.0
 
@@ -5957,7 +5957,7 @@ snapshots:
       satori: 0.15.2
       yoga-wasm-web: 0.3.3
 
-  '@vercel/python-analysis@0.12.0':
+  '@vercel/python-analysis@0.13.1':
     dependencies:
       '@bytecodealliance/preview2-shim': 0.17.6
       '@renovatebot/pep440': 4.2.1
