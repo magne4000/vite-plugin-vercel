@@ -39,7 +39,7 @@
     "@manypkg/find-root": "^3.1.0",
     "@universal-deploy/store": "^0.2.2",
     "@universal-deploy/vite": "^0.1.11",
-    "@vercel/build-utils": "^13.36.3",
+    "@vercel/build-utils": "^14.0.3",
     "@vercel/nft": "^1.10.2",
     "@vercel/routing-utils": "^6.4.1",
     "@vite-plugin-vercel/schemas": "workspace:^",
