@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.19.15",
-    "tsdown": "^0.22.14",
+    "tsdown": "^0.23.0",
     "typescript": "^7.0.2",
     "vite": "^7.3.5",
     "vitest": "^4.1.11"
@@ -39,7 +39,7 @@
     "@manypkg/find-root": "^3.1.0",
     "@universal-deploy/store": "^0.2.2",
     "@universal-deploy/vite": "^0.1.11",
-    "@vercel/build-utils": "^14.9.0",
+    "@vercel/build-utils": "^14.9.1",
     "@vercel/nft": "^1.11.0",
     "@vercel/routing-utils": "^6.5.0",
     "@vite-plugin-vercel/schemas": "workspace:^",
@@ -47,7 +47,7 @@
     "fast-glob": "^3.3.3",
     "magicast": "^0.5.4",
     "nf3": "^0.3.24",
-    "oxc-transform": "^0.148.0",
+    "oxc-transform": "^0.149.0",
     "p-limit": "^7.3.2",
     "rolldown": "^1.2.7"
   }
