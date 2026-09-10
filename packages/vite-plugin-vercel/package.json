@@ -33,7 +33,7 @@
     "tsdown": "^0.23.0",
     "typescript": "^7.0.2",
     "vite": "^7.3.5",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
