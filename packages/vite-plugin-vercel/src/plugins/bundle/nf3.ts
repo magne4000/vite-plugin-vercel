@@ -1,7 +1,6 @@
 import fs from "node:fs";
 import { cpus } from "node:os";
 import path from "node:path";
-import { resolve } from "@vercel/nft";
 import { type ExternalsPluginOptions, externals } from "nf3/plugin";
 import pLimit from "p-limit";
 import { type BuildOptions, build, type OutputBundle, type RolldownOutput } from "rolldown";
@@ -94,8 +93,17 @@ export function nf3BundlePlugin(pluginConfig: ViteVercelConfig): Plugin[] {
                   trace: {
                     outDir: path.dirname(entryPath),
                     nft: {
+                      // nf3 bundles its own @vercel/nft, which `job` comes from, so resolve with that copy's default
+                      // resolver: the prototype method, as this hook replaces `job.resolve` on the instance.
                       async resolve(id, parent, job, cjsResolve) {
-                        return resolve(id.replace(/\.wasm\?module$/, ".wasm"), parent, job, cjsResolve);
+                        const defaultResolve: typeof job.resolve = Object.getPrototypeOf(job).resolve;
+                        return defaultResolve.call(
+                          job,
+                          id.replace(/\.wasm\?module$/, ".wasm"),
+                          parent,
+                          job,
+                          cjsResolve,
+                        );
                       },
                     },
                   },
