@@ -30,16 +30,16 @@
   },
   "devDependencies": {
     "@types/node": "^22.19.15",
-    "tsdown": "^0.23.0",
+    "tsdown": "^0.23.1",
     "typescript": "^7.0.2",
     "vite": "^7.3.5",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.4"
   },
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
     "@universal-deploy/store": "^0.3.0",
-    "@universal-deploy/vite": "^0.2.0",
-    "@vercel/build-utils": "^14.19.0",
+    "@universal-deploy/vite": "^0.2.2",
+    "@vercel/build-utils": "^14.20.1",
     "@vercel/nft": "^1.11.0",
     "@vercel/routing-utils": "^6.6.0",
     "@vite-plugin-vercel/schemas": "workspace:^",
