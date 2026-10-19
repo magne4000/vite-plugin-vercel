@@ -33,13 +33,13 @@
     "tsdown": "^0.23.1",
     "typescript": "^7.0.2",
     "vite": "^7.3.5",
-    "vitest": "^5.0.4"
+    "vitest": "^5.0.5"
   },
   "dependencies": {
     "@manypkg/find-root": "^3.1.0",
     "@universal-deploy/store": "^0.3.0",
     "@universal-deploy/vite": "^0.2.2",
-    "@vercel/build-utils": "^14.20.1",
+    "@vercel/build-utils": "^14.21.3",
     "@vercel/nft": "^1.11.0",
     "@vercel/routing-utils": "^6.6.0",
     "@vite-plugin-vercel/schemas": "workspace:^",
@@ -47,8 +47,8 @@
     "fast-glob": "^3.3.3",
     "magicast": "^0.5.5",
     "nf3": "^0.4.2",
-    "oxc-transform": "^0.153.0",
+    "oxc-transform": "^0.154.0",
     "p-limit": "^7.3.3",
-    "rolldown": "^1.2.13"
+    "rolldown": "^1.2.14"
   }
 }
