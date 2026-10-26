@@ -13,9 +13,9 @@
   "keywords": [],
   "author": "",
   "devDependencies": {
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.64.1",
     "@types/node": "^20.19.37",
-    "playwright": "^1.57.0",
+    "playwright": "^1.64.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.12"
   },
