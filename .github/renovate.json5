@@ -23,4 +23,11 @@
   postUpdateOptions: [
     'pnpmDedupe',
   ],
+  packageRules: [
+    {
+      // TypeScript nightlies (x.y.z-dev.*) sort above betas/RCs in semver; stick to tagged releases.
+      matchPackageNames: ['typescript'],
+      allowedVersions: '!/-dev\\./',
+    },
+  ],
 }
